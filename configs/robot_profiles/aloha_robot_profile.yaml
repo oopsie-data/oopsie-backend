@@ -1,0 +1,74 @@
+# Robot profile for the ALOHA bimanual setup (ACT/ACT++ policy).
+# Derived from hardcoded values in convert_ar_aloha_data.py — review before use.
+
+# ===============================
+# ===== Robot Setup Related =====
+# ===============================
+
+# TODO: policy_name should match whatever policy_class is stored in the source HDF5 attrs
+policy_name: acustom_diffusion
+robot_name: aloha
+gripper_name: aloha_gripper
+is_biarm: true
+uses_mobile_base: false  # source HDF5 contains /base_action but the converter does not output it
+control_freq: 30
+camera_names:
+  - cam_high
+  - cam_left_wrist
+  - cam_right_wrist
+
+
+# ===============================
+# ===== Observation Related =====
+# ===============================
+
+robot_state_keys:
+  - joint_position
+  - gripper_position
+
+# qpos has shape (T, 14): 6 arm joints + 1 gripper per side, left arm first.
+# Index 6 (left gripper) is also written separately as observation/gripper_position.
+# TODO: confirm whether the 14th index (right gripper) should be tracked separately too.
+robot_state_joint_names:
+  - waist_left
+  - shoulder_left
+  - elbow_left
+  - forearm_roll_left
+  - wrist_angle_left
+  - wrist_rotate_left
+  - gripper_left
+  - waist_right
+  - shoulder_right
+  - elbow_right
+  - forearm_roll_right
+  - wrist_angle_right
+  - wrist_rotate_right
+  - gripper_right
+
+
+# ==========================
+# ===== Action Related =====
+# ==========================
+
+action_space:
+  - "joint_position"
+  - "gripper_position"
+
+# action array has shape (T, 14), same joint ordering as qpos above.
+# NOTE: the converter currently writes zeros for action_dict/gripper_position —
+# gripper actions are embedded in joint_position at indices 6 and 13.
+action_joint_names:
+  - waist_left
+  - shoulder_left
+  - elbow_left
+  - forearm_roll_left
+  - wrist_angle_left
+  - wrist_rotate_left
+  - gripper_left
+  - waist_right
+  - shoulder_right
+  - elbow_right
+  - forearm_roll_right
+  - wrist_angle_right
+  - wrist_rotate_right
+  - gripper_right

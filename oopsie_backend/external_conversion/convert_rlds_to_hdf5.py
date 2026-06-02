@@ -17,53 +17,18 @@ import os
 from pathlib import Path
 from typing import Any
 
-import cv2
 import h5py
 import numpy as np
 
 from oopsie_tools.annotation_tool.episode_recorder import write_mp4
 
-SCHEMA_VERSION = "robotic_failure_upload_data_format_v1"
-MAX_DIM = 1080  # must match validate.py MAX_IMAGE_SIZE
-
-
-def _resize_frames(frames: np.ndarray, max_dim: int = MAX_DIM) -> np.ndarray:
-    """Resize (T, H, W, 3) frames so that max(H, W) <= max_dim."""
-    h, w = frames.shape[1:3]
-    if w <= max_dim and h <= max_dim:
-        return frames
-    scale = max_dim / max(w, h)
-    new_w, new_h = int(w * scale), int(h * scale)
-    return np.stack(
-        [cv2.resize(f, (new_w, new_h), interpolation=cv2.INTER_AREA) for f in frames]
-    )
-
-
-def _write_episode_annotations(
-    file_handle: h5py.File,
-    episode_id: str,
-    success: float,
-    lab_id: str = "",
-    operator_name: str = "",
-    policy_id: str = "",
-    robot_id: str = "",
-    control_freq: str = "",
-) -> None:
-    """Create and populate the episode_annotations group in *file_handle*."""
-    str_dtype = h5py.string_dtype(encoding="utf-8")
-    group = file_handle.create_group("episode_annotations")
-    group.create_dataset("episode_id", data=episode_id, dtype=str_dtype)
-    if lab_id.strip():
-        group.create_dataset("lab_id", data=lab_id, dtype=str_dtype)
-    if operator_name.strip():
-        group.create_dataset("operator_name", data=operator_name, dtype=str_dtype)
-    if policy_id.strip():
-        group.create_dataset("policy_id", data=policy_id, dtype=str_dtype)
-    if robot_id.strip():
-        group.create_dataset("robot_id", data=robot_id, dtype=str_dtype)
-    if control_freq.strip():
-        group.create_dataset("control_freq", data=control_freq, dtype=str_dtype)
-    group.create_dataset("success", data=np.float32(success))
+from oopsie_backend.external_conversion.conversion_utils import (
+    SCHEMA_VERSION,
+    _decode_text,
+    _parse_fps,
+    _resize_frames,
+    write_episode_annotations,
+)
 
 
 CONVERSION_DICT = {
@@ -125,19 +90,6 @@ def _materialize_steps(episode: dict[str, Any]) -> dict[str, Any]:
     return _stack_step_records(records)
 
 
-def _decode_text(value: Any) -> str:
-    if isinstance(value, bytes):
-        return value.decode("utf-8", errors="replace")
-    if isinstance(value, np.ndarray):
-        if value.shape == ():
-            return _decode_text(value.item())
-        if value.size == 0:
-            return ""
-        first = value.reshape(-1)[0]
-        return _decode_text(first)
-    return str(value)
-
-
 def _choose_language_instruction(steps: dict[str, Any]) -> str:
     for key in (
         "language_instruction",
@@ -180,16 +132,6 @@ def _episode_stem(episode_idx: int, episode_metadata: dict[str, Any]) -> str:
         source_stem = _sanitize_stem(Path(source_path).stem)
         return f"{episode_idx:06d}_{source_stem}"
     return f"{episode_idx:06d}"
-
-
-def _parse_fps(control_freq: str, default_fps: float = 15.0) -> float:
-    try:
-        parsed = float(control_freq)
-    except (TypeError, ValueError):
-        return default_fps
-    if parsed <= 0:
-        return default_fps
-    return parsed
 
 
 def _split_path(path: str) -> list[str]:
@@ -286,7 +228,7 @@ def _write_episode_h5(
         f.attrs["schema"] = SCHEMA_VERSION
 
         if store_episode_annotations:
-            _write_episode_annotations(
+            write_episode_annotations(
                 file_handle=f,
                 episode_id=episode_id,
                 success=float(success),

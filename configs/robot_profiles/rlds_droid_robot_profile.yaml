@@ -1,0 +1,55 @@
+# Robot profile for RLDS datasets in the DROID format.
+# Derived from CONVERSION_DICT and defaults in convert_rlds_to_hdf5.py — review before use.
+
+# ===============================
+# ===== Robot Setup Related =====
+# ===============================
+
+# TODO: policy_name varies per dataset — update before use
+policy_name: teleoperation
+robot_name: franka_research_3
+gripper_name: franka_gripper
+is_biarm: false
+uses_mobile_base: false
+control_freq: 15  # default in converter; override with --control-freq if dataset differs
+camera_names:
+  - exterior_image_1_left
+  - exterior_image_2_left
+  - wrist_image_left
+
+
+# ===============================
+# ===== Observation Related =====
+# ===============================
+
+robot_state_keys:
+  - joint_position
+  - cartesian_position
+  - gripper_position
+
+robot_state_joint_names:
+  - panda_joint1
+  - panda_joint2
+  - panda_joint3
+  - panda_joint4
+  - panda_joint5
+  - panda_joint6
+  - panda_joint7
+
+# cartesian_position is stored as [x, y, z, roll, pitch, yaw] (euler_xyz)
+# per droid_dataset_transform in oopsie_tools/utils/rlds_utils.py
+robot_state_orientation_representation: "euler_xyz"
+
+
+# ==========================
+# ===== Action Related =====
+# ==========================
+
+# Primary DROID control mode is delta cartesian position + gripper.
+# CONVERSION_DICT also maps action_dict/cartesian_velocity and action_dict/gripper_velocity —
+# TODO: confirm whether those are the actual control targets or just logged observations.
+action_space:
+  - "cartesian_position"
+  - "gripper_position"
+
+orientation_representation: "euler_xyz"

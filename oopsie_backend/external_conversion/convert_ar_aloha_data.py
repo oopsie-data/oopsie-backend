@@ -1,32 +1,22 @@
 """
 Convert ACT/ALOHA format HDF5 to the robotic failure dataset format.
 
-Source format (episode_N.hdf5 root attrs):
-  language_instruction   scalar str
-  policy_class           scalar str
-  sim                    bool
-
 Source format datasets:
-  /action                             (T, 14)  joint actions, both arms
-  /base_action                        (T, 2)   mobile base commands
-  /episode_annotations  (group, 0 datasets — metadata in attrs)
-    [attr] episode_id         str  e.g. "episode_0"
-    [attr] failure_category   str
-    [attr] failure_description str
-    [attr] success            float  1.0=success, 0.0=failure
-    [attr] would_retry        float
-  /observations/effort                (T, 14)  joint torques
-  /observations/images/cam_high       (T, H, W, 3) uint8 RGB
-  /observations/images/cam_left_wrist (T, H, W, 3) uint8 RGB
-  /observations/images/cam_right_wrist(T, H, W, 3) uint8 RGB
-  /observations/qpos                  (T, 14)  joint positions, both arms
-  /observations/qvel                  (T, 14)  joint velocities, both arms
+  /action                                        (T, 14)  joint actions, both arms
+  /success                                       (T,)     per-timestep success (aggregated to scalar)
+  /compress_len                                  (3, T)   actual JPEG byte lengths per camera
+  /observations/images/camera_high               (T, max_bytes)  JPEG-compressed frames
+  /observations/images/camera_wrist_left         (T, max_bytes)  JPEG-compressed frames
+  /observations/images/camera_wrist_right        (T, max_bytes)  JPEG-compressed frames
+  /observations/qpos                             (T, 14)  joint positions, both arms
+  /observations/qvel                             (T, 14)  joint velocities (optional)
+  /observations/effort                           (T, 14)  joint torques (optional)
 
 Target format (robotic failure dataset):
   action_dict/cartesian_position           [zeros — FK not available]
   action_dict/cartesian_velocity           [zeros — FK not available]
-  action_dict/gripper_position        (T,)     zeros (bimanual — no single-arm gripper)
-  action_dict/gripper_velocity        (T,)     zeros (bimanual — no single-arm gripper)
+  action_dict/gripper_position        (T, 2)   from action[:, GRIPPER_IDX]
+  action_dict/gripper_velocity        (T, 2)   zeros
   image_observations/exterior_image_1_left  scalar str → mp4 path
   image_observations/exterior_image_2_left  scalar str → mp4 path
   image_observations/wrist_image_left       scalar str → mp4 path
@@ -41,15 +31,15 @@ Target format (robotic failure dataset):
   episode_annotations/robot_id        scalar str
   episode_annotations/control_freq    scalar str
   observation/cartesian_position           [zeros — FK not available]
-  observation/gripper_position        (T,)     from qpos[:, 6]
-  observation/joint_position          (T, 14)  from qpos
-  [file attr] language_instruction    scalar str  (read from source root attr)
+  observation/gripper_position        (T, 2)   from qpos[:, GRIPPER_IDX]
+  observation/joint_position          (T, 12)  from qpos[:, ARM_IDX]
+  [file attr] language_instruction    scalar str  (from --language CLI arg)
 
 Usage:
-    python convert_ar_aloha_data.py -s /path/to/episode_0.hdf5 -o /path/to/output
-    python convert_ar_aloha_data.py -s /path/to/episode_0.hdf5 -o /path/to/output -e 000001
-    python convert_ar_aloha_data.py -s /path/to/Amazon-Aloha-Test/ -o /path/to/output
-    python convert_ar_aloha_data.py -s /path/to/Amazon-Aloha-Test/ -o /path/to/output --start-id 5
+    python convert_ar_aloha_data.py -s /path/to/episode_0.hdf5 -o /path/to/output --language "Pick up the ball"
+    python convert_ar_aloha_data.py -s /path/to/episode_0.hdf5 -o /path/to/output --language "task" -e 000001
+    python convert_ar_aloha_data.py -s /path/to/rollouts/ -o /path/to/output --language "task"
+    python convert_ar_aloha_data.py -s /path/to/rollouts/ -o /path/to/output --language "task" --start-id 5
 """
 
 from __future__ import annotations
@@ -59,75 +49,59 @@ from pathlib import Path
 
 import cv2
 import h5py
-import imageio
 import numpy as np
 
+from oopsie_tools.annotation_tool.episode_recorder import write_mp4
 
-DEFAULT_CONTROL_FREQ = "30"
-
-SCHEMA_VERSION = "robotic_failure_upload_data_format_v1"
-MAX_DIM = 1080  # must match validate.py MAX_IMAGE_SIZE
-
-
-def _write_mp4(video_path: Path, frames: np.ndarray, fps: float) -> None:
-    """Write RGB frames (T, H, W, 3) to an MP4 file using libx264."""
-    if frames.ndim != 4 or frames.shape[-1] != 3:
-        raise ValueError(f"Expected frames with shape (T,H,W,3), got {frames.shape}")
-    if frames.shape[0] == 0:
-        raise ValueError("Cannot write video with zero frames")
-    with imageio.get_writer(
-        str(video_path),
-        format="FFMPEG",
-        mode="I",
-        fps=float(fps),
-        codec="libx264",
-    ) as writer:
-        for frame in frames:
-            writer.append_data(np.asarray(frame, dtype=np.uint8))
+from oopsie_backend.external_conversion.conversion_utils import (
+    SCHEMA_VERSION,
+    _decode_text,
+    _parse_fps,
+    _resize_frames,
+    write_episode_annotations,
+)
 
 
-def _resize_frames(frames: np.ndarray, max_dim: int = MAX_DIM) -> np.ndarray:
-    """Resize (T, H, W, 3) frames so that max(H, W) <= max_dim."""
-    h, w = frames.shape[1:3]
-    if w <= max_dim and h <= max_dim:
-        return frames
-    scale = max_dim / max(w, h)
-    new_w, new_h = int(w * scale), int(h * scale)
-    return np.stack(
-        [cv2.resize(f, (new_w, new_h), interpolation=cv2.INTER_AREA) for f in frames]
-    )
+DEFAULT_CONTROL_FREQ = "50"
+
+# Indices within the 14D ALOHA qpos/action vectors
+ARM_IDX = [0, 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12]  # 12 arm joints
+GRIPPER_IDX = [6, 13]                                  # 2 gripper joints
+
+CAMERA_MAP = [
+    ("camera_high",        "cam_high"),
+    ("camera_wrist_right", "cam_right_wrist"),
+    ("camera_wrist_left",  "cam_left_wrist"),
+]
 
 
-def _decode_attr(value) -> str:
-    """Decode an HDF5 attr value to a plain Python str."""
-    if isinstance(value, bytes):
-        return value.decode("utf-8", errors="replace")
-    return str(value)
-
-
-def _parse_fps(control_freq: str, default_fps: float = 30.0) -> float:
-    try:
-        parsed = float(control_freq)
-    except (TypeError, ValueError):
-        return default_fps
-    return parsed if parsed > 0 else default_fps
+def _decode_jpeg_frames(raw: np.ndarray, lengths: np.ndarray) -> np.ndarray:
+    """Decode T JPEG frames from a padded uint8 array into (T, H, W, 3) RGB."""
+    frames = []
+    for t in range(raw.shape[0]):
+        n = int(lengths[t])
+        buf = np.frombuffer(raw[t, :n], dtype=np.uint8)
+        bgr = cv2.imdecode(buf, cv2.IMREAD_COLOR)
+        if bgr is None:
+            raise ValueError(f"Failed to decode JPEG frame {t}")
+        frames.append(bgr[:, :, ::-1])  # BGR → RGB
+    return np.stack(frames, axis=0)
 
 
 def convert(
     source_h5: str,
     output_dir: Path,
+    language_instruction: str,
     episode_id: str = "000000",
     control_freq: str = DEFAULT_CONTROL_FREQ,
     lab_id: str = "",
     operator_name: str = "",
     policy_id: str = "",
     robot_id: str = "",
+    success_aggregation: str = "max",
 ) -> Path:
     """
     Convert a single ACT/ALOHA HDF5 file to the robotic failure dataset format.
-
-    language_instruction, success, failure_category, failure_description, and
-    would_retry are all read directly from the source file.
 
     Returns:
         Path to the output HDF5 file.
@@ -141,33 +115,35 @@ def convert(
 
     print(f"\nReading source: {source_h5}")
     with h5py.File(source_h5, "r") as src:
-        # Root attrs
-        language_instruction = _decode_attr(src.attrs["language_instruction"])
-
-        # Episode annotations (stored as group attrs in the new format)
-        ea_attrs = src["episode_annotations"].attrs
-        success = float(ea_attrs["success"])
-        failure_category = _decode_attr(ea_attrs["failure_category"])
-        failure_description = _decode_attr(ea_attrs["failure_description"])
-        would_retry = float(ea_attrs["would_retry"])
-
         # Trajectory data
-        action = src["action"][()]  # (T, 14)
+        action = src["action"][()]        # (T, 14)
         qpos = src["observations/qpos"][()]  # (T, 14)
-        cam_high = src["observations/images/cam_high"][()]  # (T, H, W, 3)
-        cam_lw = src["observations/images/cam_left_wrist"][()]  # (T, H, W, 3)
-        cam_rw = src["observations/images/cam_right_wrist"][()]  # (T, H, W, 3)
+
+        # Per-timestep success → episode scalar
+        success_arr = src["success"][()]  # (T,)
+        if success_aggregation == "last":
+            success = float(success_arr[-1])
+        else:
+            success = float(success_arr.max())
+
+        # JPEG-compressed camera images
+        compress_len = src["compress_len"][()]  # (3, T)
+        cameras: list[np.ndarray] = []
+        for cam_idx, (src_key, _) in enumerate(CAMERA_MAP):
+            raw = src[f"observations/images/{src_key}"][()]  # (T, max_bytes)
+            cameras.append(_decode_jpeg_frames(raw, compress_len[cam_idx]))
+
+    cam_high, cam_rw, cam_lw = cameras  # matches CAMERA_MAP order
 
     T = action.shape[0]
     print(f"Trajectory length: {T} steps")
     print(f"Language instruction: {language_instruction!r}")
-    print(f"Success: {success}  |  would_retry: {would_retry}")
-    print(f"Failure category: {failure_category!r}")
+    print(f"Success: {success}")
 
     # ── Video encoding ──────────────────────────────────────────────────────────
-    # cam_high        → exterior_image_1_left
-    # cam_right_wrist → exterior_image_2_left
-    # cam_left_wrist  → wrist_image_left
+    # camera_high        → exterior_image_1_left
+    # camera_wrist_right → exterior_image_2_left
+    # camera_wrist_left  → wrist_image_left
     videos_dir = output_dir / "videos"
     videos_dir.mkdir(exist_ok=True)
     ext1_rel = f"videos/{episode_id}_cam_high.mp4"
@@ -175,29 +151,28 @@ def convert(
     wrist_rel = f"videos/{episode_id}_cam_left_wrist.mp4"
 
     print("\nEncoding videos (this may take a few minutes)...")
-    _write_mp4(output_dir / ext1_rel, _resize_frames(cam_high), video_fps)
-    _write_mp4(output_dir / ext2_rel, _resize_frames(cam_rw), video_fps)
-    _write_mp4(output_dir / wrist_rel, _resize_frames(cam_lw), video_fps)
+    write_mp4(output_dir / ext1_rel, _resize_frames(cam_high), video_fps)
+    write_mp4(output_dir / ext2_rel, _resize_frames(cam_rw), video_fps)
+    write_mp4(output_dir / wrist_rel, _resize_frames(cam_lw), video_fps)
 
     # ── Observation fields ──────────────────────────────────────────────────────
-    gripper_pos_obs = qpos[:, 6].astype(np.float32)
+    gripper_pos_obs = qpos[:, GRIPPER_IDX].astype(np.float32)  # (T, 2)
 
     # ── Write output HDF5 ───────────────────────────────────────────────────────
     print(f"\nWriting: {output_h5_path}")
     with h5py.File(output_h5_path, "w") as dst:
         dst.attrs["schema"] = SCHEMA_VERSION
 
-        ea = dst.create_group("episode_annotations")
-        ea.attrs["episode_id"] = episode_id
-        ea.attrs["success"] = np.float32(success)
-        ea.attrs["failure_category"] = failure_category
-        ea.attrs["failure_description"] = failure_description
-        ea.attrs["would_retry"] = np.float32(would_retry)
-        ea.attrs["lab_id"] = lab_id
-        ea.attrs["operator_name"] = operator_name
-        ea.attrs["policy_id"] = policy_id
-        ea.attrs["robot_id"] = robot_id
-        ea.attrs["control_freq"] = control_freq
+        write_episode_annotations(
+            file_handle=dst,
+            episode_id=episode_id,
+            success=success,
+            lab_id=lab_id,
+            operator_name=operator_name,
+            policy_id=policy_id,
+            robot_id=robot_id,
+            control_freq=control_freq,
+        )
 
         img = dst.create_group("image_observations")
         img.create_dataset("exterior_image_1_left", data=ext1_rel, dtype=str_dtype)
@@ -211,16 +186,18 @@ def convert(
         ad.create_dataset(
             "cartesian_velocity", data=np.zeros((T, 6), dtype=np.float32)
         )
-        ad.create_dataset("joint_position", data=action.astype(np.float32))
-        ad.create_dataset("gripper_position", data=np.zeros(T, dtype=np.float32))
-        ad.create_dataset("gripper_velocity", data=np.zeros(T, dtype=np.float32))
+        ad.create_dataset("joint_position", data=action[:, ARM_IDX].astype(np.float32))
+        ad.create_dataset(
+            "gripper_position", data=action[:, GRIPPER_IDX].astype(np.float32)
+        )
+        ad.create_dataset("gripper_velocity", data=np.zeros((T, 2), dtype=np.float32))
 
         obs = dst.create_group("observation")
         obs.create_dataset(
             "cartesian_position", data=np.zeros((T, 6), dtype=np.float32)
         )
         obs.create_dataset("gripper_position", data=gripper_pos_obs)
-        obs.create_dataset("joint_position", data=qpos.astype(np.float32))
+        obs.create_dataset("joint_position", data=qpos[:, ARM_IDX].astype(np.float32))
 
         dst.attrs["language_instruction"] = language_instruction
 
@@ -293,16 +270,30 @@ def main() -> None:
         default="",
         help="Value for episode_annotations/robot_id.",
     )
+    parser.add_argument(
+        "--language",
+        "-l",
+        required=True,
+        help="Language instruction for all episodes (not stored in source files).",
+    )
+    parser.add_argument(
+        "--success-aggregation",
+        choices=["max", "last"],
+        default="max",
+        help="How to collapse per-timestep success to a scalar: 'max' or 'last' (default: max).",
+    )
     args = parser.parse_args()
 
     source = Path(args.source)
     shared_kwargs = dict(
         output_dir=args.output_dir,
+        language_instruction=args.language,
         control_freq=args.control_freq,
         lab_id=args.lab_id,
         operator_name=args.operator_name,
         policy_id=args.policy_id,
         robot_id=args.robot_id,
+        success_aggregation=args.success_aggregation,
     )
 
     if source.is_dir():
