@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "oopsie-tools",
+    "tqdm>=4.0",
     "huggingface-hub",
     "gsutil>=5.37",
     "tensorflow-datasets>=4.9.10",

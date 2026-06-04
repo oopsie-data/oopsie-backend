@@ -1,0 +1,62 @@
+# Robot profile for RoboArena evaluation sessions (DROID platform).
+# Used by convert_roboarena_data.py.
+#
+# Source data: /datastor2/droid/roboarena_2026_02/evaluation_sessions/
+# NPZ action format: 8D — first 7 are joint velocities (rad/s), last 1 is gripper position.
+# Videos: 10 FPS, 512x288 px.
+
+# ===============================
+# ===== Robot Setup Related =====
+# ===============================
+
+policy_name: roboarena_eval  # overridden per-episode in the converter
+robot_name: franka_research_3
+gripper_name: robotiq_2f_85
+is_biarm: false
+uses_mobile_base: false
+control_freq: 10  # matches source MP4 FPS
+camera_names:
+  - left
+  - right
+  - wrist
+
+
+# ===============================
+# ===== Observation Related =====
+# ===============================
+
+robot_state_keys:
+  - joint_position
+  - gripper_position
+  - cartesian_position
+
+robot_state_joint_names:
+  - panda_joint1
+  - panda_joint2
+  - panda_joint3
+  - panda_joint4
+  - panda_joint5
+  - panda_joint6
+  - panda_joint7
+
+# cartesian_position is 6D: [x, y, z, roll, pitch, yaw]
+robot_state_orientation_representation: "euler_xyz"
+
+
+# ==========================
+# ===== Action Related =====
+# ==========================
+
+# 8D action: first 7 = joint velocities (rad/s), last 1 = gripper position.
+action_space:
+  - "joint_velocity"
+  - "gripper_position"
+
+action_joint_names:
+  - panda_joint1
+  - panda_joint2
+  - panda_joint3
+  - panda_joint4
+  - panda_joint5
+  - panda_joint6
+  - panda_joint7
