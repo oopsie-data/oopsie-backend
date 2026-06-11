@@ -1,0 +1,67 @@
+# Robot profile for WidowX (BridgeV2 setup).
+
+# ===============================
+# ===== Robot Setup Related =====
+# ===============================
+
+policy_name: soar  # overridden per-episode in the converter
+robot_name: widow_x
+gripper_name: widow_x_gripper
+is_biarm: false
+uses_mobile_base: false
+control_freq: 15  # matches source MP4 FPS (trajectory.mp4 is 15 fps, frame_count == T)
+camera_names:
+  - main
+
+
+# ===============================
+# ===== Observation Related =====
+# ===============================
+
+# joint_position is required by the oopsie tooling (robot_profile_from_raw) but
+# SOAR has no joint data, so the converter stores a zeros placeholder for it.
+robot_state_keys:
+  - joint_position
+  - gripper_position
+  - cartesian_position
+
+
+# Used by the validator: len(robot_state_joint_names) must equal the
+# joint_position DOF (7) stored in observations/robot_states/joint_position.
+robot_state_joint_names:
+  - waist
+  - shoulder
+  - elbow
+  - forearm_roll
+  - wrist_angle
+  - wrist_rotate
+  - gripper
+
+
+# cartesian_position is 6D: [x, y, z, roll, pitch, yaw]
+robot_state_orientation_representation: "euler_xyz"
+
+
+# ==========================
+# ===== Action Related =====
+# ==========================
+
+# 7D action: first 6 = EEF position, last 1 = gripper position.
+action_space:
+  - "cartesian_position"
+  - "gripper_position"
+
+
+# cartesian_position action is 6D: [x, y, z, roll, pitch, yaw].
+orientation_representation: "euler_xyz"
+
+
+# NOTE(zhouzypaul): not used for cartesian action_space, kept for reference.
+action_joint_names:
+  - waist
+  - shoulder
+  - elbow
+  - forearm_roll
+  - wrist_angle
+  - wrist_rotate
+  - gripper
