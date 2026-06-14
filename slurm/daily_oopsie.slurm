@@ -1,0 +1,52 @@
+#!/bin/bash
+#SBATCH -J oopsie-daily
+#SBATCH -A IRI23005
+#SBATCH -p vm-small
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH -t 2-00:00:00
+#SBATCH -o /scratch/09666/abahety/logs/oopsie-daily-%j.log
+#SBATCH -e /scratch/09666/abahety/logs/oopsie-daily-%j.log
+
+set -euo pipefail
+SECONDS=0
+
+BACKEND=/work/09666/abahety/ls6/oopsie-backend
+DATA_DIR=/scratch/09666/abahety/oopsiedata
+STATS_OUT=/work/09666/abahety/ls6/oopsie-docs/docs/assets/data/stats.json
+LOG_DIR=/scratch/09666/abahety/logs
+UV=/home1/09666/abahety/.local/bin/uv
+
+mkdir -p "$LOG_DIR" "$DATA_DIR" "$(dirname "$STATS_OUT")"
+
+if [[ -f "$HOME/.hf_token" ]]; then
+  export HF_TOKEN="$(tr -d '[:space:]' < "$HOME/.hf_token")"
+elif [[ -z "${HF_TOKEN:-}" ]]; then
+  echo "error: set HF_TOKEN or create \$HOME/.hf_token" >&2
+  exit 1
+fi
+
+cd "$BACKEND"
+
+run_step() {
+  local name=$1
+  shift
+  local step_start=$SECONDS
+  echo "=== $(date -Is) START: ${name} ==="
+  "$@"
+  echo "=== $(date -Is) SUCCESS: ${name} completed in $((SECONDS - step_start))s ==="
+}
+
+# Pin numpy before 2.4's x86-v2 baseline requirement. Need this for running on vm-small.
+run_step setup_numpy bash -c 'uv add "numpy<2.4" && uv sync --reinstall-package numpy'
+
+run_step sync_hf_org "$UV" run python -m oopsie_backend.scripts.sync_hf_org \
+  --org OopsieData-Submissions \
+  --local-dir "$DATA_DIR" \
+  --verbose
+
+run_step compute_local_stats "$UV" run python -m oopsie_backend.scripts.compute_local_stats \
+  --data-dir "$DATA_DIR" \
+  --output "$STATS_OUT"
+
+echo "=== $(date -Is) SUCCESS: oopsie-daily completed in ${SECONDS}s (job ${SLURM_JOB_ID}) ==="
