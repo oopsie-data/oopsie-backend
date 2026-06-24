@@ -4,10 +4,13 @@ Sync every dataset under a Hugging Face organization to a local directory. Downl
 
 ## Command
 
+Note: Currently we are using snapshot_download, might have to switch to git clone/git pull in order to avoid hitting the API limits and making the script run faster
+
 ```bash
 cd /work/09666/abahety/ls6/oopsie-backend
 
 export HF_TOKEN=hf_...   # required for private org datasets
+export HF_HUB_DISABLE_XET=1   # this avoids reaching HUB API limits!
 
 uv run python -m oopsie_backend.scripts.sync_hf_org \
   --org OopsieData-Submissions \

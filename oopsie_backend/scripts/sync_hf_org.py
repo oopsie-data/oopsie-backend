@@ -22,7 +22,8 @@ from contextlib import contextmanager
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from huggingface_hub import snapshot_download
+from huggingface_hub import snapshot_download, logging
+# logging.set_verbosity_debug()
 from huggingface_hub.errors import RepositoryNotFoundError
 from huggingface_hub.file_download import DryRunFileInfo
 from huggingface_hub.utils import disable_progress_bars, enable_progress_bars
@@ -131,6 +132,9 @@ def sync_dataset(
             local_dir=dest,
             token=token,
             dry_run=dry_run,
+            # max_workers=2,
+            # resume_download=True,
+            # local_dir_use_symlinks=False,
         )
 
     if dry_run:
