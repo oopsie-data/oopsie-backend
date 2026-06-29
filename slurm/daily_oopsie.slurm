@@ -13,11 +13,11 @@ SECONDS=0
 
 BACKEND=/work/09666/abahety/ls6/oopsie-backend
 DATA_DIR=/scratch/09666/abahety/oopsiedata
-STATS_OUT=/work/09666/abahety/ls6/oopsie-docs/docs/assets/data/stats.json
+DOCS_STATS_OUT=/work/09666/abahety/ls6/oopsie-docs/docs/assets/data/stats.json
 LOG_DIR=/scratch/09666/abahety/logs
 UV=/home1/09666/abahety/.local/bin/uv
 
-mkdir -p "$LOG_DIR" "$DATA_DIR" "$(dirname "$STATS_OUT")"
+mkdir -p "$LOG_DIR" "$DATA_DIR" "$(dirname "$DOCS_STATS_OUT")" "$BACKEND/reports"
 
 if [[ -f "$HOME/.hf_token" ]]; then
   export HF_TOKEN="$(tr -d '[:space:]' < "$HOME/.hf_token")"
@@ -47,6 +47,6 @@ run_step sync_hf_org "$UV" run python -m oopsie_backend.scripts.sync_hf_org \
 
 run_step compute_local_stats "$UV" run python -m oopsie_backend.scripts.compute_local_stats \
   --data-dir "$DATA_DIR" \
-  --output "$STATS_OUT"
+  --docs-output "$DOCS_STATS_OUT"
 
 echo "=== $(date -Is) SUCCESS: oopsie-daily completed in ${SECONDS}s (job ${SLURM_JOB_ID}) ==="

@@ -8,6 +8,7 @@ Local storage is a **superset** of the Hub: new and changed files are downloaded
 flowchart LR
   HF["HuggingFace org"] -->|sync_hf_org| Local["Local copy\n/scratch/.../oopsiedata"]
   Local -->|compute_local_stats| Stats["stats.json\noopsie-docs/docs/assets/data/"]
+  Local -->|compute_local_stats| Reports["reports/\npublic + internal JSON/HTML"]
   Stats --> Dashboard["oopsie-docs dashboard"]
 ```
 
@@ -39,8 +40,10 @@ uv add "numpy<2.4" && uv sync --reinstall-package numpy
 |-----------------|---------|
 | `/scratch/09666/abahety/oopsiedata` | Root of synced local data |
 | `/scratch/09666/abahety/oopsiedata/.sync_report.json` | Last sync summary |
-| `/work/09666/abahety/ls6/oopsie-docs/docs/assets/data/stats.json` | Dashboard stats output |
-| `OOPSIE_STATS_OUT` | Override default `stats.json` path |
+| `/work/09666/abahety/ls6/oopsie-docs/docs/assets/data/stats.json` | Public dashboard stats (docs site) |
+| `/work/09666/abahety/ls6/oopsie-backend/reports/public_stats.json` | Public stats copy (backend) |
+| `/work/09666/abahety/ls6/oopsie-backend/reports/internal_stats.json` | Full internal stats (all repos; not published) |
+| `OOPSIE_STATS_OUT` | Override default docs-site `stats.json` path (`--docs-output`) |
 
 Directory layout matches Hub paths:
 
@@ -64,7 +67,7 @@ uv run python -m oopsie_backend.scripts.compute_local_stats \
   --data-dir /scratch/09666/abahety/oopsiedata
 ```
 
-`compute_local_stats` writes to the default `stats.json` path unless `--output` or `OOPSIE_STATS_OUT` is set.
+`compute_local_stats` writes public stats to `reports/` and the docs site by default. Override the docs JSON with `--docs-output` or `OOPSIE_STATS_OUT`.
 
 ## Daily Slurm job
 

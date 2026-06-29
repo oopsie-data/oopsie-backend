@@ -1,16 +1,20 @@
 # Compute stats
 
-Two scripts produce the same `stats.json` schema for the [`oopsie-docs`](../../oopsie-docs) dashboard. Use **local** stats in production (after sync); use **HF** stats for ad-hoc checks without syncing to disk first.
+Two scripts produce the same `stats.json` schema for the [`oopsie-docs`](../../oopsie-docs) dashboard. Use **local** stats in production (after sync); use **HF** stats for ad-hoc checks without syncing to disk first (This script hasn't been tested in a while so might break. Better to use the compute_local_stats.py script).
 
-## Output location
+## Output locations
 
-Default path (sibling `oopsie-docs` repo):
+By default, `compute_local_stats` and `compute_hf_stats` write:
 
-```
-/work/09666/abahety/ls6/oopsie-docs/docs/assets/data/stats.json
-```
+| File | Purpose |
+|------|---------|
+| `oopsie-backend/reports/public_stats.json` | Public stats copy in the backend repo |
+| `oopsie-backend/reports/public_stats.html` | Self-contained public stats snapshot |
+| `oopsie-docs/docs/assets/data/stats.json` | Public stats for the docs dashboard |
+| `oopsie-backend/reports/internal_stats.json` | Full internal stats (all repos + operators) |
+| `oopsie-backend/reports/internal_stats.html` | Self-contained internal report |
 
-Override with `--output` or the `OOPSIE_STATS_OUT` environment variable.
+Override the docs-site JSON with `--docs-output` or `OOPSIE_STATS_OUT`. The `reports/` directory is gitignored.
 
 ---
 
@@ -27,12 +31,12 @@ uv run python -m oopsie_backend.scripts.compute_local_stats \
   --data-dir /scratch/09666/abahety/oopsiedata
 ```
 
-Explicit output path (optional — matches the default):
+Explicit docs output path (optional — matches the default):
 
 ```bash
 uv run python -m oopsie_backend.scripts.compute_local_stats \
   --data-dir /scratch/09666/abahety/oopsiedata \
-  --output /work/09666/abahety/ls6/oopsie-docs/docs/assets/data/stats.json
+  --docs-output /work/09666/abahety/ls6/oopsie-docs/docs/assets/data/stats.json
 ```
 
 ### Flags
@@ -40,7 +44,13 @@ uv run python -m oopsie_backend.scripts.compute_local_stats \
 | Flag | Default | Description |
 |------|---------|-------------|
 | `--data-dir` | `/scratch/09666/abahety/oopsiedata` | Root of synced local data |
-| `--output` | `DEFAULT_STATS_JSON` | Where to write `stats.json` |
+| `--docs-output` | `oopsie-docs/docs/assets/data/stats.json` | Public JSON for the docs site |
+| `--public-json` | `reports/public_stats.json` | Public JSON copy in the backend repo |
+| `--public-html` | `reports/public_stats.html` | Public HTML snapshot |
+| `--no-public-report` | off | Skip `public_stats.html` |
+| `--internal-output` | `reports/internal_stats.json` | Internal JSON path |
+| `--no-internal-output` | off | Skip internal JSON/HTML entirely |
+| `--no-internal-report` | off | Skip `internal_stats.html` only |
 | `--limit` | none | Max `.h5` files per dataset (first N, for testing) |
 
 No `HF_TOKEN` required — reads files from disk.
@@ -53,8 +63,12 @@ Found 10675 .h5 file(s) under /scratch/09666/abahety/oopsiedata
   dataset OopsieData-Submissions/LabB: 450 .h5 file(s)
   ...
 
-Wrote /work/09666/abahety/ls6/oopsie-docs/docs/assets/data/stats.json
+Public stats JSON: reports/public_stats.json
+  Docs site JSON: /work/09666/abahety/ls6/oopsie-docs/docs/assets/data/stats.json
   10675 episodes, 37 labs, 9 datasets, 1191S / 8922F over 104.179h
+  Public report: reports/public_stats.html
+  Internal stats: reports/internal_stats.json
+  Internal report: reports/internal_stats.html
 ```
 
 Per-file read failures are logged and counted in `totals.read_errors`:
@@ -110,7 +124,12 @@ uv run python -m oopsie_backend.scripts.compute_hf_stats \
 | `--repo` / `--org` | *(one required)* | Single dataset or entire org |
 | `--repo-type` | `dataset` | `dataset` or `model` |
 | `--token` | `$HF_TOKEN` | HF read token |
-| `--output` | `DEFAULT_STATS_JSON` | Where to write `stats.json` |
+| `--docs-output` | `oopsie-docs/docs/assets/data/stats.json` | Public JSON for the docs site |
+| `--public-json` | `reports/public_stats.json` | Public JSON copy in the backend repo |
+| `--no-public-report` | off | Skip `public_stats.html` |
+| `--internal-output` | `reports/internal_stats.json` | Internal JSON path |
+| `--no-internal-output` | off | Skip internal JSON/HTML entirely |
+| `--no-internal-report` | off | Skip `internal_stats.html` only |
 | `--limit` | none | Max `.h5` files per dataset (for testing) |
 
 ### Expected output
@@ -182,6 +201,33 @@ Example `totals` block:
 ```
 
 The dashboard reads this file from `oopsie-docs/docs/assets/data/stats.json`.
+
+Public `stats.json` **omits every episode** from repos listed in `PUBLIC_EXCLUDED_DATASETS` (bulk imports such as SOAR and roboarena). Totals, timelines, robots, failure categories, and `per_lab` all use the same filter — not just lab breakdowns.
+
+**Complete annotations:** an episode counts as annotated when its latest complete annotation (by timestamp) has `success` set. Successes (`success >= 0.5`) need only that field. Failures additionally require a non-empty `failure_description` and taxonomy `failure_category` / `severity` that are not `"unknown"`. The same rule applies to per-annotator counts in `people` and to failure-description language metrics.
+
+## Internal stats (full dataset + operators)
+
+Not published to the public site. Written to `oopsie-backend/reports/` by default whenever you run either compute script (disable with `--no-internal-output`).
+
+Re-render HTML from existing JSON:
+
+```bash
+uv run python -m oopsie_backend.scripts.render_internal_report \
+  --input reports/internal_stats.json
+
+uv run python -m oopsie_backend.scripts.render_public_report \
+  --input reports/public_stats.json
+```
+
+| File | Purpose |
+|------|---------|
+| `internal_stats.json` | Full `stats` (all repos) + `people` (operators/annotators per lab, public corpus only) + `language_diversity` |
+| `internal_stats.html` | Self-contained internal report |
+| `public_stats.json` | Public-filtered stats (same schema as docs `stats.json`) |
+| `public_stats.html` | Same interactive dashboard as the public docs stats page (shared `_includes/stats-dashboard.html`) |
+
+**Public vs internal:** one `.h5` scan, multiple outputs. `aggregate(..., include_excluded=False)` → public; `build_internal_report()` → internal (includes bulk-import repos, marked with `bulk_import: true` in `per_dataset`).
 
 ## See also
 

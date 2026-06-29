@@ -3,33 +3,48 @@
 Usage:
     uv run python -m oopsie_backend.scripts.compute_local_stats \\
         --data-dir /scratch/09666/abahety/oopsiedata
+
+Writes by default:
+  - reports/public_stats.json + reports/public_stats.html (backend)
+  - ../oopsie-docs/docs/assets/data/stats.json (public docs site)
+  - reports/internal_stats.json + reports/internal_stats.html
 """
 
 from __future__ import annotations
 
 import argparse
-import json
 import sys
 from collections import defaultdict
 from pathlib import Path
 
-from oopsie_backend.utils.episode_stats import DEFAULT_STATS_JSON, aggregate, extract_record
+from oopsie_backend.utils.episode_stats import (
+    DEFAULT_DOCS_STATS_JSON,
+    DEFAULT_INTERNAL_STATS_JSON,
+    DEFAULT_PUBLIC_STATS_HTML,
+    DEFAULT_PUBLIC_STATS_JSON,
+    aggregate,
+    extract_record,
+    public_dataset_repos,
+    resolve_local_episode_path,
+    write_internal_artifacts,
+    write_public_artifacts,
+)
 
 DEFAULT_DATA_DIR = Path("/scratch/09666/abahety/oopsiedata")
 
 
 def discover_episodes(data_dir: Path) -> list[tuple[str, str, Path]]:
     """Return ``(dataset_repo, repo_relative_path, absolute_path)`` for each .h5."""
+    data_dir = data_dir.resolve()
     episodes: list[tuple[str, str, Path]] = []
     for path in sorted(data_dir.rglob("*.h5")):
         if ".cache" in path.parts:
             continue
         rel = path.relative_to(data_dir)
-        if len(rel.parts) < 3:
+        resolved = resolve_local_episode_path(data_dir, rel)
+        if resolved is None:
             continue
-        namespace, repo_name = rel.parts[0], rel.parts[1]
-        repo_path = "/".join(rel.parts[2:])
-        dataset_repo = f"{namespace}/{repo_name}"
+        dataset_repo, repo_path = resolved
         episodes.append((dataset_repo, repo_path, path))
     return episodes
 
@@ -78,16 +93,49 @@ def main(argv: list[str] | None = None) -> int:
         help=f"Root of synced local data (default: {DEFAULT_DATA_DIR}).",
     )
     parser.add_argument(
-        "--output",
+        "--docs-output",
         type=Path,
-        default=DEFAULT_STATS_JSON,
-        help="Where to write stats.json.",
+        default=DEFAULT_DOCS_STATS_JSON,
+        help="Public stats JSON for the docs site (stats.json).",
+    )
+    parser.add_argument(
+        "--public-json",
+        type=Path,
+        default=DEFAULT_PUBLIC_STATS_JSON,
+        help="Public stats JSON copy under oopsie-backend/reports/.",
+    )
+    parser.add_argument(
+        "--public-html",
+        type=Path,
+        default=DEFAULT_PUBLIC_STATS_HTML,
+        help="Public stats HTML snapshot under oopsie-backend/reports/.",
     )
     parser.add_argument(
         "--limit",
         type=int,
         default=None,
         help="Max .h5 files per dataset (first N paths in each dataset folder).",
+    )
+    parser.add_argument(
+        "--no-public-report",
+        action="store_true",
+        help="Skip public_stats.html (JSON copies are still written).",
+    )
+    parser.add_argument(
+        "--internal-output",
+        type=Path,
+        default=DEFAULT_INTERNAL_STATS_JSON,
+        help="Internal stats JSON under oopsie-backend/reports/.",
+    )
+    parser.add_argument(
+        "--no-internal-output",
+        action="store_true",
+        help="Skip internal_stats.json and internal report.",
+    )
+    parser.add_argument(
+        "--no-internal-report",
+        action="store_true",
+        help="Skip internal_stats.html when internal JSON is written.",
     )
     args = parser.parse_args(argv)
 
@@ -105,22 +153,42 @@ def main(argv: list[str] | None = None) -> int:
     records, skipped, datasets_included = collect_local_episodes(episodes, args.limit)
 
     aggregate_label = f"local:{data_dir}"
-    stats = aggregate(records, aggregate_label)
+    stats = aggregate(records, aggregate_label, include_excluded=False)
     stats["totals"]["read_errors"] = skipped
-    stats["datasets_included"] = datasets_included
+    stats["datasets_included"] = public_dataset_repos(datasets_included)
 
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    with args.output.open("w", encoding="utf-8") as fh:
-        json.dump(stats, fh, indent=2, ensure_ascii=False)
-        fh.write("\n")
+    write_public_artifacts(
+        stats,
+        backend_json_path=args.public_json,
+        docs_json_path=args.docs_output,
+        html_path=args.public_html,
+        write_html=not args.no_public_report,
+    )
+    if not args.no_internal_output:
+        write_internal_artifacts(
+            records,
+            aggregate_label,
+            args.internal_output,
+            write_html=not args.no_internal_report,
+        )
 
     t = stats["totals"]
     print(
-        f"\nWrote {args.output}\n  {t['episodes']} episodes, {t['labs']} labs, "
-        f"{t['datasets']} datasets, {t['successes']}S / {t['failures']}F "
-        f"over {t['duration_hours']}h",
+        f"\nPublic stats JSON: {args.public_json}\n"
+        f"  Docs site JSON: {args.docs_output}\n"
+        f"  {t['episodes']} episodes, {t['labs']} labs, {t['datasets']} datasets, "
+        f"{t['successes']}S / {t['failures']}F over {t['duration_hours']}h",
         file=sys.stderr,
     )
+    if not args.no_public_report:
+        print(f"  Public report: {args.public_html}", file=sys.stderr)
+    if not args.no_internal_output:
+        print(f"  Internal stats: {args.internal_output}", file=sys.stderr)
+        if not args.no_internal_report:
+            print(
+                f"  Internal report: {args.internal_output.with_suffix('.html')}",
+                file=sys.stderr,
+            )
     return 0
 
 

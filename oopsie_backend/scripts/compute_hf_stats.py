@@ -1,26 +1,18 @@
 """Stream every .h5 in a private HuggingFace dataset into memory, extract
-metadata, and write a single aggregate `stats.json` consumed by the Jekyll
-dashboard at `oopsie-docs/docs/stats.md`.
-
-No file is ever persisted to disk except the final JSON.
+metadata, and write public + internal stats artifacts.
 
 Usage:
     export HF_TOKEN=hf_...
-    python sweep_dataset.py --repo namespace/dataset-name \\
-        --output ../oopsie-docs/docs/assets/data/stats.json
+    uv run python -m oopsie_backend.scripts.compute_hf_stats \\
+        --repo OopsieData-Submissions/SomeLab
 
-    # Or paste the dataset page URL:
-    python sweep_dataset.py --repo https://huggingface.co/datasets/namespace/dataset-name
-
-    # Sweep every dataset repo under a Hugging Face organization (same token):
-    python sweep_dataset.py --org OopsieData-Submissions
-    python sweep_dataset.py --org https://huggingface.co/OopsieData-Submissions
+    uv run python -m oopsie_backend.scripts.compute_hf_stats \\
+        --org OopsieData-Submissions
 """
 
 from __future__ import annotations
 
 import argparse
-import json
 import os
 import sys
 from pathlib import Path
@@ -29,7 +21,18 @@ import requests
 from huggingface_hub import hf_hub_url
 from huggingface_hub.errors import RepositoryNotFoundError
 
-from oopsie_backend.utils.episode_stats import DEFAULT_STATS_JSON, aggregate, extract_record
+from oopsie_backend.utils.episode_stats import (
+    DEFAULT_DOCS_STATS_JSON,
+    DEFAULT_INTERNAL_STATS_JSON,
+    DEFAULT_PUBLIC_STATS_HTML,
+    DEFAULT_PUBLIC_STATS_JSON,
+    PUBLIC_EXCLUDED_DATASETS,
+    aggregate,
+    extract_record,
+    public_dataset_repos,
+    write_internal_artifacts,
+    write_public_artifacts,
+)
 from oopsie_backend.utils.hf import (
     list_dataset_repos_for_org,
     list_h5_files,
@@ -106,16 +109,49 @@ def main(argv: list[str] | None = None) -> int:
         help="HF read token (defaults to $HF_TOKEN).",
     )
     parser.add_argument(
-        "--output",
+        "--docs-output",
         type=Path,
-        default=DEFAULT_STATS_JSON,
-        help="Where to write stats.json.",
+        default=DEFAULT_DOCS_STATS_JSON,
+        help="Public stats JSON for the docs site (stats.json).",
+    )
+    parser.add_argument(
+        "--public-json",
+        type=Path,
+        default=DEFAULT_PUBLIC_STATS_JSON,
+        help="Public stats JSON copy under oopsie-backend/reports/.",
+    )
+    parser.add_argument(
+        "--public-html",
+        type=Path,
+        default=DEFAULT_PUBLIC_STATS_HTML,
+        help="Public stats HTML snapshot under oopsie-backend/reports/.",
     )
     parser.add_argument(
         "--limit",
         type=int,
         default=None,
         help="Max .h5 files to attempt per dataset (first N paths in each repo).",
+    )
+    parser.add_argument(
+        "--no-public-report",
+        action="store_true",
+        help="Skip public_stats.html (JSON copies are still written).",
+    )
+    parser.add_argument(
+        "--internal-output",
+        type=Path,
+        default=DEFAULT_INTERNAL_STATS_JSON,
+        help="Internal stats JSON under oopsie-backend/reports/.",
+    )
+    parser.add_argument(
+        "--no-internal-output",
+        action="store_true",
+        help="Skip internal_stats.json and internal report.",
+    )
+    parser.add_argument(
+        "--no-internal-report",
+        action="store_true",
+        help="Skip internal_stats.html when internal JSON is written.",
     )
     args = parser.parse_args(argv)
 
@@ -194,20 +230,44 @@ def main(argv: list[str] | None = None) -> int:
             )
             records.extend(batch)
             skipped += sk
-    stats = aggregate(records, aggregate_label)
+    stats = aggregate(records, aggregate_label, include_excluded=False)
     stats["totals"]["read_errors"] = skipped
     if datasets_included:
-        stats["datasets_included"] = datasets_included
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    with args.output.open("w", encoding="utf-8") as fh:
-        json.dump(stats, fh, indent=2, ensure_ascii=False)
-        fh.write("\n")
+        stats["datasets_included"] = public_dataset_repos(datasets_included)
+    elif args.repo is not None and aggregate_label not in PUBLIC_EXCLUDED_DATASETS:
+        stats["datasets_included"] = [aggregate_label]
+
+    write_public_artifacts(
+        stats,
+        backend_json_path=args.public_json,
+        docs_json_path=args.docs_output,
+        html_path=args.public_html,
+        write_html=not args.no_public_report,
+    )
+    if not args.no_internal_output:
+        write_internal_artifacts(
+            records,
+            aggregate_label,
+            args.internal_output,
+            write_html=not args.no_internal_report,
+        )
 
     t = stats["totals"]
     print(
-        f"\nWrote {args.output}\n  {t['episodes']} episodes, {t['labs']} labs, "
+        f"\nPublic stats JSON: {args.public_json}\n"
+        f"  Docs site JSON: {args.docs_output}\n"
+        f"  {t['episodes']} episodes, {t['labs']} labs, "
         f"{t['successes']}S / {t['failures']}F over {t['duration_hours']}h"
     )
+    if not args.no_public_report:
+        print(f"  Public report: {args.public_html}", file=sys.stderr)
+    if not args.no_internal_output:
+        print(f"  Internal stats: {args.internal_output}", file=sys.stderr)
+        if not args.no_internal_report:
+            print(
+                f"  Internal report: {args.internal_output.with_suffix('.html')}",
+                file=sys.stderr,
+            )
     return 0
 
 
