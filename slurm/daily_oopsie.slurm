@@ -5,16 +5,16 @@
 #SBATCH -N 1
 #SBATCH -n 1
 #SBATCH -t 2-00:00:00
-#SBATCH -o /scratch/09666/abahety/logs/oopsie-daily-%j.log
-#SBATCH -e /scratch/09666/abahety/logs/oopsie-daily-%j.log
+#SBATCH -o /corral/utexas/IRI26024/logs/oopsie-daily-%j.log
+#SBATCH -e /corral/utexas/IRI26024/logs/oopsie-daily-%j.log
 
 set -euo pipefail
 SECONDS=0
 
 BACKEND=/work/09666/abahety/ls6/oopsie-backend
-DATA_DIR=/scratch/09666/abahety/oopsiedata
-DOCS_STATS_OUT=/work/09666/abahety/ls6/oopsie-docs/docs/assets/data/stats.json
-LOG_DIR=/scratch/09666/abahety/logs
+DATA_DIR=/corral/utexas/IRI26024/oopsiedata
+STATS_OUT=/work/09666/abahety/ls6/oopsie-docs/docs/assets/data/stats.json
+LOG_DIR=/corral/utexas/IRI26024/logs
 UV=/home1/09666/abahety/.local/bin/uv
 
 mkdir -p "$LOG_DIR" "$DATA_DIR" "$(dirname "$DOCS_STATS_OUT")" "$BACKEND/reports"
