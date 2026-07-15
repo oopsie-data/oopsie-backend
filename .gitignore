@@ -231,3 +231,8 @@ CLAUDE.md
 
 # Generated stats reports (public HTML snapshot + internal JSON/HTML)
 reports/
+
+# Face-blur test set: keep the final manifest tracked, but not local media or
+# scratch manifests.
+face_blur_testset/videos/
+face_blur_testset/manifest.before-*.csv
