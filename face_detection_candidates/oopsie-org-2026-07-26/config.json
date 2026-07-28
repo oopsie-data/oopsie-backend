@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "detector": "deface-centerface",
+  "model_sha256": "09189deaaf8646c5c51a68447e3c744ea1e211798155d4728c20507b9f5aefbc",
+  "input_size": [
+    640,
+    640
+  ],
+  "score_threshold": 0.3,
+  "nms_threshold": 0.4,
+  "device": "cuda:0",
+  "min_positive_frames": 1,
+  "min_consecutive_frames": 1,
+  "stop_on_positive": true,
+  "max_frames": null,
+  "config_hash": "e8a68aa99f1f96a7ac29fa8abb31aa5c5180c7c3058c458f4f4d865c952a7a9e"
+}

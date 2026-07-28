@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-07-26T23:54:56Z",
+  "source_organization": "OopsieData-Submissions",
+  "candidate_semantics": "A detector triggered on at least one decoded frame at the configured threshold; candidates are not human-verified face labels.",
+  "config": {
+    "schema_version": 1,
+    "detector": "deface-centerface",
+    "model_sha256": "09189deaaf8646c5c51a68447e3c744ea1e211798155d4728c20507b9f5aefbc",
+    "input_size": [
+      640,
+      640
+    ],
+    "score_threshold": 0.3,
+    "nms_threshold": 0.4,
+    "device": "cuda:0",
+    "min_positive_frames": 1,
+    "min_consecutive_frames": 1,
+    "stop_on_positive": true,
+    "max_frames": null,
+    "config_hash": "e8a68aa99f1f96a7ac29fa8abb31aa5c5180c7c3058c458f4f4d865c952a7a9e"
+  },
+  "totals": {
+    "repositories": 18,
+    "videos": 65648,
+    "episodes": 48336,
+    "videos_with_faces": 24310,
+    "episodes_with_faces": 18317,
+    "failed_videos": 1
+  },
+  "published_candidates": {
+    "videos": 24310,
+    "episodes": 18317
+  },
+  "failed_sources": [
+    {
+      "source_repo": "OopsieData-Submissions/UofT_TISL",
+      "repo_revision": "319d5834d6d6cf4801cf28508068273eab9e0151",
+      "source_path": "cups_converted/20260508_220901_episode_0_right_wrist.mp4",
+      "episode_key": "cups_converted/20260508_220901_episode_0",
+      "error": "RuntimeError: could not open video: /tmp/oopsie-face-scan-xz1cofkr/datasets--OopsieData-Submissions--UofT_TISL/snapshots/319d5834d6d6cf4801cf28508068273eab9e0151/cups_converted/20260508_220901_episode_0_right_wrist.mp4"
+    }
+  ],
+  "outputs": {
+    "videos": "face_candidate_videos.csv",
+    "episodes": "face_candidate_episodes.csv",
+    "config": "config.json"
+  }
+}
