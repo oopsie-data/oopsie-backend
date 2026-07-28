@@ -236,3 +236,16 @@ reports/
 # scratch manifests.
 face_blur_testset/videos/
 face_blur_testset/manifest.before-*.csv
+
+# Downloaded face-detector models and generated benchmark artifacts.
+face_blur_models/
+face_blur_benchmarks/
+face_blur_outputs/
+
+# Generated face-presence scan checkpoints and raw reports. Publish compact,
+# reviewed exports under face_detection_candidates/ instead.
+face_detection_results/
+
+# Local validation suite for the face pipeline; useful during development but
+# intentionally excluded from the collaborator-facing branch.
+tests/test_face_blur_*.py
