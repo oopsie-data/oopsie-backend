@@ -15,14 +15,22 @@ from typing import Optional
 
 import h5py
 
+from oopsie_backend.utils.episode_stats import (
+    HF_ORG,
+    PUBLIC_EXCLUDED_DATASETS,
+    canonical_dataset_repo,
+    resolve_local_episode_path,
+)
+
 
 # =============================================================================
 # Edit these constants on TACC.
 # =============================================================================
 
-DATASET_ROOT = Path("/work/11382/asriniket/ls6/oopsiedata/OopsieData-Submissions")
-OUTPUT_ROOT = Path("/work/11382/asriniket/ls6/oopsiedata/oopsie_visualizer_assets")
-TOOLS_ROOT = Path("/work/11382/asriniket/ls6/oopsiedata/oopsie_visualizer_tools")
+DATASET_ROOT = Path("/media/arpit/2faaf81e-4247-445a-af59-ce2b3c62537c/oopsiedata/OopsieData-Submissions")
+# Local Jekyll serves this path as /assets/visualizer/. Keep gitignored (large).
+OUTPUT_ROOT = Path("/home/arpit/test_projects/oopsiedata/oopsie-docs/docs/assets/visualizer")
+TOOLS_ROOT = Path("/home/arpit/test_projects/oopsiedata/oopsie_visualizer_tools")
 
 METADATA_FILENAME = "metadata.json"
 VIDEOS_DIRNAME = "videos"
@@ -69,6 +77,7 @@ def main() -> None:
     metadata = {
         "videos": videos,
         "filters": build_filters(videos),
+        "excluded_from_public_datasets": sorted(PUBLIC_EXCLUDED_DATASETS),
         "source": {"dataset_root": str(DATASET_ROOT)},
     }
 
@@ -127,11 +136,30 @@ def download_ffmpeg() -> Path:
     raise RuntimeError(f"Downloaded archive did not contain an ffmpeg binary: {archive_path}")
 
 
+def dataset_repo_for_path(h5_path: Path) -> str:
+    """Path-derived HF repo id (same rules as internal stats)."""
+    rel = h5_path.relative_to(DATASET_ROOT)
+    resolved = resolve_local_episode_path(DATASET_ROOT, rel)
+    if resolved is not None:
+        return canonical_dataset_repo(resolved[0])
+    # Fallback when the path is too shallow to resolve.
+    leaf = rel.parts[0] if rel.parts else h5_path.stem
+    return canonical_dataset_repo(f"{HF_ORG}/{leaf}" if DATASET_ROOT.name == HF_ORG else leaf)
+
+
+def dataset_display_name(dataset_repo: str) -> str:
+    """Short sidebar/card label: repo leaf (e.g. SOAR_origin)."""
+    return dataset_repo.rsplit("/", 1)[-1]
+
+
 def process_episode(h5_path: Path, ffmpeg: str) -> list[dict[str, object]]:
+    dataset_repo = dataset_repo_for_path(h5_path)
+    dataset_label = dataset_display_name(dataset_repo)
+    bulk_import = dataset_repo in PUBLIC_EXCLUDED_DATASETS
+
     with h5py.File(h5_path, "r") as h5:
         language_instruction = read_attr(h5, "language_instruction", h5_path.stem)
         episode_id = read_attr(h5, "episode_id", h5_path.stem)
-        lab_id = read_attr(h5, "lab_id", h5_path.relative_to(DATASET_ROOT).parts[0])
         annotation = read_failure_annotation(h5)
         success = annotation["success"]
         camera_paths = read_camera_paths(h5, h5_path)
@@ -172,13 +200,15 @@ def process_episode(h5_path: Path, ffmpeg: str) -> list[dict[str, object]]:
                     if output_poster.exists()
                     else ""
                 ),
-                "info": info_html(language_instruction, lab_id, task_label, camera_name),
-                "scene_id": filter_id(lab_id, "scene"),
+                "info": info_html(language_instruction, dataset_label, task_label, camera_name),
+                "scene_id": filter_id(dataset_label, "scene"),
                 "camera_id": filter_id(camera_name, "camera"),
                 "camera_label": camera_name,
                 "task_id": filter_id(task_label, "task"),
-                "scene_label": lab_id,
+                "scene_label": dataset_label,
                 "task_label": task_label,
+                "dataset_repo": dataset_repo,
+                "bulk_import": bulk_import,
                 "annotation_id": filter_id(annotation["annotation_label"], "annotation"),
                 "annotation_label": annotation["annotation_label"],
                 "failure_category_ids": [
@@ -394,8 +424,8 @@ def build_filters(videos: list[dict[str, object]]) -> dict[str, dict[str, str]]:
     return filters
 
 
-def info_html(instruction: str, lab_id: str, task_label: str, camera_name: str) -> str:
-    details = " / ".join([lab_id, camera_name, task_label])
+def info_html(instruction: str, dataset_label: str, task_label: str, camera_name: str) -> str:
+    details = " / ".join([dataset_label, camera_name, task_label])
     return f"{html.escape(instruction)}<br><br>{html.escape(details)}"
 
 

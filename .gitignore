@@ -229,5 +229,3 @@ __marimo__/
 .DS_Store
 CLAUDE.md
 
-# Generated stats reports (public HTML snapshot + internal JSON/HTML)
-reports/
