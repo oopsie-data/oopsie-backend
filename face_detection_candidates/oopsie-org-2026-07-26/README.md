@@ -40,6 +40,40 @@ Episode candidates:        18,317
 Unreadable videos:         1
 ```
 
+## Flagged Videos by Repository
+
+The flagged videos are concentrated in the two bulk repositories:
+`roboarena_upload` contributed 12,018 candidates and `SOAR_origin` contributed
+7,424. Together they account for 19,442 of 24,310 flagged videos (80.0%). They
+also account for 55,295 of 65,648 inventoried videos (84.2%), so this
+concentration largely reflects their size and should not be read as a measure
+of confirmed face prevalence.
+
+The flag rate below is the percentage of successfully scanned videos that
+triggered the detector. The table is ordered by number of flagged videos.
+
+| Repository | Inventoried | Scanned | Flagged | Flag rate | Share of flagged |
+|---|---:|---:|---:|---:|---:|
+| `roboarena_upload` | 23,625 | 23,625 | 12,018 | 50.9% | 49.4% |
+| `SOAR_origin` | 31,670 | 31,670 | 7,424 | 23.4% | 30.5% |
+| `UofT_TISL` | 982 | 981 | 785 | 80.0% | 3.2% |
+| `UW_REAL` | 1,518 | 1,518 | 621 | 40.9% | 2.6% |
+| `Princeton_PRISM` | 1,008 | 1,008 | 610 | 60.5% | 2.5% |
+| `Enatic_OpenArm` | 1,275 | 1,275 | 577 | 45.3% | 2.4% |
+| `Princeton_IRoM` | 1,410 | 1,410 | 558 | 39.6% | 2.3% |
+| `Berkeley_RAIL` | 1,499 | 1,499 | 447 | 29.8% | 1.8% |
+| `UPenn_PAL` | 424 | 424 | 287 | 67.7% | 1.2% |
+| `Amazon-MobileManipulationTeam` | 363 | 363 | 261 | 71.9% | 1.1% |
+| `AI2_MOLMOACT2` | 225 | 225 | 158 | 70.2% | 0.6% |
+| `CMU_Intent` | 585 | 585 | 149 | 25.5% | 0.6% |
+| `UofT_RVL` | 126 | 126 | 121 | 96.0% | 0.5% |
+| `UdeM_REAL` | 310 | 310 | 97 | 31.3% | 0.4% |
+| `Stanford_REAL` | 154 | 154 | 82 | 53.2% | 0.3% |
+| `Armnet` | 180 | 180 | 81 | 45.0% | 0.3% |
+| `Princeton_VLL` | 54 | 54 | 33 | 61.1% | 0.1% |
+| `Stanford_Iris` | 240 | 240 | 1 | 0.4% | <0.1% |
+| **Total** | **65,648** | **65,647** | **24,310** | **37.0%** | **100.0%** |
+
 The unreadable source is:
 
 ```text
