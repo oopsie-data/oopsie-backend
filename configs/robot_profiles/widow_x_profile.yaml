@@ -9,7 +9,7 @@ robot_name: widow_x
 gripper_name: widow_x_gripper
 is_biarm: false
 uses_mobile_base: false
-control_freq: 15  # matches source MP4 FPS (trajectory.mp4 is 15 fps, frame_count == T)
+control_freq: 5
 camera_names:
   - main
 
