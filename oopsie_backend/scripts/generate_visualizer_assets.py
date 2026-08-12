@@ -356,7 +356,10 @@ def transcode_video(source_video: Path, output_video: Path, ffmpeg: str) -> None
             str(source_video),
             "-an",
             "-vf",
-            f"fps={VIDEO_FPS},{scale},format=yuv420p",
+            (
+                f"fps={VIDEO_FPS},{scale},"
+                "pad='ceil(iw/2)*2':'ceil(ih/2)*2',format=yuv420p"
+            ),
             "-c:v",
             "libx264",
             "-preset",

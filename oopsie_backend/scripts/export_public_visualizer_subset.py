@@ -15,8 +15,8 @@ import json
 import random
 import re
 import shutil
-from collections import defaultdict
-from pathlib import Path
+from collections import Counter, defaultdict
+from pathlib import Path, PurePosixPath
 
 from oopsie_backend.utils.episode_stats import PUBLIC_EXCLUDED_DATASETS
 
@@ -36,6 +36,10 @@ DEFAULT_FACE_VIDEOS_CSV = Path(
 N_FAILURE = 400
 N_SUCCESS = 100
 SEED = 42
+MIN_FAILURE_PER_DATASET = 10
+MIN_SUCCESS_PER_DATASET = 3
+DATASET_WEIGHT_POWER = 0.5
+SAMPLING_STRATEGIES = ("outcome-weighted", "equal-total")
 
 METADATA_FILENAME = "metadata.json"
 VIDEOS_DIRNAME = "videos"
@@ -72,6 +76,36 @@ def main() -> None:
     parser.add_argument("--n-failure", type=int, default=N_FAILURE)
     parser.add_argument("--n-success", type=int, default=N_SUCCESS)
     parser.add_argument("--seed", type=int, default=SEED)
+    parser.add_argument(
+        "--min-failure-per-dataset",
+        type=int,
+        default=MIN_FAILURE_PER_DATASET,
+        help="Minimum failure samples per dataset when enough are available.",
+    )
+    parser.add_argument(
+        "--min-success-per-dataset",
+        type=int,
+        default=MIN_SUCCESS_PER_DATASET,
+        help="Minimum success samples per dataset when enough are available.",
+    )
+    parser.add_argument(
+        "--dataset-weight-power",
+        type=float,
+        default=DATASET_WEIGHT_POWER,
+        help=(
+            "Dataset-size exponent for distributing samples above the minimum: "
+            "0 is equal, 0.5 is square-root balanced, and 1 is proportional."
+        ),
+    )
+    parser.add_argument(
+        "--sampling-strategy",
+        choices=SAMPLING_STRATEGIES,
+        default="outcome-weighted",
+        help=(
+            "outcome-weighted allocates failures/successes separately; equal-total "
+            "first gives datasets capacity-bounded equal total quotas."
+        ),
+    )
     args = parser.parse_args()
 
     metadata_path = args.input_root / METADATA_FILENAME
@@ -112,7 +146,46 @@ def main() -> None:
             f"Need {args.n_success} success episodes, found {len(successes)}"
         )
 
-    sampled = rng.sample(failures, args.n_failure) + rng.sample(successes, args.n_success)
+    try:
+        if args.sampling_strategy == "equal-total":
+            total_quotas = allocate_dataset_quotas(
+                failures + successes,
+                target=args.n_failure + args.n_success,
+                minimum=0,
+                weight_power=0,
+            )
+            total_quotas = rebalance_total_quotas_for_outcome_target(
+                failures,
+                successes,
+                total_quotas,
+                target_success=args.n_success,
+            )
+            failure_quotas, success_quotas = allocate_outcomes_within_total_quotas(
+                failures,
+                successes,
+                total_quotas,
+                target_success=args.n_success,
+            )
+        else:
+            failure_quotas = allocate_dataset_quotas(
+                failures,
+                target=args.n_failure,
+                minimum=args.min_failure_per_dataset,
+                weight_power=args.dataset_weight_power,
+            )
+            success_quotas = allocate_dataset_quotas(
+                successes,
+                target=args.n_success,
+                minimum=args.min_success_per_dataset,
+                weight_power=args.dataset_weight_power,
+            )
+    except ValueError as error:
+        raise SystemExit(str(error)) from error
+
+    print_dataset_quotas("failure", failure_quotas)
+    print_dataset_quotas("success", success_quotas)
+    sampled = sample_by_dataset_quota(failures, failure_quotas, rng)
+    sampled.extend(sample_by_dataset_quota(successes, success_quotas, rng))
     rng.shuffle(sampled)
 
     if args.output_root.exists():
@@ -176,6 +249,24 @@ def main() -> None:
             "n_total": len(public_videos),
             "face_filter": True,
             "face_candidates_removed": removed_faces,
+            "dataset_sampling": {
+                "strategy": args.sampling_strategy,
+                "weight_power": args.dataset_weight_power,
+                "min_failure_per_dataset": args.min_failure_per_dataset,
+                "min_success_per_dataset": args.min_success_per_dataset,
+                "represented_datasets": len(
+                    {
+                        name
+                        for name, quota in failure_quotas.items()
+                        if quota > 0
+                    }
+                    | {
+                        name
+                        for name, quota in success_quotas.items()
+                        if quota > 0
+                    }
+                ),
+            },
         },
     }
     out_meta = args.output_root / METADATA_FILENAME
@@ -294,6 +385,267 @@ def outcome_label(video: dict) -> str:
     if value == "failure":
         return "Failure"
     return "Unknown"
+
+
+def dataset_name(video: dict) -> str:
+    """Return the private sampling stratum without adding it to public metadata."""
+    explicit = str(video.get("dataset_name") or "").strip()
+    if explicit:
+        return explicit
+
+    for path_key in ("hf_path", "h5_path"):
+        remote_path = str(video.get(path_key) or "").strip()
+        if remote_path:
+            parts = PurePosixPath(remote_path).parts
+            if parts:
+                return parts[0]
+
+    dataset_repo = str(video.get("dataset_repo") or "").strip().rstrip("/")
+    if dataset_repo:
+        return dataset_repo.rsplit("/", 1)[-1]
+
+    # Backward-compatible fallback for generated paths such as
+    # videos/Armnet/episode_000000__front.mp4.
+    src_parts = PurePosixPath(str(video.get("src") or "")).parts
+    if len(src_parts) >= 3 and src_parts[0] in {VIDEOS_DIRNAME, POSTERS_DIRNAME}:
+        return src_parts[1]
+
+    raise ValueError(
+        "Cannot determine dataset for episode "
+        f"{video.get('episode_id')!r}; expected dataset_name, hf_path, h5_path, "
+        "dataset_repo, or a dataset folder in src."
+    )
+
+
+def allocate_dataset_quotas(
+    episodes: list[dict],
+    target: int,
+    minimum: int,
+    weight_power: float = DATASET_WEIGHT_POWER,
+) -> dict[str, int]:
+    """Allocate an exact, capacity-bounded target across dataset strata."""
+    if target < 0:
+        raise ValueError("Sample target must be non-negative")
+    if minimum < 0:
+        raise ValueError("Per-dataset minimum must be non-negative")
+    if weight_power < 0:
+        raise ValueError("Dataset weight power must be non-negative")
+
+    capacities = Counter(dataset_name(episode) for episode in episodes)
+    available = sum(capacities.values())
+    if available < target:
+        raise ValueError(f"Need {target} episodes, found {available}")
+    if target == 0:
+        return {}
+
+    quotas = {
+        name: min(minimum, capacity)
+        for name, capacity in sorted(capacities.items())
+    }
+    minimum_total = sum(quotas.values())
+    if minimum_total > target:
+        raise ValueError(
+            f"Per-dataset minimum requires {minimum_total} samples, "
+            f"but the target is {target}; lower the minimum"
+        )
+
+    # Weighted fair allocation of the remaining slots. Tracking additions above
+    # the floor prevents the floor itself from distorting the requested weights.
+    additions = {name: 0 for name in quotas}
+    weights = {
+        name: capacities[name] ** weight_power
+        for name in quotas
+    }
+    remaining = target - minimum_total
+    while remaining:
+        eligible = [
+            name
+            for name in quotas
+            if quotas[name] < capacities[name]
+        ]
+        if not eligible:
+            raise ValueError(
+                f"Could not allocate {target} samples within dataset capacities"
+            )
+
+        # Highest weight per next added slot wins. Name is an explicit,
+        # deterministic tie-breaker independent of input ordering.
+        selected = min(
+            eligible,
+            key=lambda name: (
+                -(weights[name] / (additions[name] + 1)),
+                name,
+            ),
+        )
+        quotas[selected] += 1
+        additions[selected] += 1
+        remaining -= 1
+
+    return quotas
+
+
+def sample_by_dataset_quota(
+    episodes: list[dict],
+    quotas: dict[str, int],
+    rng: random.Random,
+) -> list[dict]:
+    """Sample the requested number of episodes independently per dataset."""
+    grouped: dict[str, list[dict]] = defaultdict(list)
+    for episode in episodes:
+        grouped[dataset_name(episode)].append(episode)
+
+    sampled: list[dict] = []
+    for name in sorted(quotas):
+        quota = quotas[name]
+        if quota > len(grouped[name]):
+            raise ValueError(
+                f"Dataset {name!r} has {len(grouped[name])} episodes, "
+                f"below its quota of {quota}"
+            )
+        sampled.extend(rng.sample(grouped[name], quota))
+    return sampled
+
+
+def allocate_outcomes_within_total_quotas(
+    failures: list[dict],
+    successes: list[dict],
+    total_quotas: dict[str, int],
+    target_success: int,
+) -> tuple[dict[str, int], dict[str, int]]:
+    """Fit an exact success target inside fixed per-dataset total quotas."""
+    failure_capacities = Counter(dataset_name(episode) for episode in failures)
+    success_capacities = Counter(dataset_name(episode) for episode in successes)
+
+    lower_success: dict[str, int] = {}
+    upper_success: dict[str, int] = {}
+    for name, total_quota in total_quotas.items():
+        total_capacity = failure_capacities[name] + success_capacities[name]
+        if total_quota > total_capacity:
+            raise ValueError(
+                f"Dataset {name!r} has capacity {total_capacity}, "
+                f"below its total quota of {total_quota}"
+            )
+        lower_success[name] = max(
+            0,
+            total_quota - failure_capacities[name],
+        )
+        upper_success[name] = min(
+            total_quota,
+            success_capacities[name],
+        )
+
+    minimum_success = sum(lower_success.values())
+    maximum_success = sum(upper_success.values())
+    if not minimum_success <= target_success <= maximum_success:
+        raise ValueError(
+            f"Cannot fit {target_success} successes inside total dataset quotas; "
+            f"feasible range is {minimum_success}..{maximum_success}"
+        )
+
+    success_quotas = dict(lower_success)
+    remaining = target_success - minimum_success
+    while remaining:
+        eligible = [
+            name
+            for name in sorted(total_quotas)
+            if success_quotas[name] < upper_success[name]
+        ]
+        # Give the next success to the dataset with the lowest resulting
+        # success fraction, keeping outcome mix as even as capacities allow.
+        selected = min(
+            eligible,
+            key=lambda name: (
+                (success_quotas[name] + 1) / total_quotas[name],
+                name,
+            ),
+        )
+        success_quotas[selected] += 1
+        remaining -= 1
+
+    failure_quotas = {
+        name: total_quotas[name] - success_quotas[name]
+        for name in total_quotas
+    }
+    return failure_quotas, success_quotas
+
+
+def rebalance_total_quotas_for_outcome_target(
+    failures: list[dict],
+    successes: list[dict],
+    total_quotas: dict[str, int],
+    target_success: int,
+) -> dict[str, int]:
+    """Minimally shift equal total quotas until the outcome target is feasible."""
+    failure_capacities = Counter(dataset_name(episode) for episode in failures)
+    success_capacities = Counter(dataset_name(episode) for episode in successes)
+    quotas = dict(total_quotas)
+
+    def bounds() -> tuple[int, int]:
+        minimum = sum(
+            max(0, quota - failure_capacities[name])
+            for name, quota in quotas.items()
+        )
+        maximum = sum(
+            min(quota, success_capacities[name])
+            for name, quota in quotas.items()
+        )
+        return minimum, maximum
+
+    minimum_success, maximum_success = bounds()
+    while minimum_success > target_success:
+        donors = [
+            name
+            for name, quota in quotas.items()
+            if quota > failure_capacities[name]
+        ]
+        recipients = [
+            name
+            for name, quota in quotas.items()
+            if quota < failure_capacities[name]
+            and quota
+            < failure_capacities[name] + success_capacities[name]
+        ]
+        if not donors or not recipients:
+            raise ValueError(
+                f"Cannot lower the minimum success count from {minimum_success} "
+                f"to {target_success}"
+            )
+        donor = min(donors, key=lambda name: (-quotas[name], name))
+        recipient = min(recipients, key=lambda name: (quotas[name], name))
+        quotas[donor] -= 1
+        quotas[recipient] += 1
+        minimum_success, maximum_success = bounds()
+
+    while maximum_success < target_success:
+        donors = [
+            name
+            for name, quota in quotas.items()
+            if quota > success_capacities[name]
+        ]
+        recipients = [
+            name
+            for name, quota in quotas.items()
+            if quota < success_capacities[name]
+            and quota
+            < failure_capacities[name] + success_capacities[name]
+        ]
+        if not donors or not recipients:
+            raise ValueError(
+                f"Cannot raise the maximum success count from {maximum_success} "
+                f"to {target_success}"
+            )
+        donor = min(donors, key=lambda name: (-quotas[name], name))
+        recipient = min(recipients, key=lambda name: (quotas[name], name))
+        quotas[donor] -= 1
+        quotas[recipient] += 1
+        minimum_success, maximum_success = bounds()
+
+    return quotas
+
+
+def print_dataset_quotas(label: str, quotas: dict[str, int]) -> None:
+    summary = ", ".join(f"{name}={count}" for name, count in sorted(quotas.items()))
+    print(f"{label.capitalize()} dataset quotas: {summary or 'none'}", flush=True)
 
 
 def pick_one_camera_per_episode(videos: list[dict], seed: int) -> list[dict]:
