@@ -1,159 +1,188 @@
-# Face-Blurring Pipeline
+# Production Face-Blurring Pipeline
 
-The face-blurring stage runs SCRFD on every decoded video frame, associates
-detections across time, fills short detector gaps, and writes a new H.264 MP4.
-It never modifies the source video in place.
+The finalized August 2026 release used the tracked-Deface pipeline, not the
+earlier SCRFD implementation. It ran only on the 240 videos whose completed
+manual annotation had `blur_action=blur`, wrote derived H.264 MP4s without
+modifying the local raw sources, validated every output, and then replaced the
+corresponding paths on Hugging Face `main`.
 
-The default operating point comes from the detector benchmark:
+The authoritative end-to-end release record is
+[`face-privacy-release-2026-08-12.md`](face-privacy-release-2026-08-12.md).
+SCRFD remains available for detector research and historical comparison, as
+documented in [`face-blur-benchmark.md`](face-blur-benchmark.md); it did not
+render the 240 published derivatives.
 
-- SCRFD-10G at score threshold `0.3`
-- `640x640` detector input
-- up to 8 missing frames associated into the same track
-- linear box interpolation between detections
-- 2-frame pre-roll before a track's first detection
-- 8-frame motion-projected hold after its last detection
-- 4% additional hold-box expansion per missing frame
-- 25% horizontal, 35% top, and 25% bottom face-box padding
-- two-pass strong Gaussian blur
+## Release Input Boundary
 
-SCRFD-34G is also registered for experiments, but it is not the default. On
-the current benchmark set it produced more false-positive robot/workspace
-regions than SCRFD-10G at the highest tested threshold that retained 30/30
-video-level positive recall.
+Deface and Qwen outputs were not accepted directly as a blur list. The
+completed 452-row manual manifest separated face presence from downstream
+action. Only these rows were eligible:
 
-The pre-roll, interpolation, and post-detection hold are possible because each
-video is processed in two passes. The first pass completes the track plan; the
-second pass renders it. A one-frame detector miss between two observations is
-therefore filled from both neighboring boxes rather than copied blindly from
-the previous frame.
+```text
+face_present=yes
+blur_action=blur
+exemption_reason=<empty>
+```
 
-## Install
+This selected 240 videos. It excluded 162 reviewed no-face videos, 24 videos
+that were already blurred, and 26 videos containing task-relevant face
+depictions. See [`face-blur-annotations.md`](face-blur-annotations.md).
 
-Use one of the existing face-blur extras. Both include the FFmpeg encoder used
-to produce browser-compatible H.264 output.
+## Initial 240-Video Render
+
+The release used ORB-HD/deface 1.5.0's CenterFace model and deface-style masks,
+combined with temporal track confirmation:
+
+| Setting | Released value |
+|---|---|
+| Detector | `deface-centerface` |
+| Model SHA-256 | `09189deaaf8646c5c51a68447e3c744ea1e211798155d4728c20507b9f5aefbc` |
+| Detector resolution | Native source-frame resolution |
+| Continuation threshold | `0.2` |
+| Strong seed threshold | `0.3` |
+| Observations required to confirm a track | `2` |
+| Maximum association/interpolation gap | `8` frames |
+| Confirmed-track pre-roll / hold | `2` / `2` frames |
+| Smoothing window | `1` frame |
+| Hold expansion | `0.02` per frame |
+| Mask | Ellipse, scale `1.3`, Gaussian blur |
+| Encoder | H.264, CRF 18, `medium` preset |
+| Audio | Copied |
+
+The planner works in two passes. CenterFace first runs over every frame; the
+pipeline then confirms spatially consistent tracks, includes lower-scoring
+continuations, interpolates short internal gaps, applies pre-roll and hold, and
+renders the completed plan. It performs no face recognition and stores no face
+embeddings.
+
+A strong but unconfirmed detection was rendered on its observed frame rather
+than discarded. The initial policy did not extend such fallback observations
+as far as confirmed tracks, which motivated the correction pass below.
+
+## Fallback Correction
+
+An automated sidecar audit identified 97 outputs with fallback detections where
+a conservative policy could cover frames that the initial confirmed-track
+behavior might leave exposed. Those videos were regenerated with algorithm
+version 3. The ordinary confirmed-track configuration stayed unchanged, while
+fallback tracks received:
+
+- two frames of pre-roll;
+- up to 15 frames of post-detection hold.
+
+All 97 corrected MP4s passed full machine validation. Fourteen were manually
+spot-checked and approved; the remaining 83 had no additional individual
+correction-review label and were accepted after validation. The corrected set
+comprised eight `Princeton_PRISM`, four `Stanford_REAL`, one `UPenn_PAL`, nine
+`UW_REAL`, and 75 `UofT_TISL` videos.
+
+The correction pass replaced the corresponding initial derivatives before the
+final 240-video set was promoted to `main`.
+
+## Validation Contract
+
+Each release output was required to have a successful audit sidecar and to
+match the expected:
+
+- source identity and source SHA-256;
+- detector model and complete configuration hash;
+- frame dimensions, decoded frame count, and frame rate;
+- output encoding and successful full decode;
+- output SHA-256.
+
+The initial validation reported 240 of 240 valid videos and no errors. The
+correction validation reported 97 of 97 valid videos and no errors. Publication
+then compared the uploaded bytes with the local expected SHA-256 rather than
+assuming a successful commit meant the media was correct.
+
+## Hugging Face Publication
+
+The final derivatives replaced the same repository-relative source paths on
+each dataset's `main` branch:
+
+| Repository | Replaced videos |
+|---|---:|
+| `Princeton_PRISM` | 10 |
+| `Stanford_REAL` | 16 |
+| `UPenn_PAL` | 1 |
+| `UW_REAL` | 9 |
+| `UofT_TISL` | 204 |
+| **Total** | **240** |
+
+Each affected dataset contains:
+
+- root `video_tags.csv` with one `face-blurred` row per replaced path;
+- a root dataset-card `face-blurred` tag for repository-level filtering;
+- `face_blur_release/2026-08-12/` with manifest and validation metadata.
+
+The dataset-card tag means “contains face-blurred videos.” It is not a claim
+that all videos in the repository are blurred. Per-file consumers must use
+`video_tags.csv`.
+
+## Preservation and Recovery
+
+Raw originals were preserved before replacement in two ways:
+
+1. the private dataset
+   `OopsieData-Submissions/oopsie-face-raw-archive-2026-08-12`, containing all
+   240 original MP4s and a manifest;
+2. the immutable `pre-face-blur-2026-08-12` tag in each affected source
+   repository.
+
+The default `main` revision now serves the face-blurred derivatives. Recovery
+or research access to original media should use the access-controlled archive
+or the immutable tag, never an unversioned local copy.
+
+Recover one original by using the same repository-relative path at the
+pre-release tag:
 
 ```bash
-# CPU inference
+hf download OopsieData-Submissions/UofT_TISL \
+  path/to/video.mp4 \
+  --repo-type dataset \
+  --revision pre-face-blur-2026-08-12
+```
+
+The `pre-face-blur-2026-08-12` tag contains unblurred media and inherits the
+source repository's access policy. It is not made private by the existence of
+the separate raw archive. See
+[`Recovering an Original Video`](face-privacy-release-2026-08-12.md#recovering-an-original-video)
+for the security implications and exact source-revision alternative.
+
+## Running the Core Renderer
+
+Install one ONNX Runtime variant and the FFmpeg-backed encoder:
+
+```bash
+# CPU
 uv sync --extra face-blur
 
-# GPU inference
+# GPU
 uv sync --extra face-blur-gpu
 ```
 
-Do not install both extras in one environment because both ONNX Runtime
-distributions expose the same Python module.
-
-## Process the 30 Positive Review Videos
+The tracked renderer is exposed through:
 
 ```bash
 uv run --extra face-blur-gpu \
-  python -m oopsie_backend.scripts.blur_faces \
-  --manifest face_blur_testset/manifest.csv \
-  --labels yes \
-  --output-dir face_blur_outputs/positive-review \
-  --device cuda:0
-```
-
-The generated videos are under
-`face_blur_outputs/positive-review/videos/`. The directory also contains a
-`face-blur-run.json` batch report. Every video has an adjacent
-`<video>.face-blur.json` audit sidecar with:
-
-- source and output SHA-256 hashes;
-- detector/model/configuration metadata;
-- frame and timing counts;
-- track observations and scores;
-- counts of directly detected, interpolated, pre-roll, and held regions.
-
-The command resumes videos whose source stat and complete processing
-configuration still match. An existing output with missing or stale metadata
-is not overwritten unless `--overwrite` is given. Outputs are encoded and
-validated in a temporary file, then published with an atomic rename.
-
-## Process Other Data
-
-One video:
-
-```bash
-uv run --extra face-blur-gpu \
-  python -m oopsie_backend.scripts.blur_faces \
-  --input /path/to/camera.mp4 \
+  python -m oopsie_backend.scripts.run_tracked_deface \
+  --input /path/to/reviewed-video.mp4 \
   --output-dir /path/to/derived-videos \
   --device cuda:0
 ```
 
-A directory tree, preserving relative paths:
+The CLI defaults reproduce the initial release's core detector, tracking,
+mask, encoder, and audio settings. Reproducing a dataset release additionally
+requires a frozen action-filtered manifest, immutable source revisions, the
+fallback correction policy, validation, raw preservation, and remote hash
+verification. A successful standalone render is not authorization to replace
+Hub data.
 
-```bash
-uv run --extra face-blur-gpu \
-  python -m oopsie_backend.scripts.blur_faces \
-  --input /path/to/dataset/videos \
-  --output-dir /path/to/blurred-dataset/videos \
-  --device cuda:0
-```
+## Review Requirements for Future Releases
 
-The library entry point is
-`oopsie_backend.face_blur.pipeline.blur_video`, so conversion jobs can call the
-same implementation directly after writing each camera video. Keep originals
-in a restricted raw-data location and publish only the derived output.
-
-Native and confirmed-tracking ORB-HD/deface comparisons are kept as separate
-pipelines. Both use CenterFace and ellipse masks; the tracked variant confirms
-tracks with strong detections before accepting weaker temporal continuations.
-See
-[`deface-pipeline.md`](deface-pipeline.md).
-
-## Temporal Behavior
-
-Detections are matched one-to-one using predicted motion, box overlap, center
-distance, and size consistency. The tracker does not use face recognition or
-store embeddings.
-
-For each track:
-
-1. Nearby detector boxes are temporally averaged, then unioned with the raw
-   boxes. Smoothing can enlarge a region but cannot remove detector-supported
-   coverage.
-2. Missing boxes between two matched detections are linearly interpolated.
-3. The box is projected for 8 frames after the last detection using recent
-   center/size velocity with damping.
-4. Held boxes expand on every missed frame to account for motion uncertainty.
-5. All planned boxes receive additional padding before rendering.
-
-Every accepted detection creates a blur immediately; there is no minimum-hit
-filter that could expose a real face appearing for only one frame. A false
-positive can consequently persist for the configured hold period. This is an
-intentional privacy/utility tradeoff.
-
-Relevant controls include:
-
-| Option | Default | Meaning |
-|---|---:|---|
-| `--score-threshold` | `0.3` | SCRFD acceptance threshold |
-| `--max-gap-frames` | `8` | Maximum missing frames still associated/interpolated |
-| `--hold-frames` | `8` | Frames blurred after the last detection |
-| `--pre-roll-frames` | `2` | Frames blurred before the first detection |
-| `--smoothing-window` | `2` | Temporal smoothing radius in frames |
-| `--hold-expansion-per-frame` | `0.04` | Extra scale per held frame |
-| `--blur-method` | `gaussian` | `gaussian` or `pixelate` |
-| `--audio` | `copy` | Preserve audio, re-encode to AAC, or `drop` |
-
-Use `python -m oopsie_backend.scripts.blur_faces --help` for the complete set.
-
-## Manual Validation
-
-Review every positive output from beginning to end, at normal speed and with
-frame stepping around each face's entry, exit, occlusion, and fast motion.
-Check specifically for:
-
-- any unblurred face frame, including profiles and partial faces;
-- a box that lags behind a moving face during interpolation or hold;
-- insufficient forehead, chin, or side padding;
-- blur strength that leaves identity recognizable;
-- task-relevant printed/screen faces that need a documented policy decision;
-- output truncation, frame-size changes, corruption, or audio problems.
-
-The current video-level test labels cannot prove frame-level coverage. The 30
-video review is therefore a required validation step, not an optional visual
-spot check. Record any leaking sample ID and frame/timestamp before tuning so a
-regression fixture can be added.
+Before publication, inspect faces around entry, exit, occlusion, profile views,
+fast motion, reflections, and screen or printed depictions. Record whether a
+depiction is privacy-sensitive or task-relevant rather than letting the
+detector decide policy. Any suspected leak should enter a correction manifest;
+new or changed source videos must repeat the full screening and review
+workflow.

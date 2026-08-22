@@ -1,9 +1,15 @@
 # Qwen2.5-VL Face Verification
 
-`verify_hf_faces_qwen` is a detector-verification experiment for robotics
-videos. It uses Qwen2.5-VL as an additional semantic filter after
+`verify_hf_faces_qwen` is the semantic verification stage used after Deface in
+the finalized August 2026 face-privacy workflow. It uses Qwen2.5-VL as an
+additional filter after
 `deface-centerface`; it does not replace the face detector, generate bounding
 boxes, blur media, or upload anything.
+
+The verifier's output is a review-candidate signal, not the final privacy
+decision. The completed release used manual `face_present` and `blur_action`
+labels before any media was replaced. See the authoritative
+[`2026-08-12 release record`](face-privacy-release-2026-08-12.md).
 
 The verifier uses
 [`Qwen/Qwen2.5-VL-7B-Instruct`](https://huggingface.co/Qwen/Qwen2.5-VL-7B-Instruct),
@@ -27,12 +33,33 @@ reflections, and screens. It rejects robot parts, grippers, isolated hands and
 arms, tools, shadows, and accidental face-like patterns. Qwen is not asked to
 localize the face. The full frame is used rather than a detector crop so the
 model retains scene context and is not forced to interpret the false-positive
-region as a face.
+region as a face. A previously blurred region with no discernible facial
+features is answered `NO`; the later manual policy separately records
+`already_blurred` as a face-present preservation exemption.
 
 Every raw Qwen response is retained. An ambiguous response produces an
 `incomplete` result rather than being silently converted to `NO`.
 An unexpectedly short video decode or a detector-positive source video with no
 positive frames on the exhaustive rerun is also `incomplete`, never rejected.
+
+## Evaluated Production Run
+
+The finalized run consumed the Deface 0.4 scan of 4,086 videos from
+`Princeton_PRISM`, `Stanford_REAL`, `UPenn_PAL`, `UW_REAL`, and `UofT_TISL`.
+Deface produced 1,370 candidates, all of which completed Qwen verification:
+
+| Result | Videos |
+|---|---:|
+| Qwen verified | 257 |
+| Qwen rejected | 1,113 |
+| Incomplete or failed | 0 |
+| Verified episodes by filename heuristic | 207 |
+
+Qwen checked 52,694 Deface-positive frames and answered `YES` on 30,841. These
+figures describe the verifier, not the published dataset. Manual review later
+selected 240 videos for blurring: 215 Qwen-verified videos, 22 Qwen-rejected
+Deface disagreements, and three videos without a Qwen judgment. Forty-two
+Qwen-verified videos were preserved after manual review.
 
 ## Installation
 
@@ -91,7 +118,7 @@ After all shards finish, merge them with an exact expected count:
 uv run python -m oopsie_backend.scripts.merge_qwen_face_verifications \
   --input-dirs face_detection_results/qwen-shard-* \
   --output-dir face_detection_results/oopsie-five-repos-deface-0.4-qwen \
-  --expected-videos NUMBER_OF_DEFACE_0.4_CANDIDATES
+  --expected-videos 1370
 ```
 
 ## Outputs
@@ -120,7 +147,8 @@ limits, JPEG quality, and generation settings.
 
 Qwen2.5-VL is not a validated privacy detector. A `NO` response can still be a
 false negative, especially for small, occluded, profile, low-resolution, or
-motion-blurred faces. The verifier must be evaluated on labeled face and
-false-positive frames before its output is used to exclude videos from a
-privacy review. For a conservative policy, ambiguous or failed verification
-must remain review candidates.
+motion-blurred faces. The August release therefore included high Deface/Qwen
+disagreements in the manual queue and used manual blur decisions as the safety
+boundary. For future runs, ambiguous or failed verification must remain review
+candidates, and a model `NO` must not be treated as proof that a video is
+face-free.

@@ -4,7 +4,14 @@ This document describes the hand-labeled video set assembled on the
 `face-blur` branch to seed development and evaluation of a face detection and
 blurring pipeline.
 
-## Final Test Set
+This 101-video set is the finalized **detector-development set**, not the final
+publication manifest. It was imported into the later 452-video manual privacy
+queue, but the 240 Hugging Face replacements were selected by that queue's
+separate `blur_action` field. See
+[`face-blur-annotations.md`](face-blur-annotations.md) and the
+[`2026-08-12 release record`](face-privacy-release-2026-08-12.md).
+
+## Final Detector Test Set
 
 Current location:
 
@@ -98,16 +105,18 @@ Known edge cases:
   useful for checking idempotence or for measuring how the pipeline behaves on
   pre-blurred data, but they should not be counted as ordinary clean positives.
 
-For the eventual pipeline, consider tracking separate fields or derived
-categories such as:
+The finalized release implemented that separation in its annotation manifest:
 
 ```text
-detected_face = yes/no
-face_medium = real_person | printed_photo | screen | poster | unknown
-privacy_risk = yes/no/unknown
-task_relevant = yes/no/unknown
+face_present = yes | no | uncertain
 blur_action = blur | preserve | review
+exemption_reason = already_blurred | task_relevant_depiction | other | <empty>
 ```
+
+The release used `face_present`, `blur_action`, and `exemption_reason` as the
+authoritative fields. Twenty-four already-blurred videos and 26 task-relevant
+face depictions were explicitly preserved; neither category was inferred from
+the detector label alone.
 
 ## Scripts Added On This Branch
 

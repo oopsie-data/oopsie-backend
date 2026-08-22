@@ -5,6 +5,12 @@ one or more detector-only models. It reports video-level recall, specificity,
 precision, uncertain-video behavior, false detections and raw box area on
 negative frames, and exact-node throughput.
 
+This page records detector-development experiments. The finalized August 2026
+release used Deface CenterFace for screening and tracked rendering, with Qwen
+verification and manual blur decisions between those stages. SCRFD benchmark
+results below are historical comparisons, not the production release policy.
+See [`face-privacy-release-2026-08-12.md`](face-privacy-release-2026-08-12.md).
+
 It does **not** report frame-level privacy coverage because the current labels
 only say whether an entire video contains face-like content. See
 [`face-blur-testset.md`](face-blur-testset.md) for the label semantics and known
@@ -157,12 +163,13 @@ single-model timing. SCRFD-10G's first 20 videos also ran on a GPU contended by
 an unrelated workload before the resumable run moved to a free GPU. Treat the
 figures as operational lower bounds, not clean model latency measurements.
 
-SCRFD-10G at threshold `0.3` is the default detector for the
-[face-blurring pipeline](face-blur-pipeline.md). It retained full video-level recall
-while reducing negative-frame triggers by roughly 4x versus SCRFD-2.5G and 7x
-versus YuNet. This is not yet a production privacy threshold: 40 negative videos
-still contained at least one false detection, and video-level labels cannot
-measure exposed face frames or mask coverage.
+At the time of this baseline, SCRFD-10G at threshold `0.3` was selected as the
+default experimental renderer because it retained full video-level recall while
+reducing negative-frame triggers by roughly 4x versus SCRFD-2.5G and 7x versus
+YuNet. That selection was later superseded by the finalized tracked-Deface
+workflow. The baseline was never a production privacy threshold: 40 negative
+videos still contained at least one false detection, and video-level labels
+cannot measure exposed face frames or mask coverage.
 
 ## SCRFD-34G Follow-up: 2026-07-20
 
@@ -193,3 +200,19 @@ native and tracked review-video commands, and the observed frame-level temporal
 tradeoff. The confirmed tracked policy retains 30/30 positive videos and 30/58
 triggered negative videos while masking 6.159% of negative frames, versus
 6.708% for the default SCRFD-10G temporal plan.
+
+## Production Selection: August 2026
+
+The benchmark motivated the use of Deface CenterFace, but the released workflow
+did not select videos from the 101-video benchmark alone. It first used Deface
+0.3 to triage repositories, then rescanned all 4,086 videos in the five
+prioritized repositories at threshold `0.4`. That scan produced 1,370
+candidates. Pinned Qwen verification reduced the primary review pool to 257,
+and a broader 452-video manual queue—including strong model disagreements—set
+the final 240 blur actions.
+
+Rendering used tracked Deface with `0.3` strong seeds and `0.2` continuations,
+not the `0.4` screening threshold. Ninety-seven suspect renders then received a
+stricter fallback correction before the final files were promoted to Hugging
+Face `main`. These production counts and controls supersede any earlier wording
+that calls an SCRFD operating point the default release pipeline.

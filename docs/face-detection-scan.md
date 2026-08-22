@@ -5,6 +5,12 @@ dataset visible under an organization, runs face detection, and writes
 video- and episode-level CSV files. It does not blur, re-encode, or upload any
 video.
 
+This is a screening tool. Its output is not a human-verified face label and is
+not, by itself, an upload list. The finalized August 2026 release used a Deface
+0.4 scan of five prioritized repositories, followed by pinned Qwen
+verification and manual privacy decisions. See
+[`face-privacy-release-2026-08-12.md`](face-privacy-release-2026-08-12.md).
+
 ## Does It Download the Videos?
 
 The detector must decode the video frames, so every source video must be read
@@ -59,6 +65,14 @@ high-recall screening configuration: it detected all 30 positive videos in the
 current labeled test set, but it also triggered on 30 of 58 labeled negative
 videos. Treat `detected` as a candidate for review, not as a human-verified
 label.
+
+The default is useful for exploratory screening; it is not the exact
+production-run configuration. After repository triage, the finalized scan used
+`deface-centerface` at threshold `0.4`, NMS threshold `0.4`, and one positive
+frame as the video trigger. CenterFace runs at the source frame's native
+resolution even though the shared scan configuration records an input-size
+field. The immutable five-repository scan contained 4,086 videos, returned
+1,370 candidates, and had one unreadable `UofT_TISL` video.
 
 Scan one dataset instead:
 
@@ -163,6 +177,11 @@ uv run python -m oopsie_backend.scripts.merge_hf_face_scans \
 The expected count makes the merge fail rather than silently publishing a
 partial label file.
 
+`65648` was the size of the original July 2026 organization inventory. Always
+derive the expected count from a newly frozen inventory for a new scan. The
+organization later gained repositories that were not part of the finalized
+release, including `Brown_ST` and `NW_RZ`.
+
 ## Episode Mapping Limitation
 
 The repositories do not expose one uniform Hub-level episode-to-video index.
@@ -176,3 +195,12 @@ dataset that stores multiple episodes in a single video, or uses an unfamiliar
 camera naming convention, use `videos.csv` as the source of truth and resolve
 its paths against that dataset's HDF5/Parquet metadata before treating
 `episodes.csv` as exact.
+
+## Relationship to Published Data
+
+The scan outputs remain internal candidate/audit artifacts. The only final
+per-video publication marker is `video_tags.csv` in each affected Hugging Face
+repository. Its 240 `face-blurred` rows reflect the later manual and rendering
+workflow, not all 1,370 detector candidates. The root dataset-card
+`face-blurred` tag means the repository contains affected videos; it does not
+mean every video in that repository triggered the detector.

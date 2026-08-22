@@ -1,8 +1,14 @@
-# Native and Tracked Deface Pipelines
+# Deface Detector and Tracked Renderer
 
-This project keeps [ORB-HD/deface](https://github.com/ORB-HD/deface) v1.5.0 as
-an independent comparison pipeline. It does not replace or modify the existing
-SCRFD temporal face-blurring implementation.
+The finalized August 2026 face-privacy release used the CenterFace model from
+[ORB-HD/deface](https://github.com/ORB-HD/deface) v1.5.0 for both candidate
+screening and tracked rendering. The native and SCRFD modes remain useful
+comparisons, but they did not produce the 240 derivatives published to Hugging
+Face `main`.
+
+See [`face-privacy-release-2026-08-12.md`](face-privacy-release-2026-08-12.md)
+for the release outcome and [`face-blur-pipeline.md`](face-blur-pipeline.md)
+for the production rendering and correction policy.
 
 Deface uses CenterFace independently on every frame. Its native defaults are:
 
@@ -20,7 +26,7 @@ temporary path, validated, atomically published, and accompanied by a
 
 ## Install
 
-Use either existing face-blur extra. Both now include deface 1.5.0 and ONNX;
+Use either face-blur extra. Both include deface 1.5.0 and ONNX;
 the GPU extra uses the same ONNX Runtime CUDA installation as SCRFD.
 
 ```bash
@@ -28,7 +34,7 @@ uv sync --extra face-blur
 uv sync --extra face-blur-gpu
 ```
 
-## Detector Benchmark
+## Historical Detector Benchmark
 
 The `deface-centerface` adapter exposes CenterFace boxes and scores through the
 same benchmark used for SCRFD and YuNet. Run inference at a low score floor so
@@ -79,7 +85,7 @@ leave later frames exposed because detections are not linked across time.
 Complete machine-readable metrics and per-frame detections are in
 `face_blur_benchmarks/deface-native/`.
 
-## Produce Positive Review Videos
+## Historical Positive-Set Review Renders
 
 For the aggregate comparison operating point, use threshold `0.3`. It retains
 30/30 positive-video recall while improving precision and negative-video
@@ -119,7 +125,7 @@ mask interpolated, pre-roll, and held frames.
 
 ## Confirmed Temporal Tracking
 
-The separate tracked-deface mode retains the `0.3` operating point without
+The tracked-deface mode retains the `0.3` operating point without
 allowing every weak or isolated detection to create a persistent blur:
 
 1. CenterFace runs at native resolution with a `0.2` continuation floor.
@@ -180,11 +186,42 @@ their source frame. `video_0017` now has a continuous face mask through frames
 0–12, covering the entry frame missed by deface `0.3` and frame 4 missed by
 native deface `0.2`.
 
+## Final Production Use
+
+The release used two deliberately different CenterFace thresholds for two
+different jobs:
+
+- **Screening:** threshold `0.4` and NMS threshold `0.4` identified 1,370
+  candidates among 4,086 videos in the five prioritized repositories. This
+  stage stopped after a video's first positive frame.
+- **Rendering:** the full video was decoded at native resolution with a `0.2`
+  continuation floor. Two spatially consistent detections at `0.3` confirmed a
+  track; gaps of up to eight frames were interpolated with two-frame pre-roll
+  and two-frame hold.
+
+The screening threshold was not reused as the render threshold: a selective
+video-level candidate pass and conservative frame-level coverage solve
+different problems. Qwen then filtered candidate frames semantically, but the
+manual `blur_action` label—not either model—selected the final 240 inputs.
+
+After review of the initial outputs, 97 suspect videos were rerendered with a
+stricter fallback policy. Confirmed-track settings remained the same; fallback
+tracks received two-frame pre-roll and 15-frame hold. All 97 corrections passed
+machine validation, 14 were manually approved as spot checks, and the corrected
+set was included before promotion to `main`.
+
+The released media retained the deface-style ellipse at scale `1.3`, Gaussian
+blur, H.264 CRF 18 with the `medium` preset, and copied audio. Complete hashes
+and configuration records are stored in each affected dataset under
+`face_blur_release/2026-08-12/`.
+
 ## Important Limitation
 
-The corpus has video-level labels, so the benchmark can report the same
+The development corpus has video-level labels, so the benchmark can report the same
 video-level recall and negative-video/frame trigger metrics as SCRFD. It still
 cannot measure the fraction of actual face frames covered or whether an ellipse
 fully obscures identity. The eight-frame association window also represents
-different durations at different video frame rates. Manual frame-by-frame
-review remains required before choosing this policy for production.
+different durations at different video frame rates. The finalized release
+therefore added Qwen-assisted candidate review, explicit human blur decisions,
+output inspection, correction, and hash-verified publication. Future data must
+repeat those controls; the historical benchmark alone is not a release gate.
