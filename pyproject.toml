@@ -29,6 +29,12 @@ face-blur-gpu = [
     "onnx>=1.19,<2",
     "onnxruntime-gpu[cuda,cudnn]>=1.23,<2",
 ]
+face-verify-qwen = [
+    "accelerate>=1,<2",
+    "pillow>=10,<13",
+    "torch>=2.6,<3",
+    "transformers>=5.1,<6",
+]
 
 [tool.uv.sources]
 oopsie-tools = { path = "../oopsie-tools", editable = true }
