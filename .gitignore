@@ -42,7 +42,15 @@ MANIFEST
 pip-log.txt
 pip-delete-this-directory.txt
 
-# Unit test / coverage reports
+# Runtime and batch-job logs
+logs/
+*.out
+*.err
+nohup.out
+
+# Unit tests and coverage reports. Local tests are intentionally not shipped on
+# the collaborator-facing branch.
+tests/
 htmlcov/
 .tox/
 .nox/
@@ -246,6 +254,16 @@ face_blur_outputs/
 # reviewed exports under face_detection_candidates/ instead.
 face_detection_results/
 
-# Local validation suite for the face pipeline; useful during development but
-# intentionally excluded from the collaborator-facing branch.
-tests/test_face_blur_*.py
+# Local media. Source and derived videos belong in versioned dataset storage,
+# not in this code repository.
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+
+# Generated release workspaces and resumable publication state. Final compact
+# release documentation belongs under docs/; manifests live with the dataset.
+snapshot_releases/
+release_artifacts/
+**/.internal/

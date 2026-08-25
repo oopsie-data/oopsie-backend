@@ -12,6 +12,7 @@ dependencies = [
     "tensorflow-datasets>=4.9.10",
     "tensorflow>=2.21.0",
     "numpy<2.4",
+    "pyarrow>=15,<26",
 ]
 
 [project.optional-dependencies]

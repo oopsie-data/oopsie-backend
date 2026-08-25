@@ -10,6 +10,7 @@ All oopsiedata processing code lives here
 | HF org → local sync (`sync_hf_org`) | [docs/sync-hf-org.md](docs/sync-hf-org.md) |
 | Dashboard stats (`compute_local_stats`, `compute_hf_stats`) | [docs/compute-stats.md](docs/compute-stats.md) |
 | Final face-privacy pipeline and 2026-08-12 HF release | [docs/face-privacy-release-2026-08-12.md](docs/face-privacy-release-2026-08-12.md) |
+| Private OopsieData v0.1 snapshot release | [docs/oopsiedata-v0.1-snapshot.md](docs/oopsiedata-v0.1-snapshot.md) |
 | Qwen verification after Deface | [docs/qwen-face-verification.md](docs/qwen-face-verification.md) |
 | Manual face and blur-policy annotation | [docs/face-blur-annotations.md](docs/face-blur-annotations.md) |
 | Production tracked-Deface blurring | [docs/face-blur-pipeline.md](docs/face-blur-pipeline.md) |

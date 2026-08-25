@@ -12,6 +12,12 @@ SCRFD remains available for detector research and historical comparison, as
 documented in [`face-blur-benchmark.md`](face-blur-benchmark.md); it did not
 render the 240 published derivatives.
 
+The later private `oopsiedata-v0.1` snapshot carried these 240 derivatives
+forward and added 154 newly rendered videos using the finalized algorithm-3
+fallback policy. Its frozen 19-repository scope, automatic Deface/Qwen policy,
+manifest schema, server-side copy procedure, and recovery rules are documented
+in [`oopsiedata-v0.1-snapshot.md`](oopsiedata-v0.1-snapshot.md).
+
 ## Release Input Boundary
 
 Deface and Qwen outputs were not accepted directly as a blur list. The
@@ -171,12 +177,11 @@ uv run --extra face-blur-gpu \
   --device cuda:0
 ```
 
-The CLI defaults reproduce the initial release's core detector, tracking,
-mask, encoder, and audio settings. Reproducing a dataset release additionally
-requires a frozen action-filtered manifest, immutable source revisions, the
-fallback correction policy, validation, raw preservation, and remote hash
-verification. A successful standalone render is not authorization to replace
-Hub data.
+The CLI defaults reproduce the finalized algorithm-3 detector, tracking,
+fallback, mask, encoder, and audio settings. Reproducing a dataset release
+additionally requires a frozen action-filtered manifest, immutable source
+revisions, validation, raw preservation, and remote hash verification. A
+successful standalone render is not authorization to replace Hub data.
 
 ## Review Requirements for Future Releases
 
