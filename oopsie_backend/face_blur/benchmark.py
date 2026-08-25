@@ -40,6 +40,10 @@ from oopsie_backend.face_blur.types import FaceDetection
 
 SCHEMA_VERSION = 1
 ALLOWED_LABELS = frozenset({"yes", "no", "uncertain"})
+ALLOWED_BLUR_ACTIONS = frozenset({"", "blur", "preserve", "review"})
+ALLOWED_EXEMPTION_REASONS = frozenset(
+    {"", "already_blurred", "task_relevant_depiction", "other"}
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -53,6 +57,8 @@ class BenchmarkSample:
     face_present: str
     labeler: str
     notes: str
+    blur_action: str = ""
+    exemption_reason: str = ""
 
 
 def utc_now() -> str:
@@ -121,6 +127,7 @@ def load_manifest(manifest_path: Path) -> list[BenchmarkSample]:
     missing = required - set(rows[0] if rows else ())
     if missing:
         raise ValueError(f"manifest is missing columns: {', '.join(sorted(missing))}")
+    advanced_manifest = bool(rows and "blur_action" in rows[0])
 
     samples: list[BenchmarkSample] = []
     seen_ids: set[str] = set()
@@ -130,10 +137,23 @@ def load_manifest(manifest_path: Path) -> list[BenchmarkSample]:
             raise ValueError(f"invalid or duplicate sample_id on row {row_number}")
         seen_ids.add(sample_id)
         label = (row.get("face_present") or "").strip().lower()
-        if label not in ALLOWED_LABELS:
+        if label not in ALLOWED_LABELS and not (advanced_manifest and not label):
             raise ValueError(
                 f"invalid face_present={label!r} on row {row_number}; "
                 f"expected one of {sorted(ALLOWED_LABELS)}"
+            )
+        blur_action = (row.get("blur_action") or "").strip().lower()
+        if blur_action not in ALLOWED_BLUR_ACTIONS:
+            raise ValueError(
+                f"invalid blur_action={blur_action!r} on row {row_number}; "
+                f"expected one of {sorted(ALLOWED_BLUR_ACTIONS)}"
+            )
+        exemption_reason = (row.get("exemption_reason") or "").strip().lower()
+        if exemption_reason not in ALLOWED_EXEMPTION_REASONS:
+            raise ValueError(
+                f"invalid exemption_reason={exemption_reason!r} on row "
+                f"{row_number}; expected one of "
+                f"{sorted(ALLOWED_EXEMPTION_REASONS)}"
             )
         relative_path = Path((row.get("local_video_path") or "").strip())
         video_path = (root / relative_path).resolve()
@@ -156,6 +176,8 @@ def load_manifest(manifest_path: Path) -> list[BenchmarkSample]:
                 face_present=label,
                 labeler=(row.get("labeler") or "").strip(),
                 notes=(row.get("notes") or "").strip(),
+                blur_action=blur_action,
+                exemption_reason=exemption_reason,
             )
         )
     if not samples:

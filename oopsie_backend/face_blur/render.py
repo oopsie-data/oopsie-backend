@@ -130,11 +130,40 @@ def blur_frame_deface(
 
     mask_config = config or DefaceMaskConfig()
     output = frame_bgr.copy()
+    frame_height, frame_width = output.shape[:2]
+    deface_faces: list[TrackedFace] = []
+    tiny_edge_faces: list[TrackedFace] = []
+    for face in faces:
+        if face.box.area <= 0:
+            continue
+        # deface truncates coordinates, scales them, then clips x2/y2 to
+        # width-1/height-1 even though those values are later used as exclusive
+        # NumPy slice endpoints. A fractional box at the right/bottom edge can
+        # consequently become an empty crop or produce a zero-sized blur
+        # kernel. Keep normal regions on the native renderer and obscure these
+        # degenerate edge regions with our small-region-safe Gaussian fallback.
+        coordinates = np.asarray(face.box.to_list(digits=12), dtype=np.float32)
+        x1, y1, x2, y2 = (float(value) for value in coordinates.astype(int))
+        scale_delta = mask_config.mask_scale - 1.0
+        box_height, box_width = y2 - y1, x2 - x1
+        y1 -= box_height * scale_delta
+        y2 += box_height * scale_delta
+        x1 -= box_width * scale_delta
+        x2 += box_width * scale_delta
+        x1, y1, x2, y2 = np.round([x1, y1, x2, y2]).astype(int)
+        y1, y2 = max(0, y1), min(frame_height - 1, y2)
+        x1, x2 = max(0, x1), min(frame_width - 1, x2)
+        # deface chooses a blur kernel of region_size // 2. Widths/heights
+        # below four therefore either crash (kernel 0) or produce an
+        # ineffective 1-pixel identity kernel.
+        if x2 - x1 < 4 or y2 - y1 < 4:
+            tiny_edge_faces.append(face)
+        else:
+            deface_faces.append(face)
     detections = np.asarray(
         [
             [face.box.x1, face.box.y1, face.box.x2, face.box.y2, 1.0]
-            for face in faces
-            if face.box.area > 0
+            for face in deface_faces
         ],
         dtype=np.float32,
     )
@@ -149,6 +178,8 @@ def blur_frame_deface(
             replaceimg=None,
             mosaicsize=mask_config.mosaic_size,
         )
+    if tiny_edge_faces:
+        output = blur_frame(output, tiny_edge_faces, BlurConfig(method="gaussian"))
     return output
 
 

@@ -43,7 +43,8 @@ def _load_runtime(args: argparse.Namespace):
         from transformers import AutoProcessor, Qwen2_5_VLForConditionalGeneration
     except ImportError as exc:
         raise RuntimeError(
-            "Qwen verification requires torch, transformers, accelerate, and Pillow"
+            "Qwen verification requires torch, transformers, accelerate, and Pillow; "
+            f"underlying import error: {exc}"
         ) from exc
 
     if not torch.cuda.is_available() and str(args.device).startswith("cuda"):

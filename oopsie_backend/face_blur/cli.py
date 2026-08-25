@@ -43,6 +43,7 @@ class VideoJob:
     source_path: Path
     output_path: Path
     label: str | None = None
+    blur_action: str | None = None
 
 
 def _atomic_json(path: Path, data: dict) -> None:
@@ -71,14 +72,32 @@ def discover_jobs(
     inputs: list[Path] | None = None,
     manifest: Path | None = None,
     labels: set[str] | None = None,
+    blur_actions: set[str] | None = None,
+    require_complete_actions: bool = False,
 ) -> list[VideoJob]:
     """Resolve file, directory, or benchmark-manifest inputs into video jobs."""
     output_dir = output_dir.resolve()
     jobs: list[VideoJob] = []
     if manifest is not None:
         selected_labels = labels or {"yes", "no", "uncertain"}
-        for sample in load_manifest(manifest):
+        samples = load_manifest(manifest)
+        if require_complete_actions:
+            incomplete = [
+                sample.sample_id
+                for sample in samples
+                if not annotation_action_is_complete(sample)
+            ]
+            if incomplete:
+                preview = ", ".join(incomplete[:5])
+                suffix = "..." if len(incomplete) > 5 else ""
+                raise ValueError(
+                    f"manifest has {len(incomplete)} incomplete face/blur "
+                    f"annotation(s): {preview}{suffix}"
+                )
+        for sample in samples:
             if sample.face_present not in selected_labels:
+                continue
+            if blur_actions is not None and sample.blur_action not in blur_actions:
                 continue
             jobs.append(
                 VideoJob(
@@ -88,6 +107,7 @@ def discover_jobs(
                         output_dir, Path(sample.local_video_path)
                     ),
                     label=sample.face_present,
+                    blur_action=sample.blur_action or None,
                 )
             )
     else:
@@ -135,6 +155,22 @@ def discover_jobs(
     return jobs
 
 
+def annotation_action_is_complete(sample) -> bool:
+    if sample.face_present == "no":
+        return sample.blur_action == "preserve" and not sample.exemption_reason
+    if sample.face_present == "uncertain":
+        return sample.blur_action == "review" and not sample.exemption_reason
+    if sample.face_present != "yes":
+        return False
+    if sample.blur_action == "blur":
+        return not sample.exemption_reason
+    return sample.blur_action == "preserve" and sample.exemption_reason in {
+        "already_blurred",
+        "task_relevant_depiction",
+        "other",
+    }
+
+
 def resolve_device(device: str) -> str:
     if device != "auto":
         return device
@@ -167,6 +203,20 @@ def build_parser() -> argparse.ArgumentParser:
         nargs="+",
         choices=["yes", "no", "uncertain"],
         help="Manifest labels to process (default: all).",
+    )
+    parser.add_argument(
+        "--blur-actions",
+        nargs="+",
+        choices=["blur", "preserve", "review"],
+        help=(
+            "Manifest blur actions to process. Use '--blur-actions blur' after "
+            "manual privacy review."
+        ),
+    )
+    parser.add_argument(
+        "--allow-incomplete-annotations",
+        action="store_true",
+        help="Allow --blur-actions to operate before every manifest row is complete.",
     )
     parser.add_argument("--limit", type=int, default=None)
     parser.add_argument(
@@ -251,6 +301,8 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     if args.labels and args.manifest is None:
         parser.error("--labels can only be used with --manifest")
+    if args.blur_actions and args.manifest is None:
+        parser.error("--blur-actions can only be used with --manifest")
     if args.limit is not None and args.limit <= 0:
         parser.error("--limit must be positive")
     output_dir = args.output_dir.resolve()
@@ -260,6 +312,10 @@ def main(argv: list[str] | None = None) -> int:
             inputs=args.input,
             manifest=args.manifest,
             labels=set(args.labels) if args.labels else None,
+            blur_actions=set(args.blur_actions) if args.blur_actions else None,
+            require_complete_actions=(
+                bool(args.blur_actions) and not args.allow_incomplete_annotations
+            ),
         )
         if args.limit is not None:
             jobs = jobs[: args.limit]
@@ -310,6 +366,7 @@ def main(argv: list[str] | None = None) -> int:
                 {
                     "job_id": job.job_id,
                     "label": job.label,
+                    "blur_action": job.blur_action,
                     "source_path": str(job.source_path),
                     "output_path": str(job.output_path),
                     "status": result["status"],
@@ -327,6 +384,7 @@ def main(argv: list[str] | None = None) -> int:
                 {
                     "job_id": job.job_id,
                     "label": job.label,
+                    "blur_action": job.blur_action,
                     "source_path": str(job.source_path),
                     "output_path": str(job.output_path),
                     "status": "error",

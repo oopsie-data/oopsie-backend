@@ -64,6 +64,8 @@ class TrackConfirmationConfig:
     seed_threshold: float = 0.3
     min_seed_observations: int = 2
     render_unconfirmed_seeds: bool = True
+    fallback_pre_roll_frames: int = 2
+    fallback_hold_frames: int = 15
 
     def __post_init__(self) -> None:
         if not 0 <= self.continuation_threshold <= 1:
@@ -74,6 +76,10 @@ class TrackConfirmationConfig:
             raise ValueError("continuation_threshold cannot exceed seed_threshold")
         if self.min_seed_observations <= 0:
             raise ValueError("min_seed_observations must be positive")
+        if self.fallback_pre_roll_frames < 0:
+            raise ValueError("fallback_pre_roll_frames must be non-negative")
+        if self.fallback_hold_frames < 0:
+            raise ValueError("fallback_hold_frames must be non-negative")
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -335,7 +341,9 @@ def _plan_tracks(
     frame_width: int,
     frame_height: int,
     config: TrackingConfig,
-    fallback_observations: Sequence[tuple[int, TrackObservation]] = (),
+    fallback_tracks: Sequence[FaceTrack] = (),
+    fallback_pre_roll_frames: int = 0,
+    fallback_hold_frames: int = 0,
     reported_tracks: Sequence[FaceTrack] | None = None,
     policy: dict[str, object] | None = None,
 ) -> TrackingPlan:
@@ -355,10 +363,19 @@ def _plan_tracks(
             TrackedFace(track_id=track_id, box=padded, source=source)
         )
 
-    for track in tracks:
+    def plan_track(
+        track: FaceTrack,
+        *,
+        pre_roll_frames: int,
+        hold_frames: int,
+        fallback: bool,
+    ) -> None:
         observations = track.observations
         anchors = _smoothed_anchor_boxes(track, config.smoothing_window)
         observed_frames = {item.frame_index for item in observations}
+
+        def source(name: str) -> str:
+            return f"fallback_{name}" if fallback else name
 
         first = observations[0]
         first_velocity = (0.0, 0.0, 0.0, 0.0)
@@ -370,24 +387,24 @@ def _plan_tracks(
                 anchors[second.frame_index],
                 second.frame_index,
             )
-        for step in range(config.pre_roll_frames, 0, -1):
+        for step in range(pre_roll_frames, 0, -1):
             amount = -_damped_distance(step, config.motion_decay)
             projected = _project_box(
                 anchors[first.frame_index], first_velocity, amount
             ).scaled_about_center(1 + config.hold_expansion_per_frame * step)
-            add(first.frame_index - step, track.track_id, projected, "pre_roll")
+            add(first.frame_index - step, track.track_id, projected, source("pre_roll"))
 
         for index, observation in enumerate(observations):
             start_frame = observation.frame_index
             start_box = anchors[start_frame]
-            add(start_frame, track.track_id, start_box, "detection")
+            add(start_frame, track.track_id, start_box, source("detection"))
             if index + 1 >= len(observations):
                 continue
             next_frame = observations[index + 1].frame_index
             next_box = anchors[next_frame]
             elapsed = next_frame - start_frame
             for frame_index in range(start_frame + 1, next_frame):
-                source = (
+                region_source = (
                     "detection" if frame_index in observed_frames else "interpolated"
                 )
                 add(
@@ -396,7 +413,7 @@ def _plan_tracks(
                     start_box.interpolate(
                         next_box, (frame_index - start_frame) / elapsed
                     ),
-                    source,
+                    source(region_source),
                 )
 
         last = observations[-1]
@@ -409,19 +426,26 @@ def _plan_tracks(
                 anchors[last.frame_index],
                 last.frame_index,
             )
-        for step in range(1, config.hold_frames + 1):
+        for step in range(1, hold_frames + 1):
             amount = _damped_distance(step, config.motion_decay)
             projected = _project_box(
                 anchors[last.frame_index], last_velocity, amount
             ).scaled_about_center(1 + config.hold_expansion_per_frame * step)
-            add(last.frame_index + step, track.track_id, projected, "hold")
+            add(last.frame_index + step, track.track_id, projected, source("hold"))
 
-    for track_id, observation in fallback_observations:
-        add(
-            observation.frame_index,
-            track_id,
-            observation.box,
-            "fallback_detection",
+    for track in tracks:
+        plan_track(
+            track,
+            pre_roll_frames=config.pre_roll_frames,
+            hold_frames=config.hold_frames,
+            fallback=False,
+        )
+    for track in fallback_tracks:
+        plan_track(
+            track,
+            pre_roll_frames=fallback_pre_roll_frames,
+            hold_frames=fallback_hold_frames,
+            fallback=True,
         )
 
     frozen = {
@@ -472,9 +496,11 @@ def plan_confirmed_blur_regions(
 
     Detections below ``seed_threshold`` can extend a spatially associated track
     but can never create a rendered track by themselves. Tracks with enough
-    strong observations receive interpolation, pre-roll, and hold. Strong
-    observations on an unconfirmed track are rendered only on their source
-    frame so temporal processing never amplifies an isolated false positive.
+    strong observations receive the normal interpolation, pre-roll, and hold.
+    An unconfirmed track with a strong seed retains its complete associated
+    trajectory and receives a separately configured conservative temporal
+    window. This avoids exposing a persistent face when the detector produces
+    only one strong frame while keeping low-score-only tracks discarded.
     """
     tracking_config = tracking or TrackingConfig()
     confirmation_config = confirmation or TrackConfirmationConfig()
@@ -490,7 +516,7 @@ def plan_confirmed_blur_regions(
     candidate_tracks = associate_detections(candidates, tracking_config)
     confirmed_tracks: list[FaceTrack] = []
     fallback_tracks: list[FaceTrack] = []
-    fallback_observations: list[tuple[int, TrackObservation]] = []
+    fallback_seed_count = 0
     for track in candidate_tracks:
         seed_observations = tuple(
             observation
@@ -501,10 +527,8 @@ def plan_confirmed_blur_regions(
             confirmed_tracks.append(track)
             continue
         if confirmation_config.render_unconfirmed_seeds and seed_observations:
-            fallback_tracks.append(FaceTrack(track.track_id, seed_observations))
-            fallback_observations.extend(
-                (track.track_id, observation) for observation in seed_observations
-            )
+            fallback_tracks.append(track)
+            fallback_seed_count += len(seed_observations)
 
     rendered_tracks = tuple(
         sorted((*confirmed_tracks, *fallback_tracks), key=lambda item: item.track_id)
@@ -515,7 +539,9 @@ def plan_confirmed_blur_regions(
         frame_width=frame_width,
         frame_height=frame_height,
         config=tracking_config,
-        fallback_observations=fallback_observations,
+        fallback_tracks=fallback_tracks,
+        fallback_pre_roll_frames=confirmation_config.fallback_pre_roll_frames,
+        fallback_hold_frames=confirmation_config.fallback_hold_frames,
         reported_tracks=rendered_tracks,
         policy={
             "mode": "confirmed_hysteresis",
@@ -523,7 +549,10 @@ def plan_confirmed_blur_regions(
             "candidate_track_count": len(candidate_tracks),
             "confirmed_track_count": len(confirmed_tracks),
             "fallback_track_count": len(fallback_tracks),
-            "fallback_detection_count": len(fallback_observations),
+            "fallback_detection_count": fallback_seed_count,
+            "fallback_observation_count": sum(
+                len(track.observations) for track in fallback_tracks
+            ),
             "discarded_track_count": (
                 len(candidate_tracks) - len(confirmed_tracks) - len(fallback_tracks)
             ),

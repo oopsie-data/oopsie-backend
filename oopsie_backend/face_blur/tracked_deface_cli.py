@@ -40,7 +40,7 @@ from oopsie_backend.face_blur.tracking import (
 )
 
 SCHEMA_VERSION = 1
-ALGORITHM_VERSION = 1
+ALGORITHM_VERSION = 3
 
 
 def _default_tracking() -> TrackingConfig:
@@ -247,6 +247,10 @@ def build_parser() -> argparse.ArgumentParser:
     source.add_argument("--manifest", type=Path)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--labels", nargs="+", choices=["yes", "no", "uncertain"])
+    parser.add_argument(
+        "--blur-actions", nargs="+", choices=["blur", "preserve", "review"]
+    )
+    parser.add_argument("--allow-incomplete-annotations", action="store_true")
     parser.add_argument("--limit", type=int, default=None)
     parser.add_argument("--model-dir", type=Path, default=default_model_dir())
     parser.add_argument("--device", default="auto")
@@ -255,6 +259,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--seed-threshold", type=float, default=0.3)
     parser.add_argument("--min-seed-observations", type=int, default=2)
     parser.add_argument("--drop-unconfirmed-seeds", action="store_true")
+    parser.add_argument("--fallback-pre-roll-frames", type=int, default=2)
+    parser.add_argument("--fallback-hold-frames", type=int, default=15)
     parser.add_argument("--max-gap-frames", type=int, default=8)
     parser.add_argument("--hold-frames", type=int, default=2)
     parser.add_argument("--pre-roll-frames", type=int, default=2)
@@ -287,6 +293,8 @@ def _config_from_args(args: argparse.Namespace) -> TrackedDefaceConfig:
             seed_threshold=args.seed_threshold,
             min_seed_observations=args.min_seed_observations,
             render_unconfirmed_seeds=not args.drop_unconfirmed_seeds,
+            fallback_pre_roll_frames=args.fallback_pre_roll_frames,
+            fallback_hold_frames=args.fallback_hold_frames,
         ),
         tracking=TrackingConfig(
             max_gap_frames=args.max_gap_frames,
@@ -321,6 +329,8 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     if args.labels and args.manifest is None:
         parser.error("--labels can only be used with --manifest")
+    if args.blur_actions and args.manifest is None:
+        parser.error("--blur-actions can only be used with --manifest")
     if args.limit is not None and args.limit <= 0:
         parser.error("--limit must be positive")
     output_dir = args.output_dir.resolve()
@@ -330,6 +340,10 @@ def main(argv: list[str] | None = None) -> int:
             inputs=args.input,
             manifest=args.manifest,
             labels=set(args.labels) if args.labels else None,
+            blur_actions=set(args.blur_actions) if args.blur_actions else None,
+            require_complete_actions=(
+                bool(args.blur_actions) and not args.allow_incomplete_annotations
+            ),
         )
         if args.limit is not None:
             jobs = jobs[: args.limit]
@@ -377,6 +391,7 @@ def main(argv: list[str] | None = None) -> int:
                 {
                     "job_id": job.job_id,
                     "label": job.label,
+                    "blur_action": job.blur_action,
                     "source_path": str(job.source_path),
                     "output_path": str(job.output_path),
                     "status": result["status"],
@@ -396,6 +411,7 @@ def main(argv: list[str] | None = None) -> int:
                 {
                     "job_id": job.job_id,
                     "label": job.label,
+                    "blur_action": job.blur_action,
                     "source_path": str(job.source_path),
                     "output_path": str(job.output_path),
                     "status": "error",

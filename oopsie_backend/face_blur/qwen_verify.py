@@ -159,7 +159,10 @@ class QwenWorker:
     ) -> None:
         repo_root = Path(__file__).resolve().parents[2]
         command = [
-            str(worker_python.resolve()),
+            # Preserve the virtual-environment entry point. ``resolve()`` follows
+            # its python symlink to the base interpreter, which drops the venv's
+            # site-packages in the spawned worker.
+            str(worker_python.absolute()),
             "-m",
             "oopsie_backend.face_blur.qwen_worker",
             "--model",

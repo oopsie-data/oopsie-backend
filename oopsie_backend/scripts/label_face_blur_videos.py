@@ -20,13 +20,36 @@ import sys
 import tempfile
 import threading
 import webbrowser
+from datetime import datetime, timezone
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, unquote, urlparse
 
 ALLOWED_LABELS = {"", "yes", "no", "uncertain"}
+ALLOWED_BLUR_ACTIONS = {"", "blur", "preserve", "review"}
+ALLOWED_EXEMPTION_REASONS = {
+    "",
+    "already_blurred",
+    "task_relevant_depiction",
+    "other",
+}
 REQUIRED_COLUMNS = ("sample_id", "local_video_path", "face_present", "labeler", "notes")
+ADVANCED_COLUMNS = (
+    "blur_action",
+    "exemption_reason",
+    "annotation_source",
+    "annotated_at",
+)
+
+
+def utc_now() -> str:
+    return (
+        datetime.now(timezone.utc)
+        .replace(microsecond=0)
+        .isoformat()
+        .replace("+00:00", "Z")
+    )
 
 
 INDEX_HTML = r"""<!doctype html>
@@ -46,6 +69,9 @@ INDEX_HTML = r"""<!doctype html>
       --yes: #0f8a4b;
       --no: #b42318;
       --uncertain: #9a6700;
+      --blur: #b42318;
+      --preserve: #175cd3;
+      --review: #9a6700;
       --focus: #2563eb;
     }
     * { box-sizing: border-box; }
@@ -139,9 +165,21 @@ INDEX_HTML = r"""<!doctype html>
     button.yes { border-color: var(--yes); color: var(--yes); }
     button.no { border-color: var(--no); color: var(--no); }
     button.uncertain { border-color: var(--uncertain); color: var(--uncertain); }
+    button.blur { border-color: var(--blur); color: var(--blur); }
+    button.preserve { border-color: var(--preserve); color: var(--preserve); }
+    button.review { border-color: var(--review); color: var(--review); }
     button.selected.yes { background: #e7f6ee; }
     button.selected.no { background: #fff0ed; }
     button.selected.uncertain { background: #fff7db; }
+    button.selected.blur { background: #fff0ed; }
+    button.selected.preserve { background: #eff8ff; }
+    button.selected.review { background: #fff7db; }
+    .decision-help {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
     .form-row {
       display: grid;
       gap: 6px;
@@ -217,6 +255,9 @@ INDEX_HTML = r"""<!doctype html>
     .badge.yes { color: var(--yes); background: #e7f6ee; }
     .badge.no { color: var(--no); background: #fff0ed; }
     .badge.uncertain { color: var(--uncertain); background: #fff7db; }
+    .badge.blur { color: var(--blur); background: #fff0ed; }
+    .badge.preserve { color: var(--preserve); background: #eff8ff; }
+    .badge.review, .badge.needs-action { color: var(--review); background: #fff7db; }
     @media (max-width: 980px) {
       main { grid-template-columns: 1fr; }
       .side { max-height: 420px; }
@@ -230,19 +271,32 @@ INDEX_HTML = r"""<!doctype html>
   </header>
   <main>
     <section class="viewer">
-      <video id="video" controls playsinline></video>
+      <video id="video" controls playsinline autoplay muted loop></video>
       <div class="meta">
         <div>Sample</div><div id="sampleId"></div>
+        <div>Repository</div><div id="sourceRepo"></div>
         <div>Source</div><div id="sourcePath"></div>
         <div>Video</div><div id="videoPath"></div>
+        <div>Queue reason</div><div id="candidateReason"></div>
+        <div>Model signals</div><div id="modelSignals"></div>
+        <div>Imported label</div><div id="labelSource"></div>
+        <div>Current decision</div><div id="currentDecision"></div>
       </div>
       <div class="controls">
         <button id="prevBtn" type="button">Previous</button>
-        <button id="yesBtn" class="yes" type="button">Y · Face</button>
+        <button id="blurBtn" class="blur" type="button">B · Face → Blur</button>
         <button id="noBtn" class="no" type="button">N · No Face</button>
-        <button id="uncertainBtn" class="uncertain" type="button">U · Uncertain</button>
+        <button id="alreadyBlurredBtn" class="preserve advanced-only" type="button">A · Already Blurred</button>
+        <button id="taskRelevantBtn" class="preserve advanced-only" type="button">P · Task/Photo → Preserve</button>
+        <button id="otherPreserveBtn" class="preserve advanced-only" type="button">O · Other → Preserve</button>
+        <button id="uncertainBtn" class="review" type="button">U · Uncertain/Review</button>
         <button id="clearBtn" type="button">Clear</button>
         <button id="nextBtn" type="button">Next</button>
+      </div>
+      <div class="decision-help advanced-only">
+        Face presence and blur policy are stored separately. “Already blurred” and
+        “Task/Photo” both record that a face exists while instructing the downstream
+        pipeline to preserve the video.
       </div>
       <div class="form-row">
         <label for="labeler">Labeler</label>
@@ -258,10 +312,13 @@ INDEX_HTML = r"""<!doctype html>
       <div class="side-head">
         <select id="filter">
           <option value="all">All videos</option>
-          <option value="unlabeled">Unlabeled</option>
-          <option value="yes">Face</option>
+          <option value="incomplete" selected>Needs annotation/action</option>
+          <option value="blur">Blur</option>
+          <option value="preserve">Preserve</option>
+          <option value="yes">Face present</option>
           <option value="no">No face</option>
-          <option value="uncertain">Uncertain</option>
+          <option value="review">Uncertain/review</option>
+          <option value="imported">Imported labels</option>
         </select>
         <input id="search" placeholder="Search sample/source">
       </div>
@@ -273,20 +330,29 @@ INDEX_HTML = r"""<!doctype html>
     let rows = [];
     let current = 0;
     let saveTimer = null;
+    let advancedMode = false;
     const els = {
       summary: document.getElementById('summary'),
       video: document.getElementById('video'),
       sampleId: document.getElementById('sampleId'),
+      sourceRepo: document.getElementById('sourceRepo'),
       sourcePath: document.getElementById('sourcePath'),
       videoPath: document.getElementById('videoPath'),
+      candidateReason: document.getElementById('candidateReason'),
+      modelSignals: document.getElementById('modelSignals'),
+      labelSource: document.getElementById('labelSource'),
+      currentDecision: document.getElementById('currentDecision'),
       status: document.getElementById('status'),
       labeler: document.getElementById('labeler'),
       notes: document.getElementById('notes'),
       filter: document.getElementById('filter'),
       search: document.getElementById('search'),
       list: document.getElementById('list'),
-      yesBtn: document.getElementById('yesBtn'),
+      blurBtn: document.getElementById('blurBtn'),
       noBtn: document.getElementById('noBtn'),
+      alreadyBlurredBtn: document.getElementById('alreadyBlurredBtn'),
+      taskRelevantBtn: document.getElementById('taskRelevantBtn'),
+      otherPreserveBtn: document.getElementById('otherPreserveBtn'),
       uncertainBtn: document.getElementById('uncertainBtn'),
     };
 
@@ -294,13 +360,47 @@ INDEX_HTML = r"""<!doctype html>
       const res = await fetch('/api/manifest');
       const data = await res.json();
       rows = data.rows;
+      advancedMode = Boolean(data.advanced);
+      for (const element of document.querySelectorAll('.advanced-only')) {
+        element.hidden = !advancedMode;
+      }
       current = firstUnlabeledIndex();
       render();
     }
 
     function firstUnlabeledIndex() {
-      const idx = rows.findIndex(row => !row.face_present);
+      const idx = rows.findIndex(row => !decisionComplete(row));
       return idx >= 0 ? idx : 0;
+    }
+
+    function decisionComplete(row) {
+      if (!advancedMode) return ['yes', 'no', 'uncertain'].includes(row.face_present);
+      if (row.face_present === 'no') return row.blur_action === 'preserve';
+      if (row.face_present === 'yes' && row.blur_action === 'blur') return true;
+      if (row.face_present === 'yes' && row.blur_action === 'preserve') {
+        return ['already_blurred', 'task_relevant_depiction', 'other'].includes(row.exemption_reason);
+      }
+      return row.face_present === 'uncertain' && row.blur_action === 'review';
+    }
+
+    function decisionBadge(row) {
+      if (!decisionComplete(row)) {
+        return row.face_present ? ['needs action', 'needs-action'] : ['unlabeled', ''];
+      }
+      if (!advancedMode) {
+        if (row.face_present === 'yes') return ['face', 'yes'];
+        if (row.face_present === 'no') return ['no face', 'no'];
+        return ['uncertain', 'uncertain'];
+      }
+      if (row.face_present === 'no') return ['no face', 'no'];
+      if (row.blur_action === 'blur') return ['blur', 'blur'];
+      if (row.blur_action === 'review') return ['review', 'review'];
+      const reasons = {
+        already_blurred: 'preserve · blurred',
+        task_relevant_depiction: 'preserve · task/photo',
+        other: 'preserve · other',
+      };
+      return [reasons[row.exemption_reason] || 'preserve', 'preserve'];
     }
 
     function filteredRows() {
@@ -308,10 +408,15 @@ INDEX_HTML = r"""<!doctype html>
       const q = els.search.value.trim().toLowerCase();
       return rows.map((row, index) => ({row, index})).filter(({row}) => {
         const label = row.face_present || '';
-        if (filter === 'unlabeled' && label) return false;
-        if (['yes', 'no', 'uncertain'].includes(filter) && label !== filter) return false;
+        if (filter === 'incomplete' && decisionComplete(row)) return false;
+        if (['yes', 'no'].includes(filter) && label !== filter) return false;
+        if (['blur', 'preserve'].includes(filter) && row.blur_action !== filter) return false;
+        if (filter === 'review' && row.blur_action !== 'review') return false;
+        if (filter === 'imported' && !(row.annotation_source || '').startsWith('imported_')) return false;
         if (q) {
-          const hay = [row.sample_id, row.source_path, row.local_video_path, row.notes].join(' ').toLowerCase();
+          const hay = [row.sample_id, row.source_repo, row.source_path,
+            row.local_video_path, row.notes, row.candidate_reason,
+            row.annotation_source].join(' ').toLowerCase();
           if (!hay.includes(q)) return false;
         }
         return true;
@@ -322,25 +427,40 @@ INDEX_HTML = r"""<!doctype html>
       if (!rows.length) return;
       const row = rows[current];
       els.video.src = `/media/${encodeURIComponent(row.sample_id)}`;
+      els.video.play().catch(() => {});
       els.sampleId.textContent = `${row.sample_id} (${current + 1}/${rows.length})`;
+      els.sourceRepo.textContent = row.source_repo || '';
       els.sourcePath.textContent = row.source_path || '';
       els.videoPath.textContent = row.local_video_path || '';
+      els.candidateReason.textContent = row.candidate_reason || '';
+      els.modelSignals.textContent = [
+        row.qwen_verified_face ? `Qwen=${row.qwen_verified_face}` : '',
+        row.deface_positive_frames ? `deface frames=${row.deface_positive_frames}` : '',
+        row.qwen_positive_frames ? `Qwen YES frames=${row.qwen_positive_frames}` : '',
+        row.disagreement_rank_repo ? `disagreement rank=${row.disagreement_rank_repo}` : '',
+      ].filter(Boolean).join(' · ');
+      els.labelSource.textContent = [row.annotation_source, row.annotated_at].filter(Boolean).join(' · ');
+      els.currentDecision.textContent = [
+        row.face_present ? `face=${row.face_present}` : 'face=unlabeled',
+        row.blur_action ? `action=${row.blur_action}` : 'action=missing',
+        row.exemption_reason ? `reason=${row.exemption_reason}` : '',
+      ].filter(Boolean).join(' · ');
       els.labeler.value = row.labeler || localStorage.getItem('faceBlurLabeler') || '';
       els.notes.value = row.notes || '';
-      setSelected(row.face_present || '');
+      setSelected(row);
       renderSummary();
       renderList();
     }
 
     function renderSummary() {
-      const counts = {yes: 0, no: 0, uncertain: 0, unlabeled: 0};
+      const counts = {blur: 0, preserve: 0, review: 0, incomplete: 0};
       for (const row of rows) {
-        if (row.face_present === 'yes') counts.yes += 1;
-        else if (row.face_present === 'no') counts.no += 1;
-        else if (row.face_present === 'uncertain') counts.uncertain += 1;
-        else counts.unlabeled += 1;
+        if (!decisionComplete(row)) counts.incomplete += 1;
+        else if (row.blur_action === 'blur' || (!advancedMode && row.face_present === 'yes')) counts.blur += 1;
+        else if (row.blur_action === 'preserve' || (!advancedMode && row.face_present === 'no')) counts.preserve += 1;
+        else if (row.blur_action === 'review' || (!advancedMode && row.face_present === 'uncertain')) counts.review += 1;
       }
-      els.summary.textContent = `${rows.length} total · ${counts.yes} yes · ${counts.no} no · ${counts.uncertain} uncertain · ${counts.unlabeled} unlabeled`;
+      els.summary.textContent = `${rows.length} total · ${counts.blur} blur · ${counts.preserve} preserve · ${counts.review} review · ${counts.incomplete} remaining`;
     }
 
     function renderList() {
@@ -360,27 +480,32 @@ INDEX_HTML = r"""<!doctype html>
         name.textContent = row.sample_id;
         name.title = row.source_path || row.local_video_path || '';
         const badge = document.createElement('span');
-        const label = row.face_present || 'unlabeled';
-        badge.className = `badge ${row.face_present || ''}`;
+        const [label, badgeClass] = decisionBadge(row);
+        badge.className = `badge ${badgeClass}`;
         badge.textContent = label;
         btn.append(num, name, badge);
         els.list.append(btn);
       }
     }
 
-    function setSelected(label) {
-      for (const [btn, value] of [[els.yesBtn, 'yes'], [els.noBtn, 'no'], [els.uncertainBtn, 'uncertain']]) {
-        btn.classList.toggle('selected', label === value);
-      }
+    function setSelected(row) {
+      els.blurBtn.classList.toggle('selected', row.face_present === 'yes' && (!advancedMode || row.blur_action === 'blur'));
+      els.noBtn.classList.toggle('selected', row.face_present === 'no');
+      els.alreadyBlurredBtn.classList.toggle('selected', row.exemption_reason === 'already_blurred');
+      els.taskRelevantBtn.classList.toggle('selected', row.exemption_reason === 'task_relevant_depiction');
+      els.otherPreserveBtn.classList.toggle('selected', row.exemption_reason === 'other');
+      els.uncertainBtn.classList.toggle('selected', row.face_present === 'uncertain');
     }
 
-    async function save(label, advance = false) {
+    async function save(decision, advance = false) {
       const row = rows[current];
       const labeler = els.labeler.value.trim();
       if (labeler) localStorage.setItem('faceBlurLabeler', labeler);
       const payload = {
         sample_id: row.sample_id,
-        face_present: label,
+        face_present: decision.face_present,
+        blur_action: advancedMode ? decision.blur_action : '',
+        exemption_reason: advancedMode ? decision.exemption_reason : '',
         labeler,
         notes: els.notes.value,
       };
@@ -397,7 +522,7 @@ INDEX_HTML = r"""<!doctype html>
       const data = await res.json();
       rows = data.rows;
       els.status.textContent = 'Saved';
-      setSelected(label);
+      setSelected(rows[current]);
       renderSummary();
       renderList();
       if (advance) next();
@@ -405,42 +530,63 @@ INDEX_HTML = r"""<!doctype html>
 
     function queueNotesSave() {
       clearTimeout(saveTimer);
-      saveTimer = setTimeout(() => save(rows[current].face_present || '', false), 450);
+      saveTimer = setTimeout(() => save({
+        face_present: rows[current].face_present || '',
+        blur_action: rows[current].blur_action || '',
+        exemption_reason: rows[current].exemption_reason || '',
+      }, false), 450);
     }
 
     function next() {
-      if (current < rows.length - 1) {
-        current += 1;
+      const nextIndex = filteredRows().map(item => item.index).find(index => index > current);
+      if (nextIndex !== undefined) {
+        current = nextIndex;
         render();
       }
     }
 
     function previous() {
-      if (current > 0) {
-        current -= 1;
+      const previousIndices = filteredRows().map(item => item.index).filter(index => index < current);
+      if (previousIndices.length) {
+        current = previousIndices[previousIndices.length - 1];
         render();
       }
     }
 
-    document.getElementById('yesBtn').addEventListener('click', () => save('yes', true));
-    document.getElementById('noBtn').addEventListener('click', () => save('no', true));
-    document.getElementById('uncertainBtn').addEventListener('click', () => save('uncertain', true));
-    document.getElementById('clearBtn').addEventListener('click', () => save('', false));
+    els.blurBtn.addEventListener('click', () => save({face_present: 'yes', blur_action: 'blur', exemption_reason: ''}, true));
+    els.noBtn.addEventListener('click', () => save({face_present: 'no', blur_action: 'preserve', exemption_reason: ''}, true));
+    els.alreadyBlurredBtn.addEventListener('click', () => save({face_present: 'yes', blur_action: 'preserve', exemption_reason: 'already_blurred'}, true));
+    els.taskRelevantBtn.addEventListener('click', () => save({face_present: 'yes', blur_action: 'preserve', exemption_reason: 'task_relevant_depiction'}, true));
+    els.otherPreserveBtn.addEventListener('click', () => save({face_present: 'yes', blur_action: 'preserve', exemption_reason: 'other'}, true));
+    els.uncertainBtn.addEventListener('click', () => save({face_present: 'uncertain', blur_action: 'review', exemption_reason: ''}, true));
+    document.getElementById('clearBtn').addEventListener('click', () => save({face_present: '', blur_action: '', exemption_reason: ''}, false));
     document.getElementById('nextBtn').addEventListener('click', next);
     document.getElementById('prevBtn').addEventListener('click', previous);
     els.notes.addEventListener('input', queueNotesSave);
-    els.labeler.addEventListener('change', () => save(rows[current].face_present || '', false));
+    els.labeler.addEventListener('change', () => save({
+      face_present: rows[current].face_present || '',
+      blur_action: rows[current].blur_action || '',
+      exemption_reason: rows[current].exemption_reason || '',
+    }, false));
     els.filter.addEventListener('change', renderList);
     els.search.addEventListener('input', renderList);
 
     document.addEventListener('keydown', event => {
       const tag = document.activeElement && document.activeElement.tagName;
       if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
-      if (event.key === 'y' || event.key === 'Y') save('yes', true);
-      else if (event.key === 'n' || event.key === 'N') save('no', true);
-      else if (event.key === 'u' || event.key === 'U') save('uncertain', true);
+      if (['b', 'B', 'y', 'Y'].includes(event.key)) save({face_present: 'yes', blur_action: 'blur', exemption_reason: ''}, true);
+      else if (event.key === 'n' || event.key === 'N') save({face_present: 'no', blur_action: 'preserve', exemption_reason: ''}, true);
+      else if (event.key === 'a' || event.key === 'A') save({face_present: 'yes', blur_action: 'preserve', exemption_reason: 'already_blurred'}, true);
+      else if (event.key === 'p' || event.key === 'P') save({face_present: 'yes', blur_action: 'preserve', exemption_reason: 'task_relevant_depiction'}, true);
+      else if (event.key === 'o' || event.key === 'O') save({face_present: 'yes', blur_action: 'preserve', exemption_reason: 'other'}, true);
+      else if (event.key === 'u' || event.key === 'U') save({face_present: 'uncertain', blur_action: 'review', exemption_reason: ''}, true);
       else if (event.key === 'ArrowRight') next();
       else if (event.key === 'ArrowLeft') previous();
+      else if (event.key === ' ') {
+        event.preventDefault();
+        if (els.video.paused) els.video.play();
+        else els.video.pause();
+      }
     });
 
     load().catch(err => {
@@ -459,6 +605,10 @@ class ManifestStore:
         self.lock = threading.RLock()
         self.fieldnames: list[str] = []
         self.rows: list[dict[str, str]] = []
+        self.advanced = False
+        self.history_path = self.manifest_path.with_name(
+            f"{self.manifest_path.stem}.history.jsonl"
+        )
         self.load()
 
     def load(self) -> None:
@@ -476,6 +626,16 @@ class ManifestStore:
             missing = [col for col in REQUIRED_COLUMNS if col not in self.fieldnames]
             if missing:
                 raise ValueError(f"manifest is missing required column(s): {', '.join(missing)}")
+            advanced_present = [col in self.fieldnames for col in ADVANCED_COLUMNS]
+            if any(advanced_present) and not all(advanced_present):
+                missing_advanced = [
+                    col for col in ADVANCED_COLUMNS if col not in self.fieldnames
+                ]
+                raise ValueError(
+                    "advanced manifest is missing column(s): "
+                    + ", ".join(missing_advanced)
+                )
+            self.advanced = all(advanced_present)
             self.rows = [
                 {key: value or "" for key, value in row.items() if key is not None}
                 for row in reader
@@ -489,6 +649,8 @@ class ManifestStore:
             "manifest": str(self.manifest_path),
             "rows": rows,
             "summary": summarize(rows),
+            "advanced": self.advanced,
+            "history": str(self.history_path) if self.advanced else None,
         }
 
     def update_label(
@@ -496,21 +658,95 @@ class ManifestStore:
         sample_id: str,
         *,
         face_present: str,
+        blur_action: str,
+        exemption_reason: str,
         labeler: str,
         notes: str,
     ) -> dict:
         if face_present not in ALLOWED_LABELS:
             raise ValueError(f"face_present must be one of {sorted(ALLOWED_LABELS)!r}")
+        if blur_action not in ALLOWED_BLUR_ACTIONS:
+            raise ValueError(
+                f"blur_action must be one of {sorted(ALLOWED_BLUR_ACTIONS)!r}"
+            )
+        if exemption_reason not in ALLOWED_EXEMPTION_REASONS:
+            raise ValueError(
+                "exemption_reason must be one of "
+                f"{sorted(ALLOWED_EXEMPTION_REASONS)!r}"
+            )
+        if self.advanced:
+            self._validate_advanced_decision(
+                face_present, blur_action, exemption_reason
+            )
         with self.lock:
             self._load_locked()
             for row in self.rows:
                 if row.get("sample_id") == sample_id:
+                    before = dict(row)
                     row["face_present"] = face_present
                     row["labeler"] = labeler
                     row["notes"] = notes
+                    if self.advanced:
+                        row["blur_action"] = blur_action
+                        row["exemption_reason"] = exemption_reason
+                        row["annotation_source"] = "manual_ui" if face_present else ""
+                        row["annotated_at"] = utc_now() if face_present else ""
                     self._write_locked()
+                    if self.advanced:
+                        self._append_history_locked(before, row)
                     return self.snapshot()
         raise KeyError(f"sample_id not found: {sample_id}")
+
+    @staticmethod
+    def _validate_advanced_decision(
+        face_present: str,
+        blur_action: str,
+        exemption_reason: str,
+    ) -> None:
+        if not face_present:
+            if blur_action or exemption_reason:
+                raise ValueError("cleared face label requires cleared blur fields")
+            return
+        if face_present == "no":
+            if blur_action not in {"", "preserve"} or exemption_reason:
+                raise ValueError("no-face label must use preserve with no exemption")
+            return
+        if face_present == "uncertain":
+            if blur_action not in {"", "review"} or exemption_reason:
+                raise ValueError("uncertain label must use review with no exemption")
+            return
+        if not blur_action:
+            if exemption_reason:
+                raise ValueError("face with no blur action cannot have an exemption")
+            return
+        if blur_action == "blur":
+            if exemption_reason:
+                raise ValueError("blur action cannot have an exemption")
+            return
+        if blur_action == "preserve":
+            if exemption_reason not in {
+                "already_blurred",
+                "task_relevant_depiction",
+                "other",
+            }:
+                raise ValueError("preserved face requires an exemption reason")
+            return
+        raise ValueError("face-present label must use blur or preserve")
+
+    def _append_history_locked(
+        self, before: dict[str, str], after: dict[str, str]
+    ) -> None:
+        event = {
+            "timestamp": utc_now(),
+            "sample_id": after.get("sample_id"),
+            "before": before,
+            "after": dict(after),
+        }
+        with self.history_path.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(event, ensure_ascii=False, separators=(",", ":")))
+            handle.write("\n")
+            handle.flush()
+            os.fsync(handle.fileno())
 
     def video_path_for(self, sample_id: str) -> Path:
         with self.lock:
@@ -542,13 +778,25 @@ class ManifestStore:
 
 
 def summarize(rows: list[dict[str, str]]) -> dict[str, int]:
-    counts = {"total": len(rows), "yes": 0, "no": 0, "uncertain": 0, "unlabeled": 0}
+    counts = {
+        "total": len(rows),
+        "yes": 0,
+        "no": 0,
+        "uncertain": 0,
+        "unlabeled": 0,
+        "blur": 0,
+        "preserve": 0,
+        "review": 0,
+    }
     for row in rows:
         label = row.get("face_present") or ""
         if label in ("yes", "no", "uncertain"):
             counts[label] += 1
         else:
             counts["unlabeled"] += 1
+        action = row.get("blur_action") or ""
+        if action in ("blur", "preserve", "review"):
+            counts[action] += 1
     return counts
 
 
@@ -602,6 +850,8 @@ def make_handler(store: ManifestStore):
                 data = store.update_label(
                     str(payload.get("sample_id") or ""),
                     face_present=str(payload.get("face_present") or ""),
+                    blur_action=str(payload.get("blur_action") or ""),
+                    exemption_reason=str(payload.get("exemption_reason") or ""),
                     labeler=str(payload.get("labeler") or ""),
                     notes=str(payload.get("notes") or ""),
                 )
