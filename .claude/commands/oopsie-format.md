@@ -1,6 +1,6 @@
 # oopsiedata_format_v1 — Full Schema Reference
 
-Use this skill whenever writing or debugging a converter that produces Oopsie HDF5 episode files. It describes the canonical `oopsiedata_format_v1` schema as enforced by `oopsie_tools`.
+Use this skill whenever writing or debugging a converter that produces Oopsie HDF5 episode files. It describes the canonical `oopsiedata_format_v1` schema as enforced by `oopsie_data_tools`.
 
 You follow these steps:
 
@@ -8,13 +8,13 @@ You follow these steps:
 2. Create the conversion script in ./oopsie_backend/external_conversion/. Follow DRY and make sure to reuse utilities from ./oopsie_backend/external_conversion/conversion_utils.py. Make sure to read all relevant information before attempting to write the conversion script.
 3. Wait for the user to run the conversion script with the full correct input path.
 
-## Validation entry points (`oopsie_tools`)
+## Validation entry points (`oopsie_data_tools`)
 
 ```
-oopsie_tools/utils/validation/episode_loader.py   # HDF5 → EpisodeData
-oopsie_tools/utils/validation/episode_validator.py # semantic checks
-oopsie_tools/utils/validation/validation_utils.py  # public API
-oopsie_tools/utils/robot_profile/robot_profile.py  # RobotProfile
+oopsie_data_tools/utils/validation/episode_loader.py   # HDF5 → EpisodeData
+oopsie_data_tools/utils/validation/episode_validator.py # semantic checks
+oopsie_data_tools/utils/validation/validation_utils.py  # public API
+oopsie_data_tools/utils/robot_profile/robot_profile.py  # RobotProfile
 ```
 
 Run validation:
@@ -79,7 +79,7 @@ Either all three of `(failure_category via taxonomy, failure_description, severi
 
 ## RobotProfile fields
 
-Defined in `oopsie_tools/utils/robot_profile/robot_profile.py`. Serialized as JSON into `f.attrs["robot_profile"]`.
+Defined in `oopsie_data_tools/utils/robot_profile/robot_profile.py`. Serialized as JSON into `f.attrs["robot_profile"]`.
 
 **Required fields:**
 
@@ -130,7 +130,7 @@ Defined in `oopsie_tools/utils/robot_profile/robot_profile.py`. Serialized as JS
 
 ```python
 import h5py, numpy as np
-from oopsie_tools.utils.robot_profile.robot_profile import RobotProfile, robot_profile_to_json
+from oopsie_data_tools.utils.robot_profile.robot_profile import RobotProfile, robot_profile_to_json
 
 SCHEMA = "oopsiedata_format_v1"
 ALL_ACTION_KEYS = [

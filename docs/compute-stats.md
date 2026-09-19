@@ -204,7 +204,11 @@ The dashboard reads this file from `oopsie-docs/docs/assets/data/stats.json`.
 
 Public `stats.json` **omits every episode** from repos listed in `PUBLIC_EXCLUDED_DATASETS` (bulk imports such as SOAR and roboarena). Totals, timelines, robots, failure categories, and `per_lab` all use the same filter — not just lab breakdowns.
 
-**Complete annotations:** an episode counts as annotated when its latest complete annotation (by timestamp) has `success` set. Successes (`success >= 0.5`) need only that field. Failures additionally require a non-empty `failure_description` and taxonomy `failure_category` / `severity` that are not `"unknown"`. The same rule applies to per-annotator counts in `people` and to failure-description language metrics.
+Repos in `STATS_EXCLUDED_DATASETS` (e.g. `oopsiedata-v0.1`, face-raw archives) are omitted from **both** public and internal stats.
+
+**Outcome labels (success / failure / annotated):** an episode counts when its latest annotation (by timestamp) has `success` set. Successes are `success >= 0.5`; failures are `success < 0.5`. Failure description / category / severity are **not** required for these totals.
+
+**Complete annotations** (people annotator counts and failure-description language metrics): successes need only `success`; failures additionally require a non-empty `failure_description` and taxonomy `failure_category` / `severity` that are not `"unknown"`.
 
 ## Internal stats (full dataset + operators)
 

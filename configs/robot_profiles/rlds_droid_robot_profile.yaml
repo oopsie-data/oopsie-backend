@@ -37,7 +37,7 @@ robot_state_joint_names:
   - panda_joint7
 
 # cartesian_position is stored as [x, y, z, roll, pitch, yaw] (euler_xyz)
-# per droid_dataset_transform in oopsie_tools/utils/rlds_utils.py
+# per droid_dataset_transform in oopsie_data_tools/utils/rlds_utils.py
 robot_state_orientation_representation: "euler_xyz"
 
 

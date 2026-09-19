@@ -22,6 +22,7 @@ from oopsie_backend.utils.episode_stats import (
     DEFAULT_INTERNAL_STATS_JSON,
     DEFAULT_PUBLIC_STATS_HTML,
     DEFAULT_PUBLIC_STATS_JSON,
+    STATS_EXCLUDED_DATASETS,
     aggregate,
     extract_record,
     public_dataset_repos,
@@ -63,6 +64,14 @@ def collect_local_episodes(
     datasets_included: list[str] = []
 
     for dataset_repo in sorted(by_dataset):
+        if dataset_repo in STATS_EXCLUDED_DATASETS:
+            n = len(by_dataset[dataset_repo])
+            print(
+                f"  dataset {dataset_repo}: SKIPPED ({n} .h5 file(s); "
+                f"in STATS_EXCLUDED_DATASETS)",
+                file=sys.stderr,
+            )
+            continue
         files = by_dataset[dataset_repo]
         to_process = files if file_limit is None else files[:file_limit]
         datasets_included.append(dataset_repo)

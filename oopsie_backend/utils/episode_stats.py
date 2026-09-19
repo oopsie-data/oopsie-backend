@@ -32,21 +32,34 @@ PEOPLE_SCHEMA_VERSION = 3
 INTERNAL_SCHEMA_VERSION = 9
 UNKNOWN_PERSON = "unknown"
 
-SCHEMA_VERSION = 4
+SCHEMA_VERSION = 5
 TOP_TASKS_LIMIT = 20
 UNKNOWN_LAB = "unknown_lab"
 UNKNOWN_ROBOT = "unknown_robot"
 UNKNOWN_POLICY = "unknown_policy"
 UNKNOWN_CATEGORY = "unknown"
 UNKNOWN_SEVERITY = "unknown"
-DAY_MISSING_TIMESTAMP = "unrecorded"
+DAY_MISSING_TIMESTAMP = "unrecorded"  # legacy label; missing timestamps are omitted from timelines
+
+# Never included in public OR internal stats (archives / frozen snapshots).
+STATS_EXCLUDED_DATASETS: frozenset[str] = frozenset({
+    "OopsieData-Submissions/oopsiedata-v0.1",
+    "OopsieData-Submissions/oopsiedata-converted-v0.1",
+    "OopsieData-Submissions/oopsie-face-raw-archive-2026-08-12",
+})
 
 # Bulk-import / legacy HF repos omitted from the public stats.json entirely.
+# (Still appear in internal stats unless also listed in STATS_EXCLUDED_DATASETS.)
 PUBLIC_EXCLUDED_DATASETS: frozenset[str] = frozenset({
     "OopsieData-Submissions/SOAR_origin",
     "OopsieData-Submissions/roboarena_upload",
     "OopsieData-Submissions/AI2_MOLMOACT2",
     "OopsieData-Submissions/Amazon-MobileManipulationTeam",
+})
+# Placeholder / unset lab_ids omitted from the public website stats.
+PUBLIC_EXCLUDED_LABS: frozenset[str] = frozenset({
+    "example_institution",
+    "your_lab_id",
 })
 # Back-compat alias used in existing docs and call sites.
 PER_LAB_EXCLUDED_DATASETS = PUBLIC_EXCLUDED_DATASETS
@@ -225,8 +238,19 @@ def _primary_annotation(anns: list[dict]) -> dict | None:
     return max(anns, key=lambda a: (1 if a.get("timestamp") else 0, a.get("timestamp") or ""))
 
 
+def _primary_sf_annotation(anns: list[dict]) -> dict | None:
+    """Latest annotation that has a success/failure label (``success`` attr)."""
+    with_sf = [a for a in anns if a.get("success") is not None]
+    return _primary_annotation(with_sf) if with_sf else None
+
+
 def _is_complete_annotation(ann: dict) -> bool:
-    """True when an annotation record counts as a finished annotation."""
+    """True when an annotation record counts as a finished annotation.
+
+    Used for annotator people-stats and language-diversity corpora. Public
+    outcome totals (success / failure / annotated) use ``_primary_sf_annotation``
+    instead — S/F label only.
+    """
     if ann.get("success") is None:
         return False
     if ann["success"] >= 0.5:
@@ -277,8 +301,19 @@ def resolve_local_episode_path(
     return f"{parts[0]}/{parts[1]}", "/".join(parts[2:])
 
 
+def _include_in_any_stats(record: dict, repo: str) -> bool:
+    """True when an episode may appear in public or internal stats."""
+    raw = record.get("dataset_repo") or repo
+    return canonical_dataset_repo(raw) not in STATS_EXCLUDED_DATASETS
+
+
 def _include_in_public_stats(record: dict, repo: str) -> bool:
     """True when an episode should appear in public stats.json / the website."""
+    if not _include_in_any_stats(record, repo):
+        return False
+    lab = record.get("lab_id") or UNKNOWN_LAB
+    if lab in PUBLIC_EXCLUDED_LABS:
+        return False
     raw = record.get("dataset_repo") or repo
     return canonical_dataset_repo(raw) not in PUBLIC_EXCLUDED_DATASETS
 
@@ -318,7 +353,11 @@ def write_public_artifacts(
 
 def public_dataset_repos(dataset_ids: list[str]) -> list[str]:
     """HF repo ids that appear in public stats (non-excluded only)."""
-    return sorted(d for d in dataset_ids if d not in PUBLIC_EXCLUDED_DATASETS)
+    return sorted(
+        d
+        for d in dataset_ids
+        if d not in PUBLIC_EXCLUDED_DATASETS and d not in STATS_EXCLUDED_DATASETS
+    )
 
 
 def aggregate_people(
@@ -341,6 +380,8 @@ def aggregate_people(
     annotation_count = 0
 
     for r in records:
+        if not _include_in_any_stats(r, repo):
+            continue
         if not include_excluded and not _include_in_public_stats(r, repo):
             continue
         lab = r["lab_id"]
@@ -393,6 +434,7 @@ def build_internal_report(records: list[dict], repo: str) -> dict:
         "generated_at": now_timestamps(),
         "dataset_repo": repo,
         "excluded_from_public_datasets": sorted(PUBLIC_EXCLUDED_DATASETS),
+        "excluded_from_all_stats_datasets": sorted(STATS_EXCLUDED_DATASETS),
         "stats": aggregate(records, repo, include_excluded=True),
         "language_diversity": aggregate_language_diversity(
             records, repo, include_excluded=False, scope_label="public_corpus"
@@ -477,6 +519,8 @@ def aggregate(records: list[dict], repo: str, *, include_excluded: bool = False)
     episode_count = 0
 
     for r in records:
+        if not _include_in_any_stats(r, repo):
+            continue
         if not include_excluded and not _include_in_public_stats(r, repo):
             continue
         episode_count += 1
@@ -516,18 +560,13 @@ def aggregate(records: list[dict], repo: str, *, include_excluded: bool = False)
             if lab not in per_lab_last or ts > per_lab_last[lab]:
                 per_lab_last[lab] = ts
             day = ts[:10]
-        else:
-            day = DAY_MISSING_TIMESTAMP
-        timeline[day] += 1
-        timeline_per_lab[(day, lab)] += 1
+            timeline[day] += 1
+            timeline_per_lab[(day, lab)] += 1
 
-        primary = _primary_complete_annotation(r["annotations"])
+        # Outcome totals: success/failure label only (no taxonomy required).
+        primary = _primary_sf_annotation(r["annotations"])
         if primary is not None:
             annotated += 1
-            if primary.get("has_failure_description"):
-                failure_descriptions += 1
-                per_dataset_desc[dataset] += 1
-                per_lab_desc[lab] += 1
             if primary["success"] >= 0.5:
                 successes += 1
                 per_dataset_succ[dataset] += 1
@@ -536,12 +575,16 @@ def aggregate(records: list[dict], repo: str, *, include_excluded: bool = False)
                 failures += 1
                 per_dataset_fail[dataset] += 1
                 per_lab_fail[lab] += 1
-                category = primary.get("failure_category")
-                if category and category != UNKNOWN_CATEGORY:
-                    failure_categories[category] += 1
-                sev = primary.get("severity")
-                if sev and sev != UNKNOWN_SEVERITY:
-                    severity[sev] += 1
+                if primary.get("has_failure_description"):
+                    failure_descriptions += 1
+                    per_dataset_desc[dataset] += 1
+                    per_lab_desc[lab] += 1
+                    category = primary.get("failure_category")
+                    if category and category != UNKNOWN_CATEGORY:
+                        failure_categories[category] += 1
+                    sev = primary.get("severity")
+                    if sev and sev != UNKNOWN_SEVERITY:
+                        severity[sev] += 1
 
     submission_timeline = []
     cumulative = 0
@@ -631,4 +674,5 @@ def aggregate(records: list[dict], repo: str, *, include_excluded: bool = False)
     }
     if include_excluded:
         result["excluded_from_public_datasets"] = sorted(PUBLIC_EXCLUDED_DATASETS)
+        result["excluded_from_all_stats_datasets"] = sorted(STATS_EXCLUDED_DATASETS)
     return result

@@ -66,7 +66,7 @@ import h5py
 import numpy as np
 from tqdm import tqdm
 
-from oopsie_tools.utils.robot_profile.robot_profile import (
+from oopsie_data_tools.utils.robot_profile.robot_profile import (
     RobotProfile,
     load_robot_profile,
     robot_profile_to_json,

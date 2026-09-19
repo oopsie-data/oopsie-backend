@@ -5,17 +5,18 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "oopsie-tools",
+    "oopsie-data-tools",
     "tqdm>=4.0",
     "huggingface-hub",
     "gsutil>=5.37",
     "tensorflow-datasets>=4.9.10",
     "tensorflow>=2.21.0",
     "numpy<2.4",
+    "matplotlib>=3.11.1",
 ]
 
 [tool.uv.sources]
-oopsie-tools = { path = "../oopsie-tools", editable = true }
+oopsie-data-tools = { path = "../oopsie-data-tools", editable = true }
 
 [build-system]
 requires = ["hatchling"]
