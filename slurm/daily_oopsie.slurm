@@ -9,6 +9,7 @@
 #SBATCH -e /corral/utexas/IRI26024/logs/oopsie-daily-%j.log
 
 set -euo pipefail
+umask 002
 SECONDS=0
 
 BACKEND=/work/09666/abahety/ls6/oopsie-backend
@@ -18,6 +19,8 @@ LOG_DIR=/corral/utexas/IRI26024/logs
 UV=/home1/09666/abahety/.local/bin/uv
 
 mkdir -p "$LOG_DIR" "$DATA_DIR" "$(dirname "$DOCS_STATS_OUT")" "$BACKEND/reports"
+chgrp G-829069 "$DATA_DIR"
+chmod g+rwxs "$DATA_DIR"
 
 if [[ -f "$HOME/.hf_token" ]]; then
   export HF_TOKEN="$(tr -d '[:space:]' < "$HOME/.hf_token")"
@@ -43,6 +46,7 @@ run_step setup_numpy bash -c 'uv add "numpy<2.4" && uv sync --reinstall-package 
 run_step sync_hf_org "$UV" run python -m oopsie_backend.scripts.sync_hf_org \
   --org OopsieData-Submissions \
   --local-dir "$DATA_DIR" \
+  --group G-829069 \
   --verbose
 
 run_step compute_local_stats "$UV" run python -m oopsie_backend.scripts.compute_local_stats \
