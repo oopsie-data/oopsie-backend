@@ -15,9 +15,6 @@ dependencies = [
     "matplotlib>=3.11.1",
 ]
 
-[tool.uv.sources]
-oopsie-data-tools = { path = "../oopsie-data-tools", editable = true }
-
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"

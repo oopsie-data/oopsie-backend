@@ -78,9 +78,25 @@ export HF_HUB_DISABLE_XET=1   # this avoids reaching HUB API limits!
 uv run python -m oopsie_backend.scripts.sync_hf_org \
   --org OopsieData-Submissions \
   --local-dir /corral/utexas/IRI26024/oopsiedata \
+  --group G-829069 \
   --verbose
 ```
 Note: Currently we are using snapshot_download, might have to switch to git clone/git pull in order to avoid hitting the API limits and making the script run faster
+
+#### Permissions
+
+Synced data must be accessible to all members of group `G-829069`. The sync runs with umask `002`, and with `--group G-829069` it additionally assigns every path under `--local-dir` it owns to that group. Files get group read/write, and directories get group `rwx` plus setgid, so new files inherit the group. Paths owned by other users are skipped. Those paths need a one-off `chgrp -R G-829069` by their owner. The daily Slurm job passes `--group G-829069` and also sets the group on `$DATA_DIR` before syncing.
+
+To fix existing data by hand, the owner of the files runs:
+
+```bash
+DATA_DIR=/corral/utexas/IRI26024/oopsiedata
+chgrp -R G-829069 "$DATA_DIR"
+chmod -R g+rwX "$DATA_DIR"
+find "$DATA_DIR" -type d -exec chmod g+s {} +
+```
+
+`g+rwX` gives the group execute permission only on directories and on files that are already executable. To find paths that still have the wrong group, run `find "$DATA_DIR" ! -group G-829069`.
 
 #### Expected stderr output
 
