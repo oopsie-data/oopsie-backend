@@ -28,10 +28,10 @@ export HF_TOKEN=hf_...
 # or: export HF_TOKEN="$(tr -d '[:space:]' < "$HOME/.hf_token")"
 ```
 
-On LS6 `vm-small` nodes, numpy must stay below 2.4 (older CPUs lack x86-v2). The daily job handles this automatically; for manual runs:
+numpy is pinned below 2.4 in `pyproject.toml` because LS6 `vm-small` nodes have older CPUs that lack x86-v2. The daily job runs on the `normal` partition, so nothing extra is needed. For manual runs on `vm-small`:
 
 ```bash
-uv add "numpy<2.4" && uv sync --reinstall-package numpy
+uv sync --reinstall-package numpy
 ```
 
 ## (Option 1) Daily Slurm job

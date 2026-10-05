@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -J oopsie-daily
 #SBATCH -A IRI23005
-#SBATCH -p vm-small
+#SBATCH -p normal
 #SBATCH -N 1
 #SBATCH -n 1
 #SBATCH -t 2-00:00:00
