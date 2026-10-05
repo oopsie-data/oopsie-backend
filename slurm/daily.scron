@@ -1,7 +1,8 @@
-#SCRON -A iri23005
+#SCRON -A IRI23005
 #SCRON -p normal
-#SCRON -t 08:00:00
+#SCRON -t 2-00:00:00
 #SCRON -N 1
 #SCRON -n 1
-#SCRON -o /scratch/09666/abahety/logs/scron-%j.out
+#SCRON -o /corral/utexas/IRI26024/logs/oopsie-daily-%j.log
+#SCRON -e /corral/utexas/IRI26024/logs/oopsie-daily-%j.log
 0 3 * * * /work/09666/abahety/ls6/oopsie-backend/slurm/daily_oopsie.slurm

@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -J oopsie-daily
 #SBATCH -A IRI23005
-#SBATCH -p vm-small
+#SBATCH -p normal
 #SBATCH -N 1
 #SBATCH -n 1
 #SBATCH -t 2-00:00:00
@@ -14,7 +14,7 @@ SECONDS=0
 
 BACKEND=/work/09666/abahety/ls6/oopsie-backend
 DATA_DIR=/corral/utexas/IRI26024/oopsiedata
-STATS_OUT=/work/09666/abahety/ls6/oopsie-docs/docs/assets/data/stats.json
+DOCS_STATS_OUT=/work/09666/abahety/ls6/oopsie-docs/docs/assets/data/stats.json
 LOG_DIR=/corral/utexas/IRI26024/logs
 UV=/home1/09666/abahety/.local/bin/uv
 
@@ -39,9 +39,6 @@ run_step() {
   "$@"
   echo "=== $(date -Is) SUCCESS: ${name} completed in $((SECONDS - step_start))s ==="
 }
-
-# Pin numpy before 2.4's x86-v2 baseline requirement. Need this for running on vm-small.
-run_step setup_numpy bash -c 'uv add "numpy<2.4" && uv sync --reinstall-package numpy'
 
 run_step sync_hf_org "$UV" run python -m oopsie_backend.scripts.sync_hf_org \
   --org OopsieData-Submissions \
