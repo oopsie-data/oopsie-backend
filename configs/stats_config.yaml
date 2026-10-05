@@ -1,0 +1,141 @@
+# Stats computation config: dataset/lab exclusion lists, and lab requirement
+# toggles & thresholds, all in one editable place.
+#
+# Edited by hand - no code changes needed for anything in this file. Changes only
+# take effect on the next `compute_local_stats` / `compute_hf_stats` run; the
+# generated reports (public_stats.*, internal_stats.*) are static snapshots.
+
+
+# ===============================
+# ===== Dataset exclusions =====
+# ===============================
+
+datasets:
+  # Archives / frozen snapshots. Never included in public OR internal stats - their
+  # .h5 files are not even read.
+  stats_excluded:
+    - OopsieData-Submissions/oopsiedata-v0.1
+    - OopsieData-Submissions/oopsiedata-converted-v0.1
+    - OopsieData-Submissions/oopsie-face-raw-archive-2026-08-12
+
+  # Bulk-import / legacy HF repos. Excluded from public stats.json only; still
+  # shown in the internal report (flagged amber as "bulk_import") and excluded
+  # from the lab requirement checks below (see requirements.alpha/beta).
+  public_excluded:
+    - OopsieData-Submissions/SOAR_origin
+    - OopsieData-Submissions/AutoEval_origin
+    - OopsieData-Submissions/roboarena_upload
+    - OopsieData-Submissions/AI2_MOLMOACT2
+    - OopsieData-Submissions/Amazon-MobileManipulationTeam
+
+  # HF org repos holding site assets (preview images/video, metadata) rather than
+  # any lab's episode submissions. Excluded from the "All datasets" inventory.
+  non_lab_infra:
+    - OopsieData-Submissions/Visualizer_Previews
+    - OopsieData-Submissions/WebVisualizer
+
+
+# ===============================
+# ======= Lab exclusions =======
+# ===============================
+
+labs:
+  # Placeholder / unset lab_ids, omitted from public website stats.
+  public_excluded:
+    - example_institution
+    - your_lab_id
+
+  # Operator names that are template/placeholder values, not a real person.
+  # Matched case-insensitively after trimming whitespace (an empty/blank name is
+  # always treated as a placeholder too, regardless of this list). Episodes
+  # credited to these names never count toward the per-individual requirement
+  # check below, but ARE still shown (flagged) in the dataset inventory.
+  placeholder_operator_names:
+    - unknown
+    - operator
+    - pending_operator
+    - n/a
+    - na
+    - tbd
+    - none
+    - test
+    - test_operator
+    - default
+    - admin
+    - unset
+
+
+# ===============================
+# ===== Lab requirements =======
+# ===============================
+
+# A lab passes its tier if even ONE individual (operator) within it independently
+# meets every *enabled* clause below - requirements are never summed across people.
+requirements:
+  # A lab is "alpha" if ANY of its dataset repos has a real creation date before
+  # this cutoff (per the Hub's repo creation timestamp); otherwise it's "beta".
+  alpha_cutoff_date: "2026-07-01"
+
+  alpha:
+    enabled: true
+    # "Qualifying episode" = has a valid success/failure annotation.
+    min_qualifying_episodes_per_individual: 50
+
+  beta:
+    # 1. Volume.
+    volume:
+      enabled: true
+      min_qualifying_episodes_per_individual: 750
+      min_failures_per_individual: 350
+      # 750 rollouts averaging 24s each = 5h, so this also rules out e.g. all
+      # 1-second rollouts meeting the episode count alone.
+      min_duration_hours_per_individual: 5.0
+    # 2. Task diversity - not yet implemented. Always treated as disabled.
+    task_diversity:
+      enabled: false
+    # 3. Per-task cap - not yet implemented. Always treated as disabled.
+    per_task_cap:
+      enabled: false
+
+
+# ===============================
+# ====== Action-space QA =======
+# ===============================
+
+# Checks run by `run_action_qa.py` against the real per-timestep actions/* and
+# observations/robot_states/* arrays (not just attrs, unlike the rest of this
+# file's checks). See reports/data_quality_exceptions.md's "Action QA" /
+# "Action vs. Observations QA" sections for what each check actually does.
+action_qa:
+  # Flags episodes that log 2+ action representations where two same-shaped
+  # arrays are byte-for-byte (near-)identical - a likely copy-paste bug.
+  duplicate_pairs:
+    enabled: true
+    atol: 1.0e-9
+    rtol: 0.0
+
+  # Flags episodes where an action's scale (spread) is wildly out of proportion
+  # to the robot's own observed state - e.g. a unit mixup or corrupted data.
+  scale_consistency:
+    enabled: true
+    max_ratio: 5.0   # RMS(action) / RMS(next_state) above this -> flag
+    min_ratio: 0.2    # below this -> flag (e.g. a suspiciously tiny, delta-like scale)
+
+  # Flags episodes where the action doesn't correspond to the robot's real
+  # motion at all (misaligned data, wrong field, garbage values).
+  tracking_residual:
+    enabled: true
+    max_normalized_rms: 0.5   # RMS(action[t] - state[t+1]) / RMS(action) above this -> flag
+
+  # The policy-mandated check: labs were told to submit absolute actions, not
+  # deltas. Flags episodes/keys where "action = state's own step-to-step change"
+  # fits much better than "action = the next absolute state".
+  delta_detection:
+    enabled: true
+    ratio_threshold: 0.3   # RMS(resid_delta) / RMS(resid_abs) below this -> "looks like delta"
+
+  sampling:
+    # run_action_qa.py's own --limit default (max episodes checked per dataset).
+    # Full per-timestep array reads cost much more than the attrs-only pass the
+    # rest of this file's checks use, so this intentionally is NOT unlimited.
+    default_episode_limit: 50

@@ -98,6 +98,20 @@ def list_dataset_repos_for_org(author: str, token: str | None) -> list[str]:
     return sorted(set(out))
 
 
+def list_dataset_created_dates_for_org(author: str, token: str | None) -> dict[str, str | None]:
+    """Return ``{repo_id: created_at}`` (ISO 8601 UTC, or ``None``) for every dataset
+    repo owned by ``author``, straight from the Hub's repo metadata."""
+    api = HfApi(token=token)
+    out: dict[str, str | None] = {}
+    for info in api.list_datasets(author=author, token=token):
+        rid = getattr(info, "id", None) or getattr(info, "dataset_id", None)
+        if not rid:
+            continue
+        created = getattr(info, "created_at", None)
+        out[str(rid)] = created.isoformat().replace("+00:00", "Z") if created else None
+    return out
+
+
 def list_repo_files(repo: str, token: str | None, repo_type: str) -> list[str]:
     """Return every repo-relative file path."""
     api = HfApi(token=token)

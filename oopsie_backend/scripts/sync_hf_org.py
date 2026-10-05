@@ -21,6 +21,7 @@ from contextlib import contextmanager
 from dataclasses import dataclass, field
 from pathlib import Path
 
+import httpx
 from huggingface_hub import snapshot_download
 from huggingface_hub.errors import RepositoryNotFoundError
 from huggingface_hub.file_download import DryRunFileInfo
@@ -127,9 +128,11 @@ def sync_dataset(
             local_dir=dest,
             token=token,
             dry_run=dry_run,
-            # max_workers=2,
-            # resume_download=True,
-            # local_dir_use_symlinks=False,
+            # Default is 8; large video files sharing one connection at that
+            # concurrency easily exceed the 10s per-chunk read timeout, which
+            # aborts the whole sync after retries are exhausted. Lower contention
+            # instead of just raising the timeout.
+            max_workers=3,
         )
 
     if dry_run:
@@ -229,6 +232,23 @@ def main(argv: list[str] | None = None) -> int:
                 _log("")
             else:
                 _log(f"{label}  not found ({_format_duration(elapsed)})")
+            stats.errors.append(msg)
+            continue
+        except httpx.HTTPError as exc:
+            # Transient network failure (timeout, connection reset, 5xx, ...) that
+            # outlasted huggingface_hub's own retries. One bad file/connection
+            # shouldn't take down the whole multi-dataset sync - skip this dataset
+            # and keep going; re-running the sync later will resume it (ETag-based).
+            elapsed = time.perf_counter() - started
+            msg = f"skip (network error after retries): {repo_id} ({exc})"
+            stats.dataset_results.append(
+                DatasetSyncResult(repo_id=repo_id, duration_seconds=elapsed),
+            )
+            if args.verbose:
+                _log(f"network error, skipping ({_format_duration(elapsed)}): {exc}", level=1)
+                _log("")
+            else:
+                _log(f"{label}  network error, skipping ({_format_duration(elapsed)}): {exc}")
             stats.errors.append(msg)
             continue
 

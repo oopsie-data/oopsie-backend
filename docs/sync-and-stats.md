@@ -62,8 +62,9 @@ Expected log structure (stdout and stderr merged into one file):
 === 2026-06-14T10:20:00-05:00 SUCCESS: compute_local_stats completed in 300s ===
 === 2026-06-14T10:20:00-05:00 SUCCESS: oopsie-daily completed in 1200s (job 12345) ===
 ```
-
-Logs: `/scratch/09666/abahety/logs/oopsie-daily-<jobid>.log`
+Two useful outputs:
+1. Logs: `/corral/utexas/IRI26024/logs/oopsie-daily-<jobid>.log`
+2. Final report: `/corral/utexas/IRI26024/oopsiedata/.sync_report.json`
 
 ## (Option 2) Manual run (two steps)
 
@@ -161,6 +162,34 @@ uv run python -m oopsie_backend.scripts.compute_local_stats \
 | `--limit` | none | Max `.h5` files per dataset (first N, for testing) |
 
 No `HF_TOKEN` required — reads files from disk.
+
+Internal stats additionally make a **best-effort** call to the Hub (using a cached
+`huggingface-cli login` token or `HF_TOKEN`, if either is set) to list every dataset
+repo in the org and its true creation date, for the "All datasets" inventory in
+`internal_stats.html` (sortable by created/episodes/hours; includes repos with zero
+episodes, e.g. labs that registered but haven't submitted yet). If no token is
+available or the Hub can't be reached, this is skipped silently and that inventory
+falls back to each dataset's earliest-episode timestamp instead.
+
+### Config: `configs/stats_config.yaml`
+
+All of the following are edited there, not in code - changes take effect on the
+next `compute_local_stats` / `compute_hf_stats` run:
+
+- The four dataset/lab exclusion lists (archives, bulk-import, non-lab infra repos,
+  placeholder lab ids) - these used to be hardcoded constants in `episode_stats.py`.
+- The list of placeholder operator names (e.g. `pending_operator`, `unknown`) that
+  never count as a real individual.
+- The alpha/beta lab requirement thresholds and on/off toggles that drive the
+  colored status dot on each row of the "All datasets" inventory: a lab is
+  "alpha" if any of its dataset repos predates `alpha_cutoff_date`, otherwise
+  "beta"; a lab *passes* its tier if even one individual clears every *enabled*
+  clause for that tier (never summed across people). `task_diversity` and
+  `per_task_cap` are placeholders - not implemented yet, always disabled.
+
+If the file is missing, the code falls back to built-in defaults matching the
+shipped YAML, so this never hard-fails - but you should expect to edit
+`configs/stats_config.yaml`, not `episode_stats.py`, going forward.
 
 `compute_local_stats` writes two things: 
 1. public and internal stats to `reports/` 

@@ -230,4 +230,5 @@ __marimo__/
 CLAUDE.md
 
 # Generated stats reports (public HTML snapshot + internal JSON/HTML)
-reports/
+reports/*
+!reports/data_quality_exceptions.md
