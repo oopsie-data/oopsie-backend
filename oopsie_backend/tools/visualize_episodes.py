@@ -4,12 +4,12 @@ NOTE(zhouzypaul): I've made this and only tested on the SOAR dataset, and it onl
 Two modes:
 
   Episode view — plots trajectory data + video frames for one episode:
-    python -m oopsie_backend.visualize_episodes --episode path/to/episode.h5
-    python -m oopsie_backend.visualize_episodes --episode path/to/episode.h5 --out plot.png
+    python -m oopsie_backend.tools.visualize_episodes --episode path/to/episode.h5
+    python -m oopsie_backend.tools.visualize_episodes --episode path/to/episode.h5 --out plot.png
 
   Stats view — dataset-level summary across a whole directory:
-    python -m oopsie_backend.visualize_episodes --stats path/to/soar_converted/
-    python -m oopsie_backend.visualize_episodes --stats path/to/soar_converted/ --out stats.png
+    python -m oopsie_backend.tools.visualize_episodes --stats path/to/soar_converted/
+    python -m oopsie_backend.tools.visualize_episodes --stats path/to/soar_converted/ --out stats.png
 
   In both modes, --out saves to file instead of opening an interactive window.
 """
@@ -244,7 +244,7 @@ def plot_stats(data_dir: Path, out: Path | None) -> None:
 
     print("done.")
 
-    control_freq = 15.0
+    control_freq = 5.0  # NOTE(zhouzypaul): hard coded for now
     durations = [t / control_freq for t in traj_lengths]
 
     fig = plt.figure(figsize=(18, 12))

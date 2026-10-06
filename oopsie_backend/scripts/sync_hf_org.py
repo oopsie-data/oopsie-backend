@@ -13,8 +13,10 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import grp
 import json
 import os
+import stat
 import sys
 import time
 from contextlib import contextmanager
@@ -55,6 +57,43 @@ def _format_duration(seconds: float) -> str:
         return f"{seconds:.1f}s"
     minutes, secs = divmod(int(seconds), 60)
     return f"{minutes}m {secs}s"
+
+
+def share_with_group(root: Path, gid: int | None = None) -> int:
+    """Grant group rw (and x/setgid on directories) under ``root``.
+
+    If ``gid`` is given, entries are also assigned to that group. Entries not
+    owned by the current user are skipped. Returns the number of entries whose
+    group or mode was changed.
+    """
+    uid = os.getuid()
+    changed = 0
+    paths = [root, *root.rglob("*")] if root.is_dir() else []
+    for path in paths:
+        try:
+            st = path.lstat()
+            if st.st_uid != uid:
+                continue
+            touched = False
+            if gid is not None and st.st_gid != gid:
+                os.chown(path, -1, gid, follow_symlinks=False)
+                st = path.lstat()
+                touched = True
+            if not stat.S_ISLNK(st.st_mode):
+                mode = stat.S_IMODE(st.st_mode)
+                if stat.S_ISDIR(st.st_mode):
+                    new_mode = mode | stat.S_IRWXG | stat.S_ISGID
+                else:
+                    new_mode = mode | stat.S_IRGRP | stat.S_IWGRP
+                    if mode & stat.S_IXUSR:
+                        new_mode |= stat.S_IXGRP
+                if new_mode != mode:
+                    path.chmod(new_mode)
+                    touched = True
+            changed += touched
+        except OSError as exc:
+            _log(f"warning: could not update permissions on {path}: {exc}")
+    return changed
 
 
 @dataclass
@@ -164,6 +203,11 @@ def main(argv: list[str] | None = None) -> int:
         help="HF read token (defaults to $HF_TOKEN).",
     )
     parser.add_argument(
+        "--group",
+        default=None,
+        help="Group that should own all synced files (e.g. G-829069).",
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
         help="Report what would be downloaded without writing files.",
@@ -180,6 +224,17 @@ def main(argv: list[str] | None = None) -> int:
         help="Log per-dataset and per-file actions.",
     )
     args = parser.parse_args(argv)
+
+    # Synced data is shared with the group; huggingface_hub derives file modes from the umask.
+    os.umask(0o002)
+
+    gid: int | None = None
+    if args.group is not None:
+        try:
+            gid = grp.getgrnam(args.group).gr_gid
+        except KeyError:
+            print(f"error: unknown group {args.group!r}", file=sys.stderr)
+            return 1
 
     org_slug = parse_org_arg(args.org)
     dataset_ids = list_dataset_repos_for_org(org_slug, args.token)
@@ -281,6 +336,11 @@ def main(argv: list[str] | None = None) -> int:
     with report_path.open("w", encoding="utf-8") as fh:
         json.dump(report, fh, indent=2, ensure_ascii=False)
         fh.write("\n")
+
+    if not args.dry_run:
+        fixed = share_with_group(args.local_dir, gid)
+        if fixed:
+            _log(f"Updated group ownership/access on {fixed} path(s)")
 
     _log("")
     _log(

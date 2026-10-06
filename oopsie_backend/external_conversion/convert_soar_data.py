@@ -8,7 +8,7 @@ dataset of autonomously-collected trajectories, ~68% of which are failures
   {source}/berkeley_robot_{0..4}/{task}/{policy}/{date}/{success|failure}/traj{N}/
     actions.npy        (T, 7) float64  [dx,dy,dz,droll,dpitch,dyaw, gripper∈{0,1}]  (arm = DELTA EEF command)
     eef_poses.npy      (T, 7) float64  [x,y,z,roll,pitch,yaw, gripper]              (absolute proprio)
-    trajectory.mp4     256x256, 15 fps, frame_count == T  (the robot "main" camera)
+    trajectory.mp4     256x256, 15 fps container, T frames (one per 5 Hz control step)
     goals.mp4 / combined.mp4   VLM goal images / viz  (NOT robot cameras — ignored)
     language_task.txt  natural-language instruction
     success.txt        "True" / "False"
@@ -16,7 +16,13 @@ dataset of autonomously-collected trajectories, ~68% of which are failures
     time.txt, task_list.txt, object_list.txt  (unused)
 
 The SOURCE directory is treated as strictly READ-ONLY: this script only
-np.load / open(read) / shutil.copy2 *from* it and never writes into it.
+np.load / open(read) from it and never writes into it.
+
+Video fps note: source MP4s are packaged at SOURCE_VIDEO_FPS (15 fps) but the robot
+control loop runs at control_freq (5 Hz), so there is one video frame per control step.
+The oopsie validator requires |frame_count/fps - T/control_freq| ≤ 0.5s, so we
+re-encode each video at control_freq fps (stretching PTS by SOURCE_VIDEO_FPS/control_freq
+= 3x) to make the container duration match the true episode duration.
 
 Action representation (per dataset-owner decision):
   The oopsie action_space is `cartesian_position` (absolute). SOAR stores delta
@@ -53,13 +59,14 @@ import argparse
 import dataclasses
 import re
 import shutil
+import subprocess
 from pathlib import Path
 
 import h5py
 import numpy as np
 from tqdm import tqdm
 
-from oopsie_tools.utils.robot_profile.robot_profile import (
+from oopsie_data_tools.utils.robot_profile.robot_profile import (
     RobotProfile,
     load_robot_profile,
     robot_profile_to_json,
@@ -75,9 +82,13 @@ DEFAULT_LAB_ID = "Berkeley_RAIL"
 DEFAULT_OPERATOR_NAME = "SOAR_policy"
 DEFAULT_ANNOTATOR_NAME = "soar_vlm"
 
-# Episode-duration bounds (seconds) enforced by the validator, at control_freq=15.
+# Episode-duration bounds (seconds) enforced by the validator.
 MIN_EPISODE_SECONDS = 1
 MAX_EPISODE_SECONDS = 300
+
+# Source videos are packaged at this fps in the MP4 container, but the robot
+# control loop runs at control_freq (5 Hz) — one frame per control step.
+SOURCE_VIDEO_FPS = 15
 
 # Write h5py.Empty for every key not in the active action space.
 _ALL_ACTION_KEYS = [
@@ -91,6 +102,31 @@ _ALL_ACTION_KEYS = [
     "gripper_position",
     "gripper_binary",
 ]
+
+
+def _transcode_video(src: Path, dst: Path, control_freq: float) -> None:
+    """Re-encode src MP4 at control_freq fps, preserving all frames.
+
+    Source videos are packaged at SOURCE_VIDEO_FPS but the robot runs at
+    control_freq, so PTS are stretched by SOURCE_VIDEO_FPS/control_freq.
+    This makes the container duration == T/control_freq seconds, which the
+    oopsie validator requires.
+    """
+    if abs(SOURCE_VIDEO_FPS - control_freq) < 0.01:
+        shutil.copy2(src, dst)
+        return
+    multiplier = SOURCE_VIDEO_FPS / control_freq
+    subprocess.run(
+        [
+            "ffmpeg", "-y", "-i", str(src),
+            "-vf", f"setpts={multiplier:.6f}*PTS",
+            "-r", str(int(control_freq)),
+            "-c:v", "libx264", "-preset", "ultrafast", "-crf", "23",
+            str(dst),
+        ],
+        check=True,
+        capture_output=True,
+    )
 
 
 def _sanitize(text: str) -> str:
@@ -175,13 +211,13 @@ def convert_trajectory(
     # Actions (absolute, reconstructed from proprio)
     cartesian_act, gripper_act = _build_actions(eef_poses, actions_raw)
 
-    # Copy the robot camera video (read-only on source; 256px and 15 fps already in-spec).
+    # Re-encode video at control_freq fps so container duration == T/control_freq.
     src_video = traj_dir / "trajectory.mp4"
     if not src_video.is_file():
         tqdm.write(f"  skip {episode_id}: missing trajectory.mp4")
         return None
     dst_video = videos_dir / f"{episode_id}_main.mp4"
-    shutil.copy2(src_video, dst_video)
+    _transcode_video(src_video, dst_video, float(control_freq))
     rel_video_path = f"videos/{episode_id}_main.mp4"
 
     str_dtype = h5py.string_dtype(encoding="utf-8")

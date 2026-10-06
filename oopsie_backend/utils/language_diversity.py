@@ -518,6 +518,8 @@ def aggregate_language_diversity(
     """Compute Tier 1 diversity metrics from episode records."""
     from oopsie_backend.utils.episode_stats import (
         PUBLIC_EXCLUDED_DATASETS,
+        STATS_EXCLUDED_DATASETS,
+        _include_in_any_stats,
         _include_in_public_stats,
         _primary_complete_annotation,
     )
@@ -538,6 +540,8 @@ def aggregate_language_diversity(
     failures_with_description = 0
 
     for record in records:
+        if not _include_in_any_stats(record, repo):
+            continue
         if not include_excluded and not _include_in_public_stats(record, repo):
             continue
 
@@ -572,6 +576,7 @@ def aggregate_language_diversity(
     return {
         "scope": scope_label,
         "excluded_repos": sorted(PUBLIC_EXCLUDED_DATASETS) if not include_excluded else [],
+        "excluded_from_all_stats_datasets": sorted(STATS_EXCLUDED_DATASETS),
         "task_instructions": {
             **_summarize_corpus(instruction_weighted, total_episodes=total_episodes),
             "per_lab": _summarize_per_lab(instruction_by_lab, instruction_lab_totals),

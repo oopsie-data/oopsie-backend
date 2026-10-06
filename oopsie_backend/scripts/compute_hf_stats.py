@@ -27,6 +27,7 @@ from oopsie_backend.utils.episode_stats import (
     DEFAULT_PUBLIC_STATS_HTML,
     DEFAULT_PUBLIC_STATS_JSON,
     PUBLIC_EXCLUDED_DATASETS,
+    STATS_EXCLUDED_DATASETS,
     aggregate,
     extract_record,
     public_dataset_repos,
@@ -214,6 +215,12 @@ def main(argv: list[str] | None = None) -> int:
         aggregate_label = f"{org_slug}/*"
 
         for ds_id in dataset_ids:
+            if ds_id in STATS_EXCLUDED_DATASETS:
+                print(
+                    f"  skip (STATS_EXCLUDED_DATASETS): {ds_id}",
+                    file=sys.stderr,
+                )
+                continue
             try:
                 files = list_h5_files(ds_id, args.token, "dataset")
             except RepositoryNotFoundError:
@@ -234,7 +241,11 @@ def main(argv: list[str] | None = None) -> int:
     stats["totals"]["read_errors"] = skipped
     if datasets_included:
         stats["datasets_included"] = public_dataset_repos(datasets_included)
-    elif args.repo is not None and aggregate_label not in PUBLIC_EXCLUDED_DATASETS:
+    elif (
+        args.repo is not None
+        and aggregate_label not in PUBLIC_EXCLUDED_DATASETS
+        and aggregate_label not in STATS_EXCLUDED_DATASETS
+    ):
         stats["datasets_included"] = [aggregate_label]
 
     write_public_artifacts(

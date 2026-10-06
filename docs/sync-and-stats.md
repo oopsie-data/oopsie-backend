@@ -34,42 +34,7 @@ On LS6 `vm-small` nodes, numpy must stay below 2.4 (older CPUs lack x86-v2). The
 uv add "numpy<2.4" && uv sync --reinstall-package numpy
 ```
 
-## Paths (LS6)
-
-| Variable / path | Purpose |
-|-----------------|---------|
-| `/scratch/09666/abahety/oopsiedata` | Root of synced local data |
-| `/scratch/09666/abahety/oopsiedata/.sync_report.json` | Last sync summary |
-| `/work/09666/abahety/ls6/oopsie-docs/docs/assets/data/stats.json` | Public dashboard stats (docs site) |
-| `/work/09666/abahety/ls6/oopsie-backend/reports/public_stats.json` | Public stats copy (backend) |
-| `/work/09666/abahety/ls6/oopsie-backend/reports/internal_stats.json` | Full internal stats (all repos; not published) |
-| `OOPSIE_STATS_OUT` | Override default docs-site `stats.json` path (`--docs-output`) |
-
-Directory layout matches Hub paths:
-
-```
-<local-dir>/<namespace>/<repo-name>/<files...>
-```
-
-Example: `/scratch/09666/abahety/oopsiedata/OopsieData-Submissions/UT_RobIn/episode.h5`
-
-## Manual run (two steps)
-
-```bash
-cd /work/09666/abahety/ls6/oopsie-backend
-
-uv run python -m oopsie_backend.scripts.sync_hf_org \
-  --org OopsieData-Submissions \
-  --local-dir /scratch/09666/abahety/oopsiedata \
-  --verbose
-
-uv run python -m oopsie_backend.scripts.compute_local_stats \
-  --data-dir /scratch/09666/abahety/oopsiedata
-```
-
-`compute_local_stats` writes public stats to `reports/` and the docs site by default. Override the docs JSON with `--docs-output` or `OOPSIE_STATS_OUT`.
-
-## Daily Slurm job
+## (Option 1) Daily Slurm job
 
 Batch scripts live in [`slurm/`](../slurm/):
 
@@ -100,11 +65,133 @@ Expected log structure (stdout and stderr merged into one file):
 
 Logs: `/scratch/09666/abahety/logs/oopsie-daily-<jobid>.log`
 
-## Script reference
+## (Option 2) Manual run (two steps)
 
-| Script | Doc | When to use |
-|--------|-----|-------------|
-| `sync_hf_org` | [sync-hf-org.md](sync-hf-org.md) | Sync HF org datasets to local disk |
-| `compute_local_stats` | [compute-stats.md](compute-stats.md#compute_local_stats) | Stats from synced local data (production path) |
-| `compute_hf_stats` | [compute-stats.md](compute-stats.md#compute_hf_stats) | Stats streamed from HF without a local copy |
+### 1. Sync
+
+```bash
+cd /work/09666/abahety/ls6/oopsie-backend
+
+export HF_TOKEN=hf_...   # required for private org datasets
+export HF_HUB_DISABLE_XET=1   # this avoids reaching HUB API limits!
+
+uv run python -m oopsie_backend.scripts.sync_hf_org \
+  --org OopsieData-Submissions \
+  --local-dir /corral/utexas/IRI26024/oopsiedata \
+  --group G-829069 \
+  --verbose
+```
+Note: Currently we are using snapshot_download, might have to switch to git clone/git pull in order to avoid hitting the API limits and making the script run faster
+
+#### Permissions
+
+Synced data must be accessible to all members of group `G-829069`. The sync runs with umask `002`, and with `--group G-829069` it additionally assigns every path under `--local-dir` it owns to that group. Files get group read/write, and directories get group `rwx` plus setgid, so new files inherit the group. Paths owned by other users are skipped. Those paths need a one-off `chgrp -R G-829069` by their owner. The daily Slurm job passes `--group G-829069` and also sets the group on `$DATA_DIR` before syncing.
+
+To fix existing data by hand, the owner of the files runs:
+
+```bash
+DATA_DIR=/corral/utexas/IRI26024/oopsiedata
+chgrp -R G-829069 "$DATA_DIR"
+chmod -R g+rwX "$DATA_DIR"
+find "$DATA_DIR" -type d -exec chmod g+s {} +
+```
+
+`g+rwX` gives the group execute permission only on directories and on files that are already executable. To find paths that still have the wrong group, run `find "$DATA_DIR" ! -group G-829069`.
+
+#### Expected stderr output
+
+##### Default (no `--verbose`)
+
+```
+  Syncing 18 dataset(s) under 'OopsieData-Submissions'
+  [1/18] OopsieData-Submissions/SomeLab  downloaded 12, skipped 450, took 2m 15s
+  [2/18] OopsieData-Submissions/OtherLab  downloaded 0, skipped 1203, took 45.2s
+  ...
+
+  Downloaded: 12 file(s), skipped (unchanged): 37041, datasets: 18, orphans kept: 847, errors: 0
+  Report: /scratch/09666/abahety/oopsiedata/.sync_report.json
+```
+
+When already fully synced, `downloaded` is 0 and `skipped` is high.
+
+##### With `--verbose`
+
+```
+  Syncing 18 dataset(s) under 'OopsieData-Submissions'
+  [1/18] OopsieData-Submissions/SomeLab
+    dest: /scratch/09666/abahety/oopsiedata/OopsieData-Submissions/SomeLab
+    downloaded 12, skipped 450, took 2m 15s
+
+  Checking orphans...
+  OopsieData-Submissions/SomeLab: 3 orphan(s)
+
+  Downloaded: 12 file(s), skipped (unchanged): 37041, datasets: 18, orphans kept: 847, errors: 0
+  Report: /scratch/09666/abahety/oopsiedata/.sync_report.json
+```
+
+##### Sync report (`.sync_report.json`)
+
+Written to `<local-dir>/.sync_report.json` after every run.
+
+Example (truncated):
+
+```json
+{
+  "org": "OopsieData-Submissions",
+  "local_dir": "/scratch/09666/abahety/oopsiedata",
+  "dry_run": false,
+  "synced_at": {
+    "utc": "2026-06-14T16:22:34Z",
+    "cdt": "2026-06-14T11:22:34-05:00"
+  },
+  "datasets_synced": 18,
+  "files_downloaded": 0,
+  "files_skipped": 37053,
+  "orphans_kept": [
+    "OopsieData-Submissions/UT_RobIn/20260422_220912.h5",
+    "OopsieData-Submissions/UT_RobIn/20260422_220912_left.mp4"
+  ],
+  "errors": [],
+  "datasets": [
+    "OopsieData-Submissions/SomeLab",
+    "OopsieData-Submissions/OtherLab"
+  ]
+}
+```
+
+
+### 2. Update stats
+
+```bash
+uv run python -m oopsie_backend.scripts.compute_local_stats \
+  --data-dir /corral/utexas/IRI26024/oopsiedata
+```
+
+#### Flags
+
+| Flag | Default | Description |
+|------|---------|-------------|
+| `--no-public-report` | off | Skip `public_stats.html` |
+| `--no-internal-output` | off | Skip internal JSON/HTML entirely |
+| `--no-internal-report` | off | Skip `internal_stats.html` only |
+| `--limit` | none | Max `.h5` files per dataset (first N, for testing) |
+
+No `HF_TOKEN` required — reads files from disk.
+
+`compute_local_stats` writes two things: 
+1. public and internal stats to `reports/` 
+2. the public stats json to oopsie-docs.
+
+
+## Paths (LS6)
+
+| Variable / path | Purpose |
+|-----------------|---------|
+| `/corral/utexas/IRI26024/oopsiedata` | Root of synced local data |
+| `/corral/utexas/IRI26024/oopsiedata/.sync_report.json` | Last sync summary |
+| `/work/09666/abahety/ls6/oopsie-docs/docs/assets/data/stats.json` | Public dashboard stats (docs site) |
+| `/work/09666/abahety/ls6/oopsie-backend/reports/public_stats.json` | Public stats copy (backend) |
+| `/work/09666/abahety/ls6/oopsie-backend/reports/public_stats.html` | Self-contained public stats snapshot |
+| `/work/09666/abahety/ls6/oopsie-backend/reports/internal_stats.json` | Full internal stats (all repos; not published) |
+| `/work/09666/abahety/ls6/oopsie-backend/oopsie-backend/reports/internal_stats.html` | Self-contained internal report |
 

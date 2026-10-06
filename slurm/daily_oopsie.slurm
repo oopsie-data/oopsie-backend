@@ -9,7 +9,11 @@
 #SBATCH -e /corral/utexas/IRI26024/logs/oopsie-daily-%j.log
 
 set -euo pipefail
+<<<<<<< HEAD
 umask 007
+=======
+umask 002
+>>>>>>> 57a1a0a42b378f3766997f06fd4d76610f235eda
 SECONDS=0
 
 export HF_HUB_DISABLE_XET=1
@@ -20,7 +24,13 @@ STATS_OUT=/work/09666/abahety/ls6/oopsie-docs/docs/assets/data/stats.json
 LOG_DIR=/corral/utexas/IRI26024/logs
 UV=/home1/09666/abahety/.local/bin/uv
 
+<<<<<<< HEAD
 mkdir -p "$LOG_DIR" "$DATA_DIR" "$(dirname "$STATS_OUT")" "$BACKEND/reports"
+=======
+mkdir -p "$LOG_DIR" "$DATA_DIR" "$(dirname "$DOCS_STATS_OUT")" "$BACKEND/reports"
+chgrp G-829069 "$DATA_DIR"
+chmod g+rwxs "$DATA_DIR"
+>>>>>>> 57a1a0a42b378f3766997f06fd4d76610f235eda
 
 if [[ -f "$HOME/.hf_token" ]]; then
   export HF_TOKEN="$(tr -d '[:space:]' < "$HOME/.hf_token")"
@@ -46,6 +56,7 @@ run_step setup_numpy bash -c "\"$UV\" add 'numpy<2.4' && \"$UV\" sync --reinstal
 run_step sync_hf_org "$UV" run python -m oopsie_backend.scripts.sync_hf_org \
   --org OopsieData-Submissions \
   --local-dir "$DATA_DIR" \
+<<<<<<< HEAD
   --verbose \
   --limit-datasets 1
 
@@ -56,6 +67,10 @@ run_step sync_hf_org "$UV" run python -m oopsie_backend.scripts.sync_hf_org \
 #   find \"$DATA_DIR\" -user \"\$USER\" -type f -exec chmod 660 {} +
 #   echo \"Set group G-829069 and permissions (dirs 770, files 660) under $DATA_DIR\"
 # "
+=======
+  --group G-829069 \
+  --verbose
+>>>>>>> 57a1a0a42b378f3766997f06fd4d76610f235eda
 
 run_step compute_local_stats "$UV" run python -m oopsie_backend.scripts.compute_local_stats \
   --data-dir "$DATA_DIR" \

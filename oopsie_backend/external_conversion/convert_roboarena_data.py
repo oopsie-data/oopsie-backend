@@ -58,7 +58,7 @@ import numpy as np
 import yaml
 from tqdm import tqdm
 
-from oopsie_tools.utils.robot_profile.robot_profile import (
+from oopsie_data_tools.utils.robot_profile.robot_profile import (
     RobotProfile,
     robot_profile_to_json,
 )
