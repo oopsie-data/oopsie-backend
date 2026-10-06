@@ -9,7 +9,10 @@
 #SBATCH -e /corral/utexas/IRI26024/logs/oopsie-daily-%j.log
 
 set -euo pipefail
+umask 007
 SECONDS=0
+
+export HF_HUB_DISABLE_XET=1
 
 BACKEND=/work/09666/abahety/ls6/oopsie-backend
 DATA_DIR=/corral/utexas/IRI26024/oopsiedata
@@ -17,7 +20,7 @@ STATS_OUT=/work/09666/abahety/ls6/oopsie-docs/docs/assets/data/stats.json
 LOG_DIR=/corral/utexas/IRI26024/logs
 UV=/home1/09666/abahety/.local/bin/uv
 
-mkdir -p "$LOG_DIR" "$DATA_DIR" "$(dirname "$DOCS_STATS_OUT")" "$BACKEND/reports"
+mkdir -p "$LOG_DIR" "$DATA_DIR" "$(dirname "$STATS_OUT")" "$BACKEND/reports"
 
 if [[ -f "$HOME/.hf_token" ]]; then
   export HF_TOKEN="$(tr -d '[:space:]' < "$HOME/.hf_token")"
@@ -38,15 +41,28 @@ run_step() {
 }
 
 # Pin numpy before 2.4's x86-v2 baseline requirement. Need this for running on vm-small.
-run_step setup_numpy bash -c 'uv add "numpy<2.4" && uv sync --reinstall-package numpy'
+run_step setup_numpy bash -c "\"$UV\" add 'numpy<2.4' && \"$UV\" sync --reinstall-package numpy"
 
 run_step sync_hf_org "$UV" run python -m oopsie_backend.scripts.sync_hf_org \
   --org OopsieData-Submissions \
   --local-dir "$DATA_DIR" \
-  --verbose
+  --verbose \
+  --limit-datasets 1
+
+# Note: This step is kept as a safety net, but is not needed anymore.
+# run_step fix_data_permissions bash -c "
+#   find \"$DATA_DIR\" -user \"\$USER\" ! -group G-829069 -exec chgrp G-829069 {} +
+#   find \"$DATA_DIR\" -user \"\$USER\" -type d -exec chmod 2770 {} +
+#   find \"$DATA_DIR\" -user \"\$USER\" -type f -exec chmod 660 {} +
+#   echo \"Set group G-829069 and permissions (dirs 770, files 660) under $DATA_DIR\"
+# "
 
 run_step compute_local_stats "$UV" run python -m oopsie_backend.scripts.compute_local_stats \
   --data-dir "$DATA_DIR" \
-  --docs-output "$DOCS_STATS_OUT"
+  --docs-output "$STATS_OUT"
+
+chmod g+s /corral/utexas/IRI26024/logs
+chgrp G-829069 /corral/utexas/IRI26024/logs/*.log
+chmod g+r /corral/utexas/IRI26024/logs/*.log
 
 echo "=== $(date -Is) SUCCESS: oopsie-daily completed in ${SECONDS}s (job ${SLURM_JOB_ID}) ==="
