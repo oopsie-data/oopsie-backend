@@ -1,49 +1,64 @@
-# QA spot checks
+# QA spot checks: generating bundles
 
-## 1. Select episodes and build bundles
+Run from the `oopsie-backend` repo root, on a machine with the synced data mirror (LS6: `/corral/utexas/IRI26024/oopsiedata`).
+
+## 1. Preview the selection
+
+```bash
+uv run python -m oopsie_backend.scripts.select_qa_episodes \
+  --data-dir /corral/utexas/IRI26024/oopsiedata --dry-run
+```
+
+This prints one row per selected lab, showing the selected/available episode count and the distinct values selected/available for instruction, annotator, operator and robot. Skipped labs and unreadable episodes are logged to stderr. Nothing is written.
+
+## 2. Write the bundles
 
 ```bash
 uv run python -m oopsie_backend.scripts.select_qa_episodes \
   --data-dir /corral/utexas/IRI26024/oopsiedata --out-dir qa_out
 ```
 
-- One lab is one HF dataset repo. Repos in `STATS_EXCLUDED_DATASETS` / `PUBLIC_EXCLUDED_DATASETS` are skipped, as are labs with fewer than `--min-episodes` (default 200) episodes that have readable videos.
-- Per lab, `--per-lab` (default 20) episodes are picked greedily to cover as many distinct language instructions, annotators, operators and robots (`robot_profile.robot_name`) as possible. Values repeat only once a dimension is exhausted. Selection is deterministic for a given `--seed`.
-- Labs are grouped `--labs-per-bundle` (default 5) per `qa_bundle_XX.zip`. `qa_master_manifest.json` lists every bundle.
-- `--dry-run` prints, per lab, how many distinct values were selected out of those available, and writes nothing.
+| Flag | Default | Meaning |
+|---|---|---|
+| `--data-dir` | `/scratch/09666/abahety/oopsiedata` | Root of the synced mirror (contains `OopsieData-Submissions/`) |
+| `--out-dir` | `qa_out` | Output directory |
+| `--per-lab` | `20` | Episodes per lab |
+| `--min-episodes` | `200` | Skip labs with fewer eligible episodes (`0` for test data) |
+| `--labs-per-bundle` | `5` | Labs per zip (5 × 20 = 100 episodes) |
+| `--seed` | `0` | Selection seed; same seed and data give the same bundles |
+| `--workers` | `8` | Parallel h5 readers |
+| `--dry-run` | off | Print the selection table only |
 
-Bundle layout:
+Labs are HF dataset repos. Repos excluded from the public stats are never used. Episodes without readable videos are skipped.
+
+Output:
 
 ```
-qa_bundle_01/
-  qa_manifest.json
-  episodes/<Repo>/<repo_path>.h5   (+ its mp4s at their repo-relative locations)
+qa_out/
+  qa_bundle_01.zip, qa_bundle_02.zip, ...
+  qa_master_manifest.json      # every bundle's manifest, keep this
 ```
 
-Each `qa_manifest.json` entry holds `qa_id`, `dataset_repo`, `repo_path`, `bundle_path`, `video_files`, `lab_id`, `episode_id`, `language_instruction`, `operator`, `annotators`, `robot_name` and an empty `qa_notes`.
+Each zip unpacks to `qa_bundle_XX/qa_manifest.json` plus `episodes/<Repo>/<repo_path>` (h5 and mp4s). Each manifest entry has `qa_id`, `dataset_repo`, `repo_path`, `bundle_path`, `video_files`, `lab_id`, `episode_id`, `language_instruction`, `operator`, `annotators`, `robot_name` and `qa_notes`.
 
-## 2. Review (reviewer side)
+## 3. Hand out
 
-Requires `oopsie-data-tools` with the `qa` command:
+Send each reviewer one zip and the reviewer instructions (`QA_REVIEW.md` in the `qa_tool` branch of oopsie-data-tools). Track which zip went to whom.
 
-```bash
-oopsie-data qa qa_bundle_01.zip --reviewer <name>
-```
+## 4. Collect the returned notes
 
-This unpacks the zip next to itself and opens the annotator in QA mode. Episodes and existing annotations are read-only, and the only input is a QA note per episode, saved into `qa_bundle_01/qa_manifest.json`. Re-running the command resumes. When done, the reviewer sends back `qa_manifest.json`.
-
-## 3. Collect notes
+Reviewers return their `qa_manifest.json`. Save the files under distinct names, then:
 
 ```bash
 uv run python -m oopsie_backend.scripts.merge_qa_notes returned/*.json --out qa_notes.csv
 ```
 
-Each row identifies the episode by `dataset_repo` + `repo_path`. Pass `--all` to include episodes without notes.
+`--all` also includes episodes without notes. Each row identifies the episode by `dataset_repo` + `repo_path` (the h5 path inside that HF repo), together with the bundle, reviewer and note.
 
-## Local test data
+## Local test run
 
 ```bash
-HF_TOKEN=... uv run python -m oopsie_backend.scripts.sync_hf_org \
+HF_TOKEN=hf_... uv run python -m oopsie_backend.scripts.sync_hf_org \
   --org OopsieData-Submissions --local-dir ./data --smallest 10
 uv run python -m oopsie_backend.scripts.select_qa_episodes \
   --data-dir ./data --out-dir qa_out --min-episodes 0
