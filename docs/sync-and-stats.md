@@ -21,11 +21,16 @@ cd /work/09666/abahety/ls6/oopsie-backend
 uv sync
 ```
 
-Set a Hugging Face read token before running sync (or remote stats):
+Set a Hugging Face read token and correct file permissions:
 
 ```bash
 export HF_TOKEN=hf_...
-# or: export HF_TOKEN="$(tr -d '[:space:]' < "$HOME/.hf_token")"
+# or
+echo hf_xxxxxxxxxxxxxxxx > ~/.hf_token
+chmod 600 ~/.hf_token
+
+# This is very inmportant!
+echo 'umask 007' >> ~/.bashrc
 ```
 
 On LS6 `vm-small` nodes, numpy must stay below 2.4 (older CPUs lack x86-v2). The daily job handles this automatically; for manual runs:
@@ -45,6 +50,19 @@ Submit from anywhere:
 
 ```bash
 sbatch /work/09666/abahety/ls6/oopsie-backend/slurm/daily_oopsie.slurm
+```
+
+if vm-small is taking too long, try:
+
+```bash
+# check which nodes are free
+sinfo -S+P -o "%18P %10l %20F"
+
+# Use them
+sbatch -p normal /work/09666/abahety/ls6/oopsie-backend/slurm/daily_oopsie.slurm
+
+# Can also reduce time for node which gives you quicker access
+sbatch -p normal,vm-small -t 06:00:00 /work/09666/abahety/ls6/oopsie-backend/slurm/daily_oopsie.slurm
 ```
 
 Expected log structure (stdout and stderr merged into one file):

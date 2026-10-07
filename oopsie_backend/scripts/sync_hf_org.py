@@ -102,11 +102,13 @@ class DatasetSyncResult:
     duration_seconds: float
     files_downloaded: int = 0
     files_skipped: int = 0
+    error: str | None = None
 
 
 @dataclass
 class SyncStats:
     datasets_synced: int = 0
+    datasets_failed: int = 0
     files_downloaded: int = 0
     files_skipped: int = 0
     errors: list[str] = field(default_factory=list)
@@ -184,6 +186,45 @@ def sync_dataset(
     return diff_file_state(before, local_file_state(dest))
 
 
+def sync_dataset_with_retries(
+    repo_id: str,
+    local_dir: Path,
+    token: str | None,
+    *,
+    dry_run: bool,
+    verbose: bool,
+    retries: int,
+    retry_delay: float,
+) -> tuple[int, int]:
+    """Call :func:`sync_dataset`, retrying transient failures with linear backoff.
+
+    ``RepositoryNotFoundError`` is never retried. Already-downloaded files are
+    skipped on each retry, so a retry resumes rather than restarts the dataset.
+    """
+    for attempt in range(1, retries + 2):
+        try:
+            return sync_dataset(
+                repo_id,
+                local_dir,
+                token,
+                dry_run=dry_run,
+                verbose=verbose,
+            )
+        except RepositoryNotFoundError:
+            raise
+        except Exception as exc:
+            if attempt > retries:
+                raise
+            delay = retry_delay * attempt
+            _log(
+                f"attempt {attempt}/{retries + 1} failed: {type(exc).__name__}: {exc}; "
+                f"retrying in {delay:.0f}s",
+                level=1,
+            )
+            time.sleep(delay)
+    raise AssertionError("unreachable")
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -217,6 +258,18 @@ def main(argv: list[str] | None = None) -> int:
         type=int,
         default=None,
         help="Max datasets to sync (for testing).",
+    )
+    parser.add_argument(
+        "--retries",
+        type=int,
+        default=3,
+        help="Retries per dataset after a failed download (default: 3).",
+    )
+    parser.add_argument(
+        "--retry-delay",
+        type=float,
+        default=30.0,
+        help="Base seconds between retries; attempt N waits N times this (default: 30).",
     )
     parser.add_argument(
         "--verbose",
@@ -266,12 +319,14 @@ def main(argv: list[str] | None = None) -> int:
 
         started = time.perf_counter()
         try:
-            downloaded, skipped = sync_dataset(
+            downloaded, skipped = sync_dataset_with_retries(
                 repo_id,
                 args.local_dir,
                 args.token,
                 dry_run=args.dry_run,
                 verbose=args.verbose,
+                retries=args.retries,
+                retry_delay=args.retry_delay,
             )
         except RepositoryNotFoundError:
             elapsed = time.perf_counter() - started
@@ -285,6 +340,27 @@ def main(argv: list[str] | None = None) -> int:
             else:
                 _log(f"{label}  not found ({_format_duration(elapsed)})")
             stats.errors.append(msg)
+            continue
+        except Exception as exc:
+            elapsed = time.perf_counter() - started
+            error = f"{type(exc).__name__}: {exc}"
+            stats.datasets_failed += 1
+            stats.dataset_results.append(
+                DatasetSyncResult(
+                    repo_id=repo_id,
+                    duration_seconds=elapsed,
+                    error=error,
+                ),
+            )
+            stats.errors.append(
+                f"failed after {args.retries + 1} attempt(s): {repo_id}: {error}",
+            )
+            failed = f"FAILED, continuing ({_format_duration(elapsed)}): {error}"
+            if args.verbose:
+                _log(failed, level=1)
+                _log("")
+            else:
+                _log(f"{label}  {failed}")
             continue
 
         elapsed = time.perf_counter() - started
@@ -317,6 +393,7 @@ def main(argv: list[str] | None = None) -> int:
         "dry_run": args.dry_run,
         "synced_at": now_timestamps(),
         "datasets_synced": stats.datasets_synced,
+        "datasets_failed": stats.datasets_failed,
         "files_downloaded": stats.files_downloaded,
         "files_skipped": stats.files_skipped,
         "errors": stats.errors,
@@ -326,6 +403,7 @@ def main(argv: list[str] | None = None) -> int:
                 "duration_seconds": round(result.duration_seconds, 3),
                 "files_downloaded": result.files_downloaded,
                 "files_skipped": result.files_skipped,
+                **({"error": result.error} if result.error else {}),
             }
             for result in stats.dataset_results
         ],
@@ -348,9 +426,15 @@ def main(argv: list[str] | None = None) -> int:
         f"{stats.files_downloaded} file(s), "
         f"skipped (unchanged): {stats.files_skipped}, "
         f"datasets: {stats.datasets_synced}, "
+        f"failed: {stats.datasets_failed}, "
         f"errors: {len(stats.errors)}",
     )
     _log(f"Report: {report_path}")
+    if stats.datasets_failed:
+        for result in stats.dataset_results:
+            if result.error:
+                _log(f"failed: {result.repo_id}: {result.error}", level=1)
+        return 1
     return 0
 
 
