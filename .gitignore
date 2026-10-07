@@ -231,3 +231,7 @@ CLAUDE.md
 
 # Generated stats reports (public HTML snapshot + internal JSON/HTML)
 reports/
+
+# Local test data and QA bundles
+data/
+qa_out/
