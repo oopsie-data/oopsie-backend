@@ -4,7 +4,7 @@ real per-timestep actions/* and observations/robot_states/* arrays.
 This is a separate, opt-in pass from compute_local_stats.py: it reads full arrays
 (not just HDF5 attrs), which costs much more per file, so it is not run as part of
 the nightly stats job. See reports/data_quality_exceptions.md for what each check
-means and configs/stats_config.yaml's action_qa block for thresholds.
+means and configs/action_qa_config.yaml for toggles/thresholds.
 
 Usage:
     uv run python -m oopsie_backend.scripts.run_action_qa \\
@@ -19,6 +19,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import random
 import sys
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -27,11 +28,16 @@ import h5py
 
 from oopsie_backend.scripts.compute_local_stats import DEFAULT_DATA_DIR, discover_episodes
 from oopsie_backend.utils.action_qa import run_action_qa_on_h5
-from oopsie_backend.utils.episode_stats import REPORTS_DIR, STATS_EXCLUDED_DATASETS, now_timestamps, write_stats_json
-from oopsie_backend.utils.stats_config import CONFIG
+from oopsie_backend.utils.action_qa_config import CONFIG as ACTION_QA_CONFIG, DEFAULT_CHECKS
+from oopsie_backend.utils.action_qa_report import render_action_qa_report
+from oopsie_backend.utils.episode_stats import (
+    PUBLIC_EXCLUDED_DATASETS,
+    STATS_EXCLUDED_DATASETS,
+    now_timestamps,
+    write_stats_json,
+)
 
-DEFAULT_OUTPUT = REPORTS_DIR / "action_qa.json"
-MAX_FLAGGED_DETAIL = 500
+MAX_FLAGGED_DETAIL = 20000
 
 
 def _log(message: str) -> None:
@@ -39,15 +45,23 @@ def _log(message: str) -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
+    qa_config = ACTION_QA_CONFIG
+    run_cfg = qa_config["run"]
+
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
+    parser.add_argument(
+        "--data-dir",
+        type=Path,
+        default=None,
+        help="Default: run.data_dir from action_qa_config.yaml, else compute_local_stats.py's default.",
+    )
     parser.add_argument(
         "--limit",
         type=int,
         default=None,
         help=(
             "Max episodes checked per dataset, first N (default: "
-            "action_qa.sampling.default_episode_limit from stats_config.yaml). "
+            "sampling.default_episode_limit from action_qa_config.yaml). "
             "0 means unlimited."
         ),
     )
@@ -55,25 +69,45 @@ def main(argv: list[str] | None = None) -> int:
         "--max-total-episodes",
         type=int,
         default=None,
-        help="Global cap across all datasets combined (default: unlimited).",
+        help="Global cap across all datasets combined (default: run.max_total_episodes from action_qa_config.yaml).",
     )
     parser.add_argument(
         "--only-dataset",
         action="append",
         default=None,
         metavar="REPO",
-        help="Restrict to this dataset repo (e.g. OopsieData-Submissions/SomeLab). Repeatable.",
+        help=(
+            "Restrict to this dataset repo (e.g. OopsieData-Submissions/SomeLab). Repeatable. "
+            "Default: run.only_dataset from action_qa_config.yaml."
+        ),
     )
-    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
-    parser.add_argument("--verbose", action="store_true")
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=None,
+        help="Default: run.output from action_qa_config.yaml.",
+    )
+    parser.add_argument(
+        "--verbose",
+        action=argparse.BooleanOptionalAction,
+        default=None,
+        help="Default: run.verbose from action_qa_config.yaml.",
+    )
     args = parser.parse_args(argv)
 
-    qa_config = CONFIG["action_qa"]
+    data_dir_arg = args.data_dir if args.data_dir is not None else run_cfg["data_dir"]
+    data_dir_arg = Path(data_dir_arg) if data_dir_arg is not None else DEFAULT_DATA_DIR
+    max_total_episodes = args.max_total_episodes if args.max_total_episodes is not None else run_cfg["max_total_episodes"]
+    only_dataset_list = args.only_dataset if args.only_dataset is not None else run_cfg["only_dataset"]
+    output_path = args.output if args.output is not None else run_cfg["output"]
+    verbose = args.verbose if args.verbose is not None else run_cfg["verbose"]
+
     per_dataset_limit = args.limit if args.limit is not None else qa_config["sampling"]["default_episode_limit"]
     per_dataset_limit = None if per_dataset_limit in (0, None) else per_dataset_limit
-    only_dataset = set(args.only_dataset) if args.only_dataset else None
+    only_dataset = set(only_dataset_list) if only_dataset_list else None
+    scope_cfg = qa_config["scope"]
 
-    data_dir = args.data_dir.resolve()
+    data_dir = data_dir_arg.resolve()
     if not data_dir.is_dir():
         print(f"error: data dir not found: {data_dir}", file=sys.stderr)
         return 1
@@ -81,7 +115,9 @@ def main(argv: list[str] | None = None) -> int:
     episodes = discover_episodes(data_dir)
     by_dataset: dict[str, list[tuple[str, Path]]] = defaultdict(list)
     for dataset_repo, repo_path, path in episodes:
-        if dataset_repo in STATS_EXCLUDED_DATASETS:
+        if dataset_repo in STATS_EXCLUDED_DATASETS and not scope_cfg["include_stats_excluded_datasets"]:
+            continue
+        if dataset_repo in PUBLIC_EXCLUDED_DATASETS and not scope_cfg["include_public_excluded_datasets"]:
             continue
         if only_dataset is not None and dataset_repo not in only_dataset:
             continue
@@ -91,37 +127,46 @@ def main(argv: list[str] | None = None) -> int:
         print("error: no matching .h5 files found", file=sys.stderr)
         return 1
 
-    planned = {
-        ds: (files if per_dataset_limit is None else files[:per_dataset_limit])
-        for ds, files in by_dataset.items()
-    }
-    total_planned = sum(len(files) for files in planned.values())
-    if args.max_total_episodes is not None:
-        total_planned = min(total_planned, args.max_total_episodes)
-    _log(f"Will check up to {total_planned} episode(s) across {len(planned)} dataset(s)")
+    sampling_cfg = qa_config["sampling"]
+    rng = random.Random(sampling_cfg["random_seed"]) if sampling_cfg["random_seed"] is not None else random.Random()
 
+    def _select(files: list[tuple[str, Path]]) -> list[tuple[str, Path]]:
+        if per_dataset_limit is None:
+            return files
+        if sampling_cfg["random"]:
+            return rng.sample(files, k=min(per_dataset_limit, len(files)))
+        return files[:per_dataset_limit]
+
+    planned = {ds: _select(files) for ds, files in by_dataset.items()}
+    total_planned = sum(len(files) for files in planned.values())
+    if max_total_episodes is not None:
+        total_planned = min(total_planned, max_total_episodes)
+    sample_kind = "random" if sampling_cfg["random"] else "first-N sorted"
+    _log(f"Will check up to {total_planned} episode(s) across {len(planned)} dataset(s) ({sample_kind} sample)")
+
+    check_categories = {
+        category: [test for test, cfg in qa_config[category].items() if cfg["enabled"]]
+        for category in DEFAULT_CHECKS
+    }
     totals = Counter()
     per_dataset_stats: dict[str, dict] = {}
     flagged_episodes: list[dict] = []
     checked_total = 0
 
     for index, dataset_repo in enumerate(sorted(planned), 1):
-        if args.max_total_episodes is not None and checked_total >= args.max_total_episodes:
+        if max_total_episodes is not None and checked_total >= max_total_episodes:
             break
         files = planned[dataset_repo]
-        if args.max_total_episodes is not None:
-            remaining = args.max_total_episodes - checked_total
+        if max_total_episodes is not None:
+            remaining = max_total_episodes - checked_total
             files = files[:remaining]
 
         ds_totals = Counter()
-        ds_tests = {
-            "duplicate_pairs": Counter(),
-            "scale_consistency": Counter(),
-            "tracking_residual": Counter(),
-            "delta_detection": Counter(),
-            "length_mismatch": Counter(),
-        }
-        delta_flagged_keys: Counter = Counter()
+        # One entry per enabled check, so a check that never fired still shows up as zero.
+        ds_checked_episodes = {cat: {t: 0 for t in tests} for cat, tests in check_categories.items()}
+        ds_flagged_episodes = {cat: {t: 0 for t in tests} for cat, tests in check_categories.items()}
+        ds_flagged_keys = {cat: {t: Counter() for t in tests} for cat, tests in check_categories.items()}
+        ds_skips = {cat: {t: Counter() for t in tests} for cat, tests in check_categories.items()}
 
         _log(f"[{index}/{len(planned)}] {dataset_repo}: {len(files)} episode(s)")
         for i, (repo_path, path) in enumerate(files, 1):
@@ -132,23 +177,24 @@ def main(argv: list[str] | None = None) -> int:
                     result = run_action_qa_on_h5(f, qa_config)
             except Exception as exc:
                 ds_totals["errors"] += 1
-                if args.verbose:
+                if verbose:
                     _log(f"  [{i}/{len(files)}] {repo_path}: ERROR ({exc})")
                 continue
 
-            if result is None or not result["findings"]:
+            if result is None:
+                continue
+            for category, test in result["checked"]:
+                ds_checked_episodes[category][test] += 1
+            for skip in result["skips"]:
+                ds_skips[skip["category"]][skip["test"]][skip["reason"]] += 1
+            if not result["findings"]:
                 continue
 
-            tests_hit = {finding["test"] for finding in result["findings"]}
-            for test in tests_hit:
-                ds_tests[test]["flagged_episodes"] += 1
+            tests_hit = {(finding["category"], finding["test"]) for finding in result["findings"]}
+            for category, test in tests_hit:
+                ds_flagged_episodes[category][test] += 1
             for finding in result["findings"]:
-                if finding["test"] == "duplicate_pairs":
-                    ds_tests["duplicate_pairs"]["flagged_pairs"] += 1
-                elif finding["test"] == "scale_consistency":
-                    ds_tests["scale_consistency"]["flagged_keys"] += 1
-                elif finding["test"] == "delta_detection":
-                    delta_flagged_keys[finding["key"]] += 1
+                ds_flagged_keys[finding["category"]][finding["test"]][finding["key"]] += 1
 
             ds_totals["episodes_flagged"] += 1
             episode_id = path.stem
@@ -160,22 +206,24 @@ def main(argv: list[str] | None = None) -> int:
                     "findings": result["findings"],
                 }
             )
-            if args.verbose:
-                _log(f"  [{i}/{len(files)}] {repo_path}: FLAGGED ({sorted(tests_hit)})")
+            if verbose:
+                _log(f"  [{i}/{len(files)}] {repo_path}: FLAGGED ({sorted(f'{c}.{t}' for c, t in tests_hit)})")
 
         per_dataset_stats[dataset_repo] = {
             "episodes_checked": ds_totals["episodes_checked"],
             "errors": ds_totals["errors"],
             "episodes_flagged": ds_totals["episodes_flagged"],
             "tests": {
-                "duplicate_pairs": dict(ds_tests["duplicate_pairs"]),
-                "scale_consistency": dict(ds_tests["scale_consistency"]),
-                "tracking_residual": dict(ds_tests["tracking_residual"]),
-                "delta_detection": {
-                    "flagged_episodes": ds_tests["delta_detection"]["flagged_episodes"],
-                    "flagged_keys": dict(delta_flagged_keys),
-                },
-                "length_mismatch": dict(ds_tests["length_mismatch"]),
+                category: {
+                    test: {
+                        "checked_episodes": ds_checked_episodes[category][test],
+                        "flagged_episodes": ds_flagged_episodes[category][test],
+                        "flagged_keys": dict(ds_flagged_keys[category][test]),
+                        "skips": dict(ds_skips[category][test]),
+                    }
+                    for test in tests
+                }
+                for category, tests in check_categories.items()
             },
         }
         totals["episodes_checked"] += ds_totals["episodes_checked"]
@@ -183,15 +231,20 @@ def main(argv: list[str] | None = None) -> int:
         totals["episodes_flagged"] += ds_totals["episodes_flagged"]
 
     report = {
-        "schema_version": 1,
+        "schema_version": 2,
         "generated_at": now_timestamps(),
         "scope": f"local:{data_dir}",
-        "config_snapshot": qa_config,
+        "config_snapshot": {
+            **{k: v for k, v in qa_config.items() if k != "run"},
+            "run": {**qa_config["run"], "data_dir": str(data_dir), "output": str(output_path)},
+        },
         "totals": dict(totals),
         "per_dataset": per_dataset_stats,
         "flagged_episodes": flagged_episodes[:MAX_FLAGGED_DETAIL],
     }
-    write_stats_json(args.output, report)
+    write_stats_json(output_path, report)
+    html_path = Path(output_path).with_suffix(".html")
+    render_action_qa_report(report, html_path)
 
     flagged_datasets = sorted(ds for ds, s in per_dataset_stats.items() if s["episodes_flagged"] > 0)
     _log("")
@@ -203,7 +256,8 @@ def main(argv: list[str] | None = None) -> int:
         _log(f"Flagged datasets: {', '.join(flagged_datasets)}")
     else:
         _log("No datasets flagged.")
-    _log(f"Report: {args.output}")
+    _log(f"Report: {output_path}")
+    _log(f"HTML:   {html_path}")
     return 0
 
 

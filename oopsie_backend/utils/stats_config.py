@@ -52,13 +52,6 @@ _FALLBACK_RAW: dict = {
             "per_task_cap": {"enabled": False},
         },
     },
-    "action_qa": {
-        "duplicate_pairs": {"enabled": True, "atol": 1.0e-9, "rtol": 0.0},
-        "scale_consistency": {"enabled": True, "max_ratio": 5.0, "min_ratio": 0.2},
-        "tracking_residual": {"enabled": True, "max_normalized_rms": 0.5},
-        "delta_detection": {"enabled": True, "ratio_threshold": 0.3},
-        "sampling": {"default_episode_limit": 50},
-    },
 }
 
 
@@ -71,12 +64,6 @@ def _build_config(raw: dict) -> dict:
     volume_raw = beta_raw.get("volume") or {}
     task_diversity_raw = beta_raw.get("task_diversity") or {}
     per_task_cap_raw = beta_raw.get("per_task_cap") or {}
-    action_qa = raw.get("action_qa") or {}
-    dup_raw = action_qa.get("duplicate_pairs") or {}
-    scale_raw = action_qa.get("scale_consistency") or {}
-    tracking_raw = action_qa.get("tracking_residual") or {}
-    delta_raw = action_qa.get("delta_detection") or {}
-    sampling_raw = action_qa.get("sampling") or {}
 
     return {
         "stats_excluded_datasets": frozenset(datasets.get("stats_excluded") or []),
@@ -109,29 +96,6 @@ def _build_config(raw: dict) -> dict:
                 },
                 "task_diversity_enabled": bool(task_diversity_raw.get("enabled", False)),
                 "per_task_cap_enabled": bool(per_task_cap_raw.get("enabled", False)),
-            },
-        },
-        "action_qa": {
-            "duplicate_pairs": {
-                "enabled": bool(dup_raw.get("enabled", True)),
-                "atol": float(dup_raw.get("atol", 1.0e-9)),
-                "rtol": float(dup_raw.get("rtol", 0.0)),
-            },
-            "scale_consistency": {
-                "enabled": bool(scale_raw.get("enabled", True)),
-                "max_ratio": float(scale_raw.get("max_ratio", 5.0)),
-                "min_ratio": float(scale_raw.get("min_ratio", 0.2)),
-            },
-            "tracking_residual": {
-                "enabled": bool(tracking_raw.get("enabled", True)),
-                "max_normalized_rms": float(tracking_raw.get("max_normalized_rms", 0.5)),
-            },
-            "delta_detection": {
-                "enabled": bool(delta_raw.get("enabled", True)),
-                "ratio_threshold": float(delta_raw.get("ratio_threshold", 0.3)),
-            },
-            "sampling": {
-                "default_episode_limit": int(sampling_raw.get("default_episode_limit", 50)),
             },
         },
     }

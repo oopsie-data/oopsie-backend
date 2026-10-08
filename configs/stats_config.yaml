@@ -97,45 +97,5 @@ requirements:
     per_task_cap:
       enabled: false
 
-
-# ===============================
-# ====== Action-space QA =======
-# ===============================
-
-# Checks run by `run_action_qa.py` against the real per-timestep actions/* and
-# observations/robot_states/* arrays (not just attrs, unlike the rest of this
-# file's checks). See reports/data_quality_exceptions.md's "Action QA" /
-# "Action vs. Observations QA" sections for what each check actually does.
-action_qa:
-  # Flags episodes that log 2+ action representations where two same-shaped
-  # arrays are byte-for-byte (near-)identical - a likely copy-paste bug.
-  duplicate_pairs:
-    enabled: true
-    atol: 1.0e-9
-    rtol: 0.0
-
-  # Flags episodes where an action's scale (spread) is wildly out of proportion
-  # to the robot's own observed state - e.g. a unit mixup or corrupted data.
-  scale_consistency:
-    enabled: true
-    max_ratio: 5.0   # RMS(action) / RMS(next_state) above this -> flag
-    min_ratio: 0.2    # below this -> flag (e.g. a suspiciously tiny, delta-like scale)
-
-  # Flags episodes where the action doesn't correspond to the robot's real
-  # motion at all (misaligned data, wrong field, garbage values).
-  tracking_residual:
-    enabled: true
-    max_normalized_rms: 0.5   # RMS(action[t] - state[t+1]) / RMS(action) above this -> flag
-
-  # The policy-mandated check: labs were told to submit absolute actions, not
-  # deltas. Flags episodes/keys where "action = state's own step-to-step change"
-  # fits much better than "action = the next absolute state".
-  delta_detection:
-    enabled: true
-    ratio_threshold: 0.3   # RMS(resid_delta) / RMS(resid_abs) below this -> "looks like delta"
-
-  sampling:
-    # run_action_qa.py's own --limit default (max episodes checked per dataset).
-    # Full per-timestep array reads cost much more than the attrs-only pass the
-    # rest of this file's checks use, so this intentionally is NOT unlimited.
-    default_episode_limit: 50
+# Action-space QA checks (run_action_qa.py) now live in their own file:
+# configs/action_qa_config.yaml.

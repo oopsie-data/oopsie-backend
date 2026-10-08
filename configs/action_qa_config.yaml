@@ -1,0 +1,68 @@
+# Action-space QA checks for run_action_qa.py, grouped by the action space they check; edit and rerun.
+
+# Checks that apply to any declared action space.
+general:
+  duplicate_pairs:  # checks whether two different action types hold the same values (a likely copy-paste bug)
+    enabled: false
+    atol: 1.0e-9  # how close two values must be to count as the same
+    rtol: 0.0  # same, as a fraction of the value (0 = off)
+  length_mismatch:  # checks whether an action and its matching robot state have the same number of steps
+    enabled: true
+  scale_consistency:  # checks whether actions are on the same scale as the robot state (joint/gripper position only)
+    enabled: false
+    max_ratio: 5.0  # flag if actions are more than this many times larger than the state
+    min_ratio: 0.2  # flag if actions are less than this fraction of the state
+  tracking_residual:  # checks whether the commanded position matches where the robot actually ends up (joint/gripper position only)
+    enabled: false
+    max_normalized_rms: 0.5  # flag if the miss is larger than this fraction of the action's size
+  delta_detection:  # checks whether actions were saved as step-to-step changes instead of absolute positions (joint/gripper position only)
+    enabled: false
+    ratio_threshold: 0.3  # flag if the change-per-step reading fits this much better (lower = stricter)
+
+joint_position: {}  # no checks yet
+
+joint_velocity: {}  # no checks yet
+
+cartesian_position:
+  quaternion_shape:  # checks that each arm's pose is [x, y, z, qx, qy, qz, qw] with a valid (unit-length) quaternion
+    enabled: true
+    norm_atol: 1.0e-3  # how far a quaternion's length may be from 1
+    check_scalar_order: false  # also guess whether qw was put first instead of last (rough heuristic)
+  position_units:  # checks that positions are in metres (catches millimetres/centimetres or a far-away frame)
+    enabled: true
+    max_abs_position_m: 3.0  # flag any action or state position farther than this from the origin
+    max_action_state_ratio: 10.0  # flag if action positions are this many times larger than the state's
+    typical_reach_min_m: 0.2  # smallest typical arm reach, used to guess whether bad positions are in cm or mm
+    typical_reach_max_m: 1.5  # largest typical arm reach, used for the same cm-or-mm guess
+  quaternion_sign_flip:  # checks whether the quaternion suddenly flips sign (q -> -q), same orientation but confusing for learning
+    enabled: true
+  rotation_jump:  # checks whether the commanded orientation turns unrealistically fast between two steps
+    enabled: true
+    max_angular_speed_deg_s: 360.0  # fastest believable turn; per-step limit = this / control_freq
+  rotation_tracking:  # checks whether the commanded orientation matches where the robot's orientation actually ends up
+    enabled: true
+    max_median_error_deg: 20.0  # flag if the typical (median) mismatch is larger than this
+  delta_detection:  # checks whether xyz actions were saved as step-to-step changes instead of absolute positions
+    enabled: true
+    ratio_threshold: 0.3  # flag if the change-per-step reading fits this much better (lower = stricter)
+  biarm_ordering:  # checks whether the left and right arms are swapped in the actions (biarm only)
+    enabled: true
+    max_swap_ratio: 0.5  # flag if swapping the arms makes the error at least this much smaller (0.5 = halves it)
+
+cartesian_velocity: {}  # no checks yet
+
+sampling:
+  default_episode_limit: 200  # max episodes checked per dataset; --limit 0 means unlimited
+  random: true  # random sample per dataset instead of the first N in sorted path order
+  random_seed: null  # set an int for a reproducible sample
+
+scope:
+  include_stats_excluded_datasets: false  # frozen archive snapshots (oopsiedata-v0.1, -converted-v0.1, ...)
+  include_public_excluded_datasets: false  # bulk-import repos (SOAR_origin, AutoEval_origin, roboarena_upload, ...)
+
+run:  # defaults for the matching CLI flags
+  data_dir: null  # null = compute_local_stats.py's default data dir
+  max_total_episodes: null  # cap across all datasets combined; null = unlimited
+  output: reports/action_qa.json
+  only_dataset: []  # e.g. ["OopsieData-Submissions/SomeLab"]; empty = every dataset
+  verbose: false

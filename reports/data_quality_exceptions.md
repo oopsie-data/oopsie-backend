@@ -2,25 +2,27 @@
 
 Oct 4, 2026
 
-## Checks performed (methodology)
+## Checks performed
 
-### General QA
+| Category | Check | Status | What it flags |
+| --- | --- | --- | --- |
+| General | Implausible timestamp | Implemented | Timestamp decodes to before 2000 (e.g. a monotonic clock bug) → stamped with a placeholder date instead of a bogus 1970 date |
+| General | Placeholder operator name | Implemented | Generic/blank `operator_name` (`pending_operator`, `operator`, blank...) → excluded from per-individual requirements, flagged separately |
+| Action | Tag-sum vs. episode count | Implemented | Per-dataset count of each action tag vs. episode count — catches labs recording multiple simultaneous representations |
+| Action | Duplicate action arrays | Implemented | Two action keys on the same episode hold identical values → likely copy-paste bug |
+| Action vs. Observations | Scale consistency | Implemented | Action's magnitude is wildly out of proportion to the robot's own state (wrong units, bad normalization, corrupt data) |
+| Action vs. Observations | Tracking residual | Implemented | Action doesn't correspond to where the robot's state actually ends up next step (misaligned data, wrong field) |
+| Action vs. Observations | Delta-action detection | Implemented | Action looks like *state\[t+1\] - state\[t\]* (a delta) rather than the absolute state we require |
+| Action vs. Observations | Length mismatch | Implemented | An action and the state it's observed through have different numbers of timesteps |
+| cartesian\_position | Quaternion shape | Implemented | Dim isn't 7 (14 biarm), a quaternion isn't unit-norm (an optional scalar-first guess exists but is off: it misfires on gripper-down poses) |
+| cartesian\_position | Position units | Implemented | Action or state xyz beyond 3 m, or action xyz ≫ state xyz → not in metres (mm/cm) or wrong frame; reports a best-guess unit (`cm`/`mm`) |
+| cartesian\_position | Quaternion sign flips | Implemented | Consecutive quaternions with dot < 0 — same orientation written as -q, which breaks learning on raw values |
+| cartesian\_position | Rotation jumps | Implemented | Rotation between consecutive steps faster than 360°/s at the profile's `control_freq` |
+| cartesian\_position | Rotation tracking | Implemented | Median angle between action rotation and the next state's rotation above 20° → wrong frame/convention |
+| cartesian\_position | Delta-action detection (xyz) | Implemented | Action xyz looks like a delta instead of an absolute position |
+| cartesian\_position | Biarm ordering | Implemented | Action xyz matches the state better with left/right arms swapped |
 
-1. **Implausible timestamp detection** *(implemented)* — any episode timestamp that decodes to before 2000-01-01 (e.g. a monotonic/relative clock mistakenly used instead of wall-clock time) is flagged and replaced with a placeholder date, rather than silently appearing as a bogus 1970s date on the dashboard. (Caught Harvard\_EML.)
-2. **Placeholder/generic operator-name detection** *(implemented)* — episode `operator_name` values matching a configurable list of placeholders (`pending_operator`, `operator`, blank, etc.) are excluded from per-individual lab-requirement evaluation and separately flagged with a count + the names used, so a lab can't pass requirements via an unidentifiable "individual." (Caught Harvard\_EML, Stanford\_JW, UofT\_RVL.)
-
-### Action QA
-
-1. **Action-space tag-sum vs. episode-count check** *(implemented)* — per dataset, the summed counts of each arm-type action tag (`joint_position`, `joint_velocity`, `cartesian_position`, `cartesian_velocity`) and each gripper-type tag are compared against the dataset's episode count. Multiple simultaneous action representations are allowed, so "more than episode count" is expected, but it surfaces exactly which labs record multiple representations and by how much. (Found 6 labs with excess arm-tag counts totaling 3,746 extra tags.)
-2. **Duplicate/copy-pasted action array check** *(implemented)* — for episodes that log 2+ action representations, compares every same-shaped pair of arrays for exact/near-exact equality; flags a likely copy-paste bug (recording one quantity twice under different names) rather than two genuinely distinct representations.
-
-### Action vs. Observations QA
-
-1. **Scale consistency check** *(implemented)* — compares the scale (spread) of recorded action values to the robot's own observed state values; flags episodes where the action's magnitude is wildly out of proportion to the robot's real motion (e.g. wrong units, a normalization bug, or corrupted data).
-2. **Tracking residual check** *(implemented)* — checks whether each action's value is physically close to where the robot's state actually ends up one timestep later; flags episodes where the action and the robot's real motion don't correspond at all (misaligned data, wrong field, garbage values).
-3. **Delta-action detection** *(implemented)* — labs were told to submit absolute actions, not deltas (see `oopsie-docs/docs/format.md` / `data-collection.md`). For each timestep, computes how well the action matches "the next absolute state" vs. how well it matches "the change in state from this step to the next," and flags episodes/datasets where the delta explanation fits much better — i.e. where a lab appears to be submitting delta actions despite being asked not to.
-
-*Note: the alpha/beta per-individual lab requirement pass/fail system is a separate compliance-grading mechanism (not a data-integrity check) and is intentionally not listed here.*
+Note: the alpha/beta per-individual lab requirement pass/fail system is a separate compliance mechanism, not a data-integrity check, and isn't listed here.
 
 ## Purpose
 
