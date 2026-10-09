@@ -15,16 +15,38 @@ from pathlib import Path
 CHECK_DESCRIPTIONS = {
     ("general", "duplicate_pairs"): "Two different action types hold the same values (a likely copy-paste bug)",
     ("general", "length_mismatch"): "An action and its matching robot state have different numbers of steps",
-    ("general", "scale_consistency"): "Actions are on a very different scale from the robot state",
-    ("general", "tracking_residual"): "The commanded position doesn't match where the robot actually ends up",
-    ("general", "delta_detection"): "Actions were saved as step-to-step changes instead of absolute positions",
+    ("general", "action_copies_state"): "Actions are exact copies of the recorded state, not real commands",
+    ("general", "scale_consistency"): "Gripper position actions are on a very different scale from the state",
+    ("general", "tracking_residual"): "The commanded gripper position doesn't match where the gripper ends up",
+    ("general", "delta_detection"): "Gripper actions were saved as step-to-step changes instead of absolute positions",
+    ("joint_position", "joint_names"): "Action/state joint names are missing, don't match, or are in an odd order",
+    ("joint_position", "dof"): "Number of joint values doesn't match the number of joint names",
+    ("joint_position", "radians"): "Joint values aren't in radians (degrees or a -100..100 range)",
+    ("joint_position", "step_jump"): "A joint moves unrealistically far between two steps",
+    ("joint_position", "gripper_in_joints"): "A gripper value is mixed into the joint vector",
+    ("joint_position", "delta_detection"): "Joint actions were saved as step-to-step changes instead of absolute positions",
+    ("joint_position", "tracking"): "The commanded joint positions don't match where the joints actually end up",
+    ("joint_velocity", "dof"): "Number of joint velocities doesn't match the number of joint names",
+    ("joint_velocity", "speed_limit"): "A joint is commanded faster than a real arm can move",
+    ("joint_velocity", "normalized_range"): "Velocities peak at exactly +-1 (normalized, not real units)",
+    ("joint_velocity", "integration"): "Velocity x step time doesn't match how far the joints actually moved",
+    ("joint_velocity", "looks_like_position"): "The velocity is really a joint position saved under the wrong key",
+    ("joint_velocity", "smoothness"): "Velocities flip direction from step to step",
+    ("cartesian_velocity", "shape"): "Velocity isn't 6 values per arm (3 linear + 3 angular)",
+    ("cartesian_velocity", "speed_limit"): "The end effector is commanded faster than a real arm can move",
+    ("cartesian_velocity", "normalized_range"): "Velocities peak at exactly +-1 (normalized, not real units)",
+    ("cartesian_velocity", "integration"): "Velocity x step time doesn't match how the end effector actually moved and turned",
+    ("cartesian_velocity", "linear_angular_order"): "Linear and angular halves look swapped",
+    ("cartesian_velocity", "looks_like_position"): "The velocity is really a position saved under the wrong key",
+    ("cartesian_velocity", "smoothness"): "Velocities flip direction from step to step",
     ("cartesian_position", "quaternion_shape"): "Pose isn't [x, y, z, qx, qy, qz, qw] per arm with a unit-length quaternion",
     ("cartesian_position", "position_units"): "Positions aren't in metres (cm/mm or a far-away frame)",
     ("cartesian_position", "quaternion_sign_flip"): "The quaternion suddenly flips sign (q -> -q)",
     ("cartesian_position", "rotation_jump"): "The commanded orientation turns unrealistically fast between two steps",
-    ("cartesian_position", "rotation_tracking"): "The commanded orientation doesn't match where the robot's orientation ends up",
+    ("cartesian_position", "pose_tracking"): "The commanded position or orientation doesn't match where the robot ends up",
     ("cartesian_position", "delta_detection"): "xyz actions were saved as step-to-step changes instead of absolute positions",
     ("cartesian_position", "biarm_ordering"): "Left and right arms look swapped in the actions",
+    ("cartesian_position", "quaternion_scalar_order"): "The quaternion's scalar (w) component looks like it was written first instead of last (rough heuristic, often unreliable)",
 }
 
 MAX_ROWS_PER_CHECK = 50
@@ -49,6 +71,8 @@ h2 { margin: 2rem 0 .75rem; font-size: 1.1rem; }
 h3 { margin: 1.25rem 0 .4rem; font-size: 1rem; }
 .muted { color: var(--muted); }
 .legend { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; margin: .75rem 0; color: var(--muted); }
+.legend label { color: var(--ink); cursor: pointer; }
+.legend input[type="checkbox"] { margin-right: .3rem; cursor: pointer; }
 .sw { display: inline-block; width: .9rem; height: .9rem; border-radius: 3px; vertical-align: -2px; margin-right: .3rem;
   border: 1px solid var(--border); }
 .scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
@@ -76,7 +100,7 @@ a { color: var(--link); }
 pre { margin: 0; padding: .7rem; overflow-x: auto; font-size: .8rem; }
 """
 
-# Opens the <details> a grid cell links to.
+# Opens the <details> a grid cell links to; show/hide a category's grid columns.
 _SCRIPT = """
 function openTarget() {
   const el = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
@@ -84,6 +108,11 @@ function openTarget() {
 }
 window.addEventListener("hashchange", openTarget);
 openTarget();
+
+function toggleCategory(checkbox) {
+  const cells = document.querySelectorAll("#grid .cat-" + checkbox.dataset.cat);
+  cells.forEach(el => { el.style.display = checkbox.checked ? "" : "none"; });
+}
 """
 
 
@@ -133,21 +162,30 @@ def _cell(dataset_repo: str, category: str, test: str, stats: dict, *, first: bo
     if skips:
         tip.append("skipped: " + ", ".join(f"{reason} x{n}" for reason, n in sorted(skips.items())))
     title = escape(" | ".join(tip), quote=True)
-    first = " first" if first else ""  # left border separating categories
+    cls = f"cat-{category}" + (" first" if first else "")  # left border separating categories
 
     if checked == 0:
-        return f'<td class="cell na{first}" title="{title}">{"skipped" if skips else "–"}</td>'
+        return f'<td class="cell na {cls}" title="{title}">{"skipped" if skips else "–"}</td>'
     mark = "*" if skips else ""
     if flagged == 0:
-        return f'<td class="cell ok{first}" title="{title}">0/{checked}{mark}</td>'
+        return f'<td class="cell ok {cls}" title="{title}">0/{checked}{mark}</td>'
     share = flagged / checked
     alpha = 0.15 + 0.85 * share
     ink = "#fff" if alpha > 0.55 else "inherit"
     href = "#" + _slug(dataset_repo, category, test)
     return (
-        f'<td class="cell bad{first}" title="{title}" style="background: rgba(var(--bad-rgb), {alpha:.2f}); color: {ink}">'
+        f'<td class="cell bad {cls}" title="{title}" style="background: rgba(var(--bad-rgb), {alpha:.2f}); color: {ink}">'
         f'<a href="{href}">{flagged}/{checked}{mark}</a></td>'
     )
+
+
+def _category_toggles(categories: dict[str, list[str]]) -> str:
+    boxes = "".join(
+        f'<label><input type="checkbox" checked data-cat="{escape(cat, quote=True)}" '
+        f'onchange="toggleCategory(this)"> {escape(cat)}</label>'
+        for cat in categories
+    )
+    return f'<div class="legend"><span>Show checks:</span>{boxes}</div>'
 
 
 def _grid(report: dict, checks: list[tuple[str, str]]) -> str:
@@ -158,11 +196,11 @@ def _grid(report: dict, checks: list[tuple[str, str]]) -> str:
     head_top = ['<th rowspan="2">Dataset</th>', '<th rowspan="2">Episodes</th>', '<th rowspan="2">Flagged</th>']
     head_bottom = []
     for cat, tests in categories.items():
-        head_top.append(f'<th class="cat" colspan="{len(tests)}">{escape(cat)}</th>')
+        head_top.append(f'<th class="cat cat-{escape(cat, quote=True)}" colspan="{len(tests)}">{escape(cat)}</th>')
         for i, test in enumerate(tests):
             desc = escape(CHECK_DESCRIPTIONS.get((cat, test), ""), quote=True)
-            cls = ' class="first"' if i == 0 else ""
-            head_bottom.append(f'<th{cls} title="{desc}">{escape(test.replace("_", " "))}</th>')
+            cls = f"cat-{escape(cat, quote=True)}" + (" first" if i == 0 else "")
+            head_bottom.append(f'<th class="{cls}" title="{desc}">{escape(test.replace("_", " "))}</th>')
 
     def sort_key(item):
         repo, stats = item
@@ -183,7 +221,8 @@ def _grid(report: dict, checks: list[tuple[str, str]]) -> str:
             f'<td class="num">{n}{errors}</td><td class="num">{flagged} ({pct})</td>{"".join(cells)}</tr>'
         )
     return (
-        '<div class="scroll"><table class="grid"><thead>'
+        f"{_category_toggles(categories)}"
+        '<div class="scroll"><table class="grid" id="grid"><thead>'
         f'<tr>{"".join(head_top)}</tr><tr>{"".join(head_bottom)}</tr>'
         f'</thead><tbody>{"".join(rows)}</tbody></table></div>'
     )

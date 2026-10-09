@@ -8,48 +8,115 @@ general:
     rtol: 0.0  # same, as a fraction of the value (0 = off)
   length_mismatch:  # checks whether an action and its matching robot state have the same number of steps
     enabled: true
-  scale_consistency:  # checks whether actions are on the same scale as the robot state (joint/gripper position only)
+  action_copies_state:  # checks whether arm actions are just copies of the recorded state (rebuilt afterwards, not real commands)
+    enabled: true
+    atol: 1.0e-6  # how close an action must be to the state to count as a copy
+    min_fraction: 0.9  # flag if at least this share of steps are copies (of the same or the next step's state)
+  scale_consistency:  # checks whether actions are on the same scale as the robot state (gripper position only)
     enabled: false
     max_ratio: 5.0  # flag if actions are more than this many times larger than the state
     min_ratio: 0.2  # flag if actions are less than this fraction of the state
-  tracking_residual:  # checks whether the commanded position matches where the robot actually ends up (joint/gripper position only)
+  tracking_residual:  # checks whether the commanded position matches where the robot actually ends up (gripper position only)
     enabled: false
     max_normalized_rms: 0.5  # flag if the miss is larger than this fraction of the action's size
-  delta_detection:  # checks whether actions were saved as step-to-step changes instead of absolute positions (joint/gripper position only)
+  delta_detection:  # checks whether actions were saved as step-to-step changes instead of absolute positions (gripper position only)
     enabled: false
     ratio_threshold: 0.3  # flag if the change-per-step reading fits this much better (lower = stricter)
 
-joint_position: {}  # no checks yet
+joint_position:
+  joint_names:  # checks that the profile's action and state joint names are given, match each other and are in a sensible order
+    enabled: true
+  dof:  # checks that the number of joint values matches the number of joint names (action and state)
+    enabled: true
+  radians:  # checks that joint values are in radians (catches degrees and the -100..100 range some arms use)
+    enabled: true
+    max_abs_rad: 6.5  # flag any joint value larger than this (a full turn is 6.28)
+  step_jump:  # checks whether a joint moves unrealistically far between two steps
+    enabled: true
+    max_joint_speed_rad_s: 6.28  # fastest believable joint speed; per-step limit = this / control_freq
+  gripper_in_joints:  # checks whether a gripper value is mixed into the joint vector (it belongs in the gripper action)
+    enabled: true
+  delta_detection:  # checks whether joint actions were saved as step-to-step changes instead of absolute positions
+    enabled: true
+    ratio_threshold: 0.3  # flag if the change-per-step reading fits this much better (lower = stricter)
+  tracking:  # checks whether the commanded joint positions match where the robot's joints actually end up
+    enabled: true
+    max_median_error_rad: 0.2  # flag if any joint's typical (median) mismatch is larger than this
 
-joint_velocity: {}  # no checks yet
+joint_velocity:
+  dof:  # checks that the number of joint velocities matches the number of joint names
+    enabled: true
+  speed_limit:  # checks whether any joint is commanded faster than a real arm can move
+    enabled: true
+    max_joint_speed_rad_s: 3.14
+  normalized_range:  # checks whether velocities peak at exactly +-1, i.e. were normalized instead of real units
+    enabled: true
+  integration:  # checks that velocity x step time roughly matches how far the joints actually moved
+    enabled: true
+    min_ratio: 0.25  # flag if commanded motion is less than this fraction of the real motion (e.g. per-step changes stored)
+    max_ratio: 8.0  # flag if commanded motion is more than this many times the real motion (e.g. deg/s)
+    min_correlation: 0.3  # flag if commanded and real motion agree less than this (wrong joints/frame or garbage)
+    min_motion_rad: 0.2  # skip episodes where no joint moves more than this (too little motion to judge)
+  looks_like_position:  # checks whether the "velocity" is really a position (saved under the wrong key)
+    enabled: true
+    max_position_match: 0.2  # flag if the values sit this close to the position state (0 = identical)
+  smoothness:  # checks whether velocities flip direction from step to step (noise or misaligned timestamps)
+    enabled: true
+    max_sign_flip_rate: 0.3  # flag if more than this share of steps reverse direction
 
 cartesian_position:
-  quaternion_shape:  # checks that each arm's pose is [x, y, z, qx, qy, qz, qw] with a valid (unit-length) quaternion
+  biarm_ordering:  # checks whether the left and right arms are swapped in the actions (biarm only)
     enabled: true
-    norm_atol: 1.0e-3  # how far a quaternion's length may be from 1
-    check_scalar_order: false  # also guess whether qw was put first instead of last (rough heuristic)
+    max_swap_ratio: 0.5  # flag if swapping the arms makes the error at least this much smaller (0.5 = halves it)
+  delta_detection:  # checks whether xyz actions were saved as step-to-step changes instead of absolute positions
+    enabled: true
+    ratio_threshold: 0.3  # flag if the change-per-step reading fits this much better (lower = stricter)
+  pose_tracking:  # checks whether the commanded pose (position and orientation) matches where the robot actually ends up; flags if either is off
+    enabled: true
+    max_median_position_error_m: 0.10  # flag if the typical (median) position mismatch is larger than this, in metres
+    max_median_orientation_error_deg: 20.0  # flag if the typical (median) orientation mismatch is larger than this
   position_units:  # checks that positions are in metres (catches millimetres/centimetres or a far-away frame)
     enabled: true
     max_abs_position_m: 3.0  # flag any action or state position farther than this from the origin
     max_action_state_ratio: 10.0  # flag if action positions are this many times larger than the state's
     typical_reach_min_m: 0.2  # smallest typical arm reach, used to guess whether bad positions are in cm or mm
     typical_reach_max_m: 1.5  # largest typical arm reach, used for the same cm-or-mm guess
+  quaternion_shape:  # checks that each arm's pose is [x, y, z, qx, qy, qz, qw] with a valid (unit-length) quaternion
+    enabled: true
+    norm_atol: 1.0e-3  # how far a quaternion's length may be from 1
   quaternion_sign_flip:  # checks whether the quaternion suddenly flips sign (q -> -q), same orientation but confusing for learning
     enabled: true
   rotation_jump:  # checks whether the commanded orientation turns unrealistically fast between two steps
     enabled: true
     max_angular_speed_deg_s: 360.0  # fastest believable turn; per-step limit = this / control_freq
-  rotation_tracking:  # checks whether the commanded orientation matches where the robot's orientation actually ends up
-    enabled: true
-    max_median_error_deg: 20.0  # flag if the typical (median) mismatch is larger than this
-  delta_detection:  # checks whether xyz actions were saved as step-to-step changes instead of absolute positions
-    enabled: true
-    ratio_threshold: 0.3  # flag if the change-per-step reading fits this much better (lower = stricter)
-  biarm_ordering:  # checks whether the left and right arms are swapped in the actions (biarm only)
-    enabled: true
-    max_swap_ratio: 0.5  # flag if swapping the arms makes the error at least this much smaller (0.5 = halves it)
+  quaternion_scalar_order:  # guesses whether qw was put first instead of last (rough heuristic, often unreliable - off by default)
+    enabled: false
 
-cartesian_velocity: {}  # no checks yet
+cartesian_velocity:
+  shape:  # checks that each arm's velocity is 6 values: 3 linear then 3 angular
+    enabled: true
+  speed_limit:  # checks whether the end effector is commanded faster than a real arm can move
+    enabled: true
+    max_linear_m_s: 2.0
+    max_angular_rad_s: 6.28
+  normalized_range:  # checks whether velocities peak at exactly +-1, i.e. were normalized instead of real units
+    enabled: true
+  integration:  # checks that velocity x step time roughly matches how far the end effector actually moved and turned
+    enabled: true
+    min_ratio: 0.25  # flag if commanded motion is less than this fraction of the real motion (e.g. per-step changes stored)
+    max_ratio: 8.0  # flag if commanded motion is more than this many times the real motion (e.g. deg/s)
+    min_correlation: 0.3  # flag if commanded and real motion agree less than this (wrong joints/frame or garbage)
+    min_translation_m: 0.05  # judge the linear part only if the end effector moves at least this far
+    min_rotation_deg: 15.0  # judge the angular part only if the end effector turns at least this much
+  linear_angular_order:  # checks whether the linear and angular halves are swapped
+    enabled: true
+    min_improvement: 0.2  # flag if swapping the halves matches the real motion this much better
+  looks_like_position:  # checks whether the "velocity" is really a position (saved under the wrong key)
+    enabled: true
+    max_position_match: 0.2  # flag if the values sit this close to the position state (0 = identical)
+  smoothness:  # checks whether velocities flip direction from step to step (noise or misaligned timestamps)
+    enabled: true
+    max_sign_flip_rate: 0.3  # flag if more than this share of steps reverse direction
 
 sampling:
   default_episode_limit: 200  # max episodes checked per dataset; --limit 0 means unlimited

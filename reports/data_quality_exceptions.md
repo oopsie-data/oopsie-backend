@@ -13,7 +13,28 @@ Oct 4, 2026
 | Action vs. Observations | Scale consistency | Implemented | Action's magnitude is wildly out of proportion to the robot's own state (wrong units, bad normalization, corrupt data) |
 | Action vs. Observations | Tracking residual | Implemented | Action doesn't correspond to where the robot's state actually ends up next step (misaligned data, wrong field) |
 | Action vs. Observations | Delta-action detection | Implemented | Action looks like *state\[t+1\] - state\[t\]* (a delta) rather than the absolute state we require |
+| Action vs. Observations | Action copies state | Implemented | Joint/cartesian action equals the recorded state (same or next step) in ≥90% of steps → actions were rebuilt from states afterwards, not logged commands |
 | Action vs. Observations | Length mismatch | Implemented | An action and the state it's observed through have different numbers of timesteps |
+| joint\_position | Joint names | Implemented | Profile's action/state joint names missing, blank/duplicated, not matching each other, or out of order (numbering, or base-to-wrist chain - e.g. an alphabetical ROS list) |
+| joint\_position | DOF | Implemented | Number of joint values doesn't match the number of joint names |
+| joint\_position | Radians | Implemented | Joint values beyond 6.5 → degrees or a -100..100 range; reports a best-guess unit |
+| joint\_position | Step jump | Implemented | A joint moves faster than 6.28 rad/s between two steps at the profile's `control_freq` |
+| joint\_position | Gripper in joints | Implemented | A joint name contains "gripper" → gripper value mixed into the joint vector |
+| joint\_position | Delta-action detection | Implemented | Joint action looks like a delta instead of an absolute position (joints paired with the state by name) |
+| joint\_position | Tracking | Implemented | Median per-joint error between action\[t\] and state\[t+1\] above 0.2 rad |
+| joint\_velocity | DOF | Implemented | Number of joint velocities doesn't match the number of joint names |
+| joint\_velocity | Speed limit | Implemented | A joint commanded faster than 3.14 rad/s |
+| joint\_velocity | Normalized range | Implemented | Velocities peak at exactly ±1 → normalized (DROID-style), not rad/s |
+| joint\_velocity | Integration | Implemented | velocity / control\_freq vs. the joint state's per-step change: ratio outside 0.25-8 (suspected deg/s or per-step deltas), correlation below 0.3, or an exact copy of the state's motion |
+| joint\_velocity | Looks like position | Implemented | The "velocity" sits on top of the joint position state → saved under the wrong key |
+| joint\_velocity | Smoothness | Implemented | More than 30% of steps reverse direction |
+| cartesian\_velocity | Shape | Implemented | Not 6 values per arm (3 linear + 3 angular) |
+| cartesian\_velocity | Speed limit | Implemented | Linear above 2 m/s or angular above 6.28 rad/s |
+| cartesian\_velocity | Normalized range | Implemented | Velocities peak at exactly ±1 → normalized, not physical units |
+| cartesian\_velocity | Integration | Implemented | Same as joint\_velocity, separately for linear (vs. xyz change) and angular (vs. rotation change); reports whether base or end-effector frame fits |
+| cartesian\_velocity | Linear/angular order | Implemented | Swapping the two halves matches the real motion clearly better |
+| cartesian\_velocity | Looks like position | Implemented | The linear part sits on top of the state's xyz |
+| cartesian\_velocity | Smoothness | Implemented | More than 30% of steps reverse direction |
 | cartesian\_position | Quaternion shape | Implemented | Dim isn't 7 (14 biarm), a quaternion isn't unit-norm (an optional scalar-first guess exists but is off: it misfires on gripper-down poses) |
 | cartesian\_position | Position units | Implemented | Action or state xyz beyond 3 m, or action xyz ≫ state xyz → not in metres (mm/cm) or wrong frame; reports a best-guess unit (`cm`/`mm`) |
 | cartesian\_position | Quaternion sign flips | Implemented | Consecutive quaternions with dot < 0 — same orientation written as -q, which breaks learning on raw values |
