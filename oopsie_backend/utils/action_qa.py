@@ -1503,11 +1503,19 @@ def run_action_qa_on_episode(
     return {"findings": findings, "skips": skips, "checked": sorted(checked)}
 
 
-def run_action_qa_on_h5(f: h5py.File, config: dict) -> dict | None:
-    """:func:`load_action_state_arrays` + :func:`run_action_qa_on_episode`.
-    ``None`` if the episode has no declared action space at all (nothing to check).
+def profile_control_freq(profile: dict) -> float | None:
+    try:
+        return float(profile.get("control_freq"))
+    except (TypeError, ValueError):
+        return None
+
+
+def run_action_qa_on_arrays(
+    actions: dict[str, np.ndarray], states: dict[str, np.ndarray], profile: dict, config: dict
+) -> dict | None:
+    """:func:`run_action_qa_on_episode` with the declared action space and robot
+    details taken from ``profile``. ``None`` if no action space is declared.
     """
-    actions, states, profile = load_action_state_arrays(f)
     declared = profile.get("action_space") or []
     if isinstance(declared, str):
         declared = [declared]
@@ -1515,17 +1523,13 @@ def run_action_qa_on_h5(f: h5py.File, config: dict) -> dict | None:
     if not declared:
         return None
 
-    try:
-        control_freq = float(profile.get("control_freq"))
-    except (TypeError, ValueError):
-        control_freq = None
     return run_action_qa_on_episode(
         actions,
         states,
         declared,
         config,
         is_biarm=bool(profile.get("is_biarm", False)),
-        control_freq=control_freq,
+        control_freq=profile_control_freq(profile),
         state_orientation=profile.get("robot_state_orientation_representation"),
         action_joint_names=_str_list(profile.get("action_joint_names")),
         state_joint_names=_str_list(profile.get("robot_state_joint_names")),
@@ -1534,3 +1538,8 @@ def run_action_qa_on_h5(f: h5py.File, config: dict) -> dict | None:
 
 def _str_list(value) -> list[str]:
     return [str(v) for v in value] if isinstance(value, list) else []
+
+
+def run_action_qa_on_h5(f: h5py.File, config: dict) -> dict | None:
+    """:func:`load_action_state_arrays` + :func:`run_action_qa_on_arrays`."""
+    return run_action_qa_on_arrays(*load_action_state_arrays(f), config)

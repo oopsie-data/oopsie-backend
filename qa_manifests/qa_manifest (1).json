@@ -1,0 +1,2183 @@
+{
+  "bundle_id": "qa_bundle_03",
+  "created_at": "2026-10-07T19:21:12Z",
+  "seed": 0,
+  "reviewer": "Claas",
+  "labs": [
+    "OopsieData-Submissions/CMU_RPAD",
+    "OopsieData-Submissions/Charles_UFAL",
+    "OopsieData-Submissions/ETH_RK",
+    "OopsieData-Submissions/Enatic_OpenArm",
+    "OopsieData-Submissions/GT_PAIR"
+  ],
+  "episodes": [
+    {
+      "qa_id": "qa_bundle_03-001",
+      "dataset_repo": "OopsieData-Submissions/CMU_RPAD",
+      "lab_id": "CMU_RPAD",
+      "repo_path": "h2r_ghost_picktoys_robotonly_000023.h5",
+      "bundle_path": "episodes/CMU_RPAD/h2r_ghost_picktoys_robotonly_000023.h5",
+      "video_files": {
+        "front": "episodes/CMU_RPAD/videos/h2r_ghost_picktoys_robotonly_000023_front.mp4",
+        "left": "episodes/CMU_RPAD/videos/h2r_ghost_picktoys_robotonly_000023_left.mp4",
+        "wrist": "episodes/CMU_RPAD/videos/h2r_ghost_picktoys_robotonly_000023_wrist.mp4"
+      },
+      "episode_id": "h2r_ghost_picktoys_robotonly_000023",
+      "language_instruction": "Place toys in box.",
+      "operator": "haotian, vera",
+      "annotators": [
+        "sriram"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "wrong label, should be success suboptimal, video artifacts",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:31:12.286985+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-002",
+      "dataset_repo": "OopsieData-Submissions/CMU_RPAD",
+      "lab_id": "CMU_RPAD",
+      "repo_path": "ghost_mug_table_gc_20260124_000003.h5",
+      "bundle_path": "episodes/CMU_RPAD/ghost_mug_table_gc_20260124_000003.h5",
+      "video_files": {
+        "back": "episodes/CMU_RPAD/videos/ghost_mug_table_gc_20260124_000003_back.mp4",
+        "front": "episodes/CMU_RPAD/videos/ghost_mug_table_gc_20260124_000003_front.mp4",
+        "wrist": "episodes/CMU_RPAD/videos/ghost_mug_table_gc_20260124_000003_wrist.mp4"
+      },
+      "episode_id": "ghost_mug_table_gc_20260124_000003",
+      "language_instruction": "Place the mug on the table.",
+      "operator": "sriram, haotian",
+      "annotators": [
+        "sriram, haotian"
+      ],
+      "robot_name": "aloha_viperx_300s",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:28:00.027930+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-003",
+      "dataset_repo": "OopsieData-Submissions/CMU_RPAD",
+      "lab_id": "CMU_RPAD",
+      "repo_path": "jamb_place_duck_box_dp3_000016.h5",
+      "bundle_path": "episodes/CMU_RPAD/jamb_place_duck_box_dp3_000016.h5",
+      "video_files": {
+        "top": "episodes/CMU_RPAD/videos/jamb_place_duck_box_dp3_000016_top.mp4",
+        "wrist_left": "episodes/CMU_RPAD/videos/jamb_place_duck_box_dp3_000016_wrist_left.mp4",
+        "wrist_right": "episodes/CMU_RPAD/videos/jamb_place_duck_box_dp3_000016_wrist_right.mp4"
+      },
+      "episode_id": "jamb_place_duck_box_dp3_000016",
+      "language_instruction": "Place the duck in the box.",
+      "operator": "vera, peilin",
+      "annotators": [
+        "vera, peilin"
+      ],
+      "robot_name": "xarm6",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:31:44.568988+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-004",
+      "dataset_repo": "OopsieData-Submissions/CMU_RPAD",
+      "lab_id": "CMU_RPAD",
+      "repo_path": "h2r_phantom_pickmug_robothuman_000001.h5",
+      "bundle_path": "episodes/CMU_RPAD/h2r_phantom_pickmug_robothuman_000001.h5",
+      "video_files": {
+        "front": "episodes/CMU_RPAD/videos/h2r_phantom_pickmug_robothuman_000001_front.mp4",
+        "left": "episodes/CMU_RPAD/videos/h2r_phantom_pickmug_robothuman_000001_left.mp4"
+      },
+      "episode_id": "h2r_phantom_pickmug_robothuman_000001",
+      "language_instruction": "Place red mug on plate.",
+      "operator": "haotian, vera",
+      "annotators": [
+        "haotian, vera"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "should probably be success suboptimal, video artifacts",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:30:56.410866+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-005",
+      "dataset_repo": "OopsieData-Submissions/CMU_RPAD",
+      "lab_id": "CMU_RPAD",
+      "repo_path": "ghost_hammer_bluePin_robotOnly_gc_20260326_000017.h5",
+      "bundle_path": "episodes/CMU_RPAD/ghost_hammer_bluePin_robotOnly_gc_20260326_000017.h5",
+      "video_files": {
+        "back": "episodes/CMU_RPAD/videos/ghost_hammer_bluePin_robotOnly_gc_20260326_000017_back.mp4",
+        "front": "episodes/CMU_RPAD/videos/ghost_hammer_bluePin_robotOnly_gc_20260326_000017_front.mp4",
+        "wrist": "episodes/CMU_RPAD/videos/ghost_hammer_bluePin_robotOnly_gc_20260326_000017_wrist.mp4"
+      },
+      "episode_id": "ghost_hammer_bluePin_robotOnly_gc_20260326_000017",
+      "language_instruction": "Hammer the blue pin.",
+      "operator": "sriram, haotian",
+      "annotators": [
+        "sriram, haotian"
+      ],
+      "robot_name": "aloha_viperx_300s",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:27:49.273557+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-006",
+      "dataset_repo": "OopsieData-Submissions/CMU_RPAD",
+      "lab_id": "CMU_RPAD",
+      "repo_path": "jamb_store_block_ours_000000.h5",
+      "bundle_path": "episodes/CMU_RPAD/jamb_store_block_ours_000000.h5",
+      "video_files": {
+        "top": "episodes/CMU_RPAD/videos/jamb_store_block_ours_000000_top.mp4",
+        "wrist_left": "episodes/CMU_RPAD/videos/jamb_store_block_ours_000000_wrist_left.mp4",
+        "wrist_right": "episodes/CMU_RPAD/videos/jamb_store_block_ours_000000_wrist_right.mp4"
+      },
+      "episode_id": "jamb_store_block_ours_000000",
+      "language_instruction": "Store the block inside the box.",
+      "operator": "vera, peilin",
+      "annotators": [
+        "vera, peilin"
+      ],
+      "robot_name": "xarm6",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:32:49.555336+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-007",
+      "dataset_repo": "OopsieData-Submissions/CMU_RPAD",
+      "lab_id": "CMU_RPAD",
+      "repo_path": "h2r_amplify_insertdonut_robothuman_000029.h5",
+      "bundle_path": "episodes/CMU_RPAD/h2r_amplify_insertdonut_robothuman_000029.h5",
+      "video_files": {
+        "front": "episodes/CMU_RPAD/videos/h2r_amplify_insertdonut_robothuman_000029_front.mp4",
+        "left": "episodes/CMU_RPAD/videos/h2r_amplify_insertdonut_robothuman_000029_left.mp4"
+      },
+      "episode_id": "h2r_amplify_insertdonut_robothuman_000029",
+      "language_instruction": "Insert donut on the peg.",
+      "operator": "haotian, vera",
+      "annotators": [
+        "sriram"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:28:38.887217+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-008",
+      "dataset_repo": "OopsieData-Submissions/CMU_RPAD",
+      "lab_id": "CMU_RPAD",
+      "repo_path": "ghost_plate_table_20260506_contd_000017.h5",
+      "bundle_path": "episodes/CMU_RPAD/ghost_plate_table_20260506_contd_000017.h5",
+      "video_files": {
+        "back": "episodes/CMU_RPAD/videos/ghost_plate_table_20260506_contd_000017_back.mp4",
+        "front": "episodes/CMU_RPAD/videos/ghost_plate_table_20260506_contd_000017_front.mp4",
+        "wrist": "episodes/CMU_RPAD/videos/ghost_plate_table_20260506_contd_000017_wrist.mp4"
+      },
+      "episode_id": "ghost_plate_table_20260506_contd_000017",
+      "language_instruction": "Place the plate on the table.",
+      "operator": "sriram, haotian",
+      "annotators": [
+        "sriram, haotian"
+      ],
+      "robot_name": "aloha_viperx_300s",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:28:21.627401+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-009",
+      "dataset_repo": "OopsieData-Submissions/CMU_RPAD",
+      "lab_id": "CMU_RPAD",
+      "repo_path": "h2r_phantom_stackbowls_robothuman_000009.h5",
+      "bundle_path": "episodes/CMU_RPAD/h2r_phantom_stackbowls_robothuman_000009.h5",
+      "video_files": {
+        "front": "episodes/CMU_RPAD/videos/h2r_phantom_stackbowls_robothuman_000009_front.mp4",
+        "left": "episodes/CMU_RPAD/videos/h2r_phantom_stackbowls_robothuman_000009_left.mp4"
+      },
+      "episode_id": "h2r_phantom_stackbowls_robothuman_000009",
+      "language_instruction": "Stack the bowls.",
+      "operator": "haotian, vera",
+      "annotators": [
+        "haotian, vera"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "heavy video artifacts",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:30:30.852824+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-010",
+      "dataset_repo": "OopsieData-Submissions/CMU_RPAD",
+      "lab_id": "CMU_RPAD",
+      "repo_path": "jamb_stack_basin_ours_000006.h5",
+      "bundle_path": "episodes/CMU_RPAD/jamb_stack_basin_ours_000006.h5",
+      "video_files": {
+        "top": "episodes/CMU_RPAD/videos/jamb_stack_basin_ours_000006_top.mp4",
+        "wrist_left": "episodes/CMU_RPAD/videos/jamb_stack_basin_ours_000006_wrist_left.mp4",
+        "wrist_right": "episodes/CMU_RPAD/videos/jamb_stack_basin_ours_000006_wrist_right.mp4"
+      },
+      "episode_id": "jamb_stack_basin_ours_000006",
+      "language_instruction": "Stack the basins.",
+      "operator": "vera, peilin",
+      "annotators": [
+        "vera, peilin"
+      ],
+      "robot_name": "xarm6",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:32:37.206308+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-011",
+      "dataset_repo": "OopsieData-Submissions/CMU_RPAD",
+      "lab_id": "CMU_RPAD",
+      "repo_path": "ghost_fold_onesie_vit3dgp_gc_20260124_000002.h5",
+      "bundle_path": "episodes/CMU_RPAD/ghost_fold_onesie_vit3dgp_gc_20260124_000002.h5",
+      "video_files": {
+        "back": "episodes/CMU_RPAD/videos/ghost_fold_onesie_vit3dgp_gc_20260124_000002_back.mp4",
+        "front": "episodes/CMU_RPAD/videos/ghost_fold_onesie_vit3dgp_gc_20260124_000002_front.mp4",
+        "wrist": "episodes/CMU_RPAD/videos/ghost_fold_onesie_vit3dgp_gc_20260124_000002_wrist.mp4"
+      },
+      "episode_id": "ghost_fold_onesie_vit3dgp_gc_20260124_000002",
+      "language_instruction": "Fold the onesie.",
+      "operator": "sriram, haotian",
+      "annotators": [
+        "sriram"
+      ],
+      "robot_name": "aloha_viperx_300s",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:27:12.626648+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-012",
+      "dataset_repo": "OopsieData-Submissions/CMU_RPAD",
+      "lab_id": "CMU_RPAD",
+      "repo_path": "jamb_place_duck_box_gap_000003.h5",
+      "bundle_path": "episodes/CMU_RPAD/jamb_place_duck_box_gap_000003.h5",
+      "video_files": {
+        "top": "episodes/CMU_RPAD/videos/jamb_place_duck_box_gap_000003_top.mp4",
+        "wrist_left": "episodes/CMU_RPAD/videos/jamb_place_duck_box_gap_000003_wrist_left.mp4",
+        "wrist_right": "episodes/CMU_RPAD/videos/jamb_place_duck_box_gap_000003_wrist_right.mp4"
+      },
+      "episode_id": "jamb_place_duck_box_gap_000003",
+      "language_instruction": "Place the duck in the box.",
+      "operator": "vera, peilin",
+      "annotators": [
+        "vera, peilin"
+      ],
+      "robot_name": "xarm6",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:31:52.228598+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-013",
+      "dataset_repo": "OopsieData-Submissions/CMU_RPAD",
+      "lab_id": "CMU_RPAD",
+      "repo_path": "h2r_amplify_picktoys_robothuman_000022.h5",
+      "bundle_path": "episodes/CMU_RPAD/h2r_amplify_picktoys_robothuman_000022.h5",
+      "video_files": {
+        "front": "episodes/CMU_RPAD/videos/h2r_amplify_picktoys_robothuman_000022_front.mp4",
+        "left": "episodes/CMU_RPAD/videos/h2r_amplify_picktoys_robothuman_000022_left.mp4"
+      },
+      "episode_id": "h2r_amplify_picktoys_robothuman_000022",
+      "language_instruction": "Place toys in box.",
+      "operator": "haotian, vera",
+      "annotators": [
+        "haotian, vera"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:28:49.425814+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-014",
+      "dataset_repo": "OopsieData-Submissions/CMU_RPAD",
+      "lab_id": "CMU_RPAD",
+      "repo_path": "ghost_fold_ood_onesie_robotOnly_gc_20260506_000013.h5",
+      "bundle_path": "episodes/CMU_RPAD/ghost_fold_ood_onesie_robotOnly_gc_20260506_000013.h5",
+      "video_files": {
+        "back": "episodes/CMU_RPAD/videos/ghost_fold_ood_onesie_robotOnly_gc_20260506_000013_back.mp4",
+        "front": "episodes/CMU_RPAD/videos/ghost_fold_ood_onesie_robotOnly_gc_20260506_000013_front.mp4",
+        "wrist": "episodes/CMU_RPAD/videos/ghost_fold_ood_onesie_robotOnly_gc_20260506_000013_wrist.mp4"
+      },
+      "episode_id": "ghost_fold_ood_onesie_robotOnly_gc_20260506_000013",
+      "language_instruction": "Fold the onesie.",
+      "operator": "sriram, haotian",
+      "annotators": [
+        "sriram, haotian"
+      ],
+      "robot_name": "aloha_viperx_300s",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:27:35.258813+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-015",
+      "dataset_repo": "OopsieData-Submissions/CMU_RPAD",
+      "lab_id": "CMU_RPAD",
+      "repo_path": "jamb_stack_basin_ours_000026.h5",
+      "bundle_path": "episodes/CMU_RPAD/jamb_stack_basin_ours_000026.h5",
+      "video_files": {
+        "top": "episodes/CMU_RPAD/videos/jamb_stack_basin_ours_000026_top.mp4",
+        "wrist_left": "episodes/CMU_RPAD/videos/jamb_stack_basin_ours_000026_wrist_left.mp4",
+        "wrist_right": "episodes/CMU_RPAD/videos/jamb_stack_basin_ours_000026_wrist_right.mp4"
+      },
+      "episode_id": "jamb_stack_basin_ours_000026",
+      "language_instruction": "Stack the basins.",
+      "operator": "vera, peilin",
+      "annotators": [
+        "vera, peilin"
+      ],
+      "robot_name": "xarm6",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:32:43.129993+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-016",
+      "dataset_repo": "OopsieData-Submissions/CMU_RPAD",
+      "lab_id": "CMU_RPAD",
+      "repo_path": "h2r_ghost_insertdonut_robotonly_000011.h5",
+      "bundle_path": "episodes/CMU_RPAD/h2r_ghost_insertdonut_robotonly_000011.h5",
+      "video_files": {
+        "front": "episodes/CMU_RPAD/videos/h2r_ghost_insertdonut_robotonly_000011_front.mp4",
+        "left": "episodes/CMU_RPAD/videos/h2r_ghost_insertdonut_robotonly_000011_left.mp4",
+        "wrist": "episodes/CMU_RPAD/videos/h2r_ghost_insertdonut_robotonly_000011_wrist.mp4"
+      },
+      "episode_id": "h2r_ghost_insertdonut_robotonly_000011",
+      "language_instruction": "Insert donut on the peg.",
+      "operator": "haotian, vera",
+      "annotators": [
+        "sriram"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "video artifacts, desync",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:31:35.176653+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-017",
+      "dataset_repo": "OopsieData-Submissions/CMU_RPAD",
+      "lab_id": "CMU_RPAD",
+      "repo_path": "h2r_amplify_stackbowls_robothuman_000015.h5",
+      "bundle_path": "episodes/CMU_RPAD/h2r_amplify_stackbowls_robothuman_000015.h5",
+      "video_files": {
+        "front": "episodes/CMU_RPAD/videos/h2r_amplify_stackbowls_robothuman_000015_front.mp4",
+        "left": "episodes/CMU_RPAD/videos/h2r_amplify_stackbowls_robothuman_000015_left.mp4"
+      },
+      "episode_id": "h2r_amplify_stackbowls_robothuman_000015",
+      "language_instruction": "Stack the bowls.",
+      "operator": "haotian, vera",
+      "annotators": [
+        "haotian, vera"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:29:10.842623+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-018",
+      "dataset_repo": "OopsieData-Submissions/CMU_RPAD",
+      "lab_id": "CMU_RPAD",
+      "repo_path": "ghost_mug_table_robotOnly_gc_20260326_000012.h5",
+      "bundle_path": "episodes/CMU_RPAD/ghost_mug_table_robotOnly_gc_20260326_000012.h5",
+      "video_files": {
+        "back": "episodes/CMU_RPAD/videos/ghost_mug_table_robotOnly_gc_20260326_000012_back.mp4",
+        "front": "episodes/CMU_RPAD/videos/ghost_mug_table_robotOnly_gc_20260326_000012_front.mp4",
+        "wrist": "episodes/CMU_RPAD/videos/ghost_mug_table_robotOnly_gc_20260326_000012_wrist.mp4"
+      },
+      "episode_id": "ghost_mug_table_robotOnly_gc_20260326_000012",
+      "language_instruction": "Place the mug on the table.",
+      "operator": "sriram, haotian",
+      "annotators": [
+        "sriram"
+      ],
+      "robot_name": "aloha_viperx_300s",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:28:10.269497+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-019",
+      "dataset_repo": "OopsieData-Submissions/CMU_RPAD",
+      "lab_id": "CMU_RPAD",
+      "repo_path": "jamb_store_block_ours_000021.h5",
+      "bundle_path": "episodes/CMU_RPAD/jamb_store_block_ours_000021.h5",
+      "video_files": {
+        "top": "episodes/CMU_RPAD/videos/jamb_store_block_ours_000021_top.mp4",
+        "wrist_left": "episodes/CMU_RPAD/videos/jamb_store_block_ours_000021_wrist_left.mp4",
+        "wrist_right": "episodes/CMU_RPAD/videos/jamb_store_block_ours_000021_wrist_right.mp4"
+      },
+      "episode_id": "jamb_store_block_ours_000021",
+      "language_instruction": "Store the block inside the box.",
+      "operator": "vera, peilin",
+      "annotators": [
+        "vera, peilin"
+      ],
+      "robot_name": "xarm6",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:33:06.773476+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-020",
+      "dataset_repo": "OopsieData-Submissions/CMU_RPAD",
+      "lab_id": "CMU_RPAD",
+      "repo_path": "ghost_plate_table_mimicplay_20260506_000002.h5",
+      "bundle_path": "episodes/CMU_RPAD/ghost_plate_table_mimicplay_20260506_000002.h5",
+      "video_files": {
+        "back": "episodes/CMU_RPAD/videos/ghost_plate_table_mimicplay_20260506_000002_back.mp4",
+        "front": "episodes/CMU_RPAD/videos/ghost_plate_table_mimicplay_20260506_000002_front.mp4",
+        "wrist": "episodes/CMU_RPAD/videos/ghost_plate_table_mimicplay_20260506_000002_wrist.mp4"
+      },
+      "episode_id": "ghost_plate_table_mimicplay_20260506_000002",
+      "language_instruction": "Place the plate on the table.",
+      "operator": "sriram, haotian",
+      "annotators": [
+        "sriram, haotian"
+      ],
+      "robot_name": "aloha_viperx_300s",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:28:26.847053+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-021",
+      "dataset_repo": "OopsieData-Submissions/Charles_UFAL",
+      "lab_id": "Charles_UFAL",
+      "repo_path": "chess_v1_ep0105.h5",
+      "bundle_path": "episodes/Charles_UFAL/chess_v1_ep0105.h5",
+      "video_files": {
+        "overhead": "episodes/Charles_UFAL/videos/chess_v1_ep0105_overhead.mp4",
+        "wrist": "episodes/Charles_UFAL/videos/chess_v1_ep0105_wrist.mp4"
+      },
+      "episode_id": "chess_v1_ep0105",
+      "language_instruction": "Put the pawn down on e5",
+      "operator": "Matěj Kripner",
+      "annotators": [
+        "Matěj Kripner"
+      ],
+      "robot_name": "so101_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:23:56.625784+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-022",
+      "dataset_repo": "OopsieData-Submissions/Charles_UFAL",
+      "lab_id": "Charles_UFAL",
+      "repo_path": "real_e2e_v2_d2_ep0208.h5",
+      "bundle_path": "episodes/Charles_UFAL/real_e2e_v2_d2_ep0208.h5",
+      "video_files": {
+        "overhead": "episodes/Charles_UFAL/videos/real_e2e_v2_d2_ep0208_overhead.mp4",
+        "wrist": "episodes/Charles_UFAL/videos/real_e2e_v2_d2_ep0208_wrist.mp4"
+      },
+      "episode_id": "real_e2e_v2_d2_ep0208",
+      "language_instruction": "Move the king from d8 to f7",
+      "operator": "Matěj Kripner",
+      "annotators": [
+        "Matěj Kripner"
+      ],
+      "robot_name": "so101_follower",
+      "qa_notes": "video seems sped up",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:26:36.309869+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-023",
+      "dataset_repo": "OopsieData-Submissions/Charles_UFAL",
+      "lab_id": "Charles_UFAL",
+      "repo_path": "chess_v4_ep0552.h5",
+      "bundle_path": "episodes/Charles_UFAL/chess_v4_ep0552.h5",
+      "video_files": {
+        "overhead": "episodes/Charles_UFAL/videos/chess_v4_ep0552_overhead.mp4",
+        "wrist": "episodes/Charles_UFAL/videos/chess_v4_ep0552_wrist.mp4"
+      },
+      "episode_id": "chess_v4_ep0552",
+      "language_instruction": "Put the knight down on d3",
+      "operator": "Matěj Kripner",
+      "annotators": [
+        "Matěj Kripner"
+      ],
+      "robot_name": "so101_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:24:30.003789+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-024",
+      "dataset_repo": "OopsieData-Submissions/Charles_UFAL",
+      "lab_id": "Charles_UFAL",
+      "repo_path": "chess_v5_ep0063.h5",
+      "bundle_path": "episodes/Charles_UFAL/chess_v5_ep0063.h5",
+      "video_files": {
+        "overhead": "episodes/Charles_UFAL/videos/chess_v5_ep0063_overhead.mp4",
+        "wrist": "episodes/Charles_UFAL/videos/chess_v5_ep0063_wrist.mp4"
+      },
+      "episode_id": "chess_v5_ep0063",
+      "language_instruction": "Put the rook down on b3",
+      "operator": "Matěj Kripner",
+      "annotators": [
+        "Matěj Kripner"
+      ],
+      "robot_name": "so101_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:24:37.436660+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-025",
+      "dataset_repo": "OopsieData-Submissions/Charles_UFAL",
+      "lab_id": "Charles_UFAL",
+      "repo_path": "phases_king_v1_ep0017.h5",
+      "bundle_path": "episodes/Charles_UFAL/phases_king_v1_ep0017.h5",
+      "video_files": {
+        "overhead": "episodes/Charles_UFAL/videos/phases_king_v1_ep0017_overhead.mp4",
+        "wrist": "episodes/Charles_UFAL/videos/phases_king_v1_ep0017_wrist.mp4"
+      },
+      "episode_id": "phases_king_v1_ep0017",
+      "language_instruction": "Pick up the king from c3",
+      "operator": "Matěj Kripner",
+      "annotators": [
+        "Matěj Kripner"
+      ],
+      "robot_name": "so101_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:26:00.534185+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-026",
+      "dataset_repo": "OopsieData-Submissions/Charles_UFAL",
+      "lab_id": "Charles_UFAL",
+      "repo_path": "red-tape-green-cross-hd_ep0039.h5",
+      "bundle_path": "episodes/Charles_UFAL/red-tape-green-cross-hd_ep0039.h5",
+      "video_files": {
+        "overhead": "episodes/Charles_UFAL/videos/red-tape-green-cross-hd_ep0039_overhead.mp4",
+        "wrist": "episodes/Charles_UFAL/videos/red-tape-green-cross-hd_ep0039_wrist.mp4"
+      },
+      "episode_id": "red-tape-green-cross-hd_ep0039",
+      "language_instruction": "Pick up the red tape and place it onto the green cross",
+      "operator": "Matěj Kripner",
+      "annotators": [
+        "Matěj Kripner"
+      ],
+      "robot_name": "so101_follower",
+      "qa_notes": "video seems sped up",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:26:51.284572+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-027",
+      "dataset_repo": "OopsieData-Submissions/Charles_UFAL",
+      "lab_id": "Charles_UFAL",
+      "repo_path": "real_e2e_v2_d2_ep0229.h5",
+      "bundle_path": "episodes/Charles_UFAL/real_e2e_v2_d2_ep0229.h5",
+      "video_files": {
+        "overhead": "episodes/Charles_UFAL/videos/real_e2e_v2_d2_ep0229_overhead.mp4",
+        "wrist": "episodes/Charles_UFAL/videos/real_e2e_v2_d2_ep0229_wrist.mp4"
+      },
+      "episode_id": "real_e2e_v2_d2_ep0229",
+      "language_instruction": "Move the king from b7 to g2",
+      "operator": "Matěj Kripner",
+      "annotators": [
+        "Matěj Kripner"
+      ],
+      "robot_name": "so101_follower",
+      "qa_notes": "video seems sped up",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:26:45.209957+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-028",
+      "dataset_repo": "OopsieData-Submissions/Charles_UFAL",
+      "lab_id": "Charles_UFAL",
+      "repo_path": "king_v5_ep0131.h5",
+      "bundle_path": "episodes/Charles_UFAL/king_v5_ep0131.h5",
+      "video_files": {
+        "overhead": "episodes/Charles_UFAL/videos/king_v5_ep0131_overhead.mp4",
+        "wrist": "episodes/Charles_UFAL/videos/king_v5_ep0131_wrist.mp4"
+      },
+      "episode_id": "king_v5_ep0131",
+      "language_instruction": "Move the king from f8 to e4",
+      "operator": "Matěj Kripner",
+      "annotators": [
+        "Matěj Kripner"
+      ],
+      "robot_name": "so101_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:25:38.811080+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-029",
+      "dataset_repo": "OopsieData-Submissions/Charles_UFAL",
+      "lab_id": "Charles_UFAL",
+      "repo_path": "chess_v2_ep0067.h5",
+      "bundle_path": "episodes/Charles_UFAL/chess_v2_ep0067.h5",
+      "video_files": {
+        "overhead": "episodes/Charles_UFAL/videos/chess_v2_ep0067_overhead.mp4",
+        "wrist": "episodes/Charles_UFAL/videos/chess_v2_ep0067_wrist.mp4"
+      },
+      "episode_id": "chess_v2_ep0067",
+      "language_instruction": "Pick up the rook from b8",
+      "operator": "Matěj Kripner",
+      "annotators": [
+        "Matěj Kripner"
+      ],
+      "robot_name": "so101_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:24:21.884017+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-030",
+      "dataset_repo": "OopsieData-Submissions/Charles_UFAL",
+      "lab_id": "Charles_UFAL",
+      "repo_path": "chess_v1_ep0112.h5",
+      "bundle_path": "episodes/Charles_UFAL/chess_v1_ep0112.h5",
+      "video_files": {
+        "overhead": "episodes/Charles_UFAL/videos/chess_v1_ep0112_overhead.mp4",
+        "wrist": "episodes/Charles_UFAL/videos/chess_v1_ep0112_wrist.mp4"
+      },
+      "episode_id": "chess_v1_ep0112",
+      "language_instruction": "Pick up the bishop from f8",
+      "operator": "Matěj Kripner",
+      "annotators": [
+        "Matěj Kripner"
+      ],
+      "robot_name": "so101_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:24:06.409365+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-031",
+      "dataset_repo": "OopsieData-Submissions/Charles_UFAL",
+      "lab_id": "Charles_UFAL",
+      "repo_path": "king_v5_ep0239.h5",
+      "bundle_path": "episodes/Charles_UFAL/king_v5_ep0239.h5",
+      "video_files": {
+        "overhead": "episodes/Charles_UFAL/videos/king_v5_ep0239_overhead.mp4",
+        "wrist": "episodes/Charles_UFAL/videos/king_v5_ep0239_wrist.mp4"
+      },
+      "episode_id": "king_v5_ep0239",
+      "language_instruction": "Move the king from g2 to d6",
+      "operator": "Matěj Kripner",
+      "annotators": [
+        "Matěj Kripner"
+      ],
+      "robot_name": "so101_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:25:43.341607+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-032",
+      "dataset_repo": "OopsieData-Submissions/Charles_UFAL",
+      "lab_id": "Charles_UFAL",
+      "repo_path": "eval_ft_real_e2e_v2_d2_base_n256_wsd15000_lumi8_ep0023.h5",
+      "bundle_path": "episodes/Charles_UFAL/eval_ft_real_e2e_v2_d2_base_n256_wsd15000_lumi8_ep0023.h5",
+      "video_files": {
+        "overhead": "episodes/Charles_UFAL/videos/eval_ft_real_e2e_v2_d2_base_n256_wsd15000_lumi8_ep0023_overhead.mp4",
+        "wrist": "episodes/Charles_UFAL/videos/eval_ft_real_e2e_v2_d2_base_n256_wsd15000_lumi8_ep0023_wrist.mp4"
+      },
+      "episode_id": "eval_ft_real_e2e_v2_d2_base_n256_wsd15000_lumi8_ep0023",
+      "language_instruction": "Move the king from a2 to g5",
+      "operator": "Matěj Kripner",
+      "annotators": [
+        "Matěj Kripner"
+      ],
+      "robot_name": "so101_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:25:20.877799+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-033",
+      "dataset_repo": "OopsieData-Submissions/Charles_UFAL",
+      "lab_id": "Charles_UFAL",
+      "repo_path": "chess_v2_ep0046.h5",
+      "bundle_path": "episodes/Charles_UFAL/chess_v2_ep0046.h5",
+      "video_files": {
+        "overhead": "episodes/Charles_UFAL/videos/chess_v2_ep0046_overhead.mp4",
+        "wrist": "episodes/Charles_UFAL/videos/chess_v2_ep0046_wrist.mp4"
+      },
+      "episode_id": "chess_v2_ep0046",
+      "language_instruction": "Put the pawn down on c4",
+      "operator": "Matěj Kripner",
+      "annotators": [
+        "Matěj Kripner"
+      ],
+      "robot_name": "so101_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:24:14.767909+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-034",
+      "dataset_repo": "OopsieData-Submissions/Charles_UFAL",
+      "lab_id": "Charles_UFAL",
+      "repo_path": "oopsie_ft_real_e2e_v2_d2_base_n256_wsd15000_lumi8_r1_v3_ep0068.h5",
+      "bundle_path": "episodes/Charles_UFAL/oopsie_ft_real_e2e_v2_d2_base_n256_wsd15000_lumi8_r1_v3_ep0068.h5",
+      "video_files": {
+        "overhead": "episodes/Charles_UFAL/videos/oopsie_ft_real_e2e_v2_d2_base_n256_wsd15000_lumi8_r1_v3_ep0068_overhead.mp4",
+        "wrist": "episodes/Charles_UFAL/videos/oopsie_ft_real_e2e_v2_d2_base_n256_wsd15000_lumi8_r1_v3_ep0068_wrist.mp4"
+      },
+      "episode_id": "oopsie_ft_real_e2e_v2_d2_base_n256_wsd15000_lumi8_r1_v3_ep0068",
+      "language_instruction": "Move the king from g5 to h1",
+      "operator": "Matěj Kripner",
+      "annotators": [
+        "Matěj Kripner"
+      ],
+      "robot_name": "so101_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:25:55.209250+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-035",
+      "dataset_repo": "OopsieData-Submissions/Charles_UFAL",
+      "lab_id": "Charles_UFAL",
+      "repo_path": "real_e2e_v2_d2_ep0061.h5",
+      "bundle_path": "episodes/Charles_UFAL/real_e2e_v2_d2_ep0061.h5",
+      "video_files": {
+        "overhead": "episodes/Charles_UFAL/videos/real_e2e_v2_d2_ep0061_overhead.mp4",
+        "wrist": "episodes/Charles_UFAL/videos/real_e2e_v2_d2_ep0061_wrist.mp4"
+      },
+      "episode_id": "real_e2e_v2_d2_ep0061",
+      "language_instruction": "Move the king from d7 to b4",
+      "operator": "Matěj Kripner",
+      "annotators": [
+        "Matěj Kripner"
+      ],
+      "robot_name": "so101_follower",
+      "qa_notes": "video seems sped up, double check consistency",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:26:26.851824+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-036",
+      "dataset_repo": "OopsieData-Submissions/Charles_UFAL",
+      "lab_id": "Charles_UFAL",
+      "repo_path": "eval_ft_real_e2e_v2_d2_base_n256_wsd15000_lumi8_ep0005.h5",
+      "bundle_path": "episodes/Charles_UFAL/eval_ft_real_e2e_v2_d2_base_n256_wsd15000_lumi8_ep0005.h5",
+      "video_files": {
+        "overhead": "episodes/Charles_UFAL/videos/eval_ft_real_e2e_v2_d2_base_n256_wsd15000_lumi8_ep0005_overhead.mp4",
+        "wrist": "episodes/Charles_UFAL/videos/eval_ft_real_e2e_v2_d2_base_n256_wsd15000_lumi8_ep0005_wrist.mp4"
+      },
+      "episode_id": "eval_ft_real_e2e_v2_d2_base_n256_wsd15000_lumi8_ep0005",
+      "language_instruction": "Move the king from d1 to g3",
+      "operator": "Matěj Kripner",
+      "annotators": [
+        "Matěj Kripner"
+      ],
+      "robot_name": "so101_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:25:07.927147+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-037",
+      "dataset_repo": "OopsieData-Submissions/Charles_UFAL",
+      "lab_id": "Charles_UFAL",
+      "repo_path": "chess_v4_ep0273.h5",
+      "bundle_path": "episodes/Charles_UFAL/chess_v4_ep0273.h5",
+      "video_files": {
+        "overhead": "episodes/Charles_UFAL/videos/chess_v4_ep0273_overhead.mp4",
+        "wrist": "episodes/Charles_UFAL/videos/chess_v4_ep0273_wrist.mp4"
+      },
+      "episode_id": "chess_v4_ep0273",
+      "language_instruction": "Put the bishop down on b3",
+      "operator": "Matěj Kripner",
+      "annotators": [
+        "Matěj Kripner"
+      ],
+      "robot_name": "so101_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:24:25.762627+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-038",
+      "dataset_repo": "OopsieData-Submissions/Charles_UFAL",
+      "lab_id": "Charles_UFAL",
+      "repo_path": "coach_v1_ep0003.h5",
+      "bundle_path": "episodes/Charles_UFAL/coach_v1_ep0003.h5",
+      "video_files": {
+        "overhead": "episodes/Charles_UFAL/videos/coach_v1_ep0003_overhead.mp4",
+        "wrist": "episodes/Charles_UFAL/videos/coach_v1_ep0003_wrist.mp4"
+      },
+      "episode_id": "coach_v1_ep0003",
+      "language_instruction": "Move the king from e5 to b1",
+      "operator": "Matěj Kripner",
+      "annotators": [
+        "Matěj Kripner"
+      ],
+      "robot_name": "so101_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:24:53.209256+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-039",
+      "dataset_repo": "OopsieData-Submissions/Charles_UFAL",
+      "lab_id": "Charles_UFAL",
+      "repo_path": "king_v5_ep0049.h5",
+      "bundle_path": "episodes/Charles_UFAL/king_v5_ep0049.h5",
+      "video_files": {
+        "overhead": "episodes/Charles_UFAL/videos/king_v5_ep0049_overhead.mp4",
+        "wrist": "episodes/Charles_UFAL/videos/king_v5_ep0049_wrist.mp4"
+      },
+      "episode_id": "king_v5_ep0049",
+      "language_instruction": "Move the king from d1 to c7",
+      "operator": "Matěj Kripner",
+      "annotators": [
+        "Matěj Kripner"
+      ],
+      "robot_name": "so101_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:25:27.485260+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-040",
+      "dataset_repo": "OopsieData-Submissions/Charles_UFAL",
+      "lab_id": "Charles_UFAL",
+      "repo_path": "king_v5_ep0106.h5",
+      "bundle_path": "episodes/Charles_UFAL/king_v5_ep0106.h5",
+      "video_files": {
+        "overhead": "episodes/Charles_UFAL/videos/king_v5_ep0106_overhead.mp4",
+        "wrist": "episodes/Charles_UFAL/videos/king_v5_ep0106_wrist.mp4"
+      },
+      "episode_id": "king_v5_ep0106",
+      "language_instruction": "Move the king from e4 to c3",
+      "operator": "Matěj Kripner",
+      "annotators": [
+        "Matěj Kripner"
+      ],
+      "robot_name": "so101_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:25:34.444139+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-041",
+      "dataset_repo": "OopsieData-Submissions/ETH_RK",
+      "lab_id": "ETH_RK",
+      "repo_path": "orca_scissors_20260119-231728_srl_il_faive_offline_scissor-checkpoint_350_20260120-142830.h5",
+      "bundle_path": "episodes/ETH_RK/orca_scissors_20260119-231728_srl_il_faive_offline_scissor-checkpoint_350_20260120-142830.h5",
+      "video_files": {
+        "oakd_front_view": "episodes/ETH_RK/videos/orca_scissors_20260119-231728_srl_il_faive_offline_scissor-checkpoint_350_20260120-142830_oakd_front_view.mp4",
+        "oakd_wrist_bottom_view": "episodes/ETH_RK/videos/orca_scissors_20260119-231728_srl_il_faive_offline_scissor-checkpoint_350_20260120-142830_oakd_wrist_bottom_view.mp4",
+        "oakd_wrist_top_view": "episodes/ETH_RK/videos/orca_scissors_20260119-231728_srl_il_faive_offline_scissor-checkpoint_350_20260120-142830_oakd_wrist_top_view.mp4"
+      },
+      "episode_id": "orca_scissors_20260119-231728_srl_il_faive_offline_scissor-checkpoint_350_20260120-142830",
+      "language_instruction": "Pick scissors and cut the tape",
+      "operator": "Denis Tarasov and Chenyu Yang",
+      "annotators": [
+        "Denis Tarasov"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "weird camera placement",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T19:58:09.597683+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-042",
+      "dataset_repo": "OopsieData-Submissions/ETH_RK",
+      "lab_id": "ETH_RK",
+      "repo_path": "dexact_cube_pick_basic_episode_66_failure.h5",
+      "bundle_path": "episodes/ETH_RK/dexact_cube_pick_basic_episode_66_failure.h5",
+      "video_files": {
+        "front_view": "episodes/ETH_RK/videos/dexact_cube_pick_basic_episode_66_failure_front_view.mp4",
+        "top_view": "episodes/ETH_RK/videos/dexact_cube_pick_basic_episode_66_failure_top_view.mp4"
+      },
+      "episode_id": "dexact_cube_pick_basic_episode_66_failure",
+      "language_instruction": "Pick up the cube and put it into the bowl",
+      "operator": "Denis Tarasov",
+      "annotators": [
+        "Denis Tarasov"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "description contains unrelated info",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T19:55:18.083234+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-043",
+      "dataset_repo": "OopsieData-Submissions/ETH_RK",
+      "lab_id": "ETH_RK",
+      "repo_path": "faive_hand_brush_20250304-024429_egocentric-checkpoint_350_20250304-230913.h5",
+      "bundle_path": "episodes/ETH_RK/faive_hand_brush_20250304-024429_egocentric-checkpoint_350_20250304-230913.h5",
+      "video_files": {
+        "oakd_front_view": "episodes/ETH_RK/videos/faive_hand_brush_20250304-024429_egocentric-checkpoint_350_20250304-230913_oakd_front_view.mp4",
+        "oakd_side_view": "episodes/ETH_RK/videos/faive_hand_brush_20250304-024429_egocentric-checkpoint_350_20250304-230913_oakd_side_view.mp4"
+      },
+      "episode_id": "faive_hand_brush_20250304-024429_egocentric-checkpoint_350_20250304-230913",
+      "language_instruction": "Pick up the brush and make a sweep on the canvas",
+      "operator": "Chenyu Yang",
+      "annotators": [
+        "Denis Tarasov"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T19:55:55.585811+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-044",
+      "dataset_repo": "OopsieData-Submissions/ETH_RK",
+      "lab_id": "ETH_RK",
+      "repo_path": "dexact_bowl_push_basic_episode_44_success.h5",
+      "bundle_path": "episodes/ETH_RK/dexact_bowl_push_basic_episode_44_success.h5",
+      "video_files": {
+        "front_view": "episodes/ETH_RK/videos/dexact_bowl_push_basic_episode_44_success_front_view.mp4",
+        "top_view": "episodes/ETH_RK/videos/dexact_bowl_push_basic_episode_44_success_top_view.mp4"
+      },
+      "episode_id": "dexact_bowl_push_basic_episode_44_success",
+      "language_instruction": "Push the bowl across the table",
+      "operator": "Denis Tarasov",
+      "annotators": [
+        "Denis Tarasov"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "description contains unrelated info",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T19:55:01.357531+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-045",
+      "dataset_repo": "OopsieData-Submissions/ETH_RK",
+      "lab_id": "ETH_RK",
+      "repo_path": "orca_bimanual_0131.h5",
+      "bundle_path": "episodes/ETH_RK/orca_bimanual_0131.h5",
+      "video_files": {
+        "oakd_front_view": "episodes/ETH_RK/videos/orca_bimanual_0131_oakd_front_view.mp4",
+        "oakd_left_wrist_view": "episodes/ETH_RK/videos/orca_bimanual_0131_oakd_left_wrist_view.mp4",
+        "oakd_right_wrist_view": "episodes/ETH_RK/videos/orca_bimanual_0131_oakd_right_wrist_view.mp4"
+      },
+      "episode_id": "orca_bimanual_0131",
+      "language_instruction": "Grasp the bottle with the left hand and the ball with the right hand, put the ball inside the bottle, then place the bottle upright on the table",
+      "operator": "Denis Tarasov and Chenyu Yang",
+      "annotators": [
+        "Denis Tarasov"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "seems like bad camera placement",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T19:57:03.647736+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-046",
+      "dataset_repo": "OopsieData-Submissions/ETH_RK",
+      "lab_id": "ETH_RK",
+      "repo_path": "faive_hand_pan_20250305-094838_egocentric-checkpoint_350_20250305-173208.h5",
+      "bundle_path": "episodes/ETH_RK/faive_hand_pan_20250305-094838_egocentric-checkpoint_350_20250305-173208.h5",
+      "video_files": {
+        "oakd_front_view": "episodes/ETH_RK/videos/faive_hand_pan_20250305-094838_egocentric-checkpoint_350_20250305-173208_oakd_front_view.mp4",
+        "oakd_side_view": "episodes/ETH_RK/videos/faive_hand_pan_20250305-094838_egocentric-checkpoint_350_20250305-173208_oakd_side_view.mp4"
+      },
+      "episode_id": "faive_hand_pan_20250305-094838_egocentric-checkpoint_350_20250305-173208",
+      "language_instruction": "Pick up the frying pan and put it onto the oven",
+      "operator": "Chenyu Yang",
+      "annotators": [
+        "Denis Tarasov"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T19:56:00.730438+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-047",
+      "dataset_repo": "OopsieData-Submissions/ETH_RK",
+      "lab_id": "ETH_RK",
+      "repo_path": "dexact_coffee_cup2go_platform_pick_episode_26_success.h5",
+      "bundle_path": "episodes/ETH_RK/dexact_coffee_cup2go_platform_pick_episode_26_success.h5",
+      "video_files": {
+        "front_view": "episodes/ETH_RK/videos/dexact_coffee_cup2go_platform_pick_episode_26_success_front_view.mp4",
+        "top_view": "episodes/ETH_RK/videos/dexact_coffee_cup2go_platform_pick_episode_26_success_top_view.mp4"
+      },
+      "episode_id": "dexact_coffee_cup2go_platform_pick_episode_26_success",
+      "language_instruction": "Pick up the coffee cup from the platform and put it on the table",
+      "operator": "Denis Tarasov",
+      "annotators": [
+        "Denis Tarasov"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "description contains unrelated info",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T19:55:10.007497+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-048",
+      "dataset_repo": "OopsieData-Submissions/ETH_RK",
+      "lab_id": "ETH_RK",
+      "repo_path": "faive_hand_plush_20250307-173202_egocentric-checkpoint_350_20250307-204339.h5",
+      "bundle_path": "episodes/ETH_RK/faive_hand_plush_20250307-173202_egocentric-checkpoint_350_20250307-204339.h5",
+      "video_files": {
+        "oakd_front_view": "episodes/ETH_RK/videos/faive_hand_plush_20250307-173202_egocentric-checkpoint_350_20250307-204339_oakd_front_view.mp4",
+        "oakd_side_view": "episodes/ETH_RK/videos/faive_hand_plush_20250307-173202_egocentric-checkpoint_350_20250307-204339_oakd_side_view.mp4"
+      },
+      "episode_id": "faive_hand_plush_20250307-173202_egocentric-checkpoint_350_20250307-204339",
+      "language_instruction": "Pick up the plush toy and place it in the tray",
+      "operator": "Chenyu Yang",
+      "annotators": [
+        "Denis Tarasov"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T19:56:11.352528+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-049",
+      "dataset_repo": "OopsieData-Submissions/ETH_RK",
+      "lab_id": "ETH_RK",
+      "repo_path": "orca_cubes_0032.h5",
+      "bundle_path": "episodes/ETH_RK/orca_cubes_0032.h5",
+      "video_files": {
+        "oakd_front_view": "episodes/ETH_RK/videos/orca_cubes_0032_oakd_front_view.mp4",
+        "oakd_wrist_bottom_view": "episodes/ETH_RK/videos/orca_cubes_0032_oakd_wrist_bottom_view.mp4",
+        "oakd_wrist_top_view": "episodes/ETH_RK/videos/orca_cubes_0032_oakd_wrist_top_view.mp4"
+      },
+      "episode_id": "orca_cubes_0032",
+      "language_instruction": "Stack four cubes into a tower without dropping any cube",
+      "operator": "Denis Tarasov",
+      "annotators": [
+        "Denis Tarasov"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T19:57:25.771266+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-050",
+      "dataset_repo": "OopsieData-Submissions/ETH_RK",
+      "lab_id": "ETH_RK",
+      "repo_path": "dexact_cube_pick_distractors_episode_20_success.h5",
+      "bundle_path": "episodes/ETH_RK/dexact_cube_pick_distractors_episode_20_success.h5",
+      "video_files": {
+        "front_view": "episodes/ETH_RK/videos/dexact_cube_pick_distractors_episode_20_success_front_view.mp4",
+        "top_view": "episodes/ETH_RK/videos/dexact_cube_pick_distractors_episode_20_success_top_view.mp4"
+      },
+      "episode_id": "dexact_cube_pick_distractors_episode_20_success",
+      "language_instruction": "Pick up the cube among the distractor objects and put it into the bowl",
+      "operator": "Denis Tarasov",
+      "annotators": [
+        "Denis Tarasov"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "description contains unrelated info",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T19:55:20.385793+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-051",
+      "dataset_repo": "OopsieData-Submissions/ETH_RK",
+      "lab_id": "ETH_RK",
+      "repo_path": "dexact_pokemon_pick_v3_episode_42_failure.h5",
+      "bundle_path": "episodes/ETH_RK/dexact_pokemon_pick_v3_episode_42_failure.h5",
+      "video_files": {
+        "front_view": "episodes/ETH_RK/videos/dexact_pokemon_pick_v3_episode_42_failure_front_view.mp4",
+        "top_view": "episodes/ETH_RK/videos/dexact_pokemon_pick_v3_episode_42_failure_top_view.mp4"
+      },
+      "episode_id": "dexact_pokemon_pick_v3_episode_42_failure",
+      "language_instruction": "Pick up the toy and put it into the bowl",
+      "operator": "Denis Tarasov",
+      "annotators": [
+        "Denis Tarasov"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "description contains unrelated info",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T19:55:24.945044+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-052",
+      "dataset_repo": "OopsieData-Submissions/ETH_RK",
+      "lab_id": "ETH_RK",
+      "repo_path": "dexact_bottle_pickup_horizontal_basic_episode_10_success.h5",
+      "bundle_path": "episodes/ETH_RK/dexact_bottle_pickup_horizontal_basic_episode_10_success.h5",
+      "video_files": {
+        "front_view": "episodes/ETH_RK/videos/dexact_bottle_pickup_horizontal_basic_episode_10_success_front_view.mp4",
+        "top_view": "episodes/ETH_RK/videos/dexact_bottle_pickup_horizontal_basic_episode_10_success_top_view.mp4"
+      },
+      "episode_id": "dexact_bottle_pickup_horizontal_basic_episode_10_success",
+      "language_instruction": "Pick up the bottle lying horizontally from the platform",
+      "operator": "Denis Tarasov",
+      "annotators": [
+        "Denis Tarasov"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "description contains unrelated info",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T19:54:54.574678+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-053",
+      "dataset_repo": "OopsieData-Submissions/ETH_RK",
+      "lab_id": "ETH_RK",
+      "repo_path": "dexact_bottle_pickup_basic_episode_54_failure.h5",
+      "bundle_path": "episodes/ETH_RK/dexact_bottle_pickup_basic_episode_54_failure.h5",
+      "video_files": {
+        "front_view": "episodes/ETH_RK/videos/dexact_bottle_pickup_basic_episode_54_failure_front_view.mp4",
+        "top_view": "episodes/ETH_RK/videos/dexact_bottle_pickup_basic_episode_54_failure_top_view.mp4"
+      },
+      "episode_id": "dexact_bottle_pickup_basic_episode_54_failure",
+      "language_instruction": "Pick up the bottle from the platform",
+      "operator": "Denis Tarasov",
+      "annotators": [
+        "Denis Tarasov"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "description contains unrelated info",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:37:57.330542+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-054",
+      "dataset_repo": "OopsieData-Submissions/ETH_RK",
+      "lab_id": "ETH_RK",
+      "repo_path": "dexact_bottle_pick_place_from_bowl_episode_19_success.h5",
+      "bundle_path": "episodes/ETH_RK/dexact_bottle_pick_place_from_bowl_episode_19_success.h5",
+      "video_files": {
+        "front_view": "episodes/ETH_RK/videos/dexact_bottle_pick_place_from_bowl_episode_19_success_front_view.mp4",
+        "top_view": "episodes/ETH_RK/videos/dexact_bottle_pick_place_from_bowl_episode_19_success_top_view.mp4"
+      },
+      "episode_id": "dexact_bottle_pick_place_from_bowl_episode_19_success",
+      "language_instruction": "Pick the bottle out of the bowl and place it on the table",
+      "operator": "Denis Tarasov",
+      "annotators": [
+        "Denis Tarasov"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:37:36.194180+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-055",
+      "dataset_repo": "OopsieData-Submissions/ETH_RK",
+      "lab_id": "ETH_RK",
+      "repo_path": "dexact_towel_wipe_basic_episode_52_success.h5",
+      "bundle_path": "episodes/ETH_RK/dexact_towel_wipe_basic_episode_52_success.h5",
+      "video_files": {
+        "front_view": "episodes/ETH_RK/videos/dexact_towel_wipe_basic_episode_52_success_front_view.mp4",
+        "top_view": "episodes/ETH_RK/videos/dexact_towel_wipe_basic_episode_52_success_top_view.mp4"
+      },
+      "episode_id": "dexact_towel_wipe_basic_episode_52_success",
+      "language_instruction": "Wipe the surface with the towel",
+      "operator": "Denis Tarasov",
+      "annotators": [
+        "Denis Tarasov"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "description contains unrelated info",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T19:55:33.531605+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-056",
+      "dataset_repo": "OopsieData-Submissions/ETH_RK",
+      "lab_id": "ETH_RK",
+      "repo_path": "orca_duck_0021.h5",
+      "bundle_path": "episodes/ETH_RK/orca_duck_0021.h5",
+      "video_files": {
+        "oakd_front_view": "episodes/ETH_RK/videos/orca_duck_0021_oakd_front_view.mp4",
+        "oakd_wrist_bottom_view": "episodes/ETH_RK/videos/orca_duck_0021_oakd_wrist_bottom_view.mp4",
+        "oakd_wrist_top_view": "episodes/ETH_RK/videos/orca_duck_0021_oakd_wrist_top_view.mp4"
+      },
+      "episode_id": "orca_duck_0021",
+      "language_instruction": "Pick up the rubber duck and put it into the bowl",
+      "operator": "Denis Tarasov",
+      "annotators": [
+        "Denis Tarasov"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T19:57:36.931326+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-057",
+      "dataset_repo": "OopsieData-Submissions/ETH_RK",
+      "lab_id": "ETH_RK",
+      "repo_path": "orca_rgbstack_0096.h5",
+      "bundle_path": "episodes/ETH_RK/orca_rgbstack_0096.h5",
+      "video_files": {
+        "oakd_front_view": "episodes/ETH_RK/videos/orca_rgbstack_0096_oakd_front_view.mp4",
+        "oakd_wrist_bottom_view": "episodes/ETH_RK/videos/orca_rgbstack_0096_oakd_wrist_bottom_view.mp4",
+        "oakd_wrist_top_view": "episodes/ETH_RK/videos/orca_rgbstack_0096_oakd_wrist_top_view.mp4"
+      },
+      "episode_id": "orca_rgbstack_0096",
+      "language_instruction": "Stack the coloured cubes into a tower in the order red, yellow, blue from bottom to top, without dropping any cube once it has been lifted",
+      "operator": "Denis Tarasov",
+      "annotators": [
+        "Denis Tarasov"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T19:57:44.622156+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-058",
+      "dataset_repo": "OopsieData-Submissions/ETH_RK",
+      "lab_id": "ETH_RK",
+      "repo_path": "orca_scissors_20260128-113012_srl_il_online_scissor-checkpoint_270_20260128-185955_r02.h5",
+      "bundle_path": "episodes/ETH_RK/orca_scissors_20260128-113012_srl_il_online_scissor-checkpoint_270_20260128-185955_r02.h5",
+      "video_files": {
+        "oakd_front_view": "episodes/ETH_RK/videos/orca_scissors_20260128-113012_srl_il_online_scissor-checkpoint_270_20260128-185955_r02_oakd_front_view.mp4",
+        "oakd_wrist_bottom_view": "episodes/ETH_RK/videos/orca_scissors_20260128-113012_srl_il_online_scissor-checkpoint_270_20260128-185955_r02_oakd_wrist_bottom_view.mp4",
+        "oakd_wrist_top_view": "episodes/ETH_RK/videos/orca_scissors_20260128-113012_srl_il_online_scissor-checkpoint_270_20260128-185955_r02_oakd_wrist_top_view.mp4"
+      },
+      "episode_id": "orca_scissors_20260128-113012_srl_il_online_scissor-checkpoint_270_20260128-185955_r02",
+      "language_instruction": "Pick scissors and cut the tape",
+      "operator": "Denis Tarasov and Chenyu Yang",
+      "annotators": [
+        "Denis Tarasov"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T19:58:37.704537+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-059",
+      "dataset_repo": "OopsieData-Submissions/ETH_RK",
+      "lab_id": "ETH_RK",
+      "repo_path": "orca_bimanual_0111.h5",
+      "bundle_path": "episodes/ETH_RK/orca_bimanual_0111.h5",
+      "video_files": {
+        "oakd_front_view": "episodes/ETH_RK/videos/orca_bimanual_0111_oakd_front_view.mp4",
+        "oakd_left_wrist_view": "episodes/ETH_RK/videos/orca_bimanual_0111_oakd_left_wrist_view.mp4",
+        "oakd_right_wrist_view": "episodes/ETH_RK/videos/orca_bimanual_0111_oakd_right_wrist_view.mp4"
+      },
+      "episode_id": "orca_bimanual_0111",
+      "language_instruction": "Grasp the bottle with the left hand and the ball with the right hand, put the ball inside the bottle, then place the bottle upright on the table",
+      "operator": "Denis Tarasov and Chenyu Yang",
+      "annotators": [
+        "Denis Tarasov"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "seems like bad camera placement",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T19:56:39.434432+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-060",
+      "dataset_repo": "OopsieData-Submissions/ETH_RK",
+      "lab_id": "ETH_RK",
+      "repo_path": "faive_hand_brush_20250304-024203_egocentric-checkpoint_350_20250305-111223.h5",
+      "bundle_path": "episodes/ETH_RK/faive_hand_brush_20250304-024203_egocentric-checkpoint_350_20250305-111223.h5",
+      "video_files": {
+        "oakd_front_view": "episodes/ETH_RK/videos/faive_hand_brush_20250304-024203_egocentric-checkpoint_350_20250305-111223_oakd_front_view.mp4",
+        "oakd_side_view": "episodes/ETH_RK/videos/faive_hand_brush_20250304-024203_egocentric-checkpoint_350_20250305-111223_oakd_side_view.mp4"
+      },
+      "episode_id": "faive_hand_brush_20250304-024203_egocentric-checkpoint_350_20250305-111223",
+      "language_instruction": "Pick up the brush and make a sweep on the canvas",
+      "operator": "Chenyu Yang",
+      "annotators": [
+        "Denis Tarasov"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T19:55:49.864672+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-061",
+      "dataset_repo": "OopsieData-Submissions/Enatic_OpenArm",
+      "lab_id": "Enactic_OpenArm",
+      "repo_path": "197.h5",
+      "bundle_path": "episodes/Enatic_OpenArm/197.h5",
+      "video_files": {
+        "ceiling": "episodes/Enatic_OpenArm/197_ceiling.mp4",
+        "wrist_left": "episodes/Enatic_OpenArm/197_wrist_left.mp4",
+        "wrist_right": "episodes/Enatic_OpenArm/197_wrist_right.mp4"
+      },
+      "episode_id": "197",
+      "language_instruction": "Pick up the spoon and place it into the box.",
+      "operator": "team",
+      "annotators": [
+        "Ryu"
+      ],
+      "robot_name": "OpenArm_2.0_beta",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:33:37.030965+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-062",
+      "dataset_repo": "OopsieData-Submissions/Enatic_OpenArm",
+      "lab_id": "Enactic_OpenArm",
+      "repo_path": "42.h5",
+      "bundle_path": "episodes/Enatic_OpenArm/42.h5",
+      "video_files": {
+        "ceiling": "episodes/Enatic_OpenArm/42_ceiling.mp4",
+        "head_left": "episodes/Enatic_OpenArm/42_head_left.mp4",
+        "head_right": "episodes/Enatic_OpenArm/42_head_right.mp4",
+        "wrist_left": "episodes/Enatic_OpenArm/42_wrist_left.mp4",
+        "wrist_right": "episodes/Enatic_OpenArm/42_wrist_right.mp4"
+      },
+      "episode_id": "42",
+      "language_instruction": "Flip an inserted pillow so it ends face-down.",
+      "operator": "Ryu",
+      "annotators": [
+        "Ryu"
+      ],
+      "robot_name": "OpenArm_2.0",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:35:32.401045+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-063",
+      "dataset_repo": "OopsieData-Submissions/Enatic_OpenArm",
+      "lab_id": "Enactic_OpenArm",
+      "repo_path": "76.h5",
+      "bundle_path": "episodes/Enatic_OpenArm/76.h5",
+      "video_files": {
+        "ceiling": "episodes/Enatic_OpenArm/76_ceiling.mp4",
+        "head_left": "episodes/Enatic_OpenArm/76_head_left.mp4",
+        "head_right": "episodes/Enatic_OpenArm/76_head_right.mp4",
+        "wrist_left": "episodes/Enatic_OpenArm/76_wrist_left.mp4",
+        "wrist_right": "episodes/Enatic_OpenArm/76_wrist_right.mp4"
+      },
+      "episode_id": "76",
+      "language_instruction": "Grasp the cased pillow and pull the pillow out of the case.",
+      "operator": "Ryu",
+      "annotators": [
+        "Ryu"
+      ],
+      "robot_name": "OpenArm_2.0",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:36:48.627267+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-064",
+      "dataset_repo": "OopsieData-Submissions/Enatic_OpenArm",
+      "lab_id": "Enactic_OpenArm",
+      "repo_path": "52.h5",
+      "bundle_path": "episodes/Enatic_OpenArm/52.h5",
+      "video_files": {
+        "ceiling": "episodes/Enatic_OpenArm/52_ceiling.mp4",
+        "head_left": "episodes/Enatic_OpenArm/52_head_left.mp4",
+        "head_right": "episodes/Enatic_OpenArm/52_head_right.mp4",
+        "wrist_left": "episodes/Enatic_OpenArm/52_wrist_left.mp4",
+        "wrist_right": "episodes/Enatic_OpenArm/52_wrist_right.mp4"
+      },
+      "episode_id": "52",
+      "language_instruction": "Snug the pillow into the case.",
+      "operator": "Ryu",
+      "annotators": [
+        "Ryu"
+      ],
+      "robot_name": "OpenArm_2.0",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:35:52.911093+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-065",
+      "dataset_repo": "OopsieData-Submissions/Enatic_OpenArm",
+      "lab_id": "Enactic_OpenArm",
+      "repo_path": "366.h5",
+      "bundle_path": "episodes/Enatic_OpenArm/366.h5",
+      "video_files": {
+        "ceiling": "episodes/Enatic_OpenArm/366_ceiling.mp4",
+        "wrist_left": "episodes/Enatic_OpenArm/366_wrist_left.mp4",
+        "wrist_right": "episodes/Enatic_OpenArm/366_wrist_right.mp4"
+      },
+      "episode_id": "366",
+      "language_instruction": "Pick up the spoon and place it into the box.",
+      "operator": "team",
+      "annotators": [
+        "Ryu"
+      ],
+      "robot_name": "OpenArm_2.0_beta",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:34:15.917859+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-066",
+      "dataset_repo": "OopsieData-Submissions/Enatic_OpenArm",
+      "lab_id": "Enactic_OpenArm",
+      "repo_path": "45.h5",
+      "bundle_path": "episodes/Enatic_OpenArm/45.h5",
+      "video_files": {
+        "ceiling": "episodes/Enatic_OpenArm/45_ceiling.mp4",
+        "head_left": "episodes/Enatic_OpenArm/45_head_left.mp4",
+        "head_right": "episodes/Enatic_OpenArm/45_head_right.mp4",
+        "wrist_left": "episodes/Enatic_OpenArm/45_wrist_left.mp4",
+        "wrist_right": "episodes/Enatic_OpenArm/45_wrist_right.mp4"
+      },
+      "episode_id": "45",
+      "language_instruction": "Lay the empty pillowcase flat with opening up and front face down.",
+      "operator": "Ryu",
+      "annotators": [
+        "Ryu"
+      ],
+      "robot_name": "OpenArm_2.0",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:35:37.457861+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-067",
+      "dataset_repo": "OopsieData-Submissions/Enatic_OpenArm",
+      "lab_id": "Enactic_OpenArm",
+      "repo_path": "87.h5",
+      "bundle_path": "episodes/Enatic_OpenArm/87.h5",
+      "video_files": {
+        "ceiling": "episodes/Enatic_OpenArm/87_ceiling.mp4",
+        "wrist_left": "episodes/Enatic_OpenArm/87_wrist_left.mp4",
+        "wrist_right": "episodes/Enatic_OpenArm/87_wrist_right.mp4"
+      },
+      "episode_id": "87",
+      "language_instruction": "Pick up the spoon and place it into the box.",
+      "operator": "team",
+      "annotators": [
+        "Ryu"
+      ],
+      "robot_name": "OpenArm_2.0_beta",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:37:02.553721+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-068",
+      "dataset_repo": "OopsieData-Submissions/Enatic_OpenArm",
+      "lab_id": "Enactic_OpenArm",
+      "repo_path": "73.h5",
+      "bundle_path": "episodes/Enatic_OpenArm/73.h5",
+      "video_files": {
+        "ceiling": "episodes/Enatic_OpenArm/73_ceiling.mp4",
+        "head_left": "episodes/Enatic_OpenArm/73_head_left.mp4",
+        "head_right": "episodes/Enatic_OpenArm/73_head_right.mp4",
+        "wrist_left": "episodes/Enatic_OpenArm/73_wrist_left.mp4",
+        "wrist_right": "episodes/Enatic_OpenArm/73_wrist_right.mp4"
+      },
+      "episode_id": "73",
+      "language_instruction": "Grasp the cased pillow and pull the pillow out of the case.",
+      "operator": "Ryu",
+      "annotators": [
+        "Ryu"
+      ],
+      "robot_name": "OpenArm_2.0",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:36:27.019245+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-069",
+      "dataset_repo": "OopsieData-Submissions/Enatic_OpenArm",
+      "lab_id": "Enactic_OpenArm",
+      "repo_path": "40.h5",
+      "bundle_path": "episodes/Enatic_OpenArm/40.h5",
+      "video_files": {
+        "ceiling": "episodes/Enatic_OpenArm/40_ceiling.mp4",
+        "head_left": "episodes/Enatic_OpenArm/40_head_left.mp4",
+        "head_right": "episodes/Enatic_OpenArm/40_head_right.mp4",
+        "wrist_left": "episodes/Enatic_OpenArm/40_wrist_left.mp4",
+        "wrist_right": "episodes/Enatic_OpenArm/40_wrist_right.mp4"
+      },
+      "episode_id": "40",
+      "language_instruction": "Snug the pillow into the case.",
+      "operator": "Ryu",
+      "annotators": [
+        "Ryu"
+      ],
+      "robot_name": "OpenArm_2.0",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:34:59.849562+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-070",
+      "dataset_repo": "OopsieData-Submissions/Enatic_OpenArm",
+      "lab_id": "Enactic_OpenArm",
+      "repo_path": "39.h5",
+      "bundle_path": "episodes/Enatic_OpenArm/39.h5",
+      "video_files": {
+        "ceiling": "episodes/Enatic_OpenArm/39_ceiling.mp4",
+        "head_left": "episodes/Enatic_OpenArm/39_head_left.mp4",
+        "head_right": "episodes/Enatic_OpenArm/39_head_right.mp4",
+        "wrist_left": "episodes/Enatic_OpenArm/39_wrist_left.mp4",
+        "wrist_right": "episodes/Enatic_OpenArm/39_wrist_right.mp4"
+      },
+      "episode_id": "39",
+      "language_instruction": "Lay the empty pillowcase flat with opening up and front face down.",
+      "operator": "Ryu",
+      "annotators": [
+        "Ryu"
+      ],
+      "robot_name": "OpenArm_2.0",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:34:42.899804+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-071",
+      "dataset_repo": "OopsieData-Submissions/Enatic_OpenArm",
+      "lab_id": "Enactic_OpenArm",
+      "repo_path": "369.h5",
+      "bundle_path": "episodes/Enatic_OpenArm/369.h5",
+      "video_files": {
+        "ceiling": "episodes/Enatic_OpenArm/369_ceiling.mp4",
+        "wrist_left": "episodes/Enatic_OpenArm/369_wrist_left.mp4",
+        "wrist_right": "episodes/Enatic_OpenArm/369_wrist_right.mp4"
+      },
+      "episode_id": "369",
+      "language_instruction": "Pick up the spoon and place it into the box.",
+      "operator": "team",
+      "annotators": [
+        "Ryu"
+      ],
+      "robot_name": "OpenArm_2.0_beta",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:34:24.393173+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-072",
+      "dataset_repo": "OopsieData-Submissions/Enatic_OpenArm",
+      "lab_id": "Enactic_OpenArm",
+      "repo_path": "90.h5",
+      "bundle_path": "episodes/Enatic_OpenArm/90.h5",
+      "video_files": {
+        "ceiling": "episodes/Enatic_OpenArm/90_ceiling.mp4",
+        "wrist_left": "episodes/Enatic_OpenArm/90_wrist_left.mp4",
+        "wrist_right": "episodes/Enatic_OpenArm/90_wrist_right.mp4"
+      },
+      "episode_id": "90",
+      "language_instruction": "Pick up the spoon and place it into the box.",
+      "operator": "team",
+      "annotators": [
+        "Ryu"
+      ],
+      "robot_name": "OpenArm_2.0_beta",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:37:06.854509+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-073",
+      "dataset_repo": "OopsieData-Submissions/Enatic_OpenArm",
+      "lab_id": "Enactic_OpenArm",
+      "repo_path": "6.h5",
+      "bundle_path": "episodes/Enatic_OpenArm/6.h5",
+      "video_files": {
+        "ceiling": "episodes/Enatic_OpenArm/6_ceiling.mp4",
+        "head_left": "episodes/Enatic_OpenArm/6_head_left.mp4",
+        "head_right": "episodes/Enatic_OpenArm/6_head_right.mp4",
+        "wrist_left": "episodes/Enatic_OpenArm/6_wrist_left.mp4",
+        "wrist_right": "episodes/Enatic_OpenArm/6_wrist_right.mp4"
+      },
+      "episode_id": "6",
+      "language_instruction": "Grasp the cased pillow and pull the pillow out of the case.",
+      "operator": "Ryu",
+      "annotators": [
+        "Ryu"
+      ],
+      "robot_name": "OpenArm_2.0",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:36:04.686119+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-074",
+      "dataset_repo": "OopsieData-Submissions/Enatic_OpenArm",
+      "lab_id": "Enactic_OpenArm",
+      "repo_path": "37.h5",
+      "bundle_path": "episodes/Enatic_OpenArm/37.h5",
+      "video_files": {
+        "ceiling": "episodes/Enatic_OpenArm/37_ceiling.mp4",
+        "head_left": "episodes/Enatic_OpenArm/37_head_left.mp4",
+        "head_right": "episodes/Enatic_OpenArm/37_head_right.mp4",
+        "wrist_left": "episodes/Enatic_OpenArm/37_wrist_left.mp4",
+        "wrist_right": "episodes/Enatic_OpenArm/37_wrist_right.mp4"
+      },
+      "episode_id": "37",
+      "language_instruction": "Snug the pillow into the case.",
+      "operator": "Ryu",
+      "annotators": [
+        "Ryu"
+      ],
+      "robot_name": "OpenArm_2.0",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:34:35.045228+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-075",
+      "dataset_repo": "OopsieData-Submissions/Enatic_OpenArm",
+      "lab_id": "Enactic_OpenArm",
+      "repo_path": "77.h5",
+      "bundle_path": "episodes/Enatic_OpenArm/77.h5",
+      "video_files": {
+        "ceiling": "episodes/Enatic_OpenArm/77_ceiling.mp4",
+        "head_left": "episodes/Enatic_OpenArm/77_head_left.mp4",
+        "head_right": "episodes/Enatic_OpenArm/77_head_right.mp4",
+        "wrist_left": "episodes/Enatic_OpenArm/77_wrist_left.mp4",
+        "wrist_right": "episodes/Enatic_OpenArm/77_wrist_right.mp4"
+      },
+      "episode_id": "77",
+      "language_instruction": "Lay the empty pillowcase flat with opening up and front face down.",
+      "operator": "Ryu",
+      "annotators": [
+        "Ryu"
+      ],
+      "robot_name": "OpenArm_2.0",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:36:58.169432+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-076",
+      "dataset_repo": "OopsieData-Submissions/Enatic_OpenArm",
+      "lab_id": "Enactic_OpenArm",
+      "repo_path": "342.h5",
+      "bundle_path": "episodes/Enatic_OpenArm/342.h5",
+      "video_files": {
+        "ceiling": "episodes/Enatic_OpenArm/342_ceiling.mp4",
+        "wrist_left": "episodes/Enatic_OpenArm/342_wrist_left.mp4",
+        "wrist_right": "episodes/Enatic_OpenArm/342_wrist_right.mp4"
+      },
+      "episode_id": "342",
+      "language_instruction": "Pick up the spoon and place it into the box.",
+      "operator": "team",
+      "annotators": [
+        "Ryu"
+      ],
+      "robot_name": "OpenArm_2.0_beta",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:34:09.415762+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-077",
+      "dataset_repo": "OopsieData-Submissions/Enatic_OpenArm",
+      "lab_id": "Enactic_OpenArm",
+      "repo_path": "32.h5",
+      "bundle_path": "episodes/Enatic_OpenArm/32.h5",
+      "video_files": {
+        "ceiling": "episodes/Enatic_OpenArm/32_ceiling.mp4",
+        "head_left": "episodes/Enatic_OpenArm/32_head_left.mp4",
+        "head_right": "episodes/Enatic_OpenArm/32_head_right.mp4",
+        "wrist_left": "episodes/Enatic_OpenArm/32_wrist_left.mp4",
+        "wrist_right": "episodes/Enatic_OpenArm/32_wrist_right.mp4"
+      },
+      "episode_id": "32",
+      "language_instruction": "Lay the empty pillowcase flat with opening up and front face down.",
+      "operator": "Ryu",
+      "annotators": [
+        "Ryu"
+      ],
+      "robot_name": "OpenArm_2.0",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:34:05.160044+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-078",
+      "dataset_repo": "OopsieData-Submissions/Enatic_OpenArm",
+      "lab_id": "Enactic_OpenArm",
+      "repo_path": "138.h5",
+      "bundle_path": "episodes/Enatic_OpenArm/138.h5",
+      "video_files": {
+        "ceiling": "episodes/Enatic_OpenArm/138_ceiling.mp4",
+        "wrist_left": "episodes/Enatic_OpenArm/138_wrist_left.mp4",
+        "wrist_right": "episodes/Enatic_OpenArm/138_wrist_right.mp4"
+      },
+      "episode_id": "138",
+      "language_instruction": "Pick up the spoon and place it into the box.",
+      "operator": "team",
+      "annotators": [
+        "Ryu"
+      ],
+      "robot_name": "OpenArm_2.0_beta",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:33:17.703410+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-079",
+      "dataset_repo": "OopsieData-Submissions/Enatic_OpenArm",
+      "lab_id": "Enactic_OpenArm",
+      "repo_path": "70.h5",
+      "bundle_path": "episodes/Enatic_OpenArm/70.h5",
+      "video_files": {
+        "ceiling": "episodes/Enatic_OpenArm/70_ceiling.mp4",
+        "head_left": "episodes/Enatic_OpenArm/70_head_left.mp4",
+        "head_right": "episodes/Enatic_OpenArm/70_head_right.mp4",
+        "wrist_left": "episodes/Enatic_OpenArm/70_wrist_left.mp4",
+        "wrist_right": "episodes/Enatic_OpenArm/70_wrist_right.mp4"
+      },
+      "episode_id": "70",
+      "language_instruction": "Snug the pillow into the case.",
+      "operator": "Ryu",
+      "annotators": [
+        "Ryu"
+      ],
+      "robot_name": "OpenArm_2.0",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:36:22.551114+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-080",
+      "dataset_repo": "OopsieData-Submissions/Enatic_OpenArm",
+      "lab_id": "Enactic_OpenArm",
+      "repo_path": "3.h5",
+      "bundle_path": "episodes/Enatic_OpenArm/3.h5",
+      "video_files": {
+        "ceiling": "episodes/Enatic_OpenArm/3_ceiling.mp4",
+        "head_left": "episodes/Enatic_OpenArm/3_head_left.mp4",
+        "head_right": "episodes/Enatic_OpenArm/3_head_right.mp4",
+        "wrist_left": "episodes/Enatic_OpenArm/3_wrist_left.mp4",
+        "wrist_right": "episodes/Enatic_OpenArm/3_wrist_right.mp4"
+      },
+      "episode_id": "3",
+      "language_instruction": "Grasp the cased pillow and pull the pillow out of the case.",
+      "operator": "Ryu",
+      "annotators": [
+        "Ryu"
+      ],
+      "robot_name": "OpenArm_2.0",
+      "qa_notes": "should maybe be suboptimal",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T17:33:55.153595+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-081",
+      "dataset_repo": "OopsieData-Submissions/GT_PAIR",
+      "lab_id": "GT_PAIR",
+      "repo_path": "episode_000289.h5",
+      "bundle_path": "episodes/GT_PAIR/episode_000289.h5",
+      "video_files": {
+        "front_zed": "episodes/GT_PAIR/videos/episode_000289_front_zed.mp4",
+        "wrist_left": "episodes/GT_PAIR/videos/episode_000289_wrist_left.mp4"
+      },
+      "episode_id": "episode_000289",
+      "language_instruction": "Pour all the fruit from the bowl into the cup",
+      "operator": "Walker",
+      "annotators": [
+        "Walker"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T20:00:14.674761+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-082",
+      "dataset_repo": "OopsieData-Submissions/GT_PAIR",
+      "lab_id": "GT_PAIR",
+      "repo_path": "episode_000261.h5",
+      "bundle_path": "episodes/GT_PAIR/episode_000261.h5",
+      "video_files": {
+        "front_zed": "episodes/GT_PAIR/videos/episode_000261_front_zed.mp4",
+        "wrist_left": "episodes/GT_PAIR/videos/episode_000261_wrist_left.mp4"
+      },
+      "episode_id": "episode_000261",
+      "language_instruction": "Pour all the fruit from the bowl into the cup",
+      "operator": "Walker",
+      "annotators": [
+        "Walker"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T20:00:02.348562+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-083",
+      "dataset_repo": "OopsieData-Submissions/GT_PAIR",
+      "lab_id": "GT_PAIR",
+      "repo_path": "episode_000294.h5",
+      "bundle_path": "episodes/GT_PAIR/episode_000294.h5",
+      "video_files": {
+        "front_zed": "episodes/GT_PAIR/videos/episode_000294_front_zed.mp4",
+        "wrist_left": "episodes/GT_PAIR/videos/episode_000294_wrist_left.mp4"
+      },
+      "episode_id": "episode_000294",
+      "language_instruction": "Pour all the fruit from the bowl into the cup",
+      "operator": "Walker",
+      "annotators": [
+        "Walker"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T20:00:18.813254+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-084",
+      "dataset_repo": "OopsieData-Submissions/GT_PAIR",
+      "lab_id": "GT_PAIR",
+      "repo_path": "episode_000254.h5",
+      "bundle_path": "episodes/GT_PAIR/episode_000254.h5",
+      "video_files": {
+        "front_zed": "episodes/GT_PAIR/videos/episode_000254_front_zed.mp4",
+        "wrist_left": "episodes/GT_PAIR/videos/episode_000254_wrist_left.mp4"
+      },
+      "episode_id": "episode_000254",
+      "language_instruction": "Pour all the fruit from the bowl into the cup",
+      "operator": "Walker",
+      "annotators": [
+        "Walker"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T20:00:00.468721+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-085",
+      "dataset_repo": "OopsieData-Submissions/GT_PAIR",
+      "lab_id": "GT_PAIR",
+      "repo_path": "episode_000201.h5",
+      "bundle_path": "episodes/GT_PAIR/episode_000201.h5",
+      "video_files": {
+        "front_zed": "episodes/GT_PAIR/videos/episode_000201_front_zed.mp4",
+        "wrist_left": "episodes/GT_PAIR/videos/episode_000201_wrist_left.mp4"
+      },
+      "episode_id": "episode_000201",
+      "language_instruction": "Pour all the fruit from the bowl into the cup",
+      "operator": "Walker",
+      "annotators": [
+        "Walker"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T19:59:54.044482+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-086",
+      "dataset_repo": "OopsieData-Submissions/GT_PAIR",
+      "lab_id": "GT_PAIR",
+      "repo_path": "episode_000287.h5",
+      "bundle_path": "episodes/GT_PAIR/episode_000287.h5",
+      "video_files": {
+        "front_zed": "episodes/GT_PAIR/videos/episode_000287_front_zed.mp4",
+        "wrist_left": "episodes/GT_PAIR/videos/episode_000287_wrist_left.mp4"
+      },
+      "episode_id": "episode_000287",
+      "language_instruction": "Pour all the fruit from the bowl into the cup",
+      "operator": "Walker",
+      "annotators": [
+        "Walker"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T20:00:07.644850+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-087",
+      "dataset_repo": "OopsieData-Submissions/GT_PAIR",
+      "lab_id": "GT_PAIR",
+      "repo_path": "episode_000155.h5",
+      "bundle_path": "episodes/GT_PAIR/episode_000155.h5",
+      "video_files": {
+        "front_zed": "episodes/GT_PAIR/videos/episode_000155_front_zed.mp4",
+        "wrist_left": "episodes/GT_PAIR/videos/episode_000155_wrist_left.mp4"
+      },
+      "episode_id": "episode_000155",
+      "language_instruction": "Pour all the fruit from the bowl into the cup",
+      "operator": "Walker",
+      "annotators": [
+        "Walker"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T19:59:45.074720+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-088",
+      "dataset_repo": "OopsieData-Submissions/GT_PAIR",
+      "lab_id": "GT_PAIR",
+      "repo_path": "episode_000126.h5",
+      "bundle_path": "episodes/GT_PAIR/episode_000126.h5",
+      "video_files": {
+        "front_zed": "episodes/GT_PAIR/videos/episode_000126_front_zed.mp4",
+        "wrist_left": "episodes/GT_PAIR/videos/episode_000126_wrist_left.mp4"
+      },
+      "episode_id": "episode_000126",
+      "language_instruction": "Pour all the fruit from the bowl into the cup",
+      "operator": "Walker",
+      "annotators": [
+        "Walker"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T19:59:43.283315+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-089",
+      "dataset_repo": "OopsieData-Submissions/GT_PAIR",
+      "lab_id": "GT_PAIR",
+      "repo_path": "episode_000066.h5",
+      "bundle_path": "episodes/GT_PAIR/episode_000066.h5",
+      "video_files": {
+        "front_zed": "episodes/GT_PAIR/videos/episode_000066_front_zed.mp4",
+        "wrist_left": "episodes/GT_PAIR/videos/episode_000066_wrist_left.mp4"
+      },
+      "episode_id": "episode_000066",
+      "language_instruction": "Pour all the fruit from the bowl into the cup",
+      "operator": "Walker",
+      "annotators": [
+        "Walker"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T19:59:36.526604+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-090",
+      "dataset_repo": "OopsieData-Submissions/GT_PAIR",
+      "lab_id": "GT_PAIR",
+      "repo_path": "episode_000206.h5",
+      "bundle_path": "episodes/GT_PAIR/episode_000206.h5",
+      "video_files": {
+        "front_zed": "episodes/GT_PAIR/videos/episode_000206_front_zed.mp4",
+        "wrist_left": "episodes/GT_PAIR/videos/episode_000206_wrist_left.mp4"
+      },
+      "episode_id": "episode_000206",
+      "language_instruction": "Pour all the fruit from the bowl into the cup",
+      "operator": "Walker",
+      "annotators": [
+        "Walker"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T19:59:57.553554+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-091",
+      "dataset_repo": "OopsieData-Submissions/GT_PAIR",
+      "lab_id": "GT_PAIR",
+      "repo_path": "episode_000328.h5",
+      "bundle_path": "episodes/GT_PAIR/episode_000328.h5",
+      "video_files": {
+        "front_zed": "episodes/GT_PAIR/videos/episode_000328_front_zed.mp4",
+        "wrist_left": "episodes/GT_PAIR/videos/episode_000328_wrist_left.mp4"
+      },
+      "episode_id": "episode_000328",
+      "language_instruction": "Pour all the fruit from the bowl into the cup",
+      "operator": "Walker",
+      "annotators": [
+        "Walker"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T20:00:20.711376+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-092",
+      "dataset_repo": "OopsieData-Submissions/GT_PAIR",
+      "lab_id": "GT_PAIR",
+      "repo_path": "episode_000043.h5",
+      "bundle_path": "episodes/GT_PAIR/episode_000043.h5",
+      "video_files": {
+        "front_zed": "episodes/GT_PAIR/videos/episode_000043_front_zed.mp4",
+        "wrist_left": "episodes/GT_PAIR/videos/episode_000043_wrist_left.mp4"
+      },
+      "episode_id": "episode_000043",
+      "language_instruction": "Pour all the fruit from the bowl into the cup",
+      "operator": "Walker",
+      "annotators": [
+        "Walker"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T19:59:31.503566+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-093",
+      "dataset_repo": "OopsieData-Submissions/GT_PAIR",
+      "lab_id": "GT_PAIR",
+      "repo_path": "episode_000040.h5",
+      "bundle_path": "episodes/GT_PAIR/episode_000040.h5",
+      "video_files": {
+        "front_zed": "episodes/GT_PAIR/videos/episode_000040_front_zed.mp4",
+        "wrist_left": "episodes/GT_PAIR/videos/episode_000040_wrist_left.mp4"
+      },
+      "episode_id": "episode_000040",
+      "language_instruction": "Pour all the fruit from the bowl into the cup",
+      "operator": "Walker",
+      "annotators": [
+        "Walker"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T19:59:15.813153+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-094",
+      "dataset_repo": "OopsieData-Submissions/GT_PAIR",
+      "lab_id": "GT_PAIR",
+      "repo_path": "episode_000279.h5",
+      "bundle_path": "episodes/GT_PAIR/episode_000279.h5",
+      "video_files": {
+        "front_zed": "episodes/GT_PAIR/videos/episode_000279_front_zed.mp4",
+        "wrist_left": "episodes/GT_PAIR/videos/episode_000279_wrist_left.mp4"
+      },
+      "episode_id": "episode_000279",
+      "language_instruction": "Pour all the fruit from the bowl into the cup",
+      "operator": "Walker",
+      "annotators": [
+        "Walker"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T20:00:04.161336+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-095",
+      "dataset_repo": "OopsieData-Submissions/GT_PAIR",
+      "lab_id": "GT_PAIR",
+      "repo_path": "episode_000069.h5",
+      "bundle_path": "episodes/GT_PAIR/episode_000069.h5",
+      "video_files": {
+        "front_zed": "episodes/GT_PAIR/videos/episode_000069_front_zed.mp4",
+        "wrist_left": "episodes/GT_PAIR/videos/episode_000069_wrist_left.mp4"
+      },
+      "episode_id": "episode_000069",
+      "language_instruction": "Pour all the fruit from the bowl into the cup",
+      "operator": "Walker",
+      "annotators": [
+        "Walker"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T19:59:39.195337+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-096",
+      "dataset_repo": "OopsieData-Submissions/GT_PAIR",
+      "lab_id": "GT_PAIR",
+      "repo_path": "episode_000027.h5",
+      "bundle_path": "episodes/GT_PAIR/episode_000027.h5",
+      "video_files": {
+        "front_zed": "episodes/GT_PAIR/videos/episode_000027_front_zed.mp4",
+        "wrist_left": "episodes/GT_PAIR/videos/episode_000027_wrist_left.mp4"
+      },
+      "episode_id": "episode_000027",
+      "language_instruction": "Pour all the fruit from the bowl into the cup",
+      "operator": "Walker",
+      "annotators": [
+        "Walker"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T19:58:52.804635+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-097",
+      "dataset_repo": "OopsieData-Submissions/GT_PAIR",
+      "lab_id": "GT_PAIR",
+      "repo_path": "episode_000283.h5",
+      "bundle_path": "episodes/GT_PAIR/episode_000283.h5",
+      "video_files": {
+        "front_zed": "episodes/GT_PAIR/videos/episode_000283_front_zed.mp4",
+        "wrist_left": "episodes/GT_PAIR/videos/episode_000283_wrist_left.mp4"
+      },
+      "episode_id": "episode_000283",
+      "language_instruction": "Pour all the fruit from the bowl into the cup",
+      "operator": "Walker",
+      "annotators": [
+        "Walker"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T20:00:05.844805+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-098",
+      "dataset_repo": "OopsieData-Submissions/GT_PAIR",
+      "lab_id": "GT_PAIR",
+      "repo_path": "episode_000119.h5",
+      "bundle_path": "episodes/GT_PAIR/episode_000119.h5",
+      "video_files": {
+        "front_zed": "episodes/GT_PAIR/videos/episode_000119_front_zed.mp4",
+        "wrist_left": "episodes/GT_PAIR/videos/episode_000119_wrist_left.mp4"
+      },
+      "episode_id": "episode_000119",
+      "language_instruction": "Pour all the fruit from the bowl into the cup",
+      "operator": "Walker",
+      "annotators": [
+        "Walker"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T19:59:41.136907+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-099",
+      "dataset_repo": "OopsieData-Submissions/GT_PAIR",
+      "lab_id": "GT_PAIR",
+      "repo_path": "episode_000288.h5",
+      "bundle_path": "episodes/GT_PAIR/episode_000288.h5",
+      "video_files": {
+        "front_zed": "episodes/GT_PAIR/videos/episode_000288_front_zed.mp4",
+        "wrist_left": "episodes/GT_PAIR/videos/episode_000288_wrist_left.mp4"
+      },
+      "episode_id": "episode_000288",
+      "language_instruction": "Pour all the fruit from the bowl into the cup",
+      "operator": "Walker",
+      "annotators": [
+        "Walker"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T20:00:09.870747+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_03-100",
+      "dataset_repo": "OopsieData-Submissions/GT_PAIR",
+      "lab_id": "GT_PAIR",
+      "repo_path": "episode_000196.h5",
+      "bundle_path": "episodes/GT_PAIR/episode_000196.h5",
+      "video_files": {
+        "front_zed": "episodes/GT_PAIR/videos/episode_000196_front_zed.mp4",
+        "wrist_left": "episodes/GT_PAIR/videos/episode_000196_wrist_left.mp4"
+      },
+      "episode_id": "episode_000196",
+      "language_instruction": "Pour all the fruit from the bowl into the cup",
+      "operator": "Walker",
+      "annotators": [
+        "Walker"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "ok",
+      "qa_reviewer": "Claas",
+      "qa_updated_at": "2026-10-09T19:59:50.214793+00:00"
+    }
+  ]
+}

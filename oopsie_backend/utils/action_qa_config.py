@@ -81,6 +81,37 @@ DEFAULT_CHECKS: dict[str, dict[str, dict]] = {
         "looks_like_position": {"enabled": True, "max_position_match": 0.2},
         "smoothness": {"enabled": True, "max_sign_flip_rate": 0.3},
     },
+    "video": {
+        "resolution": {"enabled": True, "min_short_side": 360},
+        "decoding": {"enabled": True, "max_frame_count_diff": 1},
+        "brightness": {
+            "enabled": True,
+            "dark_median": 30.0,
+            "bright_median": 225.0,
+            "dark_frame": 15.0,
+            "bright_frame": 240.0,
+            "extreme_frame_fraction": 0.1,
+        },
+        "speed": {
+            "enabled": True,
+            "fps_rel_tol": 0.05,
+            "duration_tol_s": 0.5,
+            "duration_rel_tol": 0.05,
+            "frame_interval_cv": 0.1,
+        },
+        "frames": {
+            "enabled": True,
+            "moving_fraction_of_p95": 0.1,
+            "static_diff": 0.05,
+            "duplicate_diff": 0.01,
+            "frozen_s": 1.0,
+            "choppy_fraction": 0.2,
+            "jump_diff": 40.0,
+            "jump_ratio": 20.0,
+            "glitch_diff": 20.0,
+            "glitch_ratio": 4.0,
+        },
+    },
 }
 
 _NON_CHECK_SECTIONS = ("sampling", "scope", "run")
@@ -150,6 +181,7 @@ def _build_config(raw: dict) -> dict:
             "output": _resolve_path(run_raw.get("output")) or (_BACKEND_ROOT / "reports" / "action_qa.json"),
             "only_dataset": [str(d) for d in (run_raw.get("only_dataset") or [])],
             "verbose": bool(run_raw.get("verbose", False)),
+            "workers": int(run_raw.get("workers", 8)),
         },
     }
 

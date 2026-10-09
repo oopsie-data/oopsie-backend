@@ -1,0 +1,2154 @@
+{
+  "bundle_id": "qa_bundle_01",
+  "created_at": "2026-10-07T19:21:12Z",
+  "seed": 0,
+  "reviewer": "Karen",
+  "labs": [
+    "OopsieData-Submissions/Araya",
+    "OopsieData-Submissions/Armnet",
+    "OopsieData-Submissions/AutoEval_origin",
+    "OopsieData-Submissions/BONN_MB",
+    "OopsieData-Submissions/Berkeley_HybridRobotics"
+  ],
+  "episodes": [
+    {
+      "qa_id": "qa_bundle_01-001",
+      "dataset_repo": "OopsieData-Submissions/Araya",
+      "lab_id": "Araya",
+      "repo_path": "mibot_open_oven/20260803_205456.h5",
+      "bundle_path": "episodes/Araya/mibot_open_oven/20260803_205456.h5",
+      "video_files": {
+        "image": "episodes/Araya/mibot_open_oven/20260803_205456_image.mp4",
+        "left_ego_image": "episodes/Araya/mibot_open_oven/20260803_205456_left_ego_image.mp4",
+        "wrist_image": "episodes/Araya/mibot_open_oven/20260803_205456_wrist_image.mp4"
+      },
+      "episode_id": "20260803_205456",
+      "language_instruction": "Open the oven",
+      "operator": "LN",
+      "annotators": [
+        "LN"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:35:24.129770+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-002",
+      "dataset_repo": "OopsieData-Submissions/Araya",
+      "lab_id": "Araya",
+      "repo_path": "xvla_open_drawer/20260803_204525.h5",
+      "bundle_path": "episodes/Araya/xvla_open_drawer/20260803_204525.h5",
+      "video_files": {
+        "image": "episodes/Araya/xvla_open_drawer/20260803_204525_image.mp4",
+        "left_ego_image": "episodes/Araya/xvla_open_drawer/20260803_204525_left_ego_image.mp4",
+        "wrist_image": "episodes/Araya/xvla_open_drawer/20260803_204525_wrist_image.mp4"
+      },
+      "episode_id": "20260803_204525",
+      "language_instruction": "Open the drawer",
+      "operator": "LN",
+      "annotators": [
+        "LN"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:36:17.851232+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-003",
+      "dataset_repo": "OopsieData-Submissions/Araya",
+      "lab_id": "Araya",
+      "repo_path": "flower_close_oven/20260803_202655.h5",
+      "bundle_path": "episodes/Araya/flower_close_oven/20260803_202655.h5",
+      "video_files": {
+        "image": "episodes/Araya/flower_close_oven/20260803_202655_image.mp4",
+        "left_ego_image": "episodes/Araya/flower_close_oven/20260803_202655_left_ego_image.mp4",
+        "wrist_image": "episodes/Araya/flower_close_oven/20260803_202655_wrist_image.mp4"
+      },
+      "episode_id": "20260803_202655",
+      "language_instruction": "Close the oven",
+      "operator": "LN",
+      "annotators": [
+        "LN"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:34:12.193381+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-004",
+      "dataset_repo": "OopsieData-Submissions/Araya",
+      "lab_id": "Araya",
+      "repo_path": "dit_spoon_drawer/20260803_213753.h5",
+      "bundle_path": "episodes/Araya/dit_spoon_drawer/20260803_213753.h5",
+      "video_files": {
+        "image": "episodes/Araya/dit_spoon_drawer/20260803_213753_image.mp4",
+        "left_ego_image": "episodes/Araya/dit_spoon_drawer/20260803_213753_left_ego_image.mp4",
+        "wrist_image": "episodes/Araya/dit_spoon_drawer/20260803_213753_wrist_image.mp4"
+      },
+      "episode_id": "20260803_213753",
+      "language_instruction": "Put the spoon in the drawer",
+      "operator": "LN",
+      "annotators": [
+        "LN"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:33:50.768376+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-005",
+      "dataset_repo": "OopsieData-Submissions/Araya",
+      "lab_id": "Araya",
+      "repo_path": "flower_open_oven/20260803_210616.h5",
+      "bundle_path": "episodes/Araya/flower_open_oven/20260803_210616.h5",
+      "video_files": {
+        "image": "episodes/Araya/flower_open_oven/20260803_210616_image.mp4",
+        "left_ego_image": "episodes/Araya/flower_open_oven/20260803_210616_left_ego_image.mp4",
+        "wrist_image": "episodes/Araya/flower_open_oven/20260803_210616_wrist_image.mp4"
+      },
+      "episode_id": "20260803_210616",
+      "language_instruction": "Open the oven",
+      "operator": "LN",
+      "annotators": [
+        "LN"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:34:24.138282+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-006",
+      "dataset_repo": "OopsieData-Submissions/Araya",
+      "lab_id": "Araya",
+      "repo_path": "xvla_close_oven/20260803_202341.h5",
+      "bundle_path": "episodes/Araya/xvla_close_oven/20260803_202341.h5",
+      "video_files": {
+        "image": "episodes/Araya/xvla_close_oven/20260803_202341_image.mp4",
+        "left_ego_image": "episodes/Araya/xvla_close_oven/20260803_202341_left_ego_image.mp4",
+        "wrist_image": "episodes/Araya/xvla_close_oven/20260803_202341_wrist_image.mp4"
+      },
+      "episode_id": "20260803_202341",
+      "language_instruction": "Close the oven",
+      "operator": "LN",
+      "annotators": [
+        "LN"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:36:09.078984+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-007",
+      "dataset_repo": "OopsieData-Submissions/Araya",
+      "lab_id": "Araya",
+      "repo_path": "dit_open_drawer/20260803_204518.h5",
+      "bundle_path": "episodes/Araya/dit_open_drawer/20260803_204518.h5",
+      "video_files": {
+        "image": "episodes/Araya/dit_open_drawer/20260803_204518_image.mp4",
+        "left_ego_image": "episodes/Araya/dit_open_drawer/20260803_204518_left_ego_image.mp4",
+        "wrist_image": "episodes/Araya/dit_open_drawer/20260803_204518_wrist_image.mp4"
+      },
+      "episode_id": "20260803_204518",
+      "language_instruction": "Open the drawer",
+      "operator": "LN",
+      "annotators": [
+        "LN"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:33:30.303517+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-008",
+      "dataset_repo": "OopsieData-Submissions/Araya",
+      "lab_id": "Araya",
+      "repo_path": "xvla_spoon_drawer/20260803_213136.h5",
+      "bundle_path": "episodes/Araya/xvla_spoon_drawer/20260803_213136.h5",
+      "video_files": {
+        "image": "episodes/Araya/xvla_spoon_drawer/20260803_213136_image.mp4",
+        "left_ego_image": "episodes/Araya/xvla_spoon_drawer/20260803_213136_left_ego_image.mp4",
+        "wrist_image": "episodes/Araya/xvla_spoon_drawer/20260803_213136_wrist_image.mp4"
+      },
+      "episode_id": "20260803_213136",
+      "language_instruction": "Put the spoon in the drawer",
+      "operator": "LN",
+      "annotators": [
+        "LN"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:36:50.048965+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-009",
+      "dataset_repo": "OopsieData-Submissions/Araya",
+      "lab_id": "Araya",
+      "repo_path": "mibot_close_oven/20260803_203228.h5",
+      "bundle_path": "episodes/Araya/mibot_close_oven/20260803_203228.h5",
+      "video_files": {
+        "image": "episodes/Araya/mibot_close_oven/20260803_203228_image.mp4",
+        "left_ego_image": "episodes/Araya/mibot_close_oven/20260803_203228_left_ego_image.mp4",
+        "wrist_image": "episodes/Araya/mibot_close_oven/20260803_203228_wrist_image.mp4"
+      },
+      "episode_id": "20260803_203228",
+      "language_instruction": "Close the oven",
+      "operator": "LN",
+      "annotators": [
+        "LN"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:34:59.051169+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-010",
+      "dataset_repo": "OopsieData-Submissions/Araya",
+      "lab_id": "Araya",
+      "repo_path": "mibot_open_oven/20260803_205747.h5",
+      "bundle_path": "episodes/Araya/mibot_open_oven/20260803_205747.h5",
+      "video_files": {
+        "image": "episodes/Araya/mibot_open_oven/20260803_205747_image.mp4",
+        "left_ego_image": "episodes/Araya/mibot_open_oven/20260803_205747_left_ego_image.mp4",
+        "wrist_image": "episodes/Araya/mibot_open_oven/20260803_205747_wrist_image.mp4"
+      },
+      "episode_id": "20260803_205747",
+      "language_instruction": "Open the oven",
+      "operator": "LN",
+      "annotators": [
+        "LN"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:35:32.029834+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-011",
+      "dataset_repo": "OopsieData-Submissions/Araya",
+      "lab_id": "Araya",
+      "repo_path": "pi05_open_drawer/20260803_202603.h5",
+      "bundle_path": "episodes/Araya/pi05_open_drawer/20260803_202603.h5",
+      "video_files": {
+        "image": "episodes/Araya/pi05_open_drawer/20260803_202603_image.mp4",
+        "left_ego_image": "episodes/Araya/pi05_open_drawer/20260803_202603_left_ego_image.mp4",
+        "wrist_image": "episodes/Araya/pi05_open_drawer/20260803_202603_wrist_image.mp4"
+      },
+      "episode_id": "20260803_202603",
+      "language_instruction": "Open the drawer",
+      "operator": "LN",
+      "annotators": [
+        "LN"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:36:00.066319+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-012",
+      "dataset_repo": "OopsieData-Submissions/Araya",
+      "lab_id": "Araya",
+      "repo_path": "xvla_spoon_drawer/20260803_212957.h5",
+      "bundle_path": "episodes/Araya/xvla_spoon_drawer/20260803_212957.h5",
+      "video_files": {
+        "image": "episodes/Araya/xvla_spoon_drawer/20260803_212957_image.mp4",
+        "left_ego_image": "episodes/Araya/xvla_spoon_drawer/20260803_212957_left_ego_image.mp4",
+        "wrist_image": "episodes/Araya/xvla_spoon_drawer/20260803_212957_wrist_image.mp4"
+      },
+      "episode_id": "20260803_212957",
+      "language_instruction": "Put the spoon in the drawer",
+      "operator": "LN",
+      "annotators": [
+        "LN"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:36:44.005014+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-013",
+      "dataset_repo": "OopsieData-Submissions/Araya",
+      "lab_id": "Araya",
+      "repo_path": "mibot_open_oven/20260803_210802.h5",
+      "bundle_path": "episodes/Araya/mibot_open_oven/20260803_210802.h5",
+      "video_files": {
+        "image": "episodes/Araya/mibot_open_oven/20260803_210802_image.mp4",
+        "left_ego_image": "episodes/Araya/mibot_open_oven/20260803_210802_left_ego_image.mp4",
+        "wrist_image": "episodes/Araya/mibot_open_oven/20260803_210802_wrist_image.mp4"
+      },
+      "episode_id": "20260803_210802",
+      "language_instruction": "Open the oven",
+      "operator": "LN",
+      "annotators": [
+        "LN"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:35:36.787348+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-014",
+      "dataset_repo": "OopsieData-Submissions/Araya",
+      "lab_id": "Araya",
+      "repo_path": "mibot_close_oven/20260803_203125.h5",
+      "bundle_path": "episodes/Araya/mibot_close_oven/20260803_203125.h5",
+      "video_files": {
+        "image": "episodes/Araya/mibot_close_oven/20260803_203125_image.mp4",
+        "left_ego_image": "episodes/Araya/mibot_close_oven/20260803_203125_left_ego_image.mp4",
+        "wrist_image": "episodes/Araya/mibot_close_oven/20260803_203125_wrist_image.mp4"
+      },
+      "episode_id": "20260803_203125",
+      "language_instruction": "Close the oven",
+      "operator": "LN",
+      "annotators": [
+        "LN"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:34:50.205584+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-015",
+      "dataset_repo": "OopsieData-Submissions/Araya",
+      "lab_id": "Araya",
+      "repo_path": "xvla_open_drawer/20260803_204705.h5",
+      "bundle_path": "episodes/Araya/xvla_open_drawer/20260803_204705.h5",
+      "video_files": {
+        "image": "episodes/Araya/xvla_open_drawer/20260803_204705_image.mp4",
+        "left_ego_image": "episodes/Araya/xvla_open_drawer/20260803_204705_left_ego_image.mp4",
+        "wrist_image": "episodes/Araya/xvla_open_drawer/20260803_204705_wrist_image.mp4"
+      },
+      "episode_id": "20260803_204705",
+      "language_instruction": "Open the drawer",
+      "operator": "LN",
+      "annotators": [
+        "LN"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:36:26.609149+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-016",
+      "dataset_repo": "OopsieData-Submissions/Araya",
+      "lab_id": "Araya",
+      "repo_path": "mibot_spoon_drawer/20260803_212232.h5",
+      "bundle_path": "episodes/Araya/mibot_spoon_drawer/20260803_212232.h5",
+      "video_files": {
+        "image": "episodes/Araya/mibot_spoon_drawer/20260803_212232_image.mp4",
+        "left_ego_image": "episodes/Araya/mibot_spoon_drawer/20260803_212232_left_ego_image.mp4",
+        "wrist_image": "episodes/Araya/mibot_spoon_drawer/20260803_212232_wrist_image.mp4"
+      },
+      "episode_id": "20260803_212232",
+      "language_instruction": "Put the spoon in the drawer",
+      "operator": "LN",
+      "annotators": [
+        "LN"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:35:43.869170+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-017",
+      "dataset_repo": "OopsieData-Submissions/Araya",
+      "lab_id": "Araya",
+      "repo_path": "pi05_close_oven/20260803_202329.h5",
+      "bundle_path": "episodes/Araya/pi05_close_oven/20260803_202329.h5",
+      "video_files": {
+        "image": "episodes/Araya/pi05_close_oven/20260803_202329_image.mp4",
+        "left_ego_image": "episodes/Araya/pi05_close_oven/20260803_202329_left_ego_image.mp4",
+        "wrist_image": "episodes/Araya/pi05_close_oven/20260803_202329_wrist_image.mp4"
+      },
+      "episode_id": "20260803_202329",
+      "language_instruction": "Close the oven",
+      "operator": "LN",
+      "annotators": [
+        "LN"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:35:51.016075+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-018",
+      "dataset_repo": "OopsieData-Submissions/Araya",
+      "lab_id": "Araya",
+      "repo_path": "xvla_open_oven/20260803_211446.h5",
+      "bundle_path": "episodes/Araya/xvla_open_oven/20260803_211446.h5",
+      "video_files": {
+        "image": "episodes/Araya/xvla_open_oven/20260803_211446_image.mp4",
+        "left_ego_image": "episodes/Araya/xvla_open_oven/20260803_211446_left_ego_image.mp4",
+        "wrist_image": "episodes/Araya/xvla_open_oven/20260803_211446_wrist_image.mp4"
+      },
+      "episode_id": "20260803_211446",
+      "language_instruction": "Open the oven",
+      "operator": "LN",
+      "annotators": [
+        "LN"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:36:34.008678+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-019",
+      "dataset_repo": "OopsieData-Submissions/Araya",
+      "lab_id": "Araya",
+      "repo_path": "flower_spoon_drawer/20260803_212335.h5",
+      "bundle_path": "episodes/Araya/flower_spoon_drawer/20260803_212335.h5",
+      "video_files": {
+        "image": "episodes/Araya/flower_spoon_drawer/20260803_212335_image.mp4",
+        "left_ego_image": "episodes/Araya/flower_spoon_drawer/20260803_212335_left_ego_image.mp4",
+        "wrist_image": "episodes/Araya/flower_spoon_drawer/20260803_212335_wrist_image.mp4"
+      },
+      "episode_id": "20260803_212335",
+      "language_instruction": "Put the spoon in the drawer",
+      "operator": "LN",
+      "annotators": [
+        "LN"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:34:39.277133+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-020",
+      "dataset_repo": "OopsieData-Submissions/Araya",
+      "lab_id": "Araya",
+      "repo_path": "mibot_open_drawer/20260803_204105.h5",
+      "bundle_path": "episodes/Araya/mibot_open_drawer/20260803_204105.h5",
+      "video_files": {
+        "image": "episodes/Araya/mibot_open_drawer/20260803_204105_image.mp4",
+        "left_ego_image": "episodes/Araya/mibot_open_drawer/20260803_204105_left_ego_image.mp4",
+        "wrist_image": "episodes/Araya/mibot_open_drawer/20260803_204105_wrist_image.mp4"
+      },
+      "episode_id": "20260803_204105",
+      "language_instruction": "Open the drawer",
+      "operator": "LN",
+      "annotators": [
+        "LN"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:35:14.513796+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-021",
+      "dataset_repo": "OopsieData-Submissions/Armnet",
+      "lab_id": "Armnet",
+      "repo_path": "bimanual_so101/bimanual_so101_000766.h5",
+      "bundle_path": "episodes/Armnet/bimanual_so101/bimanual_so101_000766.h5",
+      "video_files": {
+        "left_wrist": "episodes/Armnet/bimanual_so101/bimanual_so101_000766_left_wrist.mp4",
+        "right_wrist": "episodes/Armnet/bimanual_so101/bimanual_so101_000766_right_wrist.mp4",
+        "top": "episodes/Armnet/bimanual_so101/bimanual_so101_000766_top.mp4"
+      },
+      "episode_id": "bimanual_so101_000766",
+      "language_instruction": "Fold the brown tea towel",
+      "operator": "ville",
+      "annotators": [
+        "armnetbench_v01"
+      ],
+      "robot_name": "bimanual-so101",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:40:57.260133+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-022",
+      "dataset_repo": "OopsieData-Submissions/Armnet",
+      "lab_id": "Armnet",
+      "repo_path": "episode_000011.h5",
+      "bundle_path": "episodes/Armnet/episode_000011.h5",
+      "video_files": {
+        "front": "episodes/Armnet/episode_000011_front.mp4",
+        "top": "episodes/Armnet/episode_000011_top.mp4",
+        "wrist": "episodes/Armnet/episode_000011_wrist.mp4"
+      },
+      "episode_id": "episode_000011",
+      "language_instruction": "Push the Displayport cable into the cable holder on the white block",
+      "operator": "ville",
+      "annotators": [
+        "ville"
+      ],
+      "robot_name": "so-101",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:46:44.251297+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-023",
+      "dataset_repo": "OopsieData-Submissions/Armnet",
+      "lab_id": "Armnet",
+      "repo_path": "so101/so101_000309.h5",
+      "bundle_path": "episodes/Armnet/so101/so101_000309.h5",
+      "video_files": {
+        "front": "episodes/Armnet/so101/so101_000309_front.mp4",
+        "top": "episodes/Armnet/so101/so101_000309_top.mp4",
+        "wrist": "episodes/Armnet/so101/so101_000309_wrist.mp4"
+      },
+      "episode_id": "so101_000309",
+      "language_instruction": "Stack the colouful blocks on top of each other",
+      "operator": "ville",
+      "annotators": [
+        "armnetbench_v01"
+      ],
+      "robot_name": "so-101",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:42:45.014245+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-024",
+      "dataset_repo": "OopsieData-Submissions/Armnet",
+      "lab_id": "Armnet",
+      "repo_path": "bimanual_so101/bimanual_so101_000313.h5",
+      "bundle_path": "episodes/Armnet/bimanual_so101/bimanual_so101_000313.h5",
+      "video_files": {
+        "left_wrist": "episodes/Armnet/bimanual_so101/bimanual_so101_000313_left_wrist.mp4",
+        "right_wrist": "episodes/Armnet/bimanual_so101/bimanual_so101_000313_right_wrist.mp4",
+        "top": "episodes/Armnet/bimanual_so101/bimanual_so101_000313_top.mp4"
+      },
+      "episode_id": "bimanual_so101_000313",
+      "language_instruction": "Transfer the cube between your arms and drop it into the white basket",
+      "operator": "ville",
+      "annotators": [
+        "armnetbench_v01"
+      ],
+      "robot_name": "bimanual-so101",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:38:33.202313+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-025",
+      "dataset_repo": "OopsieData-Submissions/Armnet",
+      "lab_id": "Armnet",
+      "repo_path": "bimanual_so101/bimanual_so101_000252.h5",
+      "bundle_path": "episodes/Armnet/bimanual_so101/bimanual_so101_000252.h5",
+      "video_files": {
+        "left_wrist": "episodes/Armnet/bimanual_so101/bimanual_so101_000252_left_wrist.mp4",
+        "right_wrist": "episodes/Armnet/bimanual_so101/bimanual_so101_000252_right_wrist.mp4",
+        "top": "episodes/Armnet/bimanual_so101/bimanual_so101_000252_top.mp4"
+      },
+      "episode_id": "bimanual_so101_000252",
+      "language_instruction": "Insert the candle inside the lantern and close the door",
+      "operator": "ville",
+      "annotators": [
+        "armnetbench_v01"
+      ],
+      "robot_name": "bimanual-so101",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:38:16.348290+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-026",
+      "dataset_repo": "OopsieData-Submissions/Armnet",
+      "lab_id": "Armnet",
+      "repo_path": "so101/so101_001152.h5",
+      "bundle_path": "episodes/Armnet/so101/so101_001152.h5",
+      "video_files": {
+        "front": "episodes/Armnet/so101/so101_001152_front.mp4",
+        "top": "episodes/Armnet/so101/so101_001152_top.mp4",
+        "wrist": "episodes/Armnet/so101/so101_001152_wrist.mp4"
+      },
+      "episode_id": "so101_001152",
+      "language_instruction": "Remove the small middle tool (3/8 Extension Bar 75mm) from the toolbox",
+      "operator": "ville",
+      "annotators": [
+        "armnetbench_v01"
+      ],
+      "robot_name": "so-101",
+      "qa_notes": "The text label of the tool the robot is supposed to pick up \"3/8 Extension Bar 75mm\" isn't legible from the Top View's resolution or the Front View's angle. Text is clear in the Wrist View but only when the wrist gets close to the text (entire toolbox's text can't be seen from current video)",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:45:02.551960+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-027",
+      "dataset_repo": "OopsieData-Submissions/Armnet",
+      "lab_id": "Armnet",
+      "repo_path": "so101/so101_002334.h5",
+      "bundle_path": "episodes/Armnet/so101/so101_002334.h5",
+      "video_files": {
+        "front": "episodes/Armnet/so101/so101_002334_front.mp4",
+        "top": "episodes/Armnet/so101/so101_002334_top.mp4",
+        "wrist": "episodes/Armnet/so101/so101_002334_wrist.mp4"
+      },
+      "episode_id": "so101_002334",
+      "language_instruction": "Remove the power cable from cable holder",
+      "operator": "ville",
+      "annotators": [
+        "armnetbench_v01"
+      ],
+      "robot_name": "so-101",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:46:06.037422+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-028",
+      "dataset_repo": "OopsieData-Submissions/Armnet",
+      "lab_id": "Armnet",
+      "repo_path": "bimanual_so101/bimanual_so101_001202.h5",
+      "bundle_path": "episodes/Armnet/bimanual_so101/bimanual_so101_001202.h5",
+      "video_files": {
+        "left_wrist": "episodes/Armnet/bimanual_so101/bimanual_so101_001202_left_wrist.mp4",
+        "right_wrist": "episodes/Armnet/bimanual_so101/bimanual_so101_001202_right_wrist.mp4",
+        "top": "episodes/Armnet/bimanual_so101/bimanual_so101_001202_top.mp4"
+      },
+      "episode_id": "bimanual_so101_001202",
+      "language_instruction": "Hold the pink lamp still with your left arm and open the door with your right gripper",
+      "operator": "ville",
+      "annotators": [
+        "armnetbench_v01"
+      ],
+      "robot_name": "bimanual-so101",
+      "qa_notes": "Incorrect task instruction: The lamp isn't pink",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:42:03.514695+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-029",
+      "dataset_repo": "OopsieData-Submissions/Armnet",
+      "lab_id": "Armnet",
+      "repo_path": "so101/so101_000734.h5",
+      "bundle_path": "episodes/Armnet/so101/so101_000734.h5",
+      "video_files": {
+        "front": "episodes/Armnet/so101/so101_000734_front.mp4",
+        "top": "episodes/Armnet/so101/so101_000734_top.mp4",
+        "wrist": "episodes/Armnet/so101/so101_000734_wrist.mp4"
+      },
+      "episode_id": "so101_000734",
+      "language_instruction": "Insert the missing tool into the empty slot on the toolbox",
+      "operator": "ville",
+      "annotators": [
+        "armnetbench_v01"
+      ],
+      "robot_name": "so-101",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:43:05.847715+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-030",
+      "dataset_repo": "OopsieData-Submissions/Armnet",
+      "lab_id": "Armnet",
+      "repo_path": "so101/so101_001511.h5",
+      "bundle_path": "episodes/Armnet/so101/so101_001511.h5",
+      "video_files": {
+        "front": "episodes/Armnet/so101/so101_001511_front.mp4",
+        "top": "episodes/Armnet/so101/so101_001511_top.mp4",
+        "wrist": "episodes/Armnet/so101/so101_001511_wrist.mp4"
+      },
+      "episode_id": "so101_001511",
+      "language_instruction": "Put the eye drops on the shelf",
+      "operator": "ville",
+      "annotators": [
+        "armnetbench_v01"
+      ],
+      "robot_name": "so-101",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:45:25.124454+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-031",
+      "dataset_repo": "OopsieData-Submissions/Armnet",
+      "lab_id": "Armnet",
+      "repo_path": "so101/so101_000190.h5",
+      "bundle_path": "episodes/Armnet/so101/so101_000190.h5",
+      "video_files": {
+        "front": "episodes/Armnet/so101/so101_000190_front.mp4",
+        "top": "episodes/Armnet/so101/so101_000190_top.mp4",
+        "wrist": "episodes/Armnet/so101/so101_000190_wrist.mp4"
+      },
+      "episode_id": "so101_000190",
+      "language_instruction": "Insert the colourful ring into the central wooden peg",
+      "operator": "ville",
+      "annotators": [
+        "armnetbench_v01"
+      ],
+      "robot_name": "so-101",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:42:22.526813+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-032",
+      "dataset_repo": "OopsieData-Submissions/Armnet",
+      "lab_id": "Armnet",
+      "repo_path": "so101/so101_001882.h5",
+      "bundle_path": "episodes/Armnet/so101/so101_001882.h5",
+      "video_files": {
+        "front": "episodes/Armnet/so101/so101_001882_front.mp4",
+        "top": "episodes/Armnet/so101/so101_001882_top.mp4",
+        "wrist": "episodes/Armnet/so101/so101_001882_wrist.mp4"
+      },
+      "episode_id": "so101_001882",
+      "language_instruction": "Put the eye drops into the basket",
+      "operator": "ville",
+      "annotators": [
+        "armnetbench_v01"
+      ],
+      "robot_name": "so-101",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:45:37.860259+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-033",
+      "dataset_repo": "OopsieData-Submissions/Armnet",
+      "lab_id": "Armnet",
+      "repo_path": "episode_000006.h5",
+      "bundle_path": "episodes/Armnet/episode_000006.h5",
+      "video_files": {
+        "front": "episodes/Armnet/episode_000006_front.mp4",
+        "top": "episodes/Armnet/episode_000006_top.mp4",
+        "wrist": "episodes/Armnet/episode_000006_wrist.mp4"
+      },
+      "episode_id": "episode_000006",
+      "language_instruction": "Push the Displayport cable into the cable holder on the white block",
+      "operator": "ville",
+      "annotators": [
+        "ville"
+      ],
+      "robot_name": "so-101",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:46:24.970585+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-034",
+      "dataset_repo": "OopsieData-Submissions/Armnet",
+      "lab_id": "Armnet",
+      "repo_path": "bimanual_so101/bimanual_so101_000742.h5",
+      "bundle_path": "episodes/Armnet/bimanual_so101/bimanual_so101_000742.h5",
+      "video_files": {
+        "left_wrist": "episodes/Armnet/bimanual_so101/bimanual_so101_000742_left_wrist.mp4",
+        "right_wrist": "episodes/Armnet/bimanual_so101/bimanual_so101_000742_right_wrist.mp4",
+        "top": "episodes/Armnet/bimanual_so101/bimanual_so101_000742_top.mp4"
+      },
+      "episode_id": "bimanual_so101_000742",
+      "language_instruction": "Fold the brown tea towel",
+      "operator": "ville",
+      "annotators": [
+        "armnetbench_v01"
+      ],
+      "robot_name": "bimanual-so101",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:40:39.594390+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-035",
+      "dataset_repo": "OopsieData-Submissions/Armnet",
+      "lab_id": "Armnet",
+      "repo_path": "episode_000041.h5",
+      "bundle_path": "episodes/Armnet/episode_000041.h5",
+      "video_files": {
+        "front": "episodes/Armnet/episode_000041_front.mp4",
+        "top": "episodes/Armnet/episode_000041_top.mp4",
+        "wrist": "episodes/Armnet/episode_000041_wrist.mp4"
+      },
+      "episode_id": "episode_000041",
+      "language_instruction": "Push the Displayport cable into the cable holder on the white block",
+      "operator": "ville",
+      "annotators": [
+        "ville"
+      ],
+      "robot_name": "so-101",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:46:54.821434+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-036",
+      "dataset_repo": "OopsieData-Submissions/Armnet",
+      "lab_id": "Armnet",
+      "repo_path": "bimanual_so101/bimanual_so101_000559.h5",
+      "bundle_path": "episodes/Armnet/bimanual_so101/bimanual_so101_000559.h5",
+      "video_files": {
+        "left_wrist": "episodes/Armnet/bimanual_so101/bimanual_so101_000559_left_wrist.mp4",
+        "right_wrist": "episodes/Armnet/bimanual_so101/bimanual_so101_000559_right_wrist.mp4",
+        "top": "episodes/Armnet/bimanual_so101/bimanual_so101_000559_top.mp4"
+      },
+      "episode_id": "bimanual_so101_000559",
+      "language_instruction": "Transfer the cube between your arms and drop it into the white basket",
+      "operator": "ville",
+      "annotators": [
+        "armnetbench_v01"
+      ],
+      "robot_name": "bimanual-so101",
+      "qa_notes": "Marked as \"success\" but in my opinion the task instruction is ambiguous:\n\"Transfer the cube between your arms and drop it into the white basket\"\n\nThe trajectory set the cube down before picking it up with its other arm: does this count as a \"transfer cube between your arms\"?\nThe cube does end up in the white basket so the end task is acheived. ",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:40:23.924222+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-037",
+      "dataset_repo": "OopsieData-Submissions/Armnet",
+      "lab_id": "Armnet",
+      "repo_path": "bimanual_so101/bimanual_so101_000056.h5",
+      "bundle_path": "episodes/Armnet/bimanual_so101/bimanual_so101_000056.h5",
+      "video_files": {
+        "left_wrist": "episodes/Armnet/bimanual_so101/bimanual_so101_000056_left_wrist.mp4",
+        "right_wrist": "episodes/Armnet/bimanual_so101/bimanual_so101_000056_right_wrist.mp4",
+        "top": "episodes/Armnet/bimanual_so101/bimanual_so101_000056_top.mp4"
+      },
+      "episode_id": "bimanual_so101_000056",
+      "language_instruction": "Insert the candle inside the lantern and close the door",
+      "operator": "ville",
+      "annotators": [
+        "armnetbench_v01"
+      ],
+      "robot_name": "bimanual-so101",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:38:03.261467+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-038",
+      "dataset_repo": "OopsieData-Submissions/Armnet",
+      "lab_id": "Armnet",
+      "repo_path": "bimanual_so101/bimanual_so101_001182.h5",
+      "bundle_path": "episodes/Armnet/bimanual_so101/bimanual_so101_001182.h5",
+      "video_files": {
+        "left_wrist": "episodes/Armnet/bimanual_so101/bimanual_so101_001182_left_wrist.mp4",
+        "right_wrist": "episodes/Armnet/bimanual_so101/bimanual_so101_001182_right_wrist.mp4",
+        "top": "episodes/Armnet/bimanual_so101/bimanual_so101_001182_top.mp4"
+      },
+      "episode_id": "bimanual_so101_001182",
+      "language_instruction": "Hold the pink lamp still with your left arm and open the door with your right gripper",
+      "operator": "ville",
+      "annotators": [
+        "armnetbench_v01"
+      ],
+      "robot_name": "bimanual-so101",
+      "qa_notes": "Incorrect task instruction: The lamp isn't pink",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:41:44.674505+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-039",
+      "dataset_repo": "OopsieData-Submissions/Armnet",
+      "lab_id": "Armnet",
+      "repo_path": "so101/so101_001423.h5",
+      "bundle_path": "episodes/Armnet/so101/so101_001423.h5",
+      "video_files": {
+        "front": "episodes/Armnet/so101/so101_001423_front.mp4",
+        "top": "episodes/Armnet/so101/so101_001423_top.mp4",
+        "wrist": "episodes/Armnet/so101/so101_001423_wrist.mp4"
+      },
+      "episode_id": "so101_001423",
+      "language_instruction": "Put the eye drops on the shelf",
+      "operator": "ville",
+      "annotators": [
+        "armnetbench_v01"
+      ],
+      "robot_name": "so-101",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:45:17.942872+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-040",
+      "dataset_repo": "OopsieData-Submissions/Armnet",
+      "lab_id": "Armnet",
+      "repo_path": "so101/so101_002317.h5",
+      "bundle_path": "episodes/Armnet/so101/so101_002317.h5",
+      "video_files": {
+        "front": "episodes/Armnet/so101/so101_002317_front.mp4",
+        "top": "episodes/Armnet/so101/so101_002317_top.mp4",
+        "wrist": "episodes/Armnet/so101/so101_002317_wrist.mp4"
+      },
+      "episode_id": "so101_002317",
+      "language_instruction": "Remove the power cable from cable holder",
+      "operator": "ville",
+      "annotators": [
+        "armnetbench_v01"
+      ],
+      "robot_name": "so-101",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:45:51.420219+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-041",
+      "dataset_repo": "OopsieData-Submissions/AutoEval_origin",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "chunk_0008/autoeval_004458_4033042990302736823_22.h5",
+      "bundle_path": "episodes/AutoEval_origin/chunk_0008/autoeval_004458_4033042990302736823_22.h5",
+      "video_files": {
+        "main": "episodes/AutoEval_origin/chunk_0008/videos/autoeval_004458_4033042990302736823_22_main.mp4"
+      },
+      "episode_id": "autoeval_004458_4033042990302736823_22",
+      "language_instruction": "put the eggplant in the blue sink",
+      "operator": "autoeval_orchestrator",
+      "annotators": [
+        "bridge_autoeval"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:49:52.438155+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-042",
+      "dataset_repo": "OopsieData-Submissions/AutoEval_origin",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "chunk_0022/autoeval_011207_8608531115776888532_1.h5",
+      "bundle_path": "episodes/AutoEval_origin/chunk_0022/autoeval_011207_8608531115776888532_1.h5",
+      "video_files": {
+        "main": "episodes/AutoEval_origin/chunk_0022/videos/autoeval_011207_8608531115776888532_1_main.mp4"
+      },
+      "episode_id": "autoeval_011207_8608531115776888532_1",
+      "language_instruction": "close the drawer",
+      "operator": "autoeval_orchestrator",
+      "annotators": [
+        "bridge_autoeval"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:52:01.809117+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-043",
+      "dataset_repo": "OopsieData-Submissions/AutoEval_origin",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "chunk_0009/autoeval_004964_4382478523158049091_5.h5",
+      "bundle_path": "episodes/AutoEval_origin/chunk_0009/autoeval_004964_4382478523158049091_5.h5",
+      "video_files": {
+        "main": "episodes/AutoEval_origin/chunk_0009/videos/autoeval_004964_4382478523158049091_5_main.mp4"
+      },
+      "episode_id": "autoeval_004964_4382478523158049091_5",
+      "language_instruction": "open the drawer",
+      "operator": "autoeval_orchestrator",
+      "annotators": [
+        "bridge_autoeval"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:50:10.581537+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-044",
+      "dataset_repo": "OopsieData-Submissions/AutoEval_origin",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "chunk_0022/autoeval_011154_8550696684756845663_16.h5",
+      "bundle_path": "episodes/AutoEval_origin/chunk_0022/autoeval_011154_8550696684756845663_16.h5",
+      "video_files": {
+        "main": "episodes/AutoEval_origin/chunk_0022/videos/autoeval_011154_8550696684756845663_16_main.mp4"
+      },
+      "episode_id": "autoeval_011154_8550696684756845663_16",
+      "language_instruction": "put the eggplant in the yellow basket",
+      "operator": "autoeval_orchestrator",
+      "annotators": [
+        "bridge_autoeval"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:51:57.417118+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-045",
+      "dataset_repo": "OopsieData-Submissions/AutoEval_origin",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "chunk_0004/autoeval_002087_2181825832664403651_21.h5",
+      "bundle_path": "episodes/AutoEval_origin/chunk_0004/autoeval_002087_2181825832664403651_21.h5",
+      "video_files": {
+        "main": "episodes/AutoEval_origin/chunk_0004/videos/autoeval_002087_2181825832664403651_21_main.mp4"
+      },
+      "episode_id": "autoeval_002087_2181825832664403651_21",
+      "language_instruction": "put the eggplant in the blue sink",
+      "operator": "autoeval_orchestrator",
+      "annotators": [
+        "bridge_autoeval"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:48:22.722312+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-046",
+      "dataset_repo": "OopsieData-Submissions/AutoEval_origin",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "chunk_0005/autoeval_002934_2889970394927404178_1.h5",
+      "bundle_path": "episodes/AutoEval_origin/chunk_0005/autoeval_002934_2889970394927404178_1.h5",
+      "video_files": {
+        "main": "episodes/AutoEval_origin/chunk_0005/videos/autoeval_002934_2889970394927404178_1_main.mp4"
+      },
+      "episode_id": "autoeval_002934_2889970394927404178_1",
+      "language_instruction": "open the drawer",
+      "operator": "autoeval_orchestrator",
+      "annotators": [
+        "bridge_autoeval"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:49:15.293757+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-047",
+      "dataset_repo": "OopsieData-Submissions/AutoEval_origin",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "chunk_0009/autoeval_004753_4294287350511279568_16.h5",
+      "bundle_path": "episodes/AutoEval_origin/chunk_0009/autoeval_004753_4294287350511279568_16.h5",
+      "video_files": {
+        "main": "episodes/AutoEval_origin/chunk_0009/videos/autoeval_004753_4294287350511279568_16_main.mp4"
+      },
+      "episode_id": "autoeval_004753_4294287350511279568_16",
+      "language_instruction": "close the drawer",
+      "operator": "autoeval_orchestrator",
+      "annotators": [
+        "bridge_autoeval"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:50:04.435614+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-048",
+      "dataset_repo": "OopsieData-Submissions/AutoEval_origin",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "chunk_0020/autoeval_010402_786264908379960557_0.h5",
+      "bundle_path": "episodes/AutoEval_origin/chunk_0020/autoeval_010402_786264908379960557_0.h5",
+      "video_files": {
+        "main": "episodes/AutoEval_origin/chunk_0020/videos/autoeval_010402_786264908379960557_0_main.mp4"
+      },
+      "episode_id": "autoeval_010402_786264908379960557_0",
+      "language_instruction": "put the eggplant in the yellow basket",
+      "operator": "autoeval_orchestrator",
+      "annotators": [
+        "bridge_autoeval"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:51:42.414488+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-049",
+      "dataset_repo": "OopsieData-Submissions/AutoEval_origin",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "chunk_0006/autoeval_003177_2982082955962308130_35.h5",
+      "bundle_path": "episodes/AutoEval_origin/chunk_0006/autoeval_003177_2982082955962308130_35.h5",
+      "video_files": {
+        "main": "episodes/AutoEval_origin/chunk_0006/videos/autoeval_003177_2982082955962308130_35_main.mp4"
+      },
+      "episode_id": "autoeval_003177_2982082955962308130_35",
+      "language_instruction": "put the eggplant in the blue sink",
+      "operator": "autoeval_orchestrator",
+      "annotators": [
+        "bridge_autoeval"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:49:29.590904+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-050",
+      "dataset_repo": "OopsieData-Submissions/AutoEval_origin",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "chunk_0004/autoeval_002413_2459609913186591946_49.h5",
+      "bundle_path": "episodes/AutoEval_origin/chunk_0004/autoeval_002413_2459609913186591946_49.h5",
+      "video_files": {
+        "main": "episodes/AutoEval_origin/chunk_0004/videos/autoeval_002413_2459609913186591946_49_main.mp4"
+      },
+      "episode_id": "autoeval_002413_2459609913186591946_49",
+      "language_instruction": "open the drawer",
+      "operator": "autoeval_orchestrator",
+      "annotators": [
+        "bridge_autoeval"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:48:33.065762+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-051",
+      "dataset_repo": "OopsieData-Submissions/AutoEval_origin",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "chunk_0018/autoeval_009251_7319769005502914434_33.h5",
+      "bundle_path": "episodes/AutoEval_origin/chunk_0018/autoeval_009251_7319769005502914434_33.h5",
+      "video_files": {
+        "main": "episodes/AutoEval_origin/chunk_0018/videos/autoeval_009251_7319769005502914434_33_main.mp4"
+      },
+      "episode_id": "autoeval_009251_7319769005502914434_33",
+      "language_instruction": "close the drawer",
+      "operator": "autoeval_orchestrator",
+      "annotators": [
+        "bridge_autoeval"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:51:14.289396+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-052",
+      "dataset_repo": "OopsieData-Submissions/AutoEval_origin",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "chunk_0002/autoeval_001214_1655929830969095337_5.h5",
+      "bundle_path": "episodes/AutoEval_origin/chunk_0002/autoeval_001214_1655929830969095337_5.h5",
+      "video_files": {
+        "main": "episodes/AutoEval_origin/chunk_0002/videos/autoeval_001214_1655929830969095337_5_main.mp4"
+      },
+      "episode_id": "autoeval_001214_1655929830969095337_5",
+      "language_instruction": "put the eggplant in the yellow basket",
+      "operator": "autoeval_orchestrator",
+      "annotators": [
+        "bridge_autoeval"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "low res, weird black artifact seems to appear on eggplant at 0:03",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:48:11.855032+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-053",
+      "dataset_repo": "OopsieData-Submissions/AutoEval_origin",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "chunk_0012/autoeval_006113_5221683799667996761_0.h5",
+      "bundle_path": "episodes/AutoEval_origin/chunk_0012/autoeval_006113_5221683799667996761_0.h5",
+      "video_files": {
+        "main": "episodes/AutoEval_origin/chunk_0012/videos/autoeval_006113_5221683799667996761_0_main.mp4"
+      },
+      "episode_id": "autoeval_006113_5221683799667996761_0",
+      "language_instruction": "put the eggplant in the blue sink",
+      "operator": "autoeval_orchestrator",
+      "annotators": [
+        "bridge_autoeval"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "last half (10 seconds) is just the arm not moving\n",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:50:50.771689+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-054",
+      "dataset_repo": "OopsieData-Submissions/AutoEval_origin",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "chunk_0021/autoeval_010812_8321298466224470816_11.h5",
+      "bundle_path": "episodes/AutoEval_origin/chunk_0021/autoeval_010812_8321298466224470816_11.h5",
+      "video_files": {
+        "main": "episodes/AutoEval_origin/chunk_0021/videos/autoeval_010812_8321298466224470816_11_main.mp4"
+      },
+      "episode_id": "autoeval_010812_8321298466224470816_11",
+      "language_instruction": "close the drawer",
+      "operator": "autoeval_orchestrator",
+      "annotators": [
+        "bridge_autoeval"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:51:47.777061+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-055",
+      "dataset_repo": "OopsieData-Submissions/AutoEval_origin",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "chunk_0019/autoeval_009619_7419003510458991364_19.h5",
+      "bundle_path": "episodes/AutoEval_origin/chunk_0019/autoeval_009619_7419003510458991364_19.h5",
+      "video_files": {
+        "main": "episodes/AutoEval_origin/chunk_0019/videos/autoeval_009619_7419003510458991364_19_main.mp4"
+      },
+      "episode_id": "autoeval_009619_7419003510458991364_19",
+      "language_instruction": "open the drawer",
+      "operator": "autoeval_orchestrator",
+      "annotators": [
+        "bridge_autoeval"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:51:20.195288+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-056",
+      "dataset_repo": "OopsieData-Submissions/AutoEval_origin",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "chunk_0019/autoeval_009995_7611998503776180559_18.h5",
+      "bundle_path": "episodes/AutoEval_origin/chunk_0019/autoeval_009995_7611998503776180559_18.h5",
+      "video_files": {
+        "main": "episodes/AutoEval_origin/chunk_0019/videos/autoeval_009995_7611998503776180559_18_main.mp4"
+      },
+      "episode_id": "autoeval_009995_7611998503776180559_18",
+      "language_instruction": "put the eggplant in the yellow basket",
+      "operator": "autoeval_orchestrator",
+      "annotators": [
+        "bridge_autoeval"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:51:34.512955+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-057",
+      "dataset_repo": "OopsieData-Submissions/AutoEval_origin",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "chunk_0009/autoeval_004974_4383954083635980034_8.h5",
+      "bundle_path": "episodes/AutoEval_origin/chunk_0009/autoeval_004974_4383954083635980034_8.h5",
+      "video_files": {
+        "main": "episodes/AutoEval_origin/chunk_0009/videos/autoeval_004974_4383954083635980034_8_main.mp4"
+      },
+      "episode_id": "autoeval_004974_4383954083635980034_8",
+      "language_instruction": "put the eggplant in the blue sink",
+      "operator": "autoeval_orchestrator",
+      "annotators": [
+        "bridge_autoeval"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:50:18.494643+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-058",
+      "dataset_repo": "OopsieData-Submissions/AutoEval_origin",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "chunk_0020/autoeval_010250_7779389888034798845_43.h5",
+      "bundle_path": "episodes/AutoEval_origin/chunk_0020/autoeval_010250_7779389888034798845_43.h5",
+      "video_files": {
+        "main": "episodes/AutoEval_origin/chunk_0020/videos/autoeval_010250_7779389888034798845_43_main.mp4"
+      },
+      "episode_id": "autoeval_010250_7779389888034798845_43",
+      "language_instruction": "open the drawer",
+      "operator": "autoeval_orchestrator",
+      "annotators": [
+        "bridge_autoeval"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:51:38.493374+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-059",
+      "dataset_repo": "OopsieData-Submissions/AutoEval_origin",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "chunk_0014/autoeval_007126_5810496102513199134_3.h5",
+      "bundle_path": "episodes/AutoEval_origin/chunk_0014/autoeval_007126_5810496102513199134_3.h5",
+      "video_files": {
+        "main": "episodes/AutoEval_origin/chunk_0014/videos/autoeval_007126_5810496102513199134_3_main.mp4"
+      },
+      "episode_id": "autoeval_007126_5810496102513199134_3",
+      "language_instruction": "close the drawer",
+      "operator": "autoeval_orchestrator",
+      "annotators": [
+        "bridge_autoeval"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok\n",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:50:59.355125+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-060",
+      "dataset_repo": "OopsieData-Submissions/AutoEval_origin",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "chunk_0007/autoeval_003938_3414663914180082113_6.h5",
+      "bundle_path": "episodes/AutoEval_origin/chunk_0007/autoeval_003938_3414663914180082113_6.h5",
+      "video_files": {
+        "main": "episodes/AutoEval_origin/chunk_0007/videos/autoeval_003938_3414663914180082113_6_main.mp4"
+      },
+      "episode_id": "autoeval_003938_3414663914180082113_6",
+      "language_instruction": "put the eggplant in the yellow basket",
+      "operator": "autoeval_orchestrator",
+      "annotators": [
+        "bridge_autoeval"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:49:44.114984+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-061",
+      "dataset_repo": "OopsieData-Submissions/BONN_MB",
+      "lab_id": "BONN_MB",
+      "repo_path": "20260918_101034.h5",
+      "bundle_path": "episodes/BONN_MB/20260918_101034.h5",
+      "video_files": {
+        "left": "episodes/BONN_MB/20260918_101034_left.mp4",
+        "wrist": "episodes/BONN_MB/20260918_101034_wrist.mp4"
+      },
+      "episode_id": "20260918_101034",
+      "language_instruction": "Push objects to reveal more of the scene",
+      "operator": "Jesper Mücke",
+      "annotators": [
+        "Jesper Mücke"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "Task Instruction is ambiguous. \"reveal more of the scene\" is kind of weird given the view, I would rephrase as \"more of the shelf\" ",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T20:04:20.940900+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-062",
+      "dataset_repo": "OopsieData-Submissions/BONN_MB",
+      "lab_id": "BONN_MB",
+      "repo_path": "20260915_155818.h5",
+      "bundle_path": "episodes/BONN_MB/20260915_155818.h5",
+      "video_files": {
+        "left": "episodes/BONN_MB/20260915_155818_left.mp4",
+        "wrist": "episodes/BONN_MB/20260915_155818_wrist.mp4"
+      },
+      "episode_id": "20260915_155818",
+      "language_instruction": "Grasp object from the shelf and drop into the bin",
+      "operator": "Benno Wingender",
+      "annotators": [
+        "Benno Wingender"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "\"object\" is ambiguous in task description, I assume it means \"any object\"\nCannot see the \"bin\" in either views' videos",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T20:03:33.826762+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-063",
+      "dataset_repo": "OopsieData-Submissions/BONN_MB",
+      "lab_id": "BONN_MB",
+      "repo_path": "20260915_115958.h5",
+      "bundle_path": "episodes/BONN_MB/20260915_115958.h5",
+      "video_files": {
+        "left": "episodes/BONN_MB/20260915_115958_left.mp4",
+        "wrist": "episodes/BONN_MB/20260915_115958_wrist.mp4"
+      },
+      "episode_id": "20260915_115958",
+      "language_instruction": "Grasp the sugar from the shelf and drop into bin",
+      "operator": "Jesper Mücke",
+      "annotators": [
+        "Benno Wingender",
+        "Jesper Mücke",
+        "Maren Bennewitz"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "cannot see the \"bin\" in either views' videos",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T20:00:03.013852+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-064",
+      "dataset_repo": "OopsieData-Submissions/BONN_MB",
+      "lab_id": "BONN_MB",
+      "repo_path": "20260915_135907.h5",
+      "bundle_path": "episodes/BONN_MB/20260915_135907.h5",
+      "video_files": {
+        "left": "episodes/BONN_MB/20260915_135907_left.mp4",
+        "wrist": "episodes/BONN_MB/20260915_135907_wrist.mp4"
+      },
+      "episode_id": "20260915_135907",
+      "language_instruction": "Grasp object from the shelf and drop into the bin",
+      "operator": "Maren Bennewitz",
+      "annotators": [
+        "Maren Bennewitz"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "\"object\" is ambiguous in task description, I assume it means \"any object\"\nCannot see the \"bin\" in either views' videos",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T20:03:08.402464+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-065",
+      "dataset_repo": "OopsieData-Submissions/BONN_MB",
+      "lab_id": "BONN_MB",
+      "repo_path": "20261003_193042/20261003_201543.h5",
+      "bundle_path": "episodes/BONN_MB/20261003_193042/20261003_201543.h5",
+      "video_files": {
+        "global": "episodes/BONN_MB/20261003_193042/20261003_201543_global.mp4",
+        "wrist": "episodes/BONN_MB/20261003_193042/20261003_201543_wrist.mp4"
+      },
+      "episode_id": "20261003_201543",
+      "language_instruction": "open the drawer by pulling the yellow handle backwards",
+      "operator": "Benno Wingender",
+      "annotators": [
+        "Benno Wingender"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "task instruction: \"...pulling the yellow handle backwards\" is weird given the orientation of the drawer (shouldn't the handle be pulled upwards to open the drawer?)",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:55:53.834173+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-066",
+      "dataset_repo": "OopsieData-Submissions/BONN_MB",
+      "lab_id": "123",
+      "repo_path": "20261005_165539/20261005_165624.h5",
+      "bundle_path": "episodes/BONN_MB/20261005_165539/20261005_165624.h5",
+      "video_files": {
+        "global": "episodes/BONN_MB/20261005_165539/20261005_165624_global.mp4",
+        "wrist": "episodes/BONN_MB/20261005_165539/20261005_165624_wrist.mp4"
+      },
+      "episode_id": "20261005_165624",
+      "language_instruction": "Place the yellow cube on the black box",
+      "operator": "Jesper Mücke",
+      "annotators": [
+        "Jesper Mücke"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "ok\n",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:58:30.545477+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-067",
+      "dataset_repo": "OopsieData-Submissions/BONN_MB",
+      "lab_id": "BONN_MB",
+      "repo_path": "20261004_132150/20261004_132512.h5",
+      "bundle_path": "episodes/BONN_MB/20261004_132150/20261004_132512.h5",
+      "video_files": {
+        "global": "episodes/BONN_MB/20261004_132150/20261004_132512_global.mp4",
+        "wrist": "episodes/BONN_MB/20261004_132150/20261004_132512_wrist.mp4"
+      },
+      "episode_id": "20261004_132512",
+      "language_instruction": "push the blue cube into the black square on the table",
+      "operator": "Benno Wingender",
+      "annotators": [
+        "Benno Wingender"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:56:18.253764+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-068",
+      "dataset_repo": "OopsieData-Submissions/BONN_MB",
+      "lab_id": "BONN_MB",
+      "repo_path": "20260915_115603.h5",
+      "bundle_path": "episodes/BONN_MB/20260915_115603.h5",
+      "video_files": {
+        "left": "episodes/BONN_MB/20260915_115603_left.mp4",
+        "wrist": "episodes/BONN_MB/20260915_115603_wrist.mp4"
+      },
+      "episode_id": "20260915_115603",
+      "language_instruction": "Grasp the CheezIt box from the shelf and drop into bin",
+      "operator": "Jesper Mücke",
+      "annotators": [
+        "Benno Wingender",
+        "Jesper Mücke",
+        "Maren Bennewitz"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "cannot see the \"bin\" in either views' videos",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T20:00:53.045555+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-069",
+      "dataset_repo": "OopsieData-Submissions/BONN_MB",
+      "lab_id": "123",
+      "repo_path": "20261005_092955/20261005_094506.h5",
+      "bundle_path": "episodes/BONN_MB/20261005_092955/20261005_094506.h5",
+      "video_files": {
+        "global": "episodes/BONN_MB/20261005_092955/20261005_094506_global.mp4",
+        "wrist": "episodes/BONN_MB/20261005_092955/20261005_094506_wrist.mp4"
+      },
+      "episode_id": "20261005_094506",
+      "language_instruction": "Drop a pen into the staple holder",
+      "operator": "Benno Wingender",
+      "annotators": [
+        "Benno Wingender",
+        "Jesper Mücke"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "Task Instruction: calls the black bin/container a \"staple holder\". Kind of confusing (\"bin\" would be clearest)",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:58:19.770375+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-070",
+      "dataset_repo": "OopsieData-Submissions/BONN_MB",
+      "lab_id": "BONN_MB",
+      "repo_path": "20260915_120109.h5",
+      "bundle_path": "episodes/BONN_MB/20260915_120109.h5",
+      "video_files": {
+        "left": "episodes/BONN_MB/20260915_120109_left.mp4",
+        "wrist": "episodes/BONN_MB/20260915_120109_wrist.mp4"
+      },
+      "episode_id": "20260915_120109",
+      "language_instruction": "Grasp the milk carton from the shelf and drop into bin",
+      "operator": "Jesper Mücke",
+      "annotators": [
+        "Benno Wingender",
+        "Jesper Mücke",
+        "Maren Bennewitz"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "cannot see the \"bin\" in either views' videos",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T20:01:12.858352+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-071",
+      "dataset_repo": "OopsieData-Submissions/BONN_MB",
+      "lab_id": "BONN_MB",
+      "repo_path": "20260915_123816.h5",
+      "bundle_path": "episodes/BONN_MB/20260915_123816.h5",
+      "video_files": {
+        "left": "episodes/BONN_MB/20260915_123816_left.mp4",
+        "wrist": "episodes/BONN_MB/20260915_123816_wrist.mp4"
+      },
+      "episode_id": "20260915_123816",
+      "language_instruction": "Grasp the CheezIt Box from the shelf and drop it into bin",
+      "operator": "Jesper Mücke",
+      "annotators": [
+        "Benno Wingender",
+        "Jesper Mücke",
+        "Maren Bennewitz"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "cannot see the \"bin\" in either views' videos",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T20:01:49.289512+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-072",
+      "dataset_repo": "OopsieData-Submissions/BONN_MB",
+      "lab_id": "BONN_MB",
+      "repo_path": "20261004_152138/20261004_155158.h5",
+      "bundle_path": "episodes/BONN_MB/20261004_152138/20261004_155158.h5",
+      "video_files": {
+        "global": "episodes/BONN_MB/20261004_152138/20261004_155158_global.mp4",
+        "wrist": "episodes/BONN_MB/20261004_152138/20261004_155158_wrist.mp4"
+      },
+      "episode_id": "20261004_155158",
+      "language_instruction": "put the blue cube into the black marked square",
+      "operator": "Benno Wingender",
+      "annotators": [
+        "Benno Wingender"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:56:28.774321+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-073",
+      "dataset_repo": "OopsieData-Submissions/BONN_MB",
+      "lab_id": "BONN_MB",
+      "repo_path": "20260915_120242.h5",
+      "bundle_path": "episodes/BONN_MB/20260915_120242.h5",
+      "video_files": {
+        "left": "episodes/BONN_MB/20260915_120242_left.mp4",
+        "wrist": "episodes/BONN_MB/20260915_120242_wrist.mp4"
+      },
+      "episode_id": "20260915_120242",
+      "language_instruction": "Grasp object from the shelf and drop into bin",
+      "operator": "Jesper Mücke",
+      "annotators": [
+        "Benno Wingender",
+        "Jesper Mücke",
+        "Maren Bennewitz"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "cannot see the \"bin\" in either views' videos",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T20:01:21.905362+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-074",
+      "dataset_repo": "OopsieData-Submissions/BONN_MB",
+      "lab_id": "BONN_MB",
+      "repo_path": "20260915_115655.h5",
+      "bundle_path": "episodes/BONN_MB/20260915_115655.h5",
+      "video_files": {
+        "left": "episodes/BONN_MB/20260915_115655_left.mp4",
+        "wrist": "episodes/BONN_MB/20260915_115655_wrist.mp4"
+      },
+      "episode_id": "20260915_115655",
+      "language_instruction": "Grasp pringles can from the shelf and drop into the bin",
+      "operator": "Jesper Mücke",
+      "annotators": [
+        "Benno Wingender",
+        "Jesper Mücke",
+        "Maren Bennewitz"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "cannot see the \"bin\" in either views' videos",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T20:00:24.828476+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-075",
+      "dataset_repo": "OopsieData-Submissions/BONN_MB",
+      "lab_id": "123",
+      "repo_path": "20261004_192832/20261004_193319.h5",
+      "bundle_path": "episodes/BONN_MB/20261004_192832/20261004_193319.h5",
+      "video_files": {
+        "global": "episodes/BONN_MB/20261004_192832/20261004_193319_global.mp4",
+        "wrist": "episodes/BONN_MB/20261004_192832/20261004_193319_wrist.mp4"
+      },
+      "episode_id": "20261004_193319",
+      "language_instruction": "Place at least one piece into the drawer.",
+      "operator": "Benno Wingender",
+      "annotators": [
+        "Benno Wingender"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "Task Instruction: calls the black bin/container a \"drawer\". Slightly confusing ",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:57:34.817841+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-076",
+      "dataset_repo": "OopsieData-Submissions/BONN_MB",
+      "lab_id": "BONN_MB",
+      "repo_path": "20260915_124037.h5",
+      "bundle_path": "episodes/BONN_MB/20260915_124037.h5",
+      "video_files": {
+        "left": "episodes/BONN_MB/20260915_124037_left.mp4",
+        "wrist": "episodes/BONN_MB/20260915_124037_wrist.mp4"
+      },
+      "episode_id": "20260915_124037",
+      "language_instruction": "Grasp the sugar box from the shelf and drop into bin",
+      "operator": "Jesper Mücke",
+      "annotators": [
+        "Benno Wingender",
+        "Jesper Mücke",
+        "Maren Bennewitz"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "cannot see the \"bin\" in either views' videos",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T20:02:09.483948+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-077",
+      "dataset_repo": "OopsieData-Submissions/BONN_MB",
+      "lab_id": "BONN_MB",
+      "repo_path": "20260930_121710/20260930_125345.h5",
+      "bundle_path": "episodes/BONN_MB/20260930_121710/20260930_125345.h5",
+      "video_files": {
+        "global": "episodes/BONN_MB/20260930_121710/20260930_125345_global.mp4",
+        "wrist": "episodes/BONN_MB/20260930_121710/20260930_125345_wrist.mp4"
+      },
+      "episode_id": "20260930_125345",
+      "language_instruction": "grasp the cube on the table lift it up",
+      "operator": "Benno Wingender",
+      "annotators": [
+        "Benno Wingender"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:54:54.593463+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-078",
+      "dataset_repo": "OopsieData-Submissions/BONN_MB",
+      "lab_id": "BONN_MB",
+      "repo_path": "20260915_120348.h5",
+      "bundle_path": "episodes/BONN_MB/20260915_120348.h5",
+      "video_files": {
+        "left": "episodes/BONN_MB/20260915_120348_left.mp4",
+        "wrist": "episodes/BONN_MB/20260915_120348_wrist.mp4"
+      },
+      "episode_id": "20260915_120348",
+      "language_instruction": "Grasp Milk Carton from the shelf and drop into bin",
+      "operator": "Jesper Mücke",
+      "annotators": [
+        "Benno Wingender",
+        "Jesper Mücke",
+        "Maren Bennewitz"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "cannot see the \"bin\" in either views' videos",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T20:01:37.516177+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-079",
+      "dataset_repo": "OopsieData-Submissions/BONN_MB",
+      "lab_id": "BONN_MB",
+      "repo_path": "20260915_123905.h5",
+      "bundle_path": "episodes/BONN_MB/20260915_123905.h5",
+      "video_files": {
+        "left": "episodes/BONN_MB/20260915_123905_left.mp4",
+        "wrist": "episodes/BONN_MB/20260915_123905_wrist.mp4"
+      },
+      "episode_id": "20260915_123905",
+      "language_instruction": "Grasp the sugar box from the shelf and drop into the bin",
+      "operator": "Jesper Mücke",
+      "annotators": [
+        "Benno Wingender",
+        "Jesper Mücke",
+        "Maren Bennewitz"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "cannot see the \"bin\" in either views' videos",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T20:01:58.405037+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-080",
+      "dataset_repo": "OopsieData-Submissions/BONN_MB",
+      "lab_id": "BONN_MB",
+      "repo_path": "20261004_123520/20261004_125136.h5",
+      "bundle_path": "episodes/BONN_MB/20261004_123520/20261004_125136.h5",
+      "video_files": {
+        "global": "episodes/BONN_MB/20261004_123520/20261004_125136_global.mp4",
+        "wrist": "episodes/BONN_MB/20261004_123520/20261004_125136_wrist.mp4"
+      },
+      "episode_id": "20261004_125136",
+      "language_instruction": "open the drawer by pulling the yellow handle upwards",
+      "operator": "Benno Wingender",
+      "annotators": [
+        "Benno Wingender"
+      ],
+      "robot_name": "ur5",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:56:01.270986+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-081",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_HybridRobotics",
+      "lab_id": "Berkeley_HybridRobotics",
+      "repo_path": "yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_bc_only_episode_0009.h5",
+      "bundle_path": "episodes/Berkeley_HybridRobotics/yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_bc_only_episode_0009.h5",
+      "video_files": {
+        "base": "episodes/Berkeley_HybridRobotics/videos/yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_bc_only_episode_0009_base.mp4",
+        "wrist": "episodes/Berkeley_HybridRobotics/videos/yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_bc_only_episode_0009_wrist.mp4"
+      },
+      "episode_id": "yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_bc_only_episode_0009",
+      "language_instruction": "Pick the bottle and place into the plate",
+      "operator": "Haoyi Niu",
+      "annotators": [
+        "Haoyi Niu"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:53:52.172536+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-082",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_HybridRobotics",
+      "lab_id": "Berkeley_HybridRobotics",
+      "repo_path": "yam_hire_v4_eval_train_aligned_checkpoint_005000_episode_0006.h5",
+      "bundle_path": "episodes/Berkeley_HybridRobotics/yam_hire_v4_eval_train_aligned_checkpoint_005000_episode_0006.h5",
+      "video_files": {
+        "base": "episodes/Berkeley_HybridRobotics/videos/yam_hire_v4_eval_train_aligned_checkpoint_005000_episode_0006_base.mp4",
+        "wrist": "episodes/Berkeley_HybridRobotics/videos/yam_hire_v4_eval_train_aligned_checkpoint_005000_episode_0006_wrist.mp4"
+      },
+      "episode_id": "yam_hire_v4_eval_train_aligned_checkpoint_005000_episode_0006",
+      "language_instruction": "Move the green disk from rightmost rod to middle rod of the Towers of Hanoi",
+      "operator": "Haoyi Niu",
+      "annotators": [
+        "Haoyi Niu"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:53:11.189146+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-083",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_HybridRobotics",
+      "lab_id": "Berkeley_HybridRobotics",
+      "repo_path": "yam_rl_rollouts_hanoi_sparse_terminal_v1_episode_0036.h5",
+      "bundle_path": "episodes/Berkeley_HybridRobotics/yam_rl_rollouts_hanoi_sparse_terminal_v1_episode_0036.h5",
+      "video_files": {
+        "base": "episodes/Berkeley_HybridRobotics/videos/yam_rl_rollouts_hanoi_sparse_terminal_v1_episode_0036_base.mp4",
+        "wrist": "episodes/Berkeley_HybridRobotics/videos/yam_rl_rollouts_hanoi_sparse_terminal_v1_episode_0036_wrist.mp4"
+      },
+      "episode_id": "yam_rl_rollouts_hanoi_sparse_terminal_v1_episode_0036",
+      "language_instruction": "Move the green disk from rightmost rod to middle rod of the Towers of Hanoi",
+      "operator": "Haoyi Niu",
+      "annotators": [
+        "Haoyi Niu"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:54:27.581102+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-084",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_HybridRobotics",
+      "lab_id": "Berkeley_HybridRobotics",
+      "repo_path": "yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_checkpoint_007000_episode_0022.h5",
+      "bundle_path": "episodes/Berkeley_HybridRobotics/yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_checkpoint_007000_episode_0022.h5",
+      "video_files": {
+        "base": "episodes/Berkeley_HybridRobotics/videos/yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_checkpoint_007000_episode_0022_base.mp4",
+        "wrist": "episodes/Berkeley_HybridRobotics/videos/yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_checkpoint_007000_episode_0022_wrist.mp4"
+      },
+      "episode_id": "yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_checkpoint_007000_episode_0022",
+      "language_instruction": "Pick the bottle and place into the plate",
+      "operator": "Haoyi Niu",
+      "annotators": [
+        "Haoyi Niu"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:54:15.801702+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-085",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_HybridRobotics",
+      "lab_id": "Berkeley_HybridRobotics",
+      "repo_path": "yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_checkpoint_007000_episode_0029.h5",
+      "bundle_path": "episodes/Berkeley_HybridRobotics/yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_checkpoint_007000_episode_0029.h5",
+      "video_files": {
+        "base": "episodes/Berkeley_HybridRobotics/videos/yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_checkpoint_007000_episode_0029_base.mp4",
+        "wrist": "episodes/Berkeley_HybridRobotics/videos/yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_checkpoint_007000_episode_0029_wrist.mp4"
+      },
+      "episode_id": "yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_checkpoint_007000_episode_0029",
+      "language_instruction": "Pick the bottle and place into the plate",
+      "operator": "Haoyi Niu",
+      "annotators": [
+        "Haoyi Niu"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:54:20.532465+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-086",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_HybridRobotics",
+      "lab_id": "Berkeley_HybridRobotics",
+      "repo_path": "yam_hire_v4_episode_0035.h5",
+      "bundle_path": "episodes/Berkeley_HybridRobotics/yam_hire_v4_episode_0035.h5",
+      "video_files": {
+        "base": "episodes/Berkeley_HybridRobotics/videos/yam_hire_v4_episode_0035_base.mp4",
+        "wrist": "episodes/Berkeley_HybridRobotics/videos/yam_hire_v4_episode_0035_wrist.mp4"
+      },
+      "episode_id": "yam_hire_v4_episode_0035",
+      "language_instruction": "Move the green disk from rightmost rod to middle rod of the Towers of Hanoi",
+      "operator": "Haoyi Niu",
+      "annotators": [
+        "Haoyi Niu"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:52:43.441643+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-087",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_HybridRobotics",
+      "lab_id": "Berkeley_HybridRobotics",
+      "repo_path": "yam_rl_rollouts_chunkplusH_curated_2000_1000_episode_0005.h5",
+      "bundle_path": "episodes/Berkeley_HybridRobotics/yam_rl_rollouts_chunkplusH_curated_2000_1000_episode_0005.h5",
+      "video_files": {
+        "base": "episodes/Berkeley_HybridRobotics/videos/yam_rl_rollouts_chunkplusH_curated_2000_1000_episode_0005_base.mp4",
+        "wrist": "episodes/Berkeley_HybridRobotics/videos/yam_rl_rollouts_chunkplusH_curated_2000_1000_episode_0005_wrist.mp4"
+      },
+      "episode_id": "yam_rl_rollouts_chunkplusH_curated_2000_1000_episode_0005",
+      "language_instruction": "Pick the bottle and place into the plate",
+      "operator": "Haoyi Niu",
+      "annotators": [
+        "Haoyi Niu"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:53:19.790351+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-088",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_HybridRobotics",
+      "lab_id": "Berkeley_HybridRobotics",
+      "repo_path": "yam_sparse_terminal_v1_eval_checkpoint_002000_episode_0008.h5",
+      "bundle_path": "episodes/Berkeley_HybridRobotics/yam_sparse_terminal_v1_eval_checkpoint_002000_episode_0008.h5",
+      "video_files": {
+        "base": "episodes/Berkeley_HybridRobotics/videos/yam_sparse_terminal_v1_eval_checkpoint_002000_episode_0008_base.mp4",
+        "wrist": "episodes/Berkeley_HybridRobotics/videos/yam_sparse_terminal_v1_eval_checkpoint_002000_episode_0008_wrist.mp4"
+      },
+      "episode_id": "yam_sparse_terminal_v1_eval_checkpoint_002000_episode_0008",
+      "language_instruction": "Move the green disk from rightmost rod to middle rod of the Towers of Hanoi",
+      "operator": "Haoyi Niu",
+      "annotators": [
+        "Haoyi Niu"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:54:35.380138+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-089",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_HybridRobotics",
+      "lab_id": "Berkeley_HybridRobotics",
+      "repo_path": "yam_rl_rollouts_chunkplusH_curated_2000_1000_episode_0047.h5",
+      "bundle_path": "episodes/Berkeley_HybridRobotics/yam_rl_rollouts_chunkplusH_curated_2000_1000_episode_0047.h5",
+      "video_files": {
+        "base": "episodes/Berkeley_HybridRobotics/videos/yam_rl_rollouts_chunkplusH_curated_2000_1000_episode_0047_base.mp4",
+        "wrist": "episodes/Berkeley_HybridRobotics/videos/yam_rl_rollouts_chunkplusH_curated_2000_1000_episode_0047_wrist.mp4"
+      },
+      "episode_id": "yam_rl_rollouts_chunkplusH_curated_2000_1000_episode_0047",
+      "language_instruction": "Pick the bottle and place into the plate",
+      "operator": "Haoyi Niu",
+      "annotators": [
+        "Haoyi Niu"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:53:39.339416+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-090",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_HybridRobotics",
+      "lab_id": "Berkeley_HybridRobotics",
+      "repo_path": "yam_sparse_terminal_v1_eval_checkpoint_005000_episode_0010.h5",
+      "bundle_path": "episodes/Berkeley_HybridRobotics/yam_sparse_terminal_v1_eval_checkpoint_005000_episode_0010.h5",
+      "video_files": {
+        "base": "episodes/Berkeley_HybridRobotics/videos/yam_sparse_terminal_v1_eval_checkpoint_005000_episode_0010_base.mp4",
+        "wrist": "episodes/Berkeley_HybridRobotics/videos/yam_sparse_terminal_v1_eval_checkpoint_005000_episode_0010_wrist.mp4"
+      },
+      "episode_id": "yam_sparse_terminal_v1_eval_checkpoint_005000_episode_0010",
+      "language_instruction": "Move the green disk from rightmost rod to middle rod of the Towers of Hanoi",
+      "operator": "Haoyi Niu",
+      "annotators": [
+        "Haoyi Niu"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:54:39.769319+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-091",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_HybridRobotics",
+      "lab_id": "Berkeley_HybridRobotics",
+      "repo_path": "yam_rl_rollouts_chunkplusH_curated_2000_1000_episode_0033.h5",
+      "bundle_path": "episodes/Berkeley_HybridRobotics/yam_rl_rollouts_chunkplusH_curated_2000_1000_episode_0033.h5",
+      "video_files": {
+        "base": "episodes/Berkeley_HybridRobotics/videos/yam_rl_rollouts_chunkplusH_curated_2000_1000_episode_0033_base.mp4",
+        "wrist": "episodes/Berkeley_HybridRobotics/videos/yam_rl_rollouts_chunkplusH_curated_2000_1000_episode_0033_wrist.mp4"
+      },
+      "episode_id": "yam_rl_rollouts_chunkplusH_curated_2000_1000_episode_0033",
+      "language_instruction": "Pick the bottle and place into the plate",
+      "operator": "Haoyi Niu",
+      "annotators": [
+        "Haoyi Niu"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:53:31.437978+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-092",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_HybridRobotics",
+      "lab_id": "Berkeley_HybridRobotics",
+      "repo_path": "yam_hire_v4_episode_0027.h5",
+      "bundle_path": "episodes/Berkeley_HybridRobotics/yam_hire_v4_episode_0027.h5",
+      "video_files": {
+        "base": "episodes/Berkeley_HybridRobotics/videos/yam_hire_v4_episode_0027_base.mp4",
+        "wrist": "episodes/Berkeley_HybridRobotics/videos/yam_hire_v4_episode_0027_wrist.mp4"
+      },
+      "episode_id": "yam_hire_v4_episode_0027",
+      "language_instruction": "Move the green disk from rightmost rod to middle rod of the Towers of Hanoi",
+      "operator": "Haoyi Niu",
+      "annotators": [
+        "Haoyi Niu"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:52:29.651615+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-093",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_HybridRobotics",
+      "lab_id": "Berkeley_HybridRobotics",
+      "repo_path": "yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_checkpoint_003000_episode_0015.h5",
+      "bundle_path": "episodes/Berkeley_HybridRobotics/yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_checkpoint_003000_episode_0015.h5",
+      "video_files": {
+        "base": "episodes/Berkeley_HybridRobotics/videos/yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_checkpoint_003000_episode_0015_base.mp4",
+        "wrist": "episodes/Berkeley_HybridRobotics/videos/yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_checkpoint_003000_episode_0015_wrist.mp4"
+      },
+      "episode_id": "yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_checkpoint_003000_episode_0015",
+      "language_instruction": "Pick the bottle and place into the plate",
+      "operator": "Haoyi Niu",
+      "annotators": [
+        "Haoyi Niu"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:54:09.593898+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-094",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_HybridRobotics",
+      "lab_id": "Berkeley_HybridRobotics",
+      "repo_path": "yam_hire_v4_episode_0028.h5",
+      "bundle_path": "episodes/Berkeley_HybridRobotics/yam_hire_v4_episode_0028.h5",
+      "video_files": {
+        "base": "episodes/Berkeley_HybridRobotics/videos/yam_hire_v4_episode_0028_base.mp4",
+        "wrist": "episodes/Berkeley_HybridRobotics/videos/yam_hire_v4_episode_0028_wrist.mp4"
+      },
+      "episode_id": "yam_hire_v4_episode_0028",
+      "language_instruction": "Move the green disk from rightmost rod to middle rod of the Towers of Hanoi",
+      "operator": "Haoyi Niu",
+      "annotators": [
+        "Haoyi Niu"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:52:37.528631+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-095",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_HybridRobotics",
+      "lab_id": "Berkeley_HybridRobotics",
+      "repo_path": "yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_bc_only_episode_0018.h5",
+      "bundle_path": "episodes/Berkeley_HybridRobotics/yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_bc_only_episode_0018.h5",
+      "video_files": {
+        "base": "episodes/Berkeley_HybridRobotics/videos/yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_bc_only_episode_0018_base.mp4",
+        "wrist": "episodes/Berkeley_HybridRobotics/videos/yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_bc_only_episode_0018_wrist.mp4"
+      },
+      "episode_id": "yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_bc_only_episode_0018",
+      "language_instruction": "Pick the bottle and place into the plate",
+      "operator": "Haoyi Niu",
+      "annotators": [
+        "Haoyi Niu"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:53:57.506493+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-096",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_HybridRobotics",
+      "lab_id": "Berkeley_HybridRobotics",
+      "repo_path": "yam_rl_rollouts_hanoi_sparse_terminal_v1_episode_0045.h5",
+      "bundle_path": "episodes/Berkeley_HybridRobotics/yam_rl_rollouts_hanoi_sparse_terminal_v1_episode_0045.h5",
+      "video_files": {
+        "base": "episodes/Berkeley_HybridRobotics/videos/yam_rl_rollouts_hanoi_sparse_terminal_v1_episode_0045_base.mp4",
+        "wrist": "episodes/Berkeley_HybridRobotics/videos/yam_rl_rollouts_hanoi_sparse_terminal_v1_episode_0045_wrist.mp4"
+      },
+      "episode_id": "yam_rl_rollouts_hanoi_sparse_terminal_v1_episode_0045",
+      "language_instruction": "Move the green disk from rightmost rod to middle rod of the Towers of Hanoi",
+      "operator": "Haoyi Niu",
+      "annotators": [
+        "Haoyi Niu"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:54:32.031750+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-097",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_HybridRobotics",
+      "lab_id": "Berkeley_HybridRobotics",
+      "repo_path": "yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_checkpoint_003000_episode_0007.h5",
+      "bundle_path": "episodes/Berkeley_HybridRobotics/yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_checkpoint_003000_episode_0007.h5",
+      "video_files": {
+        "base": "episodes/Berkeley_HybridRobotics/videos/yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_checkpoint_003000_episode_0007_base.mp4",
+        "wrist": "episodes/Berkeley_HybridRobotics/videos/yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_checkpoint_003000_episode_0007_wrist.mp4"
+      },
+      "episode_id": "yam_rl_rollouts_chunkplusH_curated_2000_1000_eval_checkpoint_003000_episode_0007",
+      "language_instruction": "Pick the bottle and place into the plate",
+      "operator": "Haoyi Niu",
+      "annotators": [
+        "Haoyi Niu"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:54:03.373430+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-098",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_HybridRobotics",
+      "lab_id": "Berkeley_HybridRobotics",
+      "repo_path": "yam_hire_v4_eval_train_aligned_checkpoint_003000_episode_0013.h5",
+      "bundle_path": "episodes/Berkeley_HybridRobotics/yam_hire_v4_eval_train_aligned_checkpoint_003000_episode_0013.h5",
+      "video_files": {
+        "base": "episodes/Berkeley_HybridRobotics/videos/yam_hire_v4_eval_train_aligned_checkpoint_003000_episode_0013_base.mp4",
+        "wrist": "episodes/Berkeley_HybridRobotics/videos/yam_hire_v4_eval_train_aligned_checkpoint_003000_episode_0013_wrist.mp4"
+      },
+      "episode_id": "yam_hire_v4_eval_train_aligned_checkpoint_003000_episode_0013",
+      "language_instruction": "Move the green disk from rightmost rod to middle rod of the Towers of Hanoi",
+      "operator": "Haoyi Niu",
+      "annotators": [
+        "Haoyi Niu"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:53:02.564744+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-099",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_HybridRobotics",
+      "lab_id": "Berkeley_HybridRobotics",
+      "repo_path": "yam_rl_rollouts_chunkplusH_curated_2000_1000_episode_0049.h5",
+      "bundle_path": "episodes/Berkeley_HybridRobotics/yam_rl_rollouts_chunkplusH_curated_2000_1000_episode_0049.h5",
+      "video_files": {
+        "base": "episodes/Berkeley_HybridRobotics/videos/yam_rl_rollouts_chunkplusH_curated_2000_1000_episode_0049_base.mp4",
+        "wrist": "episodes/Berkeley_HybridRobotics/videos/yam_rl_rollouts_chunkplusH_curated_2000_1000_episode_0049_wrist.mp4"
+      },
+      "episode_id": "yam_rl_rollouts_chunkplusH_curated_2000_1000_episode_0049",
+      "language_instruction": "Pick the bottle and place into the plate",
+      "operator": "Haoyi Niu",
+      "annotators": [
+        "Haoyi Niu"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:53:44.346009+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_01-100",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_HybridRobotics",
+      "lab_id": "Berkeley_HybridRobotics",
+      "repo_path": "yam_hire_v4_eval_train_aligned_checkpoint_003000_episode_0011.h5",
+      "bundle_path": "episodes/Berkeley_HybridRobotics/yam_hire_v4_eval_train_aligned_checkpoint_003000_episode_0011.h5",
+      "video_files": {
+        "base": "episodes/Berkeley_HybridRobotics/videos/yam_hire_v4_eval_train_aligned_checkpoint_003000_episode_0011_base.mp4",
+        "wrist": "episodes/Berkeley_HybridRobotics/videos/yam_hire_v4_eval_train_aligned_checkpoint_003000_episode_0011_wrist.mp4"
+      },
+      "episode_id": "yam_hire_v4_eval_train_aligned_checkpoint_003000_episode_0011",
+      "language_instruction": "Move the green disk from rightmost rod to middle rod of the Towers of Hanoi",
+      "operator": "Haoyi Niu",
+      "annotators": [
+        "Haoyi Niu"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "Karen",
+      "qa_updated_at": "2026-10-08T19:52:54.456026+00:00"
+    }
+  ]
+}

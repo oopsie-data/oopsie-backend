@@ -1,0 +1,2228 @@
+{
+  "bundle_id": "qa_bundle_10",
+  "created_at": "2026-10-07T19:21:12Z",
+  "seed": 0,
+  "reviewer": "zhouzypaul",
+  "labs": [
+    "OopsieData-Submissions/USC_Lira",
+    "OopsieData-Submissions/USP_MB",
+    "OopsieData-Submissions/UTA_RPL",
+    "OopsieData-Submissions/UW_REAL",
+    "OopsieData-Submissions/UdeM_REAL"
+  ],
+  "episodes": [
+    {
+      "qa_id": "qa_bundle_10-001",
+      "dataset_repo": "OopsieData-Submissions/USC_Lira",
+      "lab_id": "USC_Lira",
+      "repo_path": "task1_stack_episode_2026_08_27_22_05_31.h5",
+      "bundle_path": "episodes/USC_Lira/task1_stack_episode_2026_08_27_22_05_31.h5",
+      "video_files": {
+        "external": "episodes/USC_Lira/videos/task1_stack_episode_2026_08_27_22_05_31_external.mp4",
+        "wrist": "episodes/USC_Lira/videos/task1_stack_episode_2026_08_27_22_05_31_wrist.mp4"
+      },
+      "episode_id": "task1_stack_episode_2026_08_27_22_05_31",
+      "language_instruction": "stack the red block on top of the blue block",
+      "operator": "ryan",
+      "annotators": [
+        "ryan"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "camera is low resolution",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:03:23.148496+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-002",
+      "dataset_repo": "OopsieData-Submissions/USC_Lira",
+      "lab_id": "USC_Lira",
+      "repo_path": "aloha_remove_lid_suboptimal_ep001.h5",
+      "bundle_path": "episodes/USC_Lira/aloha_remove_lid_suboptimal_ep001.h5",
+      "video_files": {
+        "cam_high": "episodes/USC_Lira/videos/aloha_remove_lid_suboptimal_ep001_cam_high.mp4",
+        "cam_left_wrist": "episodes/USC_Lira/videos/aloha_remove_lid_suboptimal_ep001_cam_left_wrist.mp4",
+        "cam_right_wrist": "episodes/USC_Lira/videos/aloha_remove_lid_suboptimal_ep001_cam_right_wrist.mp4"
+      },
+      "episode_id": "aloha_remove_lid_suboptimal_ep001",
+      "language_instruction": "Remove the lid from the pot.",
+      "operator": "yigit",
+      "annotators": [
+        "yigit"
+      ],
+      "robot_name": "trossen_stationary",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:01:58.702861+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-003",
+      "dataset_repo": "OopsieData-Submissions/USC_Lira",
+      "lab_id": "USC_Lira",
+      "repo_path": "task2_pick_episode_2026_09_24_11_24_35.h5",
+      "bundle_path": "episodes/USC_Lira/task2_pick_episode_2026_09_24_11_24_35.h5",
+      "video_files": {
+        "external": "episodes/USC_Lira/videos/task2_pick_episode_2026_09_24_11_24_35_external.mp4",
+        "wrist": "episodes/USC_Lira/videos/task2_pick_episode_2026_09_24_11_24_35_wrist.mp4"
+      },
+      "episode_id": "task2_pick_episode_2026_09_24_11_24_35",
+      "language_instruction": "Pick up the red marker and put it into the blue cup",
+      "operator": "hugo",
+      "annotators": [
+        "hugo"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "low resolution",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:04:07.254250+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-004",
+      "dataset_repo": "OopsieData-Submissions/USC_Lira",
+      "lab_id": "USC_Lira",
+      "repo_path": "aloha_unzip_case_suboptimal_ep001.h5",
+      "bundle_path": "episodes/USC_Lira/aloha_unzip_case_suboptimal_ep001.h5",
+      "video_files": {
+        "cam_high": "episodes/USC_Lira/videos/aloha_unzip_case_suboptimal_ep001_cam_high.mp4",
+        "cam_left_wrist": "episodes/USC_Lira/videos/aloha_unzip_case_suboptimal_ep001_cam_left_wrist.mp4",
+        "cam_right_wrist": "episodes/USC_Lira/videos/aloha_unzip_case_suboptimal_ep001_cam_right_wrist.mp4"
+      },
+      "episode_id": "aloha_unzip_case_suboptimal_ep001",
+      "language_instruction": "Unzip the pencil case.",
+      "operator": "yigit",
+      "annotators": [
+        "yigit"
+      ],
+      "robot_name": "trossen_stationary",
+      "qa_notes": "not technically a failure, the video is just clipped",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:03:03.183408+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-005",
+      "dataset_repo": "OopsieData-Submissions/USC_Lira",
+      "lab_id": "USC_Lira",
+      "repo_path": "task6_pour_episode_2026_08_29_22_24_32.h5",
+      "bundle_path": "episodes/USC_Lira/task6_pour_episode_2026_08_29_22_24_32.h5",
+      "video_files": {
+        "external": "episodes/USC_Lira/videos/task6_pour_episode_2026_08_29_22_24_32_external.mp4",
+        "wrist": "episodes/USC_Lira/videos/task6_pour_episode_2026_08_29_22_24_32_wrist.mp4"
+      },
+      "episode_id": "task6_pour_episode_2026_08_29_22_24_32",
+      "language_instruction": "Pour the cup of beans into the blue bowl",
+      "operator": "ryan",
+      "annotators": [
+        "ryan"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:06:49.499043+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-006",
+      "dataset_repo": "OopsieData-Submissions/USC_Lira",
+      "lab_id": "USC_Lira",
+      "repo_path": "task3_put_episode_2026_09_23_12_24_47.h5",
+      "bundle_path": "episodes/USC_Lira/task3_put_episode_2026_09_23_12_24_47.h5",
+      "video_files": {
+        "external": "episodes/USC_Lira/videos/task3_put_episode_2026_09_23_12_24_47_external.mp4",
+        "wrist": "episodes/USC_Lira/videos/task3_put_episode_2026_09_23_12_24_47_wrist.mp4"
+      },
+      "episode_id": "task3_put_episode_2026_09_23_12_24_47",
+      "language_instruction": "Put the slice of bread from the toaster to the bowl",
+      "operator": "hugo",
+      "annotators": [
+        "hugo"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:04:25.721697+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-007",
+      "dataset_repo": "OopsieData-Submissions/USC_Lira",
+      "lab_id": "USC_Lira",
+      "repo_path": "aloha_open_bottle_failure_ep001.h5",
+      "bundle_path": "episodes/USC_Lira/aloha_open_bottle_failure_ep001.h5",
+      "video_files": {
+        "cam_high": "episodes/USC_Lira/videos/aloha_open_bottle_failure_ep001_cam_high.mp4",
+        "cam_left_wrist": "episodes/USC_Lira/videos/aloha_open_bottle_failure_ep001_cam_left_wrist.mp4",
+        "cam_right_wrist": "episodes/USC_Lira/videos/aloha_open_bottle_failure_ep001_cam_right_wrist.mp4"
+      },
+      "episode_id": "aloha_open_bottle_failure_ep001",
+      "language_instruction": "Open the bottle.",
+      "operator": "yigit",
+      "annotators": [
+        "yigit"
+      ],
+      "robot_name": "trossen_stationary",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:01:13.949763+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-008",
+      "dataset_repo": "OopsieData-Submissions/USC_Lira",
+      "lab_id": "USC_Lira",
+      "repo_path": "task2_pick_episode_2026_09_13_21_10_49.h5",
+      "bundle_path": "episodes/USC_Lira/task2_pick_episode_2026_09_13_21_10_49.h5",
+      "video_files": {
+        "external": "episodes/USC_Lira/videos/task2_pick_episode_2026_09_13_21_10_49_external.mp4",
+        "wrist": "episodes/USC_Lira/videos/task2_pick_episode_2026_09_13_21_10_49_wrist.mp4"
+      },
+      "episode_id": "task2_pick_episode_2026_09_13_21_10_49",
+      "language_instruction": "Pick up the marker and put it into the blue cup",
+      "operator": "ryan",
+      "annotators": [
+        "ryan"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "low resolution",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:03:55.400168+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-009",
+      "dataset_repo": "OopsieData-Submissions/USC_Lira",
+      "lab_id": "USC_Lira",
+      "repo_path": "aloha_open_drawer_failure_ep000.h5",
+      "bundle_path": "episodes/USC_Lira/aloha_open_drawer_failure_ep000.h5",
+      "video_files": {
+        "cam_high": "episodes/USC_Lira/videos/aloha_open_drawer_failure_ep000_cam_high.mp4",
+        "cam_left_wrist": "episodes/USC_Lira/videos/aloha_open_drawer_failure_ep000_cam_left_wrist.mp4",
+        "cam_right_wrist": "episodes/USC_Lira/videos/aloha_open_drawer_failure_ep000_cam_right_wrist.mp4"
+      },
+      "episode_id": "aloha_open_drawer_failure_ep000",
+      "language_instruction": "Open the red drawer.",
+      "operator": "yigit",
+      "annotators": [
+        "yigit"
+      ],
+      "robot_name": "trossen_stationary",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:01:45.060036+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-010",
+      "dataset_repo": "OopsieData-Submissions/USC_Lira",
+      "lab_id": "USC_Lira",
+      "repo_path": "task4_remove_episode_2026_09_11_13_52_00.h5",
+      "bundle_path": "episodes/USC_Lira/task4_remove_episode_2026_09_11_13_52_00.h5",
+      "video_files": {
+        "external": "episodes/USC_Lira/videos/task4_remove_episode_2026_09_11_13_52_00_external.mp4",
+        "wrist": "episodes/USC_Lira/videos/task4_remove_episode_2026_09_11_13_52_00_wrist.mp4"
+      },
+      "episode_id": "task4_remove_episode_2026_09_11_13_52_00",
+      "language_instruction": "Remove the screwdriver and the cloth from the basket and put them on the table",
+      "operator": "ryan",
+      "annotators": [
+        "ryan"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:05:30.553965+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-011",
+      "dataset_repo": "OopsieData-Submissions/USC_Lira",
+      "lab_id": "USC_Lira",
+      "repo_path": "trossen_uncap_failure_ep003.h5",
+      "bundle_path": "episodes/USC_Lira/trossen_uncap_failure_ep003.h5",
+      "video_files": {
+        "cam_high": "episodes/USC_Lira/videos/trossen_uncap_failure_ep003_cam_high.mp4",
+        "cam_left_wrist": "episodes/USC_Lira/videos/trossen_uncap_failure_ep003_cam_left_wrist.mp4",
+        "cam_right_wrist": "episodes/USC_Lira/videos/trossen_uncap_failure_ep003_cam_right_wrist.mp4"
+      },
+      "episode_id": "trossen_uncap_failure_ep003",
+      "language_instruction": "uncap the marker",
+      "operator": "yigit",
+      "annotators": [
+        "yigit"
+      ],
+      "robot_name": "trossen_stationary",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:07:06.495212+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-012",
+      "dataset_repo": "OopsieData-Submissions/USC_Lira",
+      "lab_id": "USC_Lira",
+      "repo_path": "task4_remove_episode_2026_08_29_11_33_05.h5",
+      "bundle_path": "episodes/USC_Lira/task4_remove_episode_2026_08_29_11_33_05.h5",
+      "video_files": {
+        "external": "episodes/USC_Lira/videos/task4_remove_episode_2026_08_29_11_33_05_external.mp4",
+        "wrist": "episodes/USC_Lira/videos/task4_remove_episode_2026_08_29_11_33_05_wrist.mp4"
+      },
+      "episode_id": "task4_remove_episode_2026_08_29_11_33_05",
+      "language_instruction": "Remove the towel and screwdriver from the basket and put them on the table",
+      "operator": "ryan",
+      "annotators": [
+        "ryan"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "it is success, but has extra motions after task succeeded",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:04:58.556215+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-013",
+      "dataset_repo": "OopsieData-Submissions/USC_Lira",
+      "lab_id": "USC_Lira",
+      "repo_path": "aloha_stir_pot_ep002.h5",
+      "bundle_path": "episodes/USC_Lira/aloha_stir_pot_ep002.h5",
+      "video_files": {
+        "cam_high": "episodes/USC_Lira/videos/aloha_stir_pot_ep002_cam_high.mp4",
+        "cam_left_wrist": "episodes/USC_Lira/videos/aloha_stir_pot_ep002_cam_left_wrist.mp4",
+        "cam_right_wrist": "episodes/USC_Lira/videos/aloha_stir_pot_ep002_cam_right_wrist.mp4"
+      },
+      "episode_id": "aloha_stir_pot_ep002",
+      "language_instruction": "Stir the pot.",
+      "operator": "yigit",
+      "annotators": [
+        "yigit"
+      ],
+      "robot_name": "trossen_stationary",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:02:13.997343+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-014",
+      "dataset_repo": "OopsieData-Submissions/USC_Lira",
+      "lab_id": "USC_Lira",
+      "repo_path": "task5_bowl_to_toaster_episode_2026_09_04_20_25_46.h5",
+      "bundle_path": "episodes/USC_Lira/task5_bowl_to_toaster_episode_2026_09_04_20_25_46.h5",
+      "video_files": {
+        "external": "episodes/USC_Lira/videos/task5_bowl_to_toaster_episode_2026_09_04_20_25_46_external.mp4",
+        "wrist": "episodes/USC_Lira/videos/task5_bowl_to_toaster_episode_2026_09_04_20_25_46_wrist.mp4"
+      },
+      "episode_id": "task5_bowl_to_toaster_episode_2026_09_04_20_25_46",
+      "language_instruction": "Put the slice of bread into the toaster",
+      "operator": "ryan",
+      "annotators": [
+        "ryan"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "the label says human, though I'm not sure this is a teleop episode because the way it twists and turns ",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:06:29.154596+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-015",
+      "dataset_repo": "OopsieData-Submissions/USC_Lira",
+      "lab_id": "USC_Lira",
+      "repo_path": "aloha_open_drawer_ep001.h5",
+      "bundle_path": "episodes/USC_Lira/aloha_open_drawer_ep001.h5",
+      "video_files": {
+        "cam_high": "episodes/USC_Lira/videos/aloha_open_drawer_ep001_cam_high.mp4",
+        "cam_left_wrist": "episodes/USC_Lira/videos/aloha_open_drawer_ep001_cam_left_wrist.mp4",
+        "cam_right_wrist": "episodes/USC_Lira/videos/aloha_open_drawer_ep001_cam_right_wrist.mp4"
+      },
+      "episode_id": "aloha_open_drawer_ep001",
+      "language_instruction": "Open the drawer.",
+      "operator": "yigit",
+      "annotators": [
+        "yigit"
+      ],
+      "robot_name": "trossen_stationary",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:01:28.602544+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-016",
+      "dataset_repo": "OopsieData-Submissions/USC_Lira",
+      "lab_id": "USC_Lira",
+      "repo_path": "task4_remove_episode_2026_09_08_11_32_38.h5",
+      "bundle_path": "episodes/USC_Lira/task4_remove_episode_2026_09_08_11_32_38.h5",
+      "video_files": {
+        "external": "episodes/USC_Lira/videos/task4_remove_episode_2026_09_08_11_32_38_external.mp4",
+        "wrist": "episodes/USC_Lira/videos/task4_remove_episode_2026_09_08_11_32_38_wrist.mp4"
+      },
+      "episode_id": "task4_remove_episode_2026_09_08_11_32_38",
+      "language_instruction": "Remove the screwdriver and cloth from the basket and put them on the table",
+      "operator": "ryan",
+      "annotators": [
+        "ryan"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "low resolution ",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:05:14.614035+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-017",
+      "dataset_repo": "OopsieData-Submissions/USC_Lira",
+      "lab_id": "USC_Lira",
+      "repo_path": "trossen_unzip_failure_ep003.h5",
+      "bundle_path": "episodes/USC_Lira/trossen_unzip_failure_ep003.h5",
+      "video_files": {
+        "cam_high": "episodes/USC_Lira/videos/trossen_unzip_failure_ep003_cam_high.mp4",
+        "cam_left_wrist": "episodes/USC_Lira/videos/trossen_unzip_failure_ep003_cam_left_wrist.mp4",
+        "cam_right_wrist": "episodes/USC_Lira/videos/trossen_unzip_failure_ep003_cam_right_wrist.mp4"
+      },
+      "episode_id": "trossen_unzip_failure_ep003",
+      "language_instruction": "unzip the pencil case",
+      "operator": "yigit",
+      "annotators": [
+        "yigit"
+      ],
+      "robot_name": "trossen_stationary",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:07:29.289884+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-018",
+      "dataset_repo": "OopsieData-Submissions/USC_Lira",
+      "lab_id": "USC_Lira",
+      "repo_path": "task4_remove_episode_2026_09_20_17_28_23.h5",
+      "bundle_path": "episodes/USC_Lira/task4_remove_episode_2026_09_20_17_28_23.h5",
+      "video_files": {
+        "external": "episodes/USC_Lira/videos/task4_remove_episode_2026_09_20_17_28_23_external.mp4",
+        "wrist": "episodes/USC_Lira/videos/task4_remove_episode_2026_09_20_17_28_23_wrist.mp4"
+      },
+      "episode_id": "task4_remove_episode_2026_09_20_17_28_23",
+      "language_instruction": "Remove the cloth and screwdriver from the basket and put them on the table",
+      "operator": "ryan",
+      "annotators": [
+        "ryan"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:05:44.498725+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-019",
+      "dataset_repo": "OopsieData-Submissions/USC_Lira",
+      "lab_id": "USC_Lira",
+      "repo_path": "aloha_uncap_pen_ep000.h5",
+      "bundle_path": "episodes/USC_Lira/aloha_uncap_pen_ep000.h5",
+      "video_files": {
+        "cam_high": "episodes/USC_Lira/videos/aloha_uncap_pen_ep000_cam_high.mp4",
+        "cam_left_wrist": "episodes/USC_Lira/videos/aloha_uncap_pen_ep000_cam_left_wrist.mp4",
+        "cam_right_wrist": "episodes/USC_Lira/videos/aloha_uncap_pen_ep000_cam_right_wrist.mp4"
+      },
+      "episode_id": "aloha_uncap_pen_ep000",
+      "language_instruction": "Uncap the red marker.",
+      "operator": "yigit",
+      "annotators": [
+        "yigit"
+      ],
+      "robot_name": "trossen_stationary",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:02:26.544585+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-020",
+      "dataset_repo": "OopsieData-Submissions/USC_Lira",
+      "lab_id": "USC_Lira",
+      "repo_path": "task2_pick_episode_2026_08_27_21_19_32.h5",
+      "bundle_path": "episodes/USC_Lira/task2_pick_episode_2026_08_27_21_19_32.h5",
+      "video_files": {
+        "external": "episodes/USC_Lira/videos/task2_pick_episode_2026_08_27_21_19_32_external.mp4",
+        "wrist": "episodes/USC_Lira/videos/task2_pick_episode_2026_08_27_21_19_32_wrist.mp4"
+      },
+      "episode_id": "task2_pick_episode_2026_08_27_21_19_32",
+      "language_instruction": "Pick up the red pen and put it into the blue cup",
+      "operator": "ryan",
+      "annotators": [
+        "ryan"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:03:43.361699+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-021",
+      "dataset_repo": "OopsieData-Submissions/USP_MB",
+      "lab_id": "USP_MB",
+      "repo_path": "20261005_212958/20261006_003623.h5",
+      "bundle_path": "episodes/USP_MB/20261005_212958/20261006_003623.h5",
+      "video_files": {
+        "front": "episodes/USP_MB/20261005_212958/20261006_003623_front.mp4",
+        "top": "episodes/USP_MB/20261005_212958/20261006_003623_top.mp4",
+        "wrist": "episodes/USP_MB/20261005_212958/20261006_003623_wrist.mp4"
+      },
+      "episode_id": "20261006_003623",
+      "language_instruction": "Pick the white cylinders and place it in the white mat.",
+      "operator": "Felipe Tommaselli",
+      "annotators": [
+        "Felipe Tommaselli"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "The robot seems frozen for large parts of the video!!!",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:13:35.680222+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-022",
+      "dataset_repo": "OopsieData-Submissions/USP_MB",
+      "lab_id": "USP_MB",
+      "repo_path": "20260929_191000/20260929_191025.h5",
+      "bundle_path": "episodes/USP_MB/20260929_191000/20260929_191025.h5",
+      "video_files": {
+        "front": "episodes/USP_MB/20260929_191000/20260929_191025_front.mp4",
+        "top": "episodes/USP_MB/20260929_191000/20260929_191025_top.mp4",
+        "wrist": "episodes/USP_MB/20260929_191000/20260929_191025_wrist.mp4"
+      },
+      "episode_id": "20260929_191025",
+      "language_instruction": "grab the lid and close the container",
+      "operator": "Ricardo V. Godoy",
+      "annotators": [
+        "Ricardo V. Godoy"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:11:54.439139+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-023",
+      "dataset_repo": "OopsieData-Submissions/USP_MB",
+      "lab_id": "USP_MB",
+      "repo_path": "20260901_210134/20260901_210802.h5",
+      "bundle_path": "episodes/USP_MB/20260901_210134/20260901_210802.h5",
+      "video_files": {
+        "front": "episodes/USP_MB/20260901_210134/20260901_210802_front.mp4",
+        "top": "episodes/USP_MB/20260901_210134/20260901_210802_top.mp4",
+        "wrist": "episodes/USP_MB/20260901_210134/20260901_210802_wrist.mp4"
+      },
+      "episode_id": "20260901_210802",
+      "language_instruction": "pick up the spoon in the table and place it in the purple bowl",
+      "operator": "Matheus P. Angarola",
+      "annotators": [
+        "Matheus P. Angarola"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "the wrist view does not show the spoon",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:08:37.118874+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-024",
+      "dataset_repo": "OopsieData-Submissions/USP_MB",
+      "lab_id": "USP_MB",
+      "repo_path": "20260921_180039/20260921_183154.h5",
+      "bundle_path": "episodes/USP_MB/20260921_180039/20260921_183154.h5",
+      "video_files": {
+        "front": "episodes/USP_MB/20260921_180039/20260921_183154_front.mp4",
+        "top": "episodes/USP_MB/20260921_180039/20260921_183154_top.mp4",
+        "wrist": "episodes/USP_MB/20260921_180039/20260921_183154_wrist.mp4"
+      },
+      "episode_id": "20260921_183154",
+      "language_instruction": "pick up the 3D-printed light bulb and place into the purple bowl",
+      "operator": "João H. Aléssio",
+      "annotators": [
+        "João H. Aléssio"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:11:08.070610+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-025",
+      "dataset_repo": "OopsieData-Submissions/USP_MB",
+      "lab_id": "USP_MB",
+      "repo_path": "20261005_101504/20261005_111154.h5",
+      "bundle_path": "episodes/USP_MB/20261005_101504/20261005_111154.h5",
+      "video_files": {
+        "front": "episodes/USP_MB/20261005_101504/20261005_111154_front.mp4",
+        "top": "episodes/USP_MB/20261005_101504/20261005_111154_top.mp4",
+        "wrist": "episodes/USP_MB/20261005_101504/20261005_111154_wrist.mp4"
+      },
+      "episode_id": "20261005_111154",
+      "language_instruction": "pick up the blue ball pet toy and place it inside the toy basket",
+      "operator": "Gianluca Capezzuto",
+      "annotators": [
+        "Gianluca Capezzuto"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:12:33.585864+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-026",
+      "dataset_repo": "OopsieData-Submissions/USP_MB",
+      "lab_id": "USP_MB",
+      "repo_path": "20260910_165121/20260910_183019.h5",
+      "bundle_path": "episodes/USP_MB/20260910_165121/20260910_183019.h5",
+      "video_files": {
+        "front": "episodes/USP_MB/20260910_165121/20260910_183019_front.mp4",
+        "top": "episodes/USP_MB/20260910_165121/20260910_183019_top.mp4",
+        "wrist": "episodes/USP_MB/20260910_165121/20260910_183019_wrist.mp4"
+      },
+      "episode_id": "20260910_183019",
+      "language_instruction": "close the gate valve (large)",
+      "operator": "Ricardo V. Godoy",
+      "annotators": [
+        "Ricardo V. Godoy"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:09:56.381401+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-027",
+      "dataset_repo": "OopsieData-Submissions/USP_MB",
+      "lab_id": "USP_MB",
+      "repo_path": "20260922_183741/20260922_185555.h5",
+      "bundle_path": "episodes/USP_MB/20260922_183741/20260922_185555.h5",
+      "video_files": {
+        "front": "episodes/USP_MB/20260922_183741/20260922_185555_front.mp4",
+        "top": "episodes/USP_MB/20260922_183741/20260922_185555_top.mp4",
+        "wrist": "episodes/USP_MB/20260922_183741/20260922_185555_wrist.mp4"
+      },
+      "episode_id": "20260922_185555",
+      "language_instruction": "drag the small white cube to the white space on the table",
+      "operator": "João H. Aléssio",
+      "annotators": [
+        "João H. Aléssio"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:11:15.401868+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-028",
+      "dataset_repo": "OopsieData-Submissions/USP_MB",
+      "lab_id": "USP_MB",
+      "repo_path": "20260912_171650/20260912_173353.h5",
+      "bundle_path": "episodes/USP_MB/20260912_171650/20260912_173353.h5",
+      "video_files": {
+        "front": "episodes/USP_MB/20260912_171650/20260912_173353_front.mp4",
+        "top": "episodes/USP_MB/20260912_171650/20260912_173353_top.mp4",
+        "wrist": "episodes/USP_MB/20260912_171650/20260912_173353_wrist.mp4"
+      },
+      "episode_id": "20260912_173353",
+      "language_instruction": "Pick up the Rubik's cube on the table and place it on top of the white box",
+      "operator": "Matheus P. Angarola",
+      "annotators": [
+        "Matheus P. Angarola"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:10:25.229447+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-029",
+      "dataset_repo": "OopsieData-Submissions/USP_MB",
+      "lab_id": "USP_MB",
+      "repo_path": "20260923_141928/20260923_163732.h5",
+      "bundle_path": "episodes/USP_MB/20260923_141928/20260923_163732.h5",
+      "video_files": {
+        "front": "episodes/USP_MB/20260923_141928/20260923_163732_front.mp4",
+        "top": "episodes/USP_MB/20260923_141928/20260923_163732_top.mp4",
+        "wrist": "episodes/USP_MB/20260923_141928/20260923_163732_wrist.mp4"
+      },
+      "episode_id": "20260923_163732",
+      "language_instruction": "put in the drawer",
+      "operator": "Felipe Tommaselli",
+      "annotators": [
+        "Felipe Tommaselli"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:11:24.240078+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-030",
+      "dataset_repo": "OopsieData-Submissions/USP_MB",
+      "lab_id": "USP_MB",
+      "repo_path": "20260914_192848/20260914_193718.h5",
+      "bundle_path": "episodes/USP_MB/20260914_192848/20260914_193718.h5",
+      "video_files": {
+        "front": "episodes/USP_MB/20260914_192848/20260914_193718_front.mp4",
+        "top": "episodes/USP_MB/20260914_192848/20260914_193718_top.mp4",
+        "wrist": "episodes/USP_MB/20260914_192848/20260914_193718_wrist.mp4"
+      },
+      "episode_id": "20260914_193718",
+      "language_instruction": "turn up the thread (M30)",
+      "operator": "Gianluca Capezzuto",
+      "annotators": [
+        "Gianluca Capezzuto"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:10:52.224649+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-031",
+      "dataset_repo": "OopsieData-Submissions/USP_MB",
+      "lab_id": "USP_MB",
+      "repo_path": "20260908_180635/20260908_180736.h5",
+      "bundle_path": "episodes/USP_MB/20260908_180635/20260908_180736.h5",
+      "video_files": {
+        "front": "episodes/USP_MB/20260908_180635/20260908_180736_front.mp4",
+        "top": "episodes/USP_MB/20260908_180635/20260908_180736_top.mp4",
+        "wrist": "episodes/USP_MB/20260908_180635/20260908_180736_wrist.mp4"
+      },
+      "episode_id": "20260908_180736",
+      "language_instruction": "toggle the circuit breaker",
+      "operator": "Ricardo V. Godoy",
+      "annotators": [
+        "Ricardo V. Godoy"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "wrist view not informative",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:09:05.593302+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-032",
+      "dataset_repo": "OopsieData-Submissions/USP_MB",
+      "lab_id": "USP_MB",
+      "repo_path": "20260912_160658/20260912_160727.h5",
+      "bundle_path": "episodes/USP_MB/20260912_160658/20260912_160727.h5",
+      "video_files": {
+        "front": "episodes/USP_MB/20260912_160658/20260912_160727_front.mp4",
+        "top": "episodes/USP_MB/20260912_160658/20260912_160727_top.mp4",
+        "wrist": "episodes/USP_MB/20260912_160658/20260912_160727_wrist.mp4"
+      },
+      "episode_id": "20260912_160727",
+      "language_instruction": "pick up the Rubik's cube and place it on top of the stack of books",
+      "operator": "Matheus P. Angarola",
+      "annotators": [
+        "Matheus P. Angarola"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:10:13.134988+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-033",
+      "dataset_repo": "OopsieData-Submissions/USP_MB",
+      "lab_id": "USP_MB",
+      "repo_path": "20261002_204502/20261002_220649.h5",
+      "bundle_path": "episodes/USP_MB/20261002_204502/20261002_220649.h5",
+      "video_files": {
+        "front": "episodes/USP_MB/20261002_204502/20261002_220649_front.mp4",
+        "top": "episodes/USP_MB/20261002_204502/20261002_220649_top.mp4",
+        "wrist": "episodes/USP_MB/20261002_204502/20261002_220649_wrist.mp4"
+      },
+      "episode_id": "20261002_220649",
+      "language_instruction": "pick up the thick white cylinder on the table and place it in the cardboard box",
+      "operator": "Gianluca Capezzuto",
+      "annotators": [
+        "Gianluca Capezzuto"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:12:20.185209+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-034",
+      "dataset_repo": "OopsieData-Submissions/USP_MB",
+      "lab_id": "USP_MB",
+      "repo_path": "20260928_195033/20260928_195044.h5",
+      "bundle_path": "episodes/USP_MB/20260928_195033/20260928_195044.h5",
+      "video_files": {
+        "front": "episodes/USP_MB/20260928_195033/20260928_195044_front.mp4",
+        "top": "episodes/USP_MB/20260928_195033/20260928_195044_top.mp4",
+        "wrist": "episodes/USP_MB/20260928_195033/20260928_195044_wrist.mp4"
+      },
+      "episode_id": "20260928_195044",
+      "language_instruction": "stack the three cubes on the table in descending size order",
+      "operator": "João H. Aléssio",
+      "annotators": [
+        "João H. Aléssio"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:11:42.923907+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-035",
+      "dataset_repo": "OopsieData-Submissions/USP_MB",
+      "lab_id": "USP_MB",
+      "repo_path": "20261005_191457/20261005_193541.h5",
+      "bundle_path": "episodes/USP_MB/20261005_191457/20261005_193541.h5",
+      "video_files": {
+        "front": "episodes/USP_MB/20261005_191457/20261005_193541_front.mp4",
+        "top": "episodes/USP_MB/20261005_191457/20261005_193541_top.mp4",
+        "wrist": "episodes/USP_MB/20261005_191457/20261005_193541_wrist.mp4"
+      },
+      "episode_id": "20261005_193541",
+      "language_instruction": "grab one thick chalk and place it in the red cup",
+      "operator": "Felipe Tommaselli",
+      "annotators": [
+        "Felipe Tommaselli"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:12:54.647563+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-036",
+      "dataset_repo": "OopsieData-Submissions/USP_MB",
+      "lab_id": "USP_MB",
+      "repo_path": "20260909_162445/20260909_162811.h5",
+      "bundle_path": "episodes/USP_MB/20260909_162445/20260909_162811.h5",
+      "video_files": {
+        "front": "episodes/USP_MB/20260909_162445/20260909_162811_front.mp4",
+        "top": "episodes/USP_MB/20260909_162445/20260909_162811_top.mp4",
+        "wrist": "episodes/USP_MB/20260909_162445/20260909_162811_wrist.mp4"
+      },
+      "episode_id": "20260909_162811",
+      "language_instruction": "insert the key into the yellow bracket and turn it",
+      "operator": "Ricardo V. Godoy",
+      "annotators": [
+        "Ricardo V. Godoy"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:09:32.803975+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-037",
+      "dataset_repo": "OopsieData-Submissions/USP_MB",
+      "lab_id": "USP_MB",
+      "repo_path": "20260829_205707/20260829_210022.h5",
+      "bundle_path": "episodes/USP_MB/20260829_205707/20260829_210022.h5",
+      "video_files": {
+        "front": "episodes/USP_MB/20260829_205707/20260829_210022_front.mp4",
+        "top": "episodes/USP_MB/20260829_205707/20260829_210022_top.mp4",
+        "wrist": "episodes/USP_MB/20260829_205707/20260829_210022_wrist.mp4"
+      },
+      "episode_id": "20260829_210022",
+      "language_instruction": "pick up the 3D-printed key and put in the 3D-printed lock",
+      "operator": "Matheus P. Angarola",
+      "annotators": [
+        "Matheus P. Angarola"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "the key hole is not visible in wrist view",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:08:11.296997+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-038",
+      "dataset_repo": "OopsieData-Submissions/USP_MB",
+      "lab_id": "USP_MB",
+      "repo_path": "20260914_142236/20260914_145230.h5",
+      "bundle_path": "episodes/USP_MB/20260914_142236/20260914_145230.h5",
+      "video_files": {
+        "front": "episodes/USP_MB/20260914_142236/20260914_145230_front.mp4",
+        "top": "episodes/USP_MB/20260914_142236/20260914_145230_top.mp4",
+        "wrist": "episodes/USP_MB/20260914_142236/20260914_145230_wrist.mp4"
+      },
+      "episode_id": "20260914_145230",
+      "language_instruction": "pick up the drill and place it correctly in the power drill",
+      "operator": "Felipe Tommaselli",
+      "annotators": [
+        "Felipe Tommaselli"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:10:43.595630+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-039",
+      "dataset_repo": "OopsieData-Submissions/USP_MB",
+      "lab_id": "USP_MB",
+      "repo_path": "20260923_174234/20260923_194009.h5",
+      "bundle_path": "episodes/USP_MB/20260923_174234/20260923_194009.h5",
+      "video_files": {
+        "front": "episodes/USP_MB/20260923_174234/20260923_194009_front.mp4",
+        "top": "episodes/USP_MB/20260923_174234/20260923_194009_top.mp4",
+        "wrist": "episodes/USP_MB/20260923_174234/20260923_194009_wrist.mp4"
+      },
+      "episode_id": "20260923_194009",
+      "language_instruction": "grasp the shock absorber loose part, align its hole with the pin, and insert the part fully onto the pin",
+      "operator": "Gianluca Capezzuto",
+      "annotators": [
+        "Gianluca Capezzuto"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:11:34.822743+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-040",
+      "dataset_repo": "OopsieData-Submissions/USP_MB",
+      "lab_id": "USP_MB",
+      "repo_path": "20261002_135326/20261002_135359.h5",
+      "bundle_path": "episodes/USP_MB/20261002_135326/20261002_135359.h5",
+      "video_files": {
+        "front": "episodes/USP_MB/20261002_135326/20261002_135359_front.mp4",
+        "top": "episodes/USP_MB/20261002_135326/20261002_135359_top.mp4",
+        "wrist": "episodes/USP_MB/20261002_135326/20261002_135359_wrist.mp4"
+      },
+      "episode_id": "20261002_135359",
+      "language_instruction": "lift the blue bowl and put it on the table",
+      "operator": "João H. Aléssio",
+      "annotators": [
+        "João H. Aléssio"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:12:11.243372+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-041",
+      "dataset_repo": "OopsieData-Submissions/UTA_RPL",
+      "lab_id": "UTA_RPL",
+      "repo_path": "panda_droid_mew_20261006_gautam/batch_0008/shard_022/droid_panda_222c053f4d615d20_sunsep71901032025.h5",
+      "bundle_path": "episodes/UTA_RPL/panda_droid_mew_20261006_gautam/batch_0008/shard_022/droid_panda_222c053f4d615d20_sunsep71901032025.h5",
+      "video_files": {
+        "zed_17225336_left": "episodes/UTA_RPL/panda_droid_mew_20261006_gautam/batch_0008/shard_022/videos/droid_panda_222c053f4d615d20_sunsep71901032025_zed_17225336_left.mp4",
+        "zed_17225336_right": "episodes/UTA_RPL/panda_droid_mew_20261006_gautam/batch_0008/shard_022/videos/droid_panda_222c053f4d615d20_sunsep71901032025_zed_17225336_right.mp4",
+        "zed_24013089_left": "episodes/UTA_RPL/panda_droid_mew_20261006_gautam/batch_0008/shard_022/videos/droid_panda_222c053f4d615d20_sunsep71901032025_zed_24013089_left.mp4",
+        "zed_24013089_right": "episodes/UTA_RPL/panda_droid_mew_20261006_gautam/batch_0008/shard_022/videos/droid_panda_222c053f4d615d20_sunsep71901032025_zed_24013089_right.mp4",
+        "zed_24395123_left": "episodes/UTA_RPL/panda_droid_mew_20261006_gautam/batch_0008/shard_022/videos/droid_panda_222c053f4d615d20_sunsep71901032025_zed_24395123_left.mp4",
+        "zed_24395123_right": "episodes/UTA_RPL/panda_droid_mew_20261006_gautam/batch_0008/shard_022/videos/droid_panda_222c053f4d615d20_sunsep71901032025_zed_24395123_right.mp4"
+      },
+      "episode_id": "droid_panda_222c053f4d615d20_sunsep71901032025",
+      "language_instruction": "pick up the spam and place it on the plate",
+      "operator": "droid_operator_aea639523fbd",
+      "annotators": [
+        "gautam"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:19:37.155337+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-042",
+      "dataset_repo": "OopsieData-Submissions/UTA_RPL",
+      "lab_id": "UTA_RPL",
+      "repo_path": "tydai_human_pot_stove_kevin_20261006/20260524T191649034565.h5",
+      "bundle_path": "episodes/UTA_RPL/tydai_human_pot_stove_kevin_20261006/20260524T191649034565.h5",
+      "video_files": {
+        "left_camera": "episodes/UTA_RPL/tydai_human_pot_stove_kevin_20261006/videos/20260524T191649034565_left_camera.mp4",
+        "right_camera": "episodes/UTA_RPL/tydai_human_pot_stove_kevin_20261006/videos/20260524T191649034565_right_camera.mp4",
+        "top_camera": "episodes/UTA_RPL/tydai_human_pot_stove_kevin_20261006/videos/20260524T191649034565_top_camera.mp4"
+      },
+      "episode_id": "20260524T191649034565",
+      "language_instruction": "Put the pot on the stove",
+      "operator": "roger",
+      "annotators": [
+        "kevin"
+      ],
+      "robot_name": "yam_bimanual_station_0",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:19:38.312753+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-043",
+      "dataset_repo": "OopsieData-Submissions/UTA_RPL",
+      "lab_id": "UTA_RPL",
+      "repo_path": "yam_gautam_payload_20261006/human/20260917T193633326492/20260917T193633326492.h5",
+      "bundle_path": "episodes/UTA_RPL/yam_gautam_payload_20261006/human/20260917T193633326492/20260917T193633326492.h5",
+      "video_files": {
+        "left_camera": "episodes/UTA_RPL/yam_gautam_payload_20261006/human/20260917T193633326492/videos/left_camera.mp4",
+        "right_camera": "episodes/UTA_RPL/yam_gautam_payload_20261006/human/20260917T193633326492/videos/right_camera.mp4",
+        "top_camera": "episodes/UTA_RPL/yam_gautam_payload_20261006/human/20260917T193633326492/videos/top_camera.mp4"
+      },
+      "episode_id": "20260917T193633326492",
+      "language_instruction": "Pour carrots into a cooking pot and put the pot on the stove",
+      "operator": "linke",
+      "annotators": [
+        "gautam"
+      ],
+      "robot_name": "yam_bimanual_station_0",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:22:57.025196+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-044",
+      "dataset_repo": "OopsieData-Submissions/UTA_RPL",
+      "lab_id": "UTA_RPL",
+      "repo_path": "panda_droid_mew_20261006/batch_0015/shard_011/droid_panda_6b4f1c33a0268165_wed_may_27_06_25_59_2026.h5",
+      "bundle_path": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0015/shard_011/droid_panda_6b4f1c33a0268165_wed_may_27_06_25_59_2026.h5",
+      "video_files": {
+        "zed_17225336_left": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0015/shard_011/videos/droid_panda_6b4f1c33a0268165_wed_may_27_06_25_59_2026_zed_17225336_left.mp4",
+        "zed_17225336_right": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0015/shard_011/videos/droid_panda_6b4f1c33a0268165_wed_may_27_06_25_59_2026_zed_17225336_right.mp4",
+        "zed_24013089_left": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0015/shard_011/videos/droid_panda_6b4f1c33a0268165_wed_may_27_06_25_59_2026_zed_24013089_left.mp4",
+        "zed_24013089_right": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0015/shard_011/videos/droid_panda_6b4f1c33a0268165_wed_may_27_06_25_59_2026_zed_24013089_right.mp4",
+        "zed_24395123_left": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0015/shard_011/videos/droid_panda_6b4f1c33a0268165_wed_may_27_06_25_59_2026_zed_24395123_left.mp4",
+        "zed_24395123_right": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0015/shard_011/videos/droid_panda_6b4f1c33a0268165_wed_may_27_06_25_59_2026_zed_24395123_right.mp4"
+      },
+      "episode_id": "droid_panda_6b4f1c33a0268165_wed_may_27_06_25_59_2026",
+      "language_instruction": "catch the rolling can",
+      "operator": "droid_operator_79b7d6e2dd72",
+      "annotators": [
+        "kevin"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "The first 8s both the human and the robot are frozen, and the few seconds after that the robot is frozen. Human arm not visible in the video",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:16:59.324796+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-045",
+      "dataset_repo": "OopsieData-Submissions/UTA_RPL",
+      "lab_id": "UTA_RPL",
+      "repo_path": "yam_gautam_payload_20261006/human/20260829T173238608078/20260829T173238608078.h5",
+      "bundle_path": "episodes/UTA_RPL/yam_gautam_payload_20261006/human/20260829T173238608078/20260829T173238608078.h5",
+      "video_files": {
+        "left_camera": "episodes/UTA_RPL/yam_gautam_payload_20261006/human/20260829T173238608078/videos/left_camera.mp4",
+        "right_camera": "episodes/UTA_RPL/yam_gautam_payload_20261006/human/20260829T173238608078/videos/right_camera.mp4",
+        "top_camera": "episodes/UTA_RPL/yam_gautam_payload_20261006/human/20260829T173238608078/videos/top_camera.mp4"
+      },
+      "episode_id": "20260829T173238608078",
+      "language_instruction": "put the airpods into the airpod case and place the case into the plastic receptacle",
+      "operator": "gautam",
+      "annotators": [
+        "gautam"
+      ],
+      "robot_name": "yam_bimanual_station_0",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:22:30.094981+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-046",
+      "dataset_repo": "OopsieData-Submissions/UTA_RPL",
+      "lab_id": "UTA_RPL",
+      "repo_path": "panda_droid_mew_20261006/batch_0043/shard_013/droid_panda_e77f997d571affd5_thu_sep_17_18_17_31_2026.h5",
+      "bundle_path": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0043/shard_013/droid_panda_e77f997d571affd5_thu_sep_17_18_17_31_2026.h5",
+      "video_files": {
+        "zed_17225336_left": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0043/shard_013/videos/droid_panda_e77f997d571affd5_thu_sep_17_18_17_31_2026_zed_17225336_left.mp4",
+        "zed_17225336_right": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0043/shard_013/videos/droid_panda_e77f997d571affd5_thu_sep_17_18_17_31_2026_zed_17225336_right.mp4",
+        "zed_24013089_left": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0043/shard_013/videos/droid_panda_e77f997d571affd5_thu_sep_17_18_17_31_2026_zed_24013089_left.mp4",
+        "zed_24013089_right": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0043/shard_013/videos/droid_panda_e77f997d571affd5_thu_sep_17_18_17_31_2026_zed_24013089_right.mp4",
+        "zed_24395123_left": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0043/shard_013/videos/droid_panda_e77f997d571affd5_thu_sep_17_18_17_31_2026_zed_24395123_left.mp4",
+        "zed_24395123_right": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0043/shard_013/videos/droid_panda_e77f997d571affd5_thu_sep_17_18_17_31_2026_zed_24395123_right.mp4"
+      },
+      "episode_id": "droid_panda_e77f997d571affd5_thu_sep_17_18_17_31_2026",
+      "language_instruction": "Pick up the bread and place it on the plate and then pick up the red cup and place it on the plate",
+      "operator": "droid_operator_aea639523fbd",
+      "annotators": [
+        "kevin"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:18:28.168288+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-047",
+      "dataset_repo": "OopsieData-Submissions/UTA_RPL",
+      "lab_id": "UTA_RPL",
+      "repo_path": "yam_gautam_payload_20261006/human/20260921T163355714076/20260921T163355714076.h5",
+      "bundle_path": "episodes/UTA_RPL/yam_gautam_payload_20261006/human/20260921T163355714076/20260921T163355714076.h5",
+      "video_files": {
+        "left_camera": "episodes/UTA_RPL/yam_gautam_payload_20261006/human/20260921T163355714076/videos/left_camera.mp4",
+        "right_camera": "episodes/UTA_RPL/yam_gautam_payload_20261006/human/20260921T163355714076/videos/right_camera.mp4",
+        "top_camera": "episodes/UTA_RPL/yam_gautam_payload_20261006/human/20260921T163355714076/videos/top_camera.mp4"
+      },
+      "episode_id": "20260921T163355714076",
+      "language_instruction": "Pour the carrots from the silver cup into the pot, then place the pot on the black mat and cover it.",
+      "operator": "linke",
+      "annotators": [
+        "gautam"
+      ],
+      "robot_name": "yam_bimanual_station_0",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:23:06.788329+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-048",
+      "dataset_repo": "OopsieData-Submissions/UTA_RPL",
+      "lab_id": "UTA_RPL",
+      "repo_path": "panda_droid_mew_20261006/batch_0008/shard_031/droid_panda_21a280a9234d7193_wed_may_27_06_40_54_2026.h5",
+      "bundle_path": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0008/shard_031/droid_panda_21a280a9234d7193_wed_may_27_06_40_54_2026.h5",
+      "video_files": {
+        "zed_17225336_left": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0008/shard_031/videos/droid_panda_21a280a9234d7193_wed_may_27_06_40_54_2026_zed_17225336_left.mp4",
+        "zed_17225336_right": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0008/shard_031/videos/droid_panda_21a280a9234d7193_wed_may_27_06_40_54_2026_zed_17225336_right.mp4",
+        "zed_24013089_left": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0008/shard_031/videos/droid_panda_21a280a9234d7193_wed_may_27_06_40_54_2026_zed_24013089_left.mp4",
+        "zed_24013089_right": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0008/shard_031/videos/droid_panda_21a280a9234d7193_wed_may_27_06_40_54_2026_zed_24013089_right.mp4",
+        "zed_24395123_left": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0008/shard_031/videos/droid_panda_21a280a9234d7193_wed_may_27_06_40_54_2026_zed_24395123_left.mp4",
+        "zed_24395123_right": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0008/shard_031/videos/droid_panda_21a280a9234d7193_wed_may_27_06_40_54_2026_zed_24395123_right.mp4"
+      },
+      "episode_id": "droid_panda_21a280a9234d7193_wed_may_27_06_40_54_2026",
+      "language_instruction": "pick up the coffee can",
+      "operator": "droid_operator_79b7d6e2dd72",
+      "annotators": [
+        "kevin"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:14:35.640275+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-049",
+      "dataset_repo": "OopsieData-Submissions/UTA_RPL",
+      "lab_id": "UTA_RPL",
+      "repo_path": "tydai_policy_mugtree_20261006/20260613T184134717629.h5",
+      "bundle_path": "episodes/UTA_RPL/tydai_policy_mugtree_20261006/20260613T184134717629.h5",
+      "video_files": {
+        "left_camera": "episodes/UTA_RPL/tydai_policy_mugtree_20261006/videos/20260613T184134717629_left_camera.mp4",
+        "right_camera": "episodes/UTA_RPL/tydai_policy_mugtree_20261006/videos/20260613T184134717629_right_camera.mp4",
+        "top_camera": "episodes/UTA_RPL/tydai_policy_mugtree_20261006/videos/20260613T184134717629_top_camera.mp4"
+      },
+      "episode_id": "20260613T184134717629",
+      "language_instruction": "Hang the mug on the mug tree",
+      "operator": "roger",
+      "annotators": [
+        "gautam"
+      ],
+      "robot_name": "yam_bimanual_station_0",
+      "qa_notes": "this is a video cut short",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:21:19.305268+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-050",
+      "dataset_repo": "OopsieData-Submissions/UTA_RPL",
+      "lab_id": "UTA_RPL",
+      "repo_path": "panda_droid_mew_20261006/batch_0011/shard_016/droid_panda_d0e32aaa1ad8c1f4_tue_may_12_21_07_19_2026.h5",
+      "bundle_path": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0011/shard_016/droid_panda_d0e32aaa1ad8c1f4_tue_may_12_21_07_19_2026.h5",
+      "video_files": {
+        "zed_17225336_left": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0011/shard_016/videos/droid_panda_d0e32aaa1ad8c1f4_tue_may_12_21_07_19_2026_zed_17225336_left.mp4",
+        "zed_17225336_right": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0011/shard_016/videos/droid_panda_d0e32aaa1ad8c1f4_tue_may_12_21_07_19_2026_zed_17225336_right.mp4",
+        "zed_24013089_left": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0011/shard_016/videos/droid_panda_d0e32aaa1ad8c1f4_tue_may_12_21_07_19_2026_zed_24013089_left.mp4",
+        "zed_24013089_right": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0011/shard_016/videos/droid_panda_d0e32aaa1ad8c1f4_tue_may_12_21_07_19_2026_zed_24013089_right.mp4",
+        "zed_24395123_left": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0011/shard_016/videos/droid_panda_d0e32aaa1ad8c1f4_tue_may_12_21_07_19_2026_zed_24395123_left.mp4",
+        "zed_24395123_right": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0011/shard_016/videos/droid_panda_d0e32aaa1ad8c1f4_tue_may_12_21_07_19_2026_zed_24395123_right.mp4"
+      },
+      "episode_id": "droid_panda_d0e32aaa1ad8c1f4_tue_may_12_21_07_19_2026",
+      "language_instruction": "pick up the bread from the plate and place it on the black area on the table",
+      "operator": "droid_operator_aea639523fbd",
+      "annotators": [
+        "kevin"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "The first 6s of the video the robot is frozen, but can see human moving in the background",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:15:03.027166+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-051",
+      "dataset_repo": "OopsieData-Submissions/UTA_RPL",
+      "lab_id": "UTA_RPL",
+      "repo_path": "yam_gautam_payload_20261006/policy/20260901T163016903785/20260901T163016903785.h5",
+      "bundle_path": "episodes/UTA_RPL/yam_gautam_payload_20261006/policy/20260901T163016903785/20260901T163016903785.h5",
+      "video_files": {
+        "left_camera": "episodes/UTA_RPL/yam_gautam_payload_20261006/policy/20260901T163016903785/videos/left_camera.mp4",
+        "right_camera": "episodes/UTA_RPL/yam_gautam_payload_20261006/policy/20260901T163016903785/videos/right_camera.mp4",
+        "top_camera": "episodes/UTA_RPL/yam_gautam_payload_20261006/policy/20260901T163016903785/videos/top_camera.mp4"
+      },
+      "episode_id": "20260901T163016903785",
+      "language_instruction": "Transfer the mugs from the box into the cabinet and then close the cabinet",
+      "operator": "linke",
+      "annotators": [
+        "gautam"
+      ],
+      "robot_name": "yam_bimanual_station_0",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:23:33.456489+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-052",
+      "dataset_repo": "OopsieData-Submissions/UTA_RPL",
+      "lab_id": "UTA_RPL",
+      "repo_path": "panda_droid_mew_20261006/batch_0005/shard_019/droid_panda_7b842502e918bc53_wed_may_27_06_09_33_2026.h5",
+      "bundle_path": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0005/shard_019/droid_panda_7b842502e918bc53_wed_may_27_06_09_33_2026.h5",
+      "video_files": {
+        "zed_17225336_left": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0005/shard_019/videos/droid_panda_7b842502e918bc53_wed_may_27_06_09_33_2026_zed_17225336_left.mp4",
+        "zed_17225336_right": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0005/shard_019/videos/droid_panda_7b842502e918bc53_wed_may_27_06_09_33_2026_zed_17225336_right.mp4",
+        "zed_24013089_left": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0005/shard_019/videos/droid_panda_7b842502e918bc53_wed_may_27_06_09_33_2026_zed_24013089_left.mp4",
+        "zed_24013089_right": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0005/shard_019/videos/droid_panda_7b842502e918bc53_wed_may_27_06_09_33_2026_zed_24013089_right.mp4",
+        "zed_24395123_left": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0005/shard_019/videos/droid_panda_7b842502e918bc53_wed_may_27_06_09_33_2026_zed_24395123_left.mp4",
+        "zed_24395123_right": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0005/shard_019/videos/droid_panda_7b842502e918bc53_wed_may_27_06_09_33_2026_zed_24395123_right.mp4"
+      },
+      "episode_id": "droid_panda_7b842502e918bc53_wed_may_27_06_09_33_2026",
+      "language_instruction": "Do any task, and then reset the scene.\n\nSuggested task:\n* pick up the bread",
+      "operator": "droid_operator_79b7d6e2dd72",
+      "annotators": [
+        "kevin"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "1s video with nothing happening!!!",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:13:54.765098+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-053",
+      "dataset_repo": "OopsieData-Submissions/UTA_RPL",
+      "lab_id": "UTA_RPL",
+      "repo_path": "panda_droid_mew_20261006_gautam/batch_0005/shard_014/droid_panda_18aa8b3e253aa18d_monsep81959212025.h5",
+      "bundle_path": "episodes/UTA_RPL/panda_droid_mew_20261006_gautam/batch_0005/shard_014/droid_panda_18aa8b3e253aa18d_monsep81959212025.h5",
+      "video_files": {
+        "zed_17225336_left": "episodes/UTA_RPL/panda_droid_mew_20261006_gautam/batch_0005/shard_014/videos/droid_panda_18aa8b3e253aa18d_monsep81959212025_zed_17225336_left.mp4",
+        "zed_17225336_right": "episodes/UTA_RPL/panda_droid_mew_20261006_gautam/batch_0005/shard_014/videos/droid_panda_18aa8b3e253aa18d_monsep81959212025_zed_17225336_right.mp4",
+        "zed_24013089_left": "episodes/UTA_RPL/panda_droid_mew_20261006_gautam/batch_0005/shard_014/videos/droid_panda_18aa8b3e253aa18d_monsep81959212025_zed_24013089_left.mp4",
+        "zed_24013089_right": "episodes/UTA_RPL/panda_droid_mew_20261006_gautam/batch_0005/shard_014/videos/droid_panda_18aa8b3e253aa18d_monsep81959212025_zed_24013089_right.mp4",
+        "zed_24395123_left": "episodes/UTA_RPL/panda_droid_mew_20261006_gautam/batch_0005/shard_014/videos/droid_panda_18aa8b3e253aa18d_monsep81959212025_zed_24395123_left.mp4",
+        "zed_24395123_right": "episodes/UTA_RPL/panda_droid_mew_20261006_gautam/batch_0005/shard_014/videos/droid_panda_18aa8b3e253aa18d_monsep81959212025_zed_24395123_right.mp4"
+      },
+      "episode_id": "droid_panda_18aa8b3e253aa18d_monsep81959212025",
+      "language_instruction": "pick up the paper cup and place it on the plate",
+      "operator": "droid_operator_aea639523fbd",
+      "annotators": [
+        "gautam"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:19:17.188695+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-054",
+      "dataset_repo": "OopsieData-Submissions/UTA_RPL",
+      "lab_id": "UTA_RPL",
+      "repo_path": "yam_gautam_payload_20261006/policy/20260831T010820255713/20260831T010820255713.h5",
+      "bundle_path": "episodes/UTA_RPL/yam_gautam_payload_20261006/policy/20260831T010820255713/20260831T010820255713.h5",
+      "video_files": {
+        "left_camera": "episodes/UTA_RPL/yam_gautam_payload_20261006/policy/20260831T010820255713/videos/left_camera.mp4",
+        "right_camera": "episodes/UTA_RPL/yam_gautam_payload_20261006/policy/20260831T010820255713/videos/right_camera.mp4",
+        "top_camera": "episodes/UTA_RPL/yam_gautam_payload_20261006/policy/20260831T010820255713/videos/top_camera.mp4"
+      },
+      "episode_id": "20260831T010820255713",
+      "language_instruction": "Put the AirPods into the AirPods case and place the case into the plastic receptacle.",
+      "operator": "linke",
+      "annotators": [
+        "gautam"
+      ],
+      "robot_name": "yam_bimanual_station_0",
+      "qa_notes": "the video is entirely dark!!!",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:23:18.768437+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-055",
+      "dataset_repo": "OopsieData-Submissions/UTA_RPL",
+      "lab_id": "UTA_RPL",
+      "repo_path": "panda_droid_mew_20261006/batch_0032/shard_024/droid_panda_e4e3fe67058f326f_wed_may_27_06_33_46_2026.h5",
+      "bundle_path": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0032/shard_024/droid_panda_e4e3fe67058f326f_wed_may_27_06_33_46_2026.h5",
+      "video_files": {
+        "zed_17225336_left": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0032/shard_024/videos/droid_panda_e4e3fe67058f326f_wed_may_27_06_33_46_2026_zed_17225336_left.mp4",
+        "zed_17225336_right": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0032/shard_024/videos/droid_panda_e4e3fe67058f326f_wed_may_27_06_33_46_2026_zed_17225336_right.mp4",
+        "zed_24013089_left": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0032/shard_024/videos/droid_panda_e4e3fe67058f326f_wed_may_27_06_33_46_2026_zed_24013089_left.mp4",
+        "zed_24013089_right": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0032/shard_024/videos/droid_panda_e4e3fe67058f326f_wed_may_27_06_33_46_2026_zed_24013089_right.mp4",
+        "zed_24395123_left": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0032/shard_024/videos/droid_panda_e4e3fe67058f326f_wed_may_27_06_33_46_2026_zed_24395123_left.mp4",
+        "zed_24395123_right": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0032/shard_024/videos/droid_panda_e4e3fe67058f326f_wed_may_27_06_33_46_2026_zed_24395123_right.mp4"
+      },
+      "episode_id": "droid_panda_e4e3fe67058f326f_wed_may_27_06_33_46_2026",
+      "language_instruction": "drop the lemonade into cup",
+      "operator": "droid_operator_79b7d6e2dd72",
+      "annotators": [
+        "kevin"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "The first 10s second is human resetting the scene and the robot does not move",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:17:53.084274+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-056",
+      "dataset_repo": "OopsieData-Submissions/UTA_RPL",
+      "lab_id": "UTA_RPL",
+      "repo_path": "panda_droid_mew_20261006/batch_0051/shard_011/droid_panda_b3dd9e6a395d2eef_sunsep71657522025.h5",
+      "bundle_path": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0051/shard_011/droid_panda_b3dd9e6a395d2eef_sunsep71657522025.h5",
+      "video_files": {
+        "zed_17225336_left": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0051/shard_011/videos/droid_panda_b3dd9e6a395d2eef_sunsep71657522025_zed_17225336_left.mp4",
+        "zed_17225336_right": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0051/shard_011/videos/droid_panda_b3dd9e6a395d2eef_sunsep71657522025_zed_17225336_right.mp4",
+        "zed_24013089_left": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0051/shard_011/videos/droid_panda_b3dd9e6a395d2eef_sunsep71657522025_zed_24013089_left.mp4",
+        "zed_24013089_right": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0051/shard_011/videos/droid_panda_b3dd9e6a395d2eef_sunsep71657522025_zed_24013089_right.mp4",
+        "zed_24395123_left": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0051/shard_011/videos/droid_panda_b3dd9e6a395d2eef_sunsep71657522025_zed_24395123_left.mp4",
+        "zed_24395123_right": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0051/shard_011/videos/droid_panda_b3dd9e6a395d2eef_sunsep71657522025_zed_24395123_right.mp4"
+      },
+      "episode_id": "droid_panda_b3dd9e6a395d2eef_sunsep71657522025",
+      "language_instruction": "pcik up the spam and place it on the plate",
+      "operator": "droid_operator_aea639523fbd",
+      "annotators": [
+        "kevin"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:18:46.255104+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-057",
+      "dataset_repo": "OopsieData-Submissions/UTA_RPL",
+      "lab_id": "UTA_RPL",
+      "repo_path": "yam_gautam_payload_20261006/policy/20260914T213516245987/20260914T213516245987.h5",
+      "bundle_path": "episodes/UTA_RPL/yam_gautam_payload_20261006/policy/20260914T213516245987/20260914T213516245987.h5",
+      "video_files": {
+        "left_camera": "episodes/UTA_RPL/yam_gautam_payload_20261006/policy/20260914T213516245987/videos/left_camera.mp4",
+        "right_camera": "episodes/UTA_RPL/yam_gautam_payload_20261006/policy/20260914T213516245987/videos/right_camera.mp4",
+        "top_camera": "episodes/UTA_RPL/yam_gautam_payload_20261006/policy/20260914T213516245987/videos/top_camera.mp4"
+      },
+      "episode_id": "20260914T213516245987",
+      "language_instruction": "Assemble the gearbox: place both gears in the blue carriage and fit the lid",
+      "operator": "linke",
+      "annotators": [
+        "gautam"
+      ],
+      "robot_name": "yam_bimanual_station_0",
+      "qa_notes": "for parts of the video, hand is blocking the right and top camera view!!!",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:24:26.233899+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-058",
+      "dataset_repo": "OopsieData-Submissions/UTA_RPL",
+      "lab_id": "UTA_RPL",
+      "repo_path": "panda_droid_mew_20261006/batch_0008/shard_004/droid_panda_763cc90d270da48c_wed_may_27_06_36_15_2026.h5",
+      "bundle_path": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0008/shard_004/droid_panda_763cc90d270da48c_wed_may_27_06_36_15_2026.h5",
+      "video_files": {
+        "zed_17225336_left": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0008/shard_004/videos/droid_panda_763cc90d270da48c_wed_may_27_06_36_15_2026_zed_17225336_left.mp4",
+        "zed_17225336_right": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0008/shard_004/videos/droid_panda_763cc90d270da48c_wed_may_27_06_36_15_2026_zed_17225336_right.mp4",
+        "zed_24013089_left": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0008/shard_004/videos/droid_panda_763cc90d270da48c_wed_may_27_06_36_15_2026_zed_24013089_left.mp4",
+        "zed_24013089_right": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0008/shard_004/videos/droid_panda_763cc90d270da48c_wed_may_27_06_36_15_2026_zed_24013089_right.mp4",
+        "zed_24395123_left": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0008/shard_004/videos/droid_panda_763cc90d270da48c_wed_may_27_06_36_15_2026_zed_24395123_left.mp4",
+        "zed_24395123_right": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0008/shard_004/videos/droid_panda_763cc90d270da48c_wed_may_27_06_36_15_2026_zed_24395123_right.mp4"
+      },
+      "episode_id": "droid_panda_763cc90d270da48c_wed_may_27_06_36_15_2026",
+      "language_instruction": "pick up the bread",
+      "operator": "droid_operator_79b7d6e2dd72",
+      "annotators": [
+        "kevin"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "the first 5s of the video seems frozen",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:14:21.053439+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-059",
+      "dataset_repo": "OopsieData-Submissions/UTA_RPL",
+      "lab_id": "UTA_RPL",
+      "repo_path": "yam_gautam_payload_20261006/policy/20260924T200720002398/20260924T200720002398.h5",
+      "bundle_path": "episodes/UTA_RPL/yam_gautam_payload_20261006/policy/20260924T200720002398/20260924T200720002398.h5",
+      "video_files": {
+        "left_camera": "episodes/UTA_RPL/yam_gautam_payload_20261006/policy/20260924T200720002398/videos/left_camera.mp4",
+        "right_camera": "episodes/UTA_RPL/yam_gautam_payload_20261006/policy/20260924T200720002398/videos/right_camera.mp4",
+        "top_camera": "episodes/UTA_RPL/yam_gautam_payload_20261006/policy/20260924T200720002398/videos/top_camera.mp4"
+      },
+      "episode_id": "20260924T200720002398",
+      "language_instruction": "Pick up the lego block and toss in the container",
+      "operator": "linke",
+      "annotators": [
+        "gautam"
+      ],
+      "robot_name": "yam_bimanual_station_0",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:24:38.041844+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-060",
+      "dataset_repo": "OopsieData-Submissions/UTA_RPL",
+      "lab_id": "UTA_RPL",
+      "repo_path": "panda_droid_mew_20261006/batch_0030/shard_006/droid_panda_73162eff67538da2_wed_feb_18_17_58_16_2026.h5",
+      "bundle_path": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0030/shard_006/droid_panda_73162eff67538da2_wed_feb_18_17_58_16_2026.h5",
+      "video_files": {
+        "zed_17225336_left": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0030/shard_006/videos/droid_panda_73162eff67538da2_wed_feb_18_17_58_16_2026_zed_17225336_left.mp4",
+        "zed_17225336_right": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0030/shard_006/videos/droid_panda_73162eff67538da2_wed_feb_18_17_58_16_2026_zed_17225336_right.mp4",
+        "zed_24013089_left": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0030/shard_006/videos/droid_panda_73162eff67538da2_wed_feb_18_17_58_16_2026_zed_24013089_left.mp4",
+        "zed_24013089_right": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0030/shard_006/videos/droid_panda_73162eff67538da2_wed_feb_18_17_58_16_2026_zed_24013089_right.mp4",
+        "zed_24395123_left": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0030/shard_006/videos/droid_panda_73162eff67538da2_wed_feb_18_17_58_16_2026_zed_24395123_left.mp4",
+        "zed_24395123_right": "episodes/UTA_RPL/panda_droid_mew_20261006/batch_0030/shard_006/videos/droid_panda_73162eff67538da2_wed_feb_18_17_58_16_2026_zed_24395123_right.mp4"
+      },
+      "episode_id": "droid_panda_73162eff67538da2_wed_feb_18_17_58_16_2026",
+      "language_instruction": "pick up the rectangular box from the side",
+      "operator": "droid_operator_aea639523fbd",
+      "annotators": [
+        "kevin"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:17:25.673138+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-061",
+      "dataset_repo": "OopsieData-Submissions/UW_REAL",
+      "lab_id": "UW_REAL",
+      "repo_path": "Failure_hang_mugs_0052.h5",
+      "bundle_path": "episodes/UW_REAL/Failure_hang_mugs_0052.h5",
+      "video_files": {
+        "head": "episodes/UW_REAL/Failure_hang_mugs_0052_head.mp4",
+        "left_wrist": "episodes/UW_REAL/Failure_hang_mugs_0052_left_wrist.mp4",
+        "right_wrist": "episodes/UW_REAL/Failure_hang_mugs_0052_right_wrist.mp4"
+      },
+      "episode_id": "Failure_hang_mugs_0052",
+      "language_instruction": "pick up the cup on the table, and hang it on the mug tree.",
+      "operator": "Lei Cai",
+      "annotators": [
+        "Lei Cai"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:29:43.845258+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-062",
+      "dataset_repo": "OopsieData-Submissions/UW_REAL",
+      "lab_id": "UW_REAL",
+      "repo_path": "20260619_200615.h5",
+      "bundle_path": "episodes/UW_REAL/20260619_200615.h5",
+      "video_files": {
+        "cam_2_scene": "episodes/UW_REAL/20260619_200615_cam_2_scene.mp4",
+        "cam_3_wrist": "episodes/UW_REAL/20260619_200615_cam_3_wrist.mp4",
+        "cam_4_wrist": "episodes/UW_REAL/20260619_200615_cam_4_wrist.mp4"
+      },
+      "episode_id": "20260619_200615",
+      "language_instruction": "pick up the red block and place it in the bowl",
+      "operator": "aaron",
+      "annotators": [
+        "aaron"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:28:36.615867+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-063",
+      "dataset_repo": "OopsieData-Submissions/UW_REAL",
+      "lab_id": "UW_REAL",
+      "repo_path": "20260620_081825/20260620_081835.h5",
+      "bundle_path": "episodes/UW_REAL/20260620_081825/20260620_081835.h5",
+      "video_files": {
+        "side": "episodes/UW_REAL/20260620_081825/20260620_081835_side.mp4",
+        "wrist": "episodes/UW_REAL/20260620_081825/20260620_081835_wrist.mp4"
+      },
+      "episode_id": "20260620_081835",
+      "language_instruction": "Pick up NIST rod and insert into corresponding hole on the NIST board.",
+      "operator": "Rosario Scalise",
+      "annotators": [
+        "Rosario Scalise"
+      ],
+      "robot_name": "ur5e",
+      "qa_notes": "low res",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:25:39.362845+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-064",
+      "dataset_repo": "OopsieData-Submissions/UW_REAL",
+      "lab_id": "UW_REAL",
+      "repo_path": "20260621_234059/20260621_235419.h5",
+      "bundle_path": "episodes/UW_REAL/20260621_234059/20260621_235419.h5",
+      "video_files": {
+        "camera_0": "episodes/UW_REAL/20260621_234059/20260621_235419_camera_0.mp4",
+        "wrist_cam_0": "episodes/UW_REAL/20260621_234059/20260621_235419_wrist_cam_0.mp4",
+        "wrist_cam_1": "episodes/UW_REAL/20260621_234059/20260621_235419_wrist_cam_1.mp4"
+      },
+      "episode_id": "20260621_235419",
+      "language_instruction": "carbon fiber layup on concave surface",
+      "operator": "operator",
+      "annotators": [
+        "vattanary"
+      ],
+      "robot_name": "ur5e_bimanual",
+      "qa_notes": "the wrist camera views are not loading for some reason. I also do not understand how the task \"perform carbon fiber layup\" should be done. ",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:27:45.719054+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-065",
+      "dataset_repo": "OopsieData-Submissions/UW_REAL",
+      "lab_id": "UW_REAL",
+      "repo_path": "20260611_165619/20260611_165726.h5",
+      "bundle_path": "episodes/UW_REAL/20260611_165619/20260611_165726.h5",
+      "video_files": {
+        "left": "episodes/UW_REAL/20260611_165619/20260611_165726_left.mp4",
+        "wrist": "episodes/UW_REAL/20260611_165619/20260611_165726_wrist.mp4"
+      },
+      "episode_id": "20260611_165726",
+      "language_instruction": "push the button",
+      "operator": "chaoxiang",
+      "annotators": [
+        "chaoxiang",
+        "skand"
+      ],
+      "robot_name": "franka_droid",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:24:52.092704+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-066",
+      "dataset_repo": "OopsieData-Submissions/UW_REAL",
+      "lab_id": "UW_REAL",
+      "repo_path": "episode_000034.h5",
+      "bundle_path": "episodes/UW_REAL/episode_000034.h5",
+      "video_files": {
+        "head": "episodes/UW_REAL/videos/episode_000034_head.mp4",
+        "left_wrist": "episodes/UW_REAL/videos/episode_000034_left_wrist.mp4",
+        "right_wrist": "episodes/UW_REAL/videos/episode_000034_right_wrist.mp4"
+      },
+      "episode_id": "episode_000034",
+      "language_instruction": "Pour a bowl of M&Ms into a bowl of skittles",
+      "operator": "marius",
+      "annotators": [
+        "marius"
+      ],
+      "robot_name": "bi_yam_follower",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:29:07.059545+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-067",
+      "dataset_repo": "OopsieData-Submissions/UW_REAL",
+      "lab_id": "UW_REAL",
+      "repo_path": "failure_data_bowl_0028.h5",
+      "bundle_path": "episodes/UW_REAL/failure_data_bowl_0028.h5",
+      "video_files": {
+        "head": "episodes/UW_REAL/failure_data_bowl_0028_head.mp4",
+        "left_wrist": "episodes/UW_REAL/failure_data_bowl_0028_left_wrist.mp4",
+        "right_wrist": "episodes/UW_REAL/failure_data_bowl_0028_right_wrist.mp4"
+      },
+      "episode_id": "failure_data_bowl_0028",
+      "language_instruction": "Stack all the bowls on the table into the middle bowl.",
+      "operator": "Jinghao Liu",
+      "annotators": [
+        "Jinghao Liu"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:29:24.148125+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-068",
+      "dataset_repo": "OopsieData-Submissions/UW_REAL",
+      "lab_id": "UW_REAL",
+      "repo_path": "20260619_080628/20260619_080737.h5",
+      "bundle_path": "episodes/UW_REAL/20260619_080628/20260619_080737.h5",
+      "video_files": {
+        "front": "episodes/UW_REAL/20260619_080628/20260619_080737_front.mp4",
+        "side": "episodes/UW_REAL/20260619_080628/20260619_080737_side.mp4",
+        "wrist": "episodes/UW_REAL/20260619_080628/20260619_080737_wrist.mp4"
+      },
+      "episode_id": "20260619_080737",
+      "language_instruction": "pick up the blue peg and insert it into the green peghole",
+      "operator": "Joshua Tran",
+      "annotators": [
+        "Joshua Tran"
+      ],
+      "robot_name": "ur5e",
+      "qa_notes": "low res video, and two of the camera seems to have different lighting (front vs. side)",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:25:29.937845+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-069",
+      "dataset_repo": "OopsieData-Submissions/UW_REAL",
+      "lab_id": "UW_REAL",
+      "repo_path": "failure_stack_cup_0024.h5",
+      "bundle_path": "episodes/UW_REAL/failure_stack_cup_0024.h5",
+      "video_files": {
+        "head": "episodes/UW_REAL/failure_stack_cup_0024_head.mp4",
+        "left_wrist": "episodes/UW_REAL/failure_stack_cup_0024_left_wrist.mp4",
+        "right_wrist": "episodes/UW_REAL/failure_stack_cup_0024_right_wrist.mp4"
+      },
+      "episode_id": "failure_stack_cup_0024",
+      "language_instruction": "stack the cups",
+      "operator": "Yuzhi Fan",
+      "annotators": [
+        "Yuzhi Fan"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:29:52.097076+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-070",
+      "dataset_repo": "OopsieData-Submissions/UW_REAL",
+      "lab_id": "UW_REAL",
+      "repo_path": "20260617_184652.h5",
+      "bundle_path": "episodes/UW_REAL/20260617_184652.h5",
+      "video_files": {
+        "left": "episodes/UW_REAL/20260617_184652_left.mp4",
+        "wrist": "episodes/UW_REAL/20260617_184652_wrist.mp4"
+      },
+      "episode_id": "20260617_184652",
+      "language_instruction": "put the bowl on the table",
+      "operator": "chaoxiang",
+      "annotators": [
+        "chaoxiang",
+        "jesse_zhang"
+      ],
+      "robot_name": "franka_droid",
+      "qa_notes": "technically should be success but suboptimal ",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:28:24.473596+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-071",
+      "dataset_repo": "OopsieData-Submissions/UW_REAL",
+      "lab_id": "UW_REAL",
+      "repo_path": "20260621_224151/20260621_224201.h5",
+      "bundle_path": "episodes/UW_REAL/20260621_224151/20260621_224201.h5",
+      "video_files": {
+        "camera_0": "episodes/UW_REAL/20260621_224151/20260621_224201_camera_0.mp4",
+        "wrist_cam_0": "episodes/UW_REAL/20260621_224151/20260621_224201_wrist_cam_0.mp4",
+        "wrist_cam_1": "episodes/UW_REAL/20260621_224151/20260621_224201_wrist_cam_1.mp4"
+      },
+      "episode_id": "20260621_224201",
+      "language_instruction": "perform carbon fiber layup",
+      "operator": "operator",
+      "annotators": [
+        "operator",
+        "vattanary"
+      ],
+      "robot_name": "ur5e_bimanual",
+      "qa_notes": "the wrist camera views are not loading for some reason. I also do not understand how the task \"perform carbon fiber layup\" should be done. ",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:27:33.779297+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-072",
+      "dataset_repo": "OopsieData-Submissions/UW_REAL",
+      "lab_id": "UW_REAL",
+      "repo_path": "20260619_210625.h5",
+      "bundle_path": "episodes/UW_REAL/20260619_210625.h5",
+      "video_files": {
+        "cam_2_scene": "episodes/UW_REAL/20260619_210625_cam_2_scene.mp4",
+        "cam_3_wrist": "episodes/UW_REAL/20260619_210625_cam_3_wrist.mp4",
+        "cam_4_wrist": "episodes/UW_REAL/20260619_210625_cam_4_wrist.mp4"
+      },
+      "episode_id": "20260619_210625",
+      "language_instruction": "pick up the red block and put it in the bowl",
+      "operator": "aaron",
+      "annotators": [
+        "aaron"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "camera is fisheye",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:28:51.106371+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-073",
+      "dataset_repo": "OopsieData-Submissions/UW_REAL",
+      "lab_id": "UW_REAL",
+      "repo_path": "20260616_184323.h5",
+      "bundle_path": "episodes/UW_REAL/20260616_184323.h5",
+      "video_files": {
+        "left": "episodes/UW_REAL/20260616_184323_left.mp4",
+        "wrist": "episodes/UW_REAL/20260616_184323_wrist.mp4"
+      },
+      "episode_id": "20260616_184323",
+      "language_instruction": "put the sushi in the pot",
+      "operator": "chaoxiang",
+      "annotators": [
+        "chaoxiang",
+        "skand"
+      ],
+      "robot_name": "franka_droid",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:27:57.646473+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-074",
+      "dataset_repo": "OopsieData-Submissions/UW_REAL",
+      "lab_id": "UW_REAL",
+      "repo_path": "episode_000049.h5",
+      "bundle_path": "episodes/UW_REAL/episode_000049.h5",
+      "video_files": {
+        "head": "episodes/UW_REAL/videos/episode_000049_head.mp4",
+        "left_wrist": "episodes/UW_REAL/videos/episode_000049_left_wrist.mp4",
+        "right_wrist": "episodes/UW_REAL/videos/episode_000049_right_wrist.mp4"
+      },
+      "episode_id": "episode_000049",
+      "language_instruction": "Pour a bowl of M&Ms into a bowl of skittles",
+      "operator": "marius",
+      "annotators": [
+        "marius"
+      ],
+      "robot_name": "bi_yam_follower",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:29:13.147784+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-075",
+      "dataset_repo": "OopsieData-Submissions/UW_REAL",
+      "lab_id": "UW_REAL",
+      "repo_path": "20260617_175815.h5",
+      "bundle_path": "episodes/UW_REAL/20260617_175815.h5",
+      "video_files": {
+        "left": "episodes/UW_REAL/20260617_175815_left.mp4",
+        "wrist": "episodes/UW_REAL/20260617_175815_wrist.mp4"
+      },
+      "episode_id": "20260617_175815",
+      "language_instruction": "unknown task",
+      "operator": "chaoxiang",
+      "annotators": [
+        "chaoxiang",
+        "jesse_zhang",
+        "skand"
+      ],
+      "robot_name": "franka_droid",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:28:05.591396+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-076",
+      "dataset_repo": "OopsieData-Submissions/UW_REAL",
+      "lab_id": "UW_REAL",
+      "repo_path": "20260620_082641/20260620_082651.h5",
+      "bundle_path": "episodes/UW_REAL/20260620_082641/20260620_082651.h5",
+      "video_files": {
+        "side": "episodes/UW_REAL/20260620_082641/20260620_082651_side.mp4",
+        "wrist": "episodes/UW_REAL/20260620_082641/20260620_082651_wrist.mp4"
+      },
+      "episode_id": "20260620_082651",
+      "language_instruction": "Pick up NIST rod and insert into corresponding hole on the NIST board.",
+      "operator": "Rosario Scalise",
+      "annotators": [
+        "Rosario Scalise"
+      ],
+      "robot_name": "ur5e",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:25:47.824470+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-077",
+      "dataset_repo": "OopsieData-Submissions/UW_REAL",
+      "lab_id": "UW_REAL",
+      "repo_path": "Failure_hang_mugs_0013.h5",
+      "bundle_path": "episodes/UW_REAL/Failure_hang_mugs_0013.h5",
+      "video_files": {
+        "head": "episodes/UW_REAL/Failure_hang_mugs_0013_head.mp4",
+        "left_wrist": "episodes/UW_REAL/Failure_hang_mugs_0013_left_wrist.mp4",
+        "right_wrist": "episodes/UW_REAL/Failure_hang_mugs_0013_right_wrist.mp4"
+      },
+      "episode_id": "Failure_hang_mugs_0013",
+      "language_instruction": "pick up the cup on the table, and hang it on the mug tree.",
+      "operator": "Lei Cai",
+      "annotators": [
+        "Lei Cai"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:29:38.079402+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-078",
+      "dataset_repo": "OopsieData-Submissions/UW_REAL",
+      "lab_id": "UW_REAL",
+      "repo_path": "20260619_073453/20260619_073735.h5",
+      "bundle_path": "episodes/UW_REAL/20260619_073453/20260619_073735.h5",
+      "video_files": {
+        "front": "episodes/UW_REAL/20260619_073453/20260619_073735_front.mp4",
+        "side": "episodes/UW_REAL/20260619_073453/20260619_073735_side.mp4",
+        "wrist": "episodes/UW_REAL/20260619_073453/20260619_073735_wrist.mp4"
+      },
+      "episode_id": "20260619_073735",
+      "language_instruction": "pick up the blue peg and insert it into the green peghole",
+      "operator": "Joshua Tran",
+      "annotators": [
+        "Joshua Tran"
+      ],
+      "robot_name": "ur5e",
+      "qa_notes": "low res video, and two of the camera seems to have different lighting (front vs. side)",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:25:13.301150+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-079",
+      "dataset_repo": "OopsieData-Submissions/UW_REAL",
+      "lab_id": "UW_REAL",
+      "repo_path": "failure_data_bowl_0041.h5",
+      "bundle_path": "episodes/UW_REAL/failure_data_bowl_0041.h5",
+      "video_files": {
+        "head": "episodes/UW_REAL/failure_data_bowl_0041_head.mp4",
+        "left_wrist": "episodes/UW_REAL/failure_data_bowl_0041_left_wrist.mp4",
+        "right_wrist": "episodes/UW_REAL/failure_data_bowl_0041_right_wrist.mp4"
+      },
+      "episode_id": "failure_data_bowl_0041",
+      "language_instruction": "Stack all the bowls on the table into the middle bowl.",
+      "operator": "Jinghao Liu",
+      "annotators": [
+        "Jinghao Liu"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:29:28.725230+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-080",
+      "dataset_repo": "OopsieData-Submissions/UW_REAL",
+      "lab_id": "UW_REAL",
+      "repo_path": "failure_stack_cup_0053.h5",
+      "bundle_path": "episodes/UW_REAL/failure_stack_cup_0053.h5",
+      "video_files": {
+        "head": "episodes/UW_REAL/failure_stack_cup_0053_head.mp4",
+        "left_wrist": "episodes/UW_REAL/failure_stack_cup_0053_left_wrist.mp4",
+        "right_wrist": "episodes/UW_REAL/failure_stack_cup_0053_right_wrist.mp4"
+      },
+      "episode_id": "failure_stack_cup_0053",
+      "language_instruction": "stack the cups",
+      "operator": "Yuzhi Fan",
+      "annotators": [
+        "Yuzhi Fan"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:29:56.225756+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-081",
+      "dataset_repo": "OopsieData-Submissions/UdeM_REAL",
+      "lab_id": "UdeM_REAL",
+      "repo_path": "20260930_121219_701618/20260930_122600.h5",
+      "bundle_path": "episodes/UdeM_REAL/20260930_121219_701618/20260930_122600.h5",
+      "video_files": {
+        "left": "episodes/UdeM_REAL/20260930_121219_701618/20260930_122600_left.mp4",
+        "right": "episodes/UdeM_REAL/20260930_121219_701618/20260930_122600_right.mp4",
+        "wrist": "episodes/UdeM_REAL/20260930_121219_701618/20260930_122600_wrist.mp4"
+      },
+      "episode_id": "20260930_122600",
+      "language_instruction": "put the yellow duck on the red bowl",
+      "operator": "Daniel Lawson",
+      "annotators": [
+        "Daniel Lawson"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T00:48:44.088618+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-082",
+      "dataset_repo": "OopsieData-Submissions/UdeM_REAL",
+      "lab_id": "UdeM_REAL",
+      "repo_path": "20261002_213853/20261002_222322.h5",
+      "bundle_path": "episodes/UdeM_REAL/20261002_213853/20261002_222322.h5",
+      "video_files": {
+        "right": "episodes/UdeM_REAL/20261002_213853/20261002_222322_right.mp4",
+        "wrist": "episodes/UdeM_REAL/20261002_213853/20261002_222322_wrist.mp4"
+      },
+      "episode_id": "20261002_222322",
+      "language_instruction": "get the tape measure from the cabinet and put it on the counter",
+      "operator": "Jesse Silverberg",
+      "annotators": [
+        "Jesse Silverberg"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "technically success but side effects",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T00:52:49.942589+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-083",
+      "dataset_repo": "OopsieData-Submissions/UdeM_REAL",
+      "lab_id": "UdeM_REAL",
+      "repo_path": "teleop/droid_udem/converted/000025_trajectory.h5",
+      "bundle_path": "episodes/UdeM_REAL/teleop/droid_udem/converted/000025_trajectory.h5",
+      "video_files": {
+        "left": "episodes/UdeM_REAL/teleop/droid_udem/converted/videos/000025_left.mp4",
+        "right": "episodes/UdeM_REAL/teleop/droid_udem/converted/videos/000025_right.mp4",
+        "wrist": "episodes/UdeM_REAL/teleop/droid_udem/converted/videos/000025_wrist.mp4"
+      },
+      "episode_id": "000025",
+      "language_instruction": "Move object into or out of container (ex: drawer, clothes hamper, plate, trashcan, washer)",
+      "operator": "Albert Zhan",
+      "annotators": [
+        "operator"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "The task (\"Move object into or out of container (ex: drawer, clothes hamper, plate, trashcan, washer)\") is very ambiguous, and contains many possible interpretations",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:00:12.868995+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-084",
+      "dataset_repo": "OopsieData-Submissions/UdeM_REAL",
+      "lab_id": "UdeM_REAL",
+      "repo_path": "20260926_183217/20260926_184307/20260926_184307.h5",
+      "bundle_path": "episodes/UdeM_REAL/20260926_183217/20260926_184307/20260926_184307.h5",
+      "video_files": {
+        "overhead": "episodes/UdeM_REAL/20260926_183217/20260926_184307/20260926_184307_overhead.mp4",
+        "wrist": "episodes/UdeM_REAL/20260926_183217/20260926_184307/20260926_184307_wrist.mp4"
+      },
+      "episode_id": "20260926_184307",
+      "language_instruction": "put the blue animal on the pink animal",
+      "operator": "Daniel Lawson",
+      "annotators": [
+        "Daniel Lawson"
+      ],
+      "robot_name": "SO-101",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T00:48:17.611505+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-085",
+      "dataset_repo": "OopsieData-Submissions/UdeM_REAL",
+      "lab_id": "MILA",
+      "repo_path": "converted/000028_trajectory.h5",
+      "bundle_path": "episodes/UdeM_REAL/converted/000028_trajectory.h5",
+      "video_files": {
+        "right": "episodes/UdeM_REAL/converted/videos/000028_right.mp4",
+        "wrist": "episodes/UdeM_REAL/converted/videos/000028_wrist.mp4"
+      },
+      "episode_id": "000028",
+      "language_instruction": "Pick up the spoon and place it in the utensil holder.",
+      "operator": "albert",
+      "annotators": [
+        "Jesse Silverberg",
+        "operator"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "The video seem choppy around action chunks",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T00:55:51.755316+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-086",
+      "dataset_repo": "OopsieData-Submissions/UdeM_REAL",
+      "lab_id": "UdeM_REAL",
+      "repo_path": "teleop/droid_udem/converted/000016_trajectory.h5",
+      "bundle_path": "episodes/UdeM_REAL/teleop/droid_udem/converted/000016_trajectory.h5",
+      "video_files": {
+        "left": "episodes/UdeM_REAL/teleop/droid_udem/converted/videos/000016_left.mp4",
+        "right": "episodes/UdeM_REAL/teleop/droid_udem/converted/videos/000016_right.mp4",
+        "wrist": "episodes/UdeM_REAL/teleop/droid_udem/converted/videos/000016_wrist.mp4"
+      },
+      "episode_id": "000016",
+      "language_instruction": "put the knife on the plate",
+      "operator": "Albert Zhan",
+      "annotators": [
+        "Albert Zhan",
+        "operator"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "This video is not choppy (even though it seems to be in the same environment with the same robot as the other choppy video). The difference could be that this is teleop data.",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T00:59:11.293590+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-087",
+      "dataset_repo": "OopsieData-Submissions/UdeM_REAL",
+      "lab_id": "UdeM_REAL",
+      "repo_path": "20260926_175609/20260926_180508/20260926_180508.h5",
+      "bundle_path": "episodes/UdeM_REAL/20260926_175609/20260926_180508/20260926_180508.h5",
+      "video_files": {
+        "overhead": "episodes/UdeM_REAL/20260926_175609/20260926_180508/20260926_180508_overhead.mp4",
+        "wrist": "episodes/UdeM_REAL/20260926_175609/20260926_180508/20260926_180508_wrist.mp4"
+      },
+      "episode_id": "20260926_180508",
+      "language_instruction": "put the sponge on the phone",
+      "operator": "Daniel Lawson",
+      "annotators": [
+        "Daniel Lawson"
+      ],
+      "robot_name": "SO-101",
+      "qa_notes": "robot barely does anything",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T00:47:37.174914+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-088",
+      "dataset_repo": "OopsieData-Submissions/UdeM_REAL",
+      "lab_id": "UdeM_REAL",
+      "repo_path": "20261001_183438/20261001_194954.h5",
+      "bundle_path": "episodes/UdeM_REAL/20261001_183438/20261001_194954.h5",
+      "video_files": {
+        "right": "episodes/UdeM_REAL/20261001_183438/20261001_194954_right.mp4",
+        "wrist": "episodes/UdeM_REAL/20261001_183438/20261001_194954_wrist.mp4"
+      },
+      "episode_id": "20261001_194954",
+      "language_instruction": "place the tape measure in the red bowl",
+      "operator": "Jesse Silverberg",
+      "annotators": [
+        "Jesse Silverberg"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "label is success, but should technically be success but suboptimal. There is also a lot of extra motion after the task has succeeded.",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T00:51:01.702768+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-089",
+      "dataset_repo": "OopsieData-Submissions/UdeM_REAL",
+      "lab_id": "UdeM_REAL",
+      "repo_path": "000002_trajectory.h5",
+      "bundle_path": "episodes/UdeM_REAL/000002_trajectory.h5",
+      "video_files": {
+        "left": "episodes/UdeM_REAL/videos/000002_left.mp4",
+        "wrist": "episodes/UdeM_REAL/videos/000002_wrist.mp4"
+      },
+      "episode_id": "000002",
+      "language_instruction": "move the spoon next to the knife",
+      "operator": "Albert Zhan",
+      "annotators": [
+        "Albert Zhan",
+        "operator"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "camera low resolution",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:00:27.222116+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-090",
+      "dataset_repo": "OopsieData-Submissions/UdeM_REAL",
+      "lab_id": "MILA",
+      "repo_path": "converted/000003_trajectory.h5",
+      "bundle_path": "episodes/UdeM_REAL/converted/000003_trajectory.h5",
+      "video_files": {
+        "right": "episodes/UdeM_REAL/converted/videos/000003_right.mp4",
+        "wrist": "episodes/UdeM_REAL/converted/videos/000003_wrist.mp4"
+      },
+      "episode_id": "000003",
+      "language_instruction": "Pick up the spoon and place it in the sink.",
+      "operator": "albert",
+      "annotators": [
+        "Jesse Silverberg",
+        "operator"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T00:54:36.564553+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-091",
+      "dataset_repo": "OopsieData-Submissions/UdeM_REAL",
+      "lab_id": "UdeM_REAL",
+      "repo_path": "20261004_124705/20261004_125003/20261004_125003.h5",
+      "bundle_path": "episodes/UdeM_REAL/20261004_124705/20261004_125003/20261004_125003.h5",
+      "video_files": {
+        "overhead": "episodes/UdeM_REAL/20261004_124705/20261004_125003/20261004_125003_overhead.mp4",
+        "wrist": "episodes/UdeM_REAL/20261004_124705/20261004_125003/20261004_125003_wrist.mp4"
+      },
+      "episode_id": "20261004_125003",
+      "language_instruction": "put the pen on the plate",
+      "operator": "Daniel Lawson",
+      "annotators": [
+        "Daniel Lawson"
+      ],
+      "robot_name": "SO-101",
+      "qa_notes": "the robot barely moves/ interact with object",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T00:54:02.041776+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-092",
+      "dataset_repo": "OopsieData-Submissions/UdeM_REAL",
+      "lab_id": "UdeM_REAL",
+      "repo_path": "pi05droid/converted/000021_trajectory.h5",
+      "bundle_path": "episodes/UdeM_REAL/pi05droid/converted/000021_trajectory.h5",
+      "video_files": {
+        "left": "episodes/UdeM_REAL/pi05droid/converted/videos/000021_left.mp4",
+        "wrist": "episodes/UdeM_REAL/pi05droid/converted/videos/000021_wrist.mp4"
+      },
+      "episode_id": "000021",
+      "language_instruction": "Place the black spoon in the sink",
+      "operator": "Albert Zhan",
+      "annotators": [
+        "Albert Zhan",
+        "operator"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "camera somewhat low resolution",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T00:58:02.515493+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-093",
+      "dataset_repo": "OopsieData-Submissions/UdeM_REAL",
+      "lab_id": "UdeM_REAL",
+      "repo_path": "20261001_114805/20261001_120220/20261001_120220.h5",
+      "bundle_path": "episodes/UdeM_REAL/20261001_114805/20261001_120220/20261001_120220.h5",
+      "video_files": {
+        "overhead": "episodes/UdeM_REAL/20261001_114805/20261001_120220/20261001_120220_overhead.mp4",
+        "wrist": "episodes/UdeM_REAL/20261001_114805/20261001_120220/20261001_120220_wrist.mp4"
+      },
+      "episode_id": "20261001_120220",
+      "language_instruction": "put the pen on the pink animal",
+      "operator": "Daniel Lawson",
+      "annotators": [
+        "Daniel Lawson"
+      ],
+      "robot_name": "SO-101",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T00:49:54.532194+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-094",
+      "dataset_repo": "OopsieData-Submissions/UdeM_REAL",
+      "lab_id": "UdeM_REAL",
+      "repo_path": "20261002_190659/20261002_202250.h5",
+      "bundle_path": "episodes/UdeM_REAL/20261002_190659/20261002_202250.h5",
+      "video_files": {
+        "right": "episodes/UdeM_REAL/20261002_190659/20261002_202250_right.mp4",
+        "wrist": "episodes/UdeM_REAL/20261002_190659/20261002_202250_wrist.mp4"
+      },
+      "episode_id": "20261002_202250",
+      "language_instruction": "place the white block on the red plate",
+      "operator": "Jesse Silverberg",
+      "annotators": [
+        "Jesse Silverberg"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "label should be success but side effects",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T00:52:58.113621+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-095",
+      "dataset_repo": "OopsieData-Submissions/UdeM_REAL",
+      "lab_id": "MILA",
+      "repo_path": "converted/000042_trajectory.h5",
+      "bundle_path": "episodes/UdeM_REAL/converted/000042_trajectory.h5",
+      "video_files": {
+        "right": "episodes/UdeM_REAL/converted/videos/000042_right.mp4",
+        "wrist": "episodes/UdeM_REAL/converted/videos/000042_wrist.mp4"
+      },
+      "episode_id": "000042",
+      "language_instruction": "Pick up the red bowl and place it in the grey bowl.",
+      "operator": "albert",
+      "annotators": [
+        "Jesse Silverberg",
+        "operator"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "The video seems slightly choppy around action chunk boundary",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T00:56:49.194909+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-096",
+      "dataset_repo": "OopsieData-Submissions/UdeM_REAL",
+      "lab_id": "UdeM_REAL",
+      "repo_path": "000007_trajectory.h5",
+      "bundle_path": "episodes/UdeM_REAL/000007_trajectory.h5",
+      "video_files": {
+        "left": "episodes/UdeM_REAL/videos/000007_left.mp4",
+        "wrist": "episodes/UdeM_REAL/videos/000007_wrist.mp4"
+      },
+      "episode_id": "000007",
+      "language_instruction": "push the plate slightly to the right to reveal the spoon and then pick up the spoon and place it next to the knife",
+      "operator": "Albert Zhan",
+      "annotators": [
+        "Albert Zhan",
+        "operator"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T01:00:52.149424+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-097",
+      "dataset_repo": "OopsieData-Submissions/UdeM_REAL",
+      "lab_id": "UdeM_REAL",
+      "repo_path": "20261004_122926/20261004_123840/20261004_123840.h5",
+      "bundle_path": "episodes/UdeM_REAL/20261004_122926/20261004_123840/20261004_123840.h5",
+      "video_files": {
+        "overhead": "episodes/UdeM_REAL/20261004_122926/20261004_123840/20261004_123840_overhead.mp4",
+        "wrist": "episodes/UdeM_REAL/20261004_122926/20261004_123840/20261004_123840_wrist.mp4"
+      },
+      "episode_id": "20261004_123840",
+      "language_instruction": "put the sponge on the plate",
+      "operator": "Daniel Lawson",
+      "annotators": [
+        "Daniel Lawson"
+      ],
+      "robot_name": "SO-101",
+      "qa_notes": "the robot barely moves / interact with object",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T00:53:35.704985+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-098",
+      "dataset_repo": "OopsieData-Submissions/UdeM_REAL",
+      "lab_id": "UdeM_REAL",
+      "repo_path": "20261001_183438/20261001_202504.h5",
+      "bundle_path": "episodes/UdeM_REAL/20261001_183438/20261001_202504.h5",
+      "video_files": {
+        "right": "episodes/UdeM_REAL/20261001_183438/20261001_202504_right.mp4",
+        "wrist": "episodes/UdeM_REAL/20261001_183438/20261001_202504_wrist.mp4"
+      },
+      "episode_id": "20261001_202504",
+      "language_instruction": "place the cup next to the plate",
+      "operator": "Jesse Silverberg",
+      "annotators": [
+        "Jesse Silverberg"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T00:51:36.937057+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-099",
+      "dataset_repo": "OopsieData-Submissions/UdeM_REAL",
+      "lab_id": "UdeM_REAL",
+      "repo_path": "20261001_110915/20261001_112449/20261001_112449.h5",
+      "bundle_path": "episodes/UdeM_REAL/20261001_110915/20261001_112449/20261001_112449.h5",
+      "video_files": {
+        "overhead": "episodes/UdeM_REAL/20261001_110915/20261001_112449/20261001_112449_overhead.mp4",
+        "wrist": "episodes/UdeM_REAL/20261001_110915/20261001_112449/20261001_112449_wrist.mp4"
+      },
+      "episode_id": "20261001_112449",
+      "language_instruction": "pick up the pen",
+      "operator": "Daniel Lawson",
+      "annotators": [
+        "Daniel Lawson"
+      ],
+      "robot_name": "SO-101",
+      "qa_notes": "",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T00:49:23.195657+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_10-100",
+      "dataset_repo": "OopsieData-Submissions/UdeM_REAL",
+      "lab_id": "UdeM_REAL",
+      "repo_path": "LAP/converted/000003_trajectory.h5",
+      "bundle_path": "episodes/UdeM_REAL/LAP/converted/000003_trajectory.h5",
+      "video_files": {
+        "left": "episodes/UdeM_REAL/LAP/converted/videos/000003_left.mp4",
+        "wrist": "episodes/UdeM_REAL/LAP/converted/videos/000003_wrist.mp4"
+      },
+      "episode_id": "000003",
+      "language_instruction": "pick up the duckie next to the knife and place it onto the plate",
+      "operator": "Albert Zhan",
+      "annotators": [
+        "Albert Zhan",
+        "operator"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "camera somewhat low resolution",
+      "qa_reviewer": "zhouzypaul",
+      "qa_updated_at": "2026-10-08T00:57:29.289525+00:00"
+    }
+  ]
+}

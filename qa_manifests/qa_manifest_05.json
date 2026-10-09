@@ -1,0 +1,2155 @@
+{
+  "bundle_id": "qa_bundle_05",
+  "created_at": "2026-10-07T19:21:12Z",
+  "seed": 0,
+  "reviewer": "MarcelHussing",
+  "labs": [
+    "OopsieData-Submissions/KAIST_KL",
+    "OopsieData-Submissions/KIT_ALR",
+    "OopsieData-Submissions/MIT_CLEAR",
+    "OopsieData-Submissions/MIT_Improbable",
+    "OopsieData-Submissions/McGill_DM_HL"
+  ],
+  "episodes": [
+    {
+      "qa_id": "qa_bundle_05-001",
+      "dataset_repo": "OopsieData-Submissions/KAIST_KL",
+      "lab_id": "KAIST_KL",
+      "repo_path": "changyeon/put_the_pet_on_the_shelve_rollout_failure/put_the_pet_on_the_shelve_rollout_failure_ep0177.h5",
+      "bundle_path": "episodes/KAIST_KL/changyeon/put_the_pet_on_the_shelve_rollout_failure/put_the_pet_on_the_shelve_rollout_failure_ep0177.h5",
+      "video_files": {
+        "exterior_image_1_left": "episodes/KAIST_KL/changyeon/put_the_pet_on_the_shelve_rollout_failure/put_the_pet_on_the_shelve_rollout_failure_ep0177_exterior_image_1_left.mp4",
+        "exterior_image_2_left": "episodes/KAIST_KL/changyeon/put_the_pet_on_the_shelve_rollout_failure/put_the_pet_on_the_shelve_rollout_failure_ep0177_exterior_image_2_left.mp4",
+        "wrist_image_left": "episodes/KAIST_KL/changyeon/put_the_pet_on_the_shelve_rollout_failure/put_the_pet_on_the_shelve_rollout_failure_ep0177_wrist_image_left.mp4"
+      },
+      "episode_id": "put_the_pet_on_the_shelve_rollout_failure_ep0177",
+      "language_instruction": "put the pet on the shelve",
+      "operator": "Changyeon Kim",
+      "annotators": [
+        "Changyeon Kim"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "low resolution, description is confusing because pet is lowercase (there is a plastic bottle and I think its supposed to be PET), Failure description incorrect as there is no toy",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:06:05.998594+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-002",
+      "dataset_repo": "OopsieData-Submissions/KAIST_KL",
+      "lab_id": "KAIST_KL",
+      "repo_path": "sinjae/place_profile/place_profile_2026-10-06_fail_episode_0086.h5",
+      "bundle_path": "episodes/KAIST_KL/sinjae/place_profile/place_profile_2026-10-06_fail_episode_0086.h5",
+      "video_files": {
+        "exterior_image_1_left": "episodes/KAIST_KL/sinjae/place_profile/place_profile_2026-10-06_fail_episode_0086_exterior_image_1_left.mp4",
+        "exterior_image_2_left": "episodes/KAIST_KL/sinjae/place_profile/place_profile_2026-10-06_fail_episode_0086_exterior_image_2_left.mp4",
+        "wrist_image_left": "episodes/KAIST_KL/sinjae/place_profile/place_profile_2026-10-06_fail_episode_0086_wrist_image_left.mp4"
+      },
+      "episode_id": "place_profile_2026-10-06_fail_episode_0086",
+      "language_instruction": "Place the profile at the designated position",
+      "operator": "Sinjae Kang",
+      "annotators": [
+        "Sinjae Kang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "task description is vague as I don't know what the \"designated position\" is",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:07:53.158683+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-003",
+      "dataset_repo": "OopsieData-Submissions/KAIST_KL",
+      "lab_id": "KAIST_KL",
+      "repo_path": "changyeon/pick_up_the_right_cup_and_stack_it_on_the_left_cup_rollout_failure/pick_up_the_right_cup_and_stack_it_on_the_left_cup_rollout_failure_ep0073.h5",
+      "bundle_path": "episodes/KAIST_KL/changyeon/pick_up_the_right_cup_and_stack_it_on_the_left_cup_rollout_failure/pick_up_the_right_cup_and_stack_it_on_the_left_cup_rollout_failure_ep0073.h5",
+      "video_files": {
+        "exterior_image_1_left": "episodes/KAIST_KL/changyeon/pick_up_the_right_cup_and_stack_it_on_the_left_cup_rollout_failure/pick_up_the_right_cup_and_stack_it_on_the_left_cup_rollout_failure_ep0073_exterior_image_1_left.mp4",
+        "exterior_image_2_left": "episodes/KAIST_KL/changyeon/pick_up_the_right_cup_and_stack_it_on_the_left_cup_rollout_failure/pick_up_the_right_cup_and_stack_it_on_the_left_cup_rollout_failure_ep0073_exterior_image_2_left.mp4",
+        "wrist_image_left": "episodes/KAIST_KL/changyeon/pick_up_the_right_cup_and_stack_it_on_the_left_cup_rollout_failure/pick_up_the_right_cup_and_stack_it_on_the_left_cup_rollout_failure_ep0073_wrist_image_left.mp4"
+      },
+      "episode_id": "pick_up_the_right_cup_and_stack_it_on_the_left_cup_rollout_failure_ep0073",
+      "language_instruction": "pick up the right cup and stack it on the left cup",
+      "operator": "Changyeon Kim",
+      "annotators": [
+        "Changyeon Kim"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "low resolution, description not well defined in wrist camera (yellow cup is on the left in the wrist video and on the right in others), incorrect label (robot succeeds in stacking unless I misunderstand stacking)",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:05:30.024498+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-004",
+      "dataset_repo": "OopsieData-Submissions/KAIST_KL",
+      "lab_id": "KAIST_KL",
+      "repo_path": "sinjae/snacks_basket/snacks_basket_2026-10-06_fail_episode_0118.h5",
+      "bundle_path": "episodes/KAIST_KL/sinjae/snacks_basket/snacks_basket_2026-10-06_fail_episode_0118.h5",
+      "video_files": {
+        "exterior_image_1_left": "episodes/KAIST_KL/sinjae/snacks_basket/snacks_basket_2026-10-06_fail_episode_0118_exterior_image_1_left.mp4",
+        "exterior_image_2_left": "episodes/KAIST_KL/sinjae/snacks_basket/snacks_basket_2026-10-06_fail_episode_0118_exterior_image_2_left.mp4",
+        "wrist_image_left": "episodes/KAIST_KL/sinjae/snacks_basket/snacks_basket_2026-10-06_fail_episode_0118_wrist_image_left.mp4"
+      },
+      "episode_id": "snacks_basket_2026-10-06_fail_episode_0118",
+      "language_instruction": "Place the snacks in the basket",
+      "operator": "Sinjae Kang",
+      "annotators": [
+        "Sinjae Kang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:09:30.813341+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-005",
+      "dataset_repo": "OopsieData-Submissions/KAIST_KL",
+      "lab_id": "KAIST_KL",
+      "repo_path": "changyeon/pick_and_place_the_three_pieces_of_fruit_onto_the_plate_rollout_success/pick_and_place_the_three_pieces_of_fruit_onto_the_plate_rollout_success_ep0094.h5",
+      "bundle_path": "episodes/KAIST_KL/changyeon/pick_and_place_the_three_pieces_of_fruit_onto_the_plate_rollout_success/pick_and_place_the_three_pieces_of_fruit_onto_the_plate_rollout_success_ep0094.h5",
+      "video_files": {
+        "exterior_image_1_left": "episodes/KAIST_KL/changyeon/pick_and_place_the_three_pieces_of_fruit_onto_the_plate_rollout_success/pick_and_place_the_three_pieces_of_fruit_onto_the_plate_rollout_success_ep0094_exterior_image_1_left.mp4",
+        "exterior_image_2_left": "episodes/KAIST_KL/changyeon/pick_and_place_the_three_pieces_of_fruit_onto_the_plate_rollout_success/pick_and_place_the_three_pieces_of_fruit_onto_the_plate_rollout_success_ep0094_exterior_image_2_left.mp4",
+        "wrist_image_left": "episodes/KAIST_KL/changyeon/pick_and_place_the_three_pieces_of_fruit_onto_the_plate_rollout_success/pick_and_place_the_three_pieces_of_fruit_onto_the_plate_rollout_success_ep0094_wrist_image_left.mp4"
+      },
+      "episode_id": "pick_and_place_the_three_pieces_of_fruit_onto_the_plate_rollout_success_ep0094",
+      "language_instruction": "pick and place the three pieces of fruit onto the plate",
+      "operator": "Changyeon Kim",
+      "annotators": [
+        "Changyeon Kim"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "low resolution",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T17:58:03.696709+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-006",
+      "dataset_repo": "OopsieData-Submissions/KAIST_KL",
+      "lab_id": "KAIST_KL",
+      "repo_path": "sinjae/serve_muffin/serve_muffin_2026-10-05_train_episode_0103.h5",
+      "bundle_path": "episodes/KAIST_KL/sinjae/serve_muffin/serve_muffin_2026-10-05_train_episode_0103.h5",
+      "video_files": {
+        "exterior_image_1_left": "episodes/KAIST_KL/sinjae/serve_muffin/serve_muffin_2026-10-05_train_episode_0103_exterior_image_1_left.mp4",
+        "exterior_image_2_left": "episodes/KAIST_KL/sinjae/serve_muffin/serve_muffin_2026-10-05_train_episode_0103_exterior_image_2_left.mp4",
+        "wrist_image_left": "episodes/KAIST_KL/sinjae/serve_muffin/serve_muffin_2026-10-05_train_episode_0103_wrist_image_left.mp4"
+      },
+      "episode_id": "serve_muffin_2026-10-05_train_episode_0103",
+      "language_instruction": "Serve the muffin",
+      "operator": "Sinjae Kang",
+      "annotators": [
+        "Sinjae Kang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "Task description underspecified (maybe that's intended) there are multiple muffins and serving just means putting on tray",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:09:05.716722+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-007",
+      "dataset_repo": "OopsieData-Submissions/KAIST_KL",
+      "lab_id": "KAIST_KL",
+      "repo_path": "changyeon/put_the_two_cubes_into_the_cup_rollout_success/put_the_two_cubes_into_the_cup_rollout_success_ep0042.h5",
+      "bundle_path": "episodes/KAIST_KL/changyeon/put_the_two_cubes_into_the_cup_rollout_success/put_the_two_cubes_into_the_cup_rollout_success_ep0042.h5",
+      "video_files": {
+        "exterior_image_1_left": "episodes/KAIST_KL/changyeon/put_the_two_cubes_into_the_cup_rollout_success/put_the_two_cubes_into_the_cup_rollout_success_ep0042_exterior_image_1_left.mp4",
+        "exterior_image_2_left": "episodes/KAIST_KL/changyeon/put_the_two_cubes_into_the_cup_rollout_success/put_the_two_cubes_into_the_cup_rollout_success_ep0042_exterior_image_2_left.mp4",
+        "wrist_image_left": "episodes/KAIST_KL/changyeon/put_the_two_cubes_into_the_cup_rollout_success/put_the_two_cubes_into_the_cup_rollout_success_ep0042_wrist_image_left.mp4"
+      },
+      "episode_id": "put_the_two_cubes_into_the_cup_rollout_success_ep0042",
+      "language_instruction": "put the two cubes into the cup",
+      "operator": "Changyeon Kim",
+      "annotators": [
+        "Changyeon Kim"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "low resolution",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:01:26.253618+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-008",
+      "dataset_repo": "OopsieData-Submissions/KAIST_KL",
+      "lab_id": "KAIST_KL",
+      "repo_path": "sinjae/spoon_fork_cross/spoon_fork_cross_2026-10-04_fail_episode_0181.h5",
+      "bundle_path": "episodes/KAIST_KL/sinjae/spoon_fork_cross/spoon_fork_cross_2026-10-04_fail_episode_0181.h5",
+      "video_files": {
+        "exterior_image_1_left": "episodes/KAIST_KL/sinjae/spoon_fork_cross/spoon_fork_cross_2026-10-04_fail_episode_0181_exterior_image_1_left.mp4",
+        "exterior_image_2_left": "episodes/KAIST_KL/sinjae/spoon_fork_cross/spoon_fork_cross_2026-10-04_fail_episode_0181_exterior_image_2_left.mp4",
+        "wrist_image_left": "episodes/KAIST_KL/sinjae/spoon_fork_cross/spoon_fork_cross_2026-10-04_fail_episode_0181_wrist_image_left.mp4"
+      },
+      "episode_id": "spoon_fork_cross_2026-10-04_fail_episode_0181",
+      "language_instruction": "Place the spoon and fork crossed on the plate",
+      "operator": "Sinjae Kang",
+      "annotators": [
+        "Sinjae Kang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:11:23.289936+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-009",
+      "dataset_repo": "OopsieData-Submissions/KAIST_KL",
+      "lab_id": "KAIST_KL",
+      "repo_path": "changyeon/pick_up_the_apple_and_place_it_on_the_dish_rollout_failure/pick_up_the_apple_and_place_it_on_the_dish_rollout_failure_ep0114.h5",
+      "bundle_path": "episodes/KAIST_KL/changyeon/pick_up_the_apple_and_place_it_on_the_dish_rollout_failure/pick_up_the_apple_and_place_it_on_the_dish_rollout_failure_ep0114.h5",
+      "video_files": {
+        "exterior_image_1_left": "episodes/KAIST_KL/changyeon/pick_up_the_apple_and_place_it_on_the_dish_rollout_failure/pick_up_the_apple_and_place_it_on_the_dish_rollout_failure_ep0114_exterior_image_1_left.mp4",
+        "exterior_image_2_left": "episodes/KAIST_KL/changyeon/pick_up_the_apple_and_place_it_on_the_dish_rollout_failure/pick_up_the_apple_and_place_it_on_the_dish_rollout_failure_ep0114_exterior_image_2_left.mp4",
+        "wrist_image_left": "episodes/KAIST_KL/changyeon/pick_up_the_apple_and_place_it_on_the_dish_rollout_failure/pick_up_the_apple_and_place_it_on_the_dish_rollout_failure_ep0114_wrist_image_left.mp4"
+      },
+      "episode_id": "pick_up_the_apple_and_place_it_on_the_dish_rollout_failure_ep0114",
+      "language_instruction": "pick up the apple and place it on the dish",
+      "operator": "Changyeon Kim",
+      "annotators": [
+        "Changyeon Kim"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "low resolution, human hand in the image that interacts with object at the end",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T17:58:12.659172+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-010",
+      "dataset_repo": "OopsieData-Submissions/KAIST_KL",
+      "lab_id": "KAIST_KL",
+      "repo_path": "changyeon/stack_the_three_cups_in_tower_demo_success/stack_the_three_cups_in_tower_demo_success_ep0015.h5",
+      "bundle_path": "episodes/KAIST_KL/changyeon/stack_the_three_cups_in_tower_demo_success/stack_the_three_cups_in_tower_demo_success_ep0015.h5",
+      "video_files": {
+        "exterior_image_1_left": "episodes/KAIST_KL/changyeon/stack_the_three_cups_in_tower_demo_success/stack_the_three_cups_in_tower_demo_success_ep0015_exterior_image_1_left.mp4",
+        "exterior_image_2_left": "episodes/KAIST_KL/changyeon/stack_the_three_cups_in_tower_demo_success/stack_the_three_cups_in_tower_demo_success_ep0015_exterior_image_2_left.mp4",
+        "wrist_image_left": "episodes/KAIST_KL/changyeon/stack_the_three_cups_in_tower_demo_success/stack_the_three_cups_in_tower_demo_success_ep0015_wrist_image_left.mp4"
+      },
+      "episode_id": "stack_the_three_cups_in_tower_demo_success_ep0015",
+      "language_instruction": "stack the three cups in tower",
+      "operator": "Changyeon Kim",
+      "annotators": [
+        "Changyeon Kim"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "low resolution",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:03:59.555133+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-011",
+      "dataset_repo": "OopsieData-Submissions/KAIST_KL",
+      "lab_id": "KAIST_KL",
+      "repo_path": "changyeon/stack_the_three_blocks_on_the_tray_demo_success/stack_the_three_blocks_on_the_tray_demo_success_ep0025.h5",
+      "bundle_path": "episodes/KAIST_KL/changyeon/stack_the_three_blocks_on_the_tray_demo_success/stack_the_three_blocks_on_the_tray_demo_success_ep0025.h5",
+      "video_files": {
+        "exterior_image_1_left": "episodes/KAIST_KL/changyeon/stack_the_three_blocks_on_the_tray_demo_success/stack_the_three_blocks_on_the_tray_demo_success_ep0025_exterior_image_1_left.mp4",
+        "exterior_image_2_left": "episodes/KAIST_KL/changyeon/stack_the_three_blocks_on_the_tray_demo_success/stack_the_three_blocks_on_the_tray_demo_success_ep0025_exterior_image_2_left.mp4",
+        "wrist_image_left": "episodes/KAIST_KL/changyeon/stack_the_three_blocks_on_the_tray_demo_success/stack_the_three_blocks_on_the_tray_demo_success_ep0025_wrist_image_left.mp4"
+      },
+      "episode_id": "stack_the_three_blocks_on_the_tray_demo_success_ep0025",
+      "language_instruction": "stack the three blocks on the tray",
+      "operator": "Changyeon Kim",
+      "annotators": [
+        "Changyeon Kim"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "low resolution",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:03:13.329430+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-012",
+      "dataset_repo": "OopsieData-Submissions/KAIST_KL",
+      "lab_id": "KAIST_KL",
+      "repo_path": "changyeon/put_the_pan_on_the_stove_demo_success/put_the_pan_on_the_stove_demo_success_ep0027.h5",
+      "bundle_path": "episodes/KAIST_KL/changyeon/put_the_pan_on_the_stove_demo_success/put_the_pan_on_the_stove_demo_success_ep0027.h5",
+      "video_files": {
+        "exterior_image_1_left": "episodes/KAIST_KL/changyeon/put_the_pan_on_the_stove_demo_success/put_the_pan_on_the_stove_demo_success_ep0027_exterior_image_1_left.mp4",
+        "exterior_image_2_left": "episodes/KAIST_KL/changyeon/put_the_pan_on_the_stove_demo_success/put_the_pan_on_the_stove_demo_success_ep0027_exterior_image_2_left.mp4",
+        "wrist_image_left": "episodes/KAIST_KL/changyeon/put_the_pan_on_the_stove_demo_success/put_the_pan_on_the_stove_demo_success_ep0027_wrist_image_left.mp4"
+      },
+      "episode_id": "put_the_pan_on_the_stove_demo_success_ep0027",
+      "language_instruction": "put the pan on the stove",
+      "operator": "Changyeon Kim",
+      "annotators": [
+        "Changyeon Kim"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "low resolution",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T17:58:26.527912+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-013",
+      "dataset_repo": "OopsieData-Submissions/KAIST_KL",
+      "lab_id": "KAIST_KL",
+      "repo_path": "changyeon/remove_the_marker_from_the_white_cup_and_put_on_the_table_demo_success/remove_the_marker_from_the_white_cup_and_put_on_the_table_demo_success_ep0018.h5",
+      "bundle_path": "episodes/KAIST_KL/changyeon/remove_the_marker_from_the_white_cup_and_put_on_the_table_demo_success/remove_the_marker_from_the_white_cup_and_put_on_the_table_demo_success_ep0018.h5",
+      "video_files": {
+        "exterior_image_1_left": "episodes/KAIST_KL/changyeon/remove_the_marker_from_the_white_cup_and_put_on_the_table_demo_success/remove_the_marker_from_the_white_cup_and_put_on_the_table_demo_success_ep0018_exterior_image_1_left.mp4",
+        "exterior_image_2_left": "episodes/KAIST_KL/changyeon/remove_the_marker_from_the_white_cup_and_put_on_the_table_demo_success/remove_the_marker_from_the_white_cup_and_put_on_the_table_demo_success_ep0018_exterior_image_2_left.mp4",
+        "wrist_image_left": "episodes/KAIST_KL/changyeon/remove_the_marker_from_the_white_cup_and_put_on_the_table_demo_success/remove_the_marker_from_the_white_cup_and_put_on_the_table_demo_success_ep0018_wrist_image_left.mp4"
+      },
+      "episode_id": "remove_the_marker_from_the_white_cup_and_put_on_the_table_demo_success_ep0018",
+      "language_instruction": "remove the marker from the white cup and put on the table",
+      "operator": "Changyeon Kim",
+      "annotators": [
+        "Changyeon Kim"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "low resolution",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:02:41.137350+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-014",
+      "dataset_repo": "OopsieData-Submissions/KAIST_KL",
+      "lab_id": "KAIST_KL",
+      "repo_path": "sinjae/place_profile/place_profile_2026-10-06_fail_episode_0010.h5",
+      "bundle_path": "episodes/KAIST_KL/sinjae/place_profile/place_profile_2026-10-06_fail_episode_0010.h5",
+      "video_files": {
+        "exterior_image_1_left": "episodes/KAIST_KL/sinjae/place_profile/place_profile_2026-10-06_fail_episode_0010_exterior_image_1_left.mp4",
+        "exterior_image_2_left": "episodes/KAIST_KL/sinjae/place_profile/place_profile_2026-10-06_fail_episode_0010_exterior_image_2_left.mp4",
+        "wrist_image_left": "episodes/KAIST_KL/sinjae/place_profile/place_profile_2026-10-06_fail_episode_0010_wrist_image_left.mp4"
+      },
+      "episode_id": "place_profile_2026-10-06_fail_episode_0010",
+      "language_instruction": "Place the profile at the designated position",
+      "operator": "Sinjae Kang",
+      "annotators": [
+        "Sinjae Kang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "task description is vague as I don't know what the \"designated position\" is",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:07:41.342859+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-015",
+      "dataset_repo": "OopsieData-Submissions/KAIST_KL",
+      "lab_id": "KAIST_KL",
+      "repo_path": "sinjae/serve_muffin/serve_muffin_2026-10-05_fail_episode_0150.h5",
+      "bundle_path": "episodes/KAIST_KL/sinjae/serve_muffin/serve_muffin_2026-10-05_fail_episode_0150.h5",
+      "video_files": {
+        "exterior_image_1_left": "episodes/KAIST_KL/sinjae/serve_muffin/serve_muffin_2026-10-05_fail_episode_0150_exterior_image_1_left.mp4",
+        "exterior_image_2_left": "episodes/KAIST_KL/sinjae/serve_muffin/serve_muffin_2026-10-05_fail_episode_0150_exterior_image_2_left.mp4",
+        "wrist_image_left": "episodes/KAIST_KL/sinjae/serve_muffin/serve_muffin_2026-10-05_fail_episode_0150_wrist_image_left.mp4"
+      },
+      "episode_id": "serve_muffin_2026-10-05_fail_episode_0150",
+      "language_instruction": "Serve the muffin",
+      "operator": "Sinjae Kang",
+      "annotators": [
+        "Sinjae Kang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "Task description underspecified (maybe that's intended) there are multiple muffins and serving just means putting on tray",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:08:42.636366+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-016",
+      "dataset_repo": "OopsieData-Submissions/KAIST_KL",
+      "lab_id": "KAIST_KL",
+      "repo_path": "sinjae/spoon_fork_cross/spoon_fork_cross_2026-10-04_fail_episode_0146.h5",
+      "bundle_path": "episodes/KAIST_KL/sinjae/spoon_fork_cross/spoon_fork_cross_2026-10-04_fail_episode_0146.h5",
+      "video_files": {
+        "exterior_image_1_left": "episodes/KAIST_KL/sinjae/spoon_fork_cross/spoon_fork_cross_2026-10-04_fail_episode_0146_exterior_image_1_left.mp4",
+        "exterior_image_2_left": "episodes/KAIST_KL/sinjae/spoon_fork_cross/spoon_fork_cross_2026-10-04_fail_episode_0146_exterior_image_2_left.mp4",
+        "wrist_image_left": "episodes/KAIST_KL/sinjae/spoon_fork_cross/spoon_fork_cross_2026-10-04_fail_episode_0146_wrist_image_left.mp4"
+      },
+      "episode_id": "spoon_fork_cross_2026-10-04_fail_episode_0146",
+      "language_instruction": "Place the spoon and fork crossed on the plate",
+      "operator": "Sinjae Kang",
+      "annotators": [
+        "Sinjae Kang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:10:52.557743+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-017",
+      "dataset_repo": "OopsieData-Submissions/KAIST_KL",
+      "lab_id": "KAIST_KL",
+      "repo_path": "sinjae/snacks_basket/snacks_basket_2026-10-06_train_episode_0065.h5",
+      "bundle_path": "episodes/KAIST_KL/sinjae/snacks_basket/snacks_basket_2026-10-06_train_episode_0065.h5",
+      "video_files": {
+        "exterior_image_1_left": "episodes/KAIST_KL/sinjae/snacks_basket/snacks_basket_2026-10-06_train_episode_0065_exterior_image_1_left.mp4",
+        "exterior_image_2_left": "episodes/KAIST_KL/sinjae/snacks_basket/snacks_basket_2026-10-06_train_episode_0065_exterior_image_2_left.mp4",
+        "wrist_image_left": "episodes/KAIST_KL/sinjae/snacks_basket/snacks_basket_2026-10-06_train_episode_0065_wrist_image_left.mp4"
+      },
+      "episode_id": "snacks_basket_2026-10-06_train_episode_0065",
+      "language_instruction": "Place the snacks in the basket",
+      "operator": "Sinjae Kang",
+      "annotators": [
+        "Sinjae Kang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "only 2 out of 3 things get placed then the video ends",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:10:31.849074+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-018",
+      "dataset_repo": "OopsieData-Submissions/KAIST_KL",
+      "lab_id": "KAIST_KL",
+      "repo_path": "changyeon/pick_up_the_right_cup_and_stack_it_on_the_left_cup_rollout_failure/pick_up_the_right_cup_and_stack_it_on_the_left_cup_rollout_failure_ep0040.h5",
+      "bundle_path": "episodes/KAIST_KL/changyeon/pick_up_the_right_cup_and_stack_it_on_the_left_cup_rollout_failure/pick_up_the_right_cup_and_stack_it_on_the_left_cup_rollout_failure_ep0040.h5",
+      "video_files": {
+        "exterior_image_1_left": "episodes/KAIST_KL/changyeon/pick_up_the_right_cup_and_stack_it_on_the_left_cup_rollout_failure/pick_up_the_right_cup_and_stack_it_on_the_left_cup_rollout_failure_ep0040_exterior_image_1_left.mp4",
+        "exterior_image_2_left": "episodes/KAIST_KL/changyeon/pick_up_the_right_cup_and_stack_it_on_the_left_cup_rollout_failure/pick_up_the_right_cup_and_stack_it_on_the_left_cup_rollout_failure_ep0040_exterior_image_2_left.mp4",
+        "wrist_image_left": "episodes/KAIST_KL/changyeon/pick_up_the_right_cup_and_stack_it_on_the_left_cup_rollout_failure/pick_up_the_right_cup_and_stack_it_on_the_left_cup_rollout_failure_ep0040_wrist_image_left.mp4"
+      },
+      "episode_id": "pick_up_the_right_cup_and_stack_it_on_the_left_cup_rollout_failure_ep0040",
+      "language_instruction": "pick up the right cup and stack it on the left cup",
+      "operator": "Changyeon Kim",
+      "annotators": [
+        "Changyeon Kim"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "low resolution, task description not well defined in wrist camera (orange cup is on the left in the wrist video and on the right in others)",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:05:01.412435+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-019",
+      "dataset_repo": "OopsieData-Submissions/KAIST_KL",
+      "lab_id": "KAIST_KL",
+      "repo_path": "changyeon/put_the_pet_on_the_shelve_rollout_success/put_the_pet_on_the_shelve_rollout_success_ep0074.h5",
+      "bundle_path": "episodes/KAIST_KL/changyeon/put_the_pet_on_the_shelve_rollout_success/put_the_pet_on_the_shelve_rollout_success_ep0074.h5",
+      "video_files": {
+        "exterior_image_1_left": "episodes/KAIST_KL/changyeon/put_the_pet_on_the_shelve_rollout_success/put_the_pet_on_the_shelve_rollout_success_ep0074_exterior_image_1_left.mp4",
+        "exterior_image_2_left": "episodes/KAIST_KL/changyeon/put_the_pet_on_the_shelve_rollout_success/put_the_pet_on_the_shelve_rollout_success_ep0074_exterior_image_2_left.mp4",
+        "wrist_image_left": "episodes/KAIST_KL/changyeon/put_the_pet_on_the_shelve_rollout_success/put_the_pet_on_the_shelve_rollout_success_ep0074_wrist_image_left.mp4"
+      },
+      "episode_id": "put_the_pet_on_the_shelve_rollout_success_ep0074",
+      "language_instruction": "put the pet on the shelve",
+      "operator": "Changyeon Kim",
+      "annotators": [
+        "Changyeon Kim"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "low resolution, description is confusing because pet is lowercase (there is a plastic bottle and I think its supposed to be PET), bottle very difficult to see in first and second video",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:01:03.587980+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-020",
+      "dataset_repo": "OopsieData-Submissions/KAIST_KL",
+      "lab_id": "KAIST_KL",
+      "repo_path": "changyeon/put_the_two_cubes_into_the_cup_rollout_success/put_the_two_cubes_into_the_cup_rollout_success_ep0058.h5",
+      "bundle_path": "episodes/KAIST_KL/changyeon/put_the_two_cubes_into_the_cup_rollout_success/put_the_two_cubes_into_the_cup_rollout_success_ep0058.h5",
+      "video_files": {
+        "exterior_image_1_left": "episodes/KAIST_KL/changyeon/put_the_two_cubes_into_the_cup_rollout_success/put_the_two_cubes_into_the_cup_rollout_success_ep0058_exterior_image_1_left.mp4",
+        "exterior_image_2_left": "episodes/KAIST_KL/changyeon/put_the_two_cubes_into_the_cup_rollout_success/put_the_two_cubes_into_the_cup_rollout_success_ep0058_exterior_image_2_left.mp4",
+        "wrist_image_left": "episodes/KAIST_KL/changyeon/put_the_two_cubes_into_the_cup_rollout_success/put_the_two_cubes_into_the_cup_rollout_success_ep0058_wrist_image_left.mp4"
+      },
+      "episode_id": "put_the_two_cubes_into_the_cup_rollout_success_ep0058",
+      "language_instruction": "put the two cubes into the cup",
+      "operator": "Changyeon Kim",
+      "annotators": [
+        "Changyeon Kim"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "low resolution, human in image moving",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:01:56.884005+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-021",
+      "dataset_repo": "OopsieData-Submissions/KIT_ALR",
+      "lab_id": "KIT_ALR",
+      "repo_path": "20261003_110250/20261003_110302.h5",
+      "bundle_path": "episodes/KIT_ALR/20261003_110250/20261003_110302.h5",
+      "video_files": {
+        "left": "episodes/KIT_ALR/20261003_110250/20261003_110302_left.mp4",
+        "right": "episodes/KIT_ALR/20261003_110250/20261003_110302_right.mp4",
+        "wrist": "episodes/KIT_ALR/20261003_110250/20261003_110302_wrist.mp4"
+      },
+      "episode_id": "20261003_110302",
+      "language_instruction": "Put all yellow cubes on the right plate.",
+      "operator": "ALR",
+      "annotators": [
+        "ALR"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "right is ill defined in the wrist view where goal plate is at the top",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:16:02.893869+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-022",
+      "dataset_repo": "OopsieData-Submissions/KIT_ALR",
+      "lab_id": "KIT_ALR",
+      "repo_path": "20261004_205135/20261004_210151.h5",
+      "bundle_path": "episodes/KIT_ALR/20261004_205135/20261004_210151.h5",
+      "video_files": {
+        "left": "episodes/KIT_ALR/20261004_205135/20261004_210151_left.mp4",
+        "right": "episodes/KIT_ALR/20261004_205135/20261004_210151_right.mp4",
+        "wrist": "episodes/KIT_ALR/20261004_205135/20261004_210151_wrist.mp4"
+      },
+      "episode_id": "20261004_210151",
+      "language_instruction": "Pick up one cup and stack it into another.",
+      "operator": "ALR",
+      "annotators": [
+        "ALR"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:22:36.278898+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-023",
+      "dataset_repo": "OopsieData-Submissions/KIT_ALR",
+      "lab_id": "KIT_ALR",
+      "repo_path": "20261001_210022/20261001_210034.h5",
+      "bundle_path": "episodes/KIT_ALR/20261001_210022/20261001_210034.h5",
+      "video_files": {
+        "left": "episodes/KIT_ALR/20261001_210022/20261001_210034_left.mp4",
+        "right": "episodes/KIT_ALR/20261001_210022/20261001_210034_right.mp4",
+        "wrist": "episodes/KIT_ALR/20261001_210022/20261001_210034_wrist.mp4"
+      },
+      "episode_id": "20261001_210034",
+      "language_instruction": "Put all red blocks in the top drawer.",
+      "operator": "ALR",
+      "annotators": [
+        "ALR"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:11:42.135940+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-024",
+      "dataset_repo": "OopsieData-Submissions/KIT_ALR",
+      "lab_id": "KIT_ALR",
+      "repo_path": "20261003_125752/20261003_131123.h5",
+      "bundle_path": "episodes/KIT_ALR/20261003_125752/20261003_131123.h5",
+      "video_files": {
+        "left": "episodes/KIT_ALR/20261003_125752/20261003_131123_left.mp4",
+        "right": "episodes/KIT_ALR/20261003_125752/20261003_131123_right.mp4",
+        "wrist": "episodes/KIT_ALR/20261003_125752/20261003_131123_wrist.mp4"
+      },
+      "episode_id": "20261003_131123",
+      "language_instruction": "Put all red cubes on the middle plate.",
+      "operator": "ALR",
+      "annotators": [
+        "ALR"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:18:09.262688+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-025",
+      "dataset_repo": "OopsieData-Submissions/KIT_ALR",
+      "lab_id": "KIT_ALR",
+      "repo_path": "20261003_205604/20261003_210031.h5",
+      "bundle_path": "episodes/KIT_ALR/20261003_205604/20261003_210031.h5",
+      "video_files": {
+        "left": "episodes/KIT_ALR/20261003_205604/20261003_210031_left.mp4",
+        "right": "episodes/KIT_ALR/20261003_205604/20261003_210031_right.mp4",
+        "wrist": "episodes/KIT_ALR/20261003_205604/20261003_210031_wrist.mp4"
+      },
+      "episode_id": "20261003_210031",
+      "language_instruction": "Stack the green block on the blue block.",
+      "operator": "ALR",
+      "annotators": [
+        "ALR"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:21:04.054054+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-026",
+      "dataset_repo": "OopsieData-Submissions/KIT_ALR",
+      "lab_id": "KIT_ALR",
+      "repo_path": "20261003_114940/20261003_115421.h5",
+      "bundle_path": "episodes/KIT_ALR/20261003_114940/20261003_115421.h5",
+      "video_files": {
+        "left": "episodes/KIT_ALR/20261003_114940/20261003_115421_left.mp4",
+        "right": "episodes/KIT_ALR/20261003_114940/20261003_115421_right.mp4",
+        "wrist": "episodes/KIT_ALR/20261003_114940/20261003_115421_wrist.mp4"
+      },
+      "episode_id": "20261003_115421",
+      "language_instruction": "Put all green cubes on the left plate.",
+      "operator": "ALR",
+      "annotators": [
+        "ALR"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "left is ill defined in the wrist view where goal plate is at the bottom",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:16:33.485446+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-027",
+      "dataset_repo": "OopsieData-Submissions/KIT_ALR",
+      "lab_id": "KIT_ALR",
+      "repo_path": "20261003_122614/20261003_123926.h5",
+      "bundle_path": "episodes/KIT_ALR/20261003_122614/20261003_123926.h5",
+      "video_files": {
+        "left": "episodes/KIT_ALR/20261003_122614/20261003_123926_left.mp4",
+        "right": "episodes/KIT_ALR/20261003_122614/20261003_123926_right.mp4",
+        "wrist": "episodes/KIT_ALR/20261003_122614/20261003_123926_wrist.mp4"
+      },
+      "episode_id": "20261003_123926",
+      "language_instruction": "Put all green cubes on the right plate.",
+      "operator": "ALR",
+      "annotators": [
+        "ALR"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "right is ill defined in the wrist view where goal plate is at the top, unclear what side effect is here",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:17:54.134203+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-028",
+      "dataset_repo": "OopsieData-Submissions/KIT_ALR",
+      "lab_id": "KIT_ALR",
+      "repo_path": "20261002_201255/20261002_201307.h5",
+      "bundle_path": "episodes/KIT_ALR/20261002_201255/20261002_201307.h5",
+      "video_files": {
+        "left": "episodes/KIT_ALR/20261002_201255/20261002_201307_left.mp4",
+        "right": "episodes/KIT_ALR/20261002_201255/20261002_201307_right.mp4",
+        "wrist": "episodes/KIT_ALR/20261002_201255/20261002_201307_wrist.mp4"
+      },
+      "episode_id": "20261002_201307",
+      "language_instruction": "Put all yellow cubes on the left plate.",
+      "operator": "ALR",
+      "annotators": [
+        "ALR"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "left is ill defined in the wrist view where goal plate is at the bottom",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:15:10.715410+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-029",
+      "dataset_repo": "OopsieData-Submissions/KIT_ALR",
+      "lab_id": "KIT_ALR",
+      "repo_path": "20261004_140014/20261004_140551.h5",
+      "bundle_path": "episodes/KIT_ALR/20261004_140014/20261004_140551.h5",
+      "video_files": {
+        "left": "episodes/KIT_ALR/20261004_140014/20261004_140551_left.mp4",
+        "right": "episodes/KIT_ALR/20261004_140014/20261004_140551_right.mp4",
+        "wrist": "episodes/KIT_ALR/20261004_140014/20261004_140551_wrist.mp4"
+      },
+      "episode_id": "20261004_140551",
+      "language_instruction": "Put all green blocks in the top drawer.",
+      "operator": "ALR",
+      "annotators": [
+        "ALR"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:22:15.038082+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-030",
+      "dataset_repo": "OopsieData-Submissions/KIT_ALR",
+      "lab_id": "KIT_ALR",
+      "repo_path": "20261002_182001/20261002_182537.h5",
+      "bundle_path": "episodes/KIT_ALR/20261002_182001/20261002_182537.h5",
+      "video_files": {
+        "left": "episodes/KIT_ALR/20261002_182001/20261002_182537_left.mp4",
+        "right": "episodes/KIT_ALR/20261002_182001/20261002_182537_right.mp4",
+        "wrist": "episodes/KIT_ALR/20261002_182001/20261002_182537_wrist.mp4"
+      },
+      "episode_id": "20261002_182537",
+      "language_instruction": "Put all green cubes on the middle plate.",
+      "operator": "ALR",
+      "annotators": [
+        "ALR"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:12:21.552445+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-031",
+      "dataset_repo": "OopsieData-Submissions/KIT_ALR",
+      "lab_id": "KIT_ALR",
+      "repo_path": "20261003_202445/20261003_202731.h5",
+      "bundle_path": "episodes/KIT_ALR/20261003_202445/20261003_202731.h5",
+      "video_files": {
+        "left": "episodes/KIT_ALR/20261003_202445/20261003_202731_left.mp4",
+        "right": "episodes/KIT_ALR/20261003_202445/20261003_202731_right.mp4",
+        "wrist": "episodes/KIT_ALR/20261003_202445/20261003_202731_wrist.mp4"
+      },
+      "episode_id": "20261003_202731",
+      "language_instruction": "Stack the yellow block on the green block.",
+      "operator": "ALR",
+      "annotators": [
+        "ALR"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:19:55.727118+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-032",
+      "dataset_repo": "OopsieData-Submissions/KIT_ALR",
+      "lab_id": "KIT_ALR",
+      "repo_path": "20261004_115412/20261004_115607.h5",
+      "bundle_path": "episodes/KIT_ALR/20261004_115412/20261004_115607.h5",
+      "video_files": {
+        "left": "episodes/KIT_ALR/20261004_115412/20261004_115607_left.mp4",
+        "right": "episodes/KIT_ALR/20261004_115412/20261004_115607_right.mp4",
+        "wrist": "episodes/KIT_ALR/20261004_115412/20261004_115607_wrist.mp4"
+      },
+      "episode_id": "20261004_115607",
+      "language_instruction": "Put all blue blocks in the top drawer.",
+      "operator": "ALR",
+      "annotators": [
+        "ALR"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:21:42.659983+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-033",
+      "dataset_repo": "OopsieData-Submissions/KIT_ALR",
+      "lab_id": "KIT_ALR",
+      "repo_path": "20261003_183823/20261003_184612.h5",
+      "bundle_path": "episodes/KIT_ALR/20261003_183823/20261003_184612.h5",
+      "video_files": {
+        "left": "episodes/KIT_ALR/20261003_183823/20261003_184612_left.mp4",
+        "right": "episodes/KIT_ALR/20261003_183823/20261003_184612_right.mp4",
+        "wrist": "episodes/KIT_ALR/20261003_183823/20261003_184612_wrist.mp4"
+      },
+      "episode_id": "20261003_184612",
+      "language_instruction": "Put all yellow cubes on the middle plate.",
+      "operator": "ALR",
+      "annotators": [
+        "ALR"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:18:36.432494+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-034",
+      "dataset_repo": "OopsieData-Submissions/KIT_ALR",
+      "lab_id": "KIT_ALR",
+      "repo_path": "20261002_191513/20261002_191526.h5",
+      "bundle_path": "episodes/KIT_ALR/20261002_191513/20261002_191526.h5",
+      "video_files": {
+        "left": "episodes/KIT_ALR/20261002_191513/20261002_191526_left.mp4",
+        "right": "episodes/KIT_ALR/20261002_191513/20261002_191526_right.mp4",
+        "wrist": "episodes/KIT_ALR/20261002_191513/20261002_191526_wrist.mp4"
+      },
+      "episode_id": "20261002_191526",
+      "language_instruction": "Put all red cubes on the left plate.",
+      "operator": "ALR",
+      "annotators": [
+        "ALR"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "left is ill defined in the wrist view where goal plate is at the bottom",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:14:40.776464+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-035",
+      "dataset_repo": "OopsieData-Submissions/KIT_ALR",
+      "lab_id": "KIT_ALR",
+      "repo_path": "20261002_195103/20261002_195113.h5",
+      "bundle_path": "episodes/KIT_ALR/20261002_195103/20261002_195113.h5",
+      "video_files": {
+        "left": "episodes/KIT_ALR/20261002_195103/20261002_195113_left.mp4",
+        "right": "episodes/KIT_ALR/20261002_195103/20261002_195113_right.mp4",
+        "wrist": "episodes/KIT_ALR/20261002_195103/20261002_195113_wrist.mp4"
+      },
+      "episode_id": "20261002_195113",
+      "language_instruction": "Put all red cubes on the right plate.",
+      "operator": "ALR",
+      "annotators": [
+        "ALR"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "right is ill defined in the wrist view where goal plate is at the top",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:14:32.589791+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-036",
+      "dataset_repo": "OopsieData-Submissions/KIT_ALR",
+      "lab_id": "KIT_ALR",
+      "repo_path": "20261003_203950/20261003_204514.h5",
+      "bundle_path": "episodes/KIT_ALR/20261003_203950/20261003_204514.h5",
+      "video_files": {
+        "left": "episodes/KIT_ALR/20261003_203950/20261003_204514_left.mp4",
+        "right": "episodes/KIT_ALR/20261003_203950/20261003_204514_right.mp4",
+        "wrist": "episodes/KIT_ALR/20261003_203950/20261003_204514_wrist.mp4"
+      },
+      "episode_id": "20261003_204514",
+      "language_instruction": "Stack the yellow block on the blue block.",
+      "operator": "ALR",
+      "annotators": [
+        "ALR"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:20:36.836410+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-037",
+      "dataset_repo": "OopsieData-Submissions/KIT_ALR",
+      "lab_id": "KIT_ALR",
+      "repo_path": "20261003_104644/20261003_105706.h5",
+      "bundle_path": "episodes/KIT_ALR/20261003_104644/20261003_105706.h5",
+      "video_files": {
+        "left": "episodes/KIT_ALR/20261003_104644/20261003_105706_left.mp4",
+        "right": "episodes/KIT_ALR/20261003_104644/20261003_105706_right.mp4",
+        "wrist": "episodes/KIT_ALR/20261003_104644/20261003_105706_wrist.mp4"
+      },
+      "episode_id": "20261003_105706",
+      "language_instruction": "Put all blue cubes on the middle plate.",
+      "operator": "ALR",
+      "annotators": [
+        "ALR"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:15:40.323081+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-038",
+      "dataset_repo": "OopsieData-Submissions/KIT_ALR",
+      "lab_id": "KIT_ALR",
+      "repo_path": "20261003_202136/20261003_202224.h5",
+      "bundle_path": "episodes/KIT_ALR/20261003_202136/20261003_202224.h5",
+      "video_files": {
+        "left": "episodes/KIT_ALR/20261003_202136/20261003_202224_left.mp4",
+        "right": "episodes/KIT_ALR/20261003_202136/20261003_202224_right.mp4",
+        "wrist": "episodes/KIT_ALR/20261003_202136/20261003_202224_wrist.mp4"
+      },
+      "episode_id": "20261003_202224",
+      "language_instruction": "Stack the green block on the yellow block.",
+      "operator": "ALR",
+      "annotators": [
+        "ALR"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:19:52.061353+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-039",
+      "dataset_repo": "OopsieData-Submissions/KIT_ALR",
+      "lab_id": "KIT_ALR",
+      "repo_path": "20261003_204621/20261003_204708.h5",
+      "bundle_path": "episodes/KIT_ALR/20261003_204621/20261003_204708.h5",
+      "video_files": {
+        "left": "episodes/KIT_ALR/20261003_204621/20261003_204708_left.mp4",
+        "right": "episodes/KIT_ALR/20261003_204621/20261003_204708_right.mp4",
+        "wrist": "episodes/KIT_ALR/20261003_204621/20261003_204708_wrist.mp4"
+      },
+      "episode_id": "20261003_204708",
+      "language_instruction": "Stack the blue block on the yellow block.",
+      "operator": "ALR",
+      "annotators": [
+        "ALR"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:20:48.558623+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-040",
+      "dataset_repo": "OopsieData-Submissions/KIT_ALR",
+      "lab_id": "KIT_ALR",
+      "repo_path": "20261003_203121/20261003_203132.h5",
+      "bundle_path": "episodes/KIT_ALR/20261003_203121/20261003_203132.h5",
+      "video_files": {
+        "left": "episodes/KIT_ALR/20261003_203121/20261003_203132_left.mp4",
+        "right": "episodes/KIT_ALR/20261003_203121/20261003_203132_right.mp4",
+        "wrist": "episodes/KIT_ALR/20261003_203121/20261003_203132_wrist.mp4"
+      },
+      "episode_id": "20261003_203132",
+      "language_instruction": "Stack the green block on the green block.",
+      "operator": "ALR",
+      "annotators": [
+        "ALR"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:20:15.982965+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-041",
+      "dataset_repo": "OopsieData-Submissions/MIT_CLEAR",
+      "lab_id": "MIT_CLEAR",
+      "repo_path": "20260903_124539.h5",
+      "bundle_path": "episodes/MIT_CLEAR/20260903_124539.h5",
+      "video_files": {
+        "hand": "episodes/MIT_CLEAR/20260903_124539_hand.mp4",
+        "third_person": "episodes/MIT_CLEAR/20260903_124539_third_person.mp4"
+      },
+      "episode_id": "20260903_124539",
+      "language_instruction": "put the marker on the plate",
+      "operator": "clear",
+      "annotators": [
+        "clear"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:40:00.015599+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-042",
+      "dataset_repo": "OopsieData-Submissions/MIT_CLEAR",
+      "lab_id": "MIT_CLEAR",
+      "repo_path": "20260820_125514.h5",
+      "bundle_path": "episodes/MIT_CLEAR/20260820_125514.h5",
+      "video_files": {
+        "hand": "episodes/MIT_CLEAR/20260820_125514_hand.mp4",
+        "third_person": "episodes/MIT_CLEAR/20260820_125514_third_person.mp4"
+      },
+      "episode_id": "20260820_125514",
+      "language_instruction": "pick up the pen on the table and put it in the bowl",
+      "operator": "clear",
+      "annotators": [
+        "clear"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:38:25.434206+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-043",
+      "dataset_repo": "OopsieData-Submissions/MIT_CLEAR",
+      "lab_id": "MIT_CLEAR",
+      "repo_path": "20261002_225725.h5",
+      "bundle_path": "episodes/MIT_CLEAR/20261002_225725.h5",
+      "video_files": {
+        "hand": "episodes/MIT_CLEAR/20261002_225725_hand.mp4",
+        "third_person": "episodes/MIT_CLEAR/20261002_225725_third_person.mp4"
+      },
+      "episode_id": "20261002_225725",
+      "language_instruction": "put the screwdriver on the tool board",
+      "operator": "clear",
+      "annotators": [
+        "clear"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:41:59.877724+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-044",
+      "dataset_repo": "OopsieData-Submissions/MIT_CLEAR",
+      "lab_id": "MIT_CLEAR",
+      "repo_path": "20260909_104325.h5",
+      "bundle_path": "episodes/MIT_CLEAR/20260909_104325.h5",
+      "video_files": {
+        "hand": "episodes/MIT_CLEAR/20260909_104325_hand.mp4",
+        "third_person": "episodes/MIT_CLEAR/20260909_104325_third_person.mp4"
+      },
+      "episode_id": "20260909_104325",
+      "language_instruction": "put the pen on the plate",
+      "operator": "clear",
+      "annotators": [
+        "clear"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "person in image and face not blurred, otherwise ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:41:06.254190+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-045",
+      "dataset_repo": "OopsieData-Submissions/MIT_CLEAR",
+      "lab_id": "MIT_CLEAR",
+      "repo_path": "20261003_214210.h5",
+      "bundle_path": "episodes/MIT_CLEAR/20261003_214210.h5",
+      "video_files": {
+        "hand": "episodes/MIT_CLEAR/20261003_214210_hand.mp4",
+        "third_person": "episodes/MIT_CLEAR/20261003_214210_third_person.mp4"
+      },
+      "episode_id": "20261003_214210",
+      "language_instruction": "press a key on the laptop",
+      "operator": "clear",
+      "annotators": [
+        "clear"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "difficult to tell if robot succeeded or not in the beginning then it just flails which is definitely failure",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:43:53.176844+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-046",
+      "dataset_repo": "OopsieData-Submissions/MIT_CLEAR",
+      "lab_id": "MIT_CLEAR",
+      "repo_path": "20260820_125107.h5",
+      "bundle_path": "episodes/MIT_CLEAR/20260820_125107.h5",
+      "video_files": {
+        "hand": "episodes/MIT_CLEAR/20260820_125107_hand.mp4",
+        "third_person": "episodes/MIT_CLEAR/20260820_125107_third_person.mp4"
+      },
+      "episode_id": "20260820_125107",
+      "language_instruction": "pick up the blue cup on the plate and put it on the table",
+      "operator": "clear",
+      "annotators": [
+        "clear"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "failure here just means the robot doesnt open its gripper, might be fine?",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:38:06.791804+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-047",
+      "dataset_repo": "OopsieData-Submissions/MIT_CLEAR",
+      "lab_id": "MIT_CLEAR",
+      "repo_path": "20261003_220814.h5",
+      "bundle_path": "episodes/MIT_CLEAR/20261003_220814.h5",
+      "video_files": {
+        "hand": "episodes/MIT_CLEAR/20261003_220814_hand.mp4",
+        "third_person": "episodes/MIT_CLEAR/20261003_220814_third_person.mp4"
+      },
+      "episode_id": "20261003_220814",
+      "language_instruction": "press a button on the remote",
+      "operator": "clear",
+      "annotators": [
+        "clear"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "human in the wrist camera image at the end and not blurred",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:44:35.177941+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-048",
+      "dataset_repo": "OopsieData-Submissions/MIT_CLEAR",
+      "lab_id": "MIT_CLEAR",
+      "repo_path": "20261003_234226.h5",
+      "bundle_path": "episodes/MIT_CLEAR/20261003_234226.h5",
+      "video_files": {
+        "hand": "episodes/MIT_CLEAR/20261003_234226_hand.mp4",
+        "third_person": "episodes/MIT_CLEAR/20261003_234226_third_person.mp4"
+      },
+      "episode_id": "20261003_234226",
+      "language_instruction": "put the wine glass on the table",
+      "operator": "clear",
+      "annotators": [
+        "clear"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "task description is confusing the wine glass is on a table",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:45:27.615315+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-049",
+      "dataset_repo": "OopsieData-Submissions/MIT_CLEAR",
+      "lab_id": "MIT_CLEAR",
+      "repo_path": "20261003_212613.h5",
+      "bundle_path": "episodes/MIT_CLEAR/20261003_212613.h5",
+      "video_files": {
+        "hand": "episodes/MIT_CLEAR/20261003_212613_hand.mp4",
+        "third_person": "episodes/MIT_CLEAR/20261003_212613_third_person.mp4"
+      },
+      "episode_id": "20261003_212613",
+      "language_instruction": "open the microwave by pressing the pink button",
+      "operator": "clear",
+      "annotators": [
+        "clear"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:42:55.278859+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-050",
+      "dataset_repo": "OopsieData-Submissions/MIT_CLEAR",
+      "lab_id": "MIT_CLEAR",
+      "repo_path": "20260830_141103.h5",
+      "bundle_path": "episodes/MIT_CLEAR/20260830_141103.h5",
+      "video_files": {
+        "hand": "episodes/MIT_CLEAR/20260830_141103_hand.mp4",
+        "third_person": "episodes/MIT_CLEAR/20260830_141103_third_person.mp4"
+      },
+      "episode_id": "20260830_141103",
+      "language_instruction": "pick up the pen and put it on the plate",
+      "operator": "clear",
+      "annotators": [
+        "clear"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:39:30.583767+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-051",
+      "dataset_repo": "OopsieData-Submissions/MIT_CLEAR",
+      "lab_id": "MIT_CLEAR",
+      "repo_path": "20260820_125031.h5",
+      "bundle_path": "episodes/MIT_CLEAR/20260820_125031.h5",
+      "video_files": {
+        "hand": "episodes/MIT_CLEAR/20260820_125031_hand.mp4",
+        "third_person": "episodes/MIT_CLEAR/20260820_125031_third_person.mp4"
+      },
+      "episode_id": "20260820_125031",
+      "language_instruction": "pick up the blue cup on the table and put it on the plate",
+      "operator": "clear",
+      "annotators": [
+        "clear"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:37:15.271550+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-052",
+      "dataset_repo": "OopsieData-Submissions/MIT_CLEAR",
+      "lab_id": "MIT_CLEAR",
+      "repo_path": "20261003_210947.h5",
+      "bundle_path": "episodes/MIT_CLEAR/20261003_210947.h5",
+      "video_files": {
+        "hand": "episodes/MIT_CLEAR/20261003_210947_hand.mp4",
+        "third_person": "episodes/MIT_CLEAR/20261003_210947_third_person.mp4"
+      },
+      "episode_id": "20261003_210947",
+      "language_instruction": "open the microwave",
+      "operator": "clear",
+      "annotators": [
+        "clear"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:42:39.155904+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-053",
+      "dataset_repo": "OopsieData-Submissions/MIT_CLEAR",
+      "lab_id": "MIT_CLEAR",
+      "repo_path": "20260909_075832.h5",
+      "bundle_path": "episodes/MIT_CLEAR/20260909_075832.h5",
+      "video_files": {
+        "hand": "episodes/MIT_CLEAR/20260909_075832_hand.mp4",
+        "third_person": "episodes/MIT_CLEAR/20260909_075832_third_person.mp4"
+      },
+      "episode_id": "20260909_075832",
+      "language_instruction": "put the grape in the plate",
+      "operator": "clear",
+      "annotators": [
+        "clear"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:40:18.655525+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-054",
+      "dataset_repo": "OopsieData-Submissions/MIT_CLEAR",
+      "lab_id": "MIT_CLEAR",
+      "repo_path": "20261004_204319.h5",
+      "bundle_path": "episodes/MIT_CLEAR/20261004_204319.h5",
+      "video_files": {
+        "hand": "episodes/MIT_CLEAR/20261004_204319_hand.mp4",
+        "third_person": "episodes/MIT_CLEAR/20261004_204319_third_person.mp4"
+      },
+      "episode_id": "20261004_204319",
+      "language_instruction": "put the banana on the table",
+      "operator": "clear",
+      "annotators": [
+        "clear"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "probably success not optimal",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:46:33.897719+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-055",
+      "dataset_repo": "OopsieData-Submissions/MIT_CLEAR",
+      "lab_id": "MIT_CLEAR",
+      "repo_path": "20261004_204728.h5",
+      "bundle_path": "episodes/MIT_CLEAR/20261004_204728.h5",
+      "video_files": {
+        "hand": "episodes/MIT_CLEAR/20261004_204728_hand.mp4",
+        "third_person": "episodes/MIT_CLEAR/20261004_204728_third_person.mp4"
+      },
+      "episode_id": "20261004_204728",
+      "language_instruction": "grasp the wine bottle",
+      "operator": "clear",
+      "annotators": [
+        "clear"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:46:54.807861+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-056",
+      "dataset_repo": "OopsieData-Submissions/MIT_CLEAR",
+      "lab_id": "MIT_CLEAR",
+      "repo_path": "20260819_162835.h5",
+      "bundle_path": "episodes/MIT_CLEAR/20260819_162835.h5",
+      "video_files": {
+        "hand": "episodes/MIT_CLEAR/20260819_162835_hand.mp4",
+        "third_person": "episodes/MIT_CLEAR/20260819_162835_third_person.mp4"
+      },
+      "episode_id": "20260819_162835",
+      "language_instruction": "pick up the carrot on the table and put it in the bowl",
+      "operator": "clear",
+      "annotators": [
+        "clear"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:36:19.588534+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-057",
+      "dataset_repo": "OopsieData-Submissions/MIT_CLEAR",
+      "lab_id": "MIT_CLEAR",
+      "repo_path": "20261003_222208.h5",
+      "bundle_path": "episodes/MIT_CLEAR/20261003_222208.h5",
+      "video_files": {
+        "hand": "episodes/MIT_CLEAR/20261003_222208_hand.mp4",
+        "third_person": "episodes/MIT_CLEAR/20261003_222208_third_person.mp4"
+      },
+      "episode_id": "20261003_222208",
+      "language_instruction": "fold the towel",
+      "operator": "clear",
+      "annotators": [
+        "clear"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:44:54.461327+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-058",
+      "dataset_repo": "OopsieData-Submissions/MIT_CLEAR",
+      "lab_id": "MIT_CLEAR",
+      "repo_path": "20261004_194411.h5",
+      "bundle_path": "episodes/MIT_CLEAR/20261004_194411.h5",
+      "video_files": {
+        "hand": "episodes/MIT_CLEAR/20261004_194411_hand.mp4",
+        "third_person": "episodes/MIT_CLEAR/20261004_194411_third_person.mp4"
+      },
+      "episode_id": "20261004_194411",
+      "language_instruction": "open the microwave by pulling the handle",
+      "operator": "clear",
+      "annotators": [
+        "clear"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "person with face not blurred in wrist camera image at the end",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:46:05.317050+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-059",
+      "dataset_repo": "OopsieData-Submissions/MIT_CLEAR",
+      "lab_id": "MIT_CLEAR",
+      "repo_path": "20261004_205207.h5",
+      "bundle_path": "episodes/MIT_CLEAR/20261004_205207.h5",
+      "video_files": {
+        "hand": "episodes/MIT_CLEAR/20261004_205207_hand.mp4",
+        "third_person": "episodes/MIT_CLEAR/20261004_205207_third_person.mp4"
+      },
+      "episode_id": "20261004_205207",
+      "language_instruction": "put the glass on the plate",
+      "operator": "clear",
+      "annotators": [
+        "clear"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:49:53.745998+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-060",
+      "dataset_repo": "OopsieData-Submissions/MIT_CLEAR",
+      "lab_id": "MIT_CLEAR",
+      "repo_path": "20260825_124401.h5",
+      "bundle_path": "episodes/MIT_CLEAR/20260825_124401.h5",
+      "video_files": {
+        "hand": "episodes/MIT_CLEAR/20260825_124401_hand.mp4",
+        "third_person": "episodes/MIT_CLEAR/20260825_124401_third_person.mp4"
+      },
+      "episode_id": "20260825_124401",
+      "language_instruction": "pick up the black tape on the table and put it on the plate",
+      "operator": "clear",
+      "annotators": [
+        "clear"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:39:03.768066+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-061",
+      "dataset_repo": "OopsieData-Submissions/MIT_Improbable",
+      "lab_id": "MIT_Improbable",
+      "repo_path": "local_donut_bowl_dagger_iteration000/batch_000/local_donut_bowl_dagger_iteration000_50eae4f6_000027.h5",
+      "bundle_path": "episodes/MIT_Improbable/local_donut_bowl_dagger_iteration000/batch_000/local_donut_bowl_dagger_iteration000_50eae4f6_000027.h5",
+      "video_files": {
+        "global": "episodes/MIT_Improbable/local_donut_bowl_dagger_iteration000/batch_000/local_donut_bowl_dagger_iteration000_50eae4f6_000027_global.mp4",
+        "wrist": "episodes/MIT_Improbable/local_donut_bowl_dagger_iteration000/batch_000/local_donut_bowl_dagger_iteration000_50eae4f6_000027_wrist.mp4"
+      },
+      "episode_id": "local_donut_bowl_dagger_iteration000_50eae4f6_000027",
+      "language_instruction": "put the donut in the bowl",
+      "operator": "Zhang-Wei Hong",
+      "annotators": [
+        "Zhang-Wei Hong"
+      ],
+      "robot_name": "Franka Research 3",
+      "qa_notes": "global view has rotated camera, notes are confusing",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:58:07.625796+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-062",
+      "dataset_repo": "OopsieData-Submissions/MIT_Improbable",
+      "lab_id": "MIT_Improbable",
+      "repo_path": "inference_rollouts_h16/batch_010/inference_h16_0506_cc365c2a55ca07c8.h5",
+      "bundle_path": "episodes/MIT_Improbable/inference_rollouts_h16/batch_010/inference_h16_0506_cc365c2a55ca07c8.h5",
+      "video_files": {
+        "global": "episodes/MIT_Improbable/inference_rollouts_h16/batch_010/inference_h16_0506_cc365c2a55ca07c8_global.mp4",
+        "wrist": "episodes/MIT_Improbable/inference_rollouts_h16/batch_010/inference_h16_0506_cc365c2a55ca07c8_wrist.mp4"
+      },
+      "episode_id": "inference_h16_0506_cc365c2a55ca07c8",
+      "language_instruction": "put the tape in the bowl",
+      "operator": "Sunshine Jiang",
+      "annotators": [
+        "Sunshine Jiang"
+      ],
+      "robot_name": "Franka Research 3",
+      "qa_notes": "global view has rotated camera, notes are confusing",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:54:46.524705+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-063",
+      "dataset_repo": "OopsieData-Submissions/MIT_Improbable",
+      "lab_id": "MIT_Improbable",
+      "repo_path": "inference_rollouts_h16/batch_012/inference_h16_0609_bfafd32bc073fdbc.h5",
+      "bundle_path": "episodes/MIT_Improbable/inference_rollouts_h16/batch_012/inference_h16_0609_bfafd32bc073fdbc.h5",
+      "video_files": {
+        "global": "episodes/MIT_Improbable/inference_rollouts_h16/batch_012/inference_h16_0609_bfafd32bc073fdbc_global.mp4",
+        "wrist": "episodes/MIT_Improbable/inference_rollouts_h16/batch_012/inference_h16_0609_bfafd32bc073fdbc_wrist.mp4"
+      },
+      "episode_id": "inference_h16_0609_bfafd32bc073fdbc",
+      "language_instruction": "put the tape in front of the camera",
+      "operator": "Sunshine Jiang",
+      "annotators": [
+        "Sunshine Jiang"
+      ],
+      "robot_name": "Franka Research 3",
+      "qa_notes": "global view has rotated camera, notes are confusing, task description is confusing because tape is in camera view",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:54:56.764366+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-064",
+      "dataset_repo": "OopsieData-Submissions/MIT_Improbable",
+      "lab_id": "MIT_Improbable",
+      "repo_path": "inference_rollouts_h16/batch_016/inference_h16_0819_a2b512bfa8443826.h5",
+      "bundle_path": "episodes/MIT_Improbable/inference_rollouts_h16/batch_016/inference_h16_0819_a2b512bfa8443826.h5",
+      "video_files": {
+        "global": "episodes/MIT_Improbable/inference_rollouts_h16/batch_016/inference_h16_0819_a2b512bfa8443826_global.mp4",
+        "wrist": "episodes/MIT_Improbable/inference_rollouts_h16/batch_016/inference_h16_0819_a2b512bfa8443826_wrist.mp4"
+      },
+      "episode_id": "inference_h16_0819_a2b512bfa8443826",
+      "language_instruction": "open the bottom drawer",
+      "operator": "Zhang-Wei Hong",
+      "annotators": [
+        "Zhang-Wei Hong"
+      ],
+      "robot_name": "Franka Research 3",
+      "qa_notes": "global view has rotated camera, notes are confusing, unclear if failure because video is cut short",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:55:55.351364+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-065",
+      "dataset_repo": "OopsieData-Submissions/MIT_Improbable",
+      "lab_id": "MIT_Improbable",
+      "repo_path": "inference_rollouts_h16/batch_010/inference_h16_0533_5b2daadb72eec91f.h5",
+      "bundle_path": "episodes/MIT_Improbable/inference_rollouts_h16/batch_010/inference_h16_0533_5b2daadb72eec91f.h5",
+      "video_files": {
+        "global": "episodes/MIT_Improbable/inference_rollouts_h16/batch_010/inference_h16_0533_5b2daadb72eec91f_global.mp4",
+        "wrist": "episodes/MIT_Improbable/inference_rollouts_h16/batch_010/inference_h16_0533_5b2daadb72eec91f_wrist.mp4"
+      },
+      "episode_id": "inference_h16_0533_5b2daadb72eec91f",
+      "language_instruction": "put the white tape in the bowl",
+      "operator": "Sunshine Jiang",
+      "annotators": [
+        "Sunshine Jiang"
+      ],
+      "robot_name": "Franka Research 3",
+      "qa_notes": "global view has rotated camera, notes are confusing, unclear if success because video is cut short",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:54:51.007081+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-066",
+      "dataset_repo": "OopsieData-Submissions/MIT_Improbable",
+      "lab_id": "MIT_Improbable",
+      "repo_path": "local_top_drawer_bowl_dagger_sft_record_iteration000/batch_000/local_top_drawer_bowl_dagger_sft_record_iteration000_41abe8cd_000004.h5",
+      "bundle_path": "episodes/MIT_Improbable/local_top_drawer_bowl_dagger_sft_record_iteration000/batch_000/local_top_drawer_bowl_dagger_sft_record_iteration000_41abe8cd_000004.h5",
+      "video_files": {
+        "global": "episodes/MIT_Improbable/local_top_drawer_bowl_dagger_sft_record_iteration000/batch_000/local_top_drawer_bowl_dagger_sft_record_iteration000_41abe8cd_000004_global.mp4",
+        "wrist": "episodes/MIT_Improbable/local_top_drawer_bowl_dagger_sft_record_iteration000/batch_000/local_top_drawer_bowl_dagger_sft_record_iteration000_41abe8cd_000004_wrist.mp4"
+      },
+      "episode_id": "local_top_drawer_bowl_dagger_sft_record_iteration000_41abe8cd_000004",
+      "language_instruction": "open the top drawer and put the bowl inside",
+      "operator": "Zhang-Wei Hong",
+      "annotators": [
+        "Zhang-Wei Hong"
+      ],
+      "robot_name": "Franka Research 3",
+      "qa_notes": "global view has rotated camera, notes are confusing",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:58:45.138209+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-067",
+      "dataset_repo": "OopsieData-Submissions/MIT_Improbable",
+      "lab_id": "MIT_Improbable",
+      "repo_path": "inference_rollouts_h16/batch_019/inference_h16_0990_8c5da6de9200209d.h5",
+      "bundle_path": "episodes/MIT_Improbable/inference_rollouts_h16/batch_019/inference_h16_0990_8c5da6de9200209d.h5",
+      "video_files": {
+        "global": "episodes/MIT_Improbable/inference_rollouts_h16/batch_019/inference_h16_0990_8c5da6de9200209d_global.mp4",
+        "wrist": "episodes/MIT_Improbable/inference_rollouts_h16/batch_019/inference_h16_0990_8c5da6de9200209d_wrist.mp4"
+      },
+      "episode_id": "inference_h16_0990_8c5da6de9200209d",
+      "language_instruction": "put the scissor in the bowl",
+      "operator": "Sunshine Jiang",
+      "annotators": [
+        "Sunshine Jiang"
+      ],
+      "robot_name": "Franka Research 3",
+      "qa_notes": "global view has rotated camera, notes are confusing",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:57:48.295582+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-068",
+      "dataset_repo": "OopsieData-Submissions/MIT_Improbable",
+      "lab_id": "MIT_Improbable",
+      "repo_path": "inference_rollouts_h16/batch_016/inference_h16_0849_3be111d140c8acaa.h5",
+      "bundle_path": "episodes/MIT_Improbable/inference_rollouts_h16/batch_016/inference_h16_0849_3be111d140c8acaa.h5",
+      "video_files": {
+        "global": "episodes/MIT_Improbable/inference_rollouts_h16/batch_016/inference_h16_0849_3be111d140c8acaa_global.mp4",
+        "wrist": "episodes/MIT_Improbable/inference_rollouts_h16/batch_016/inference_h16_0849_3be111d140c8acaa_wrist.mp4"
+      },
+      "episode_id": "inference_h16_0849_3be111d140c8acaa",
+      "language_instruction": "put the banana in the bowl",
+      "operator": "Zhang-Wei Hong",
+      "annotators": [
+        "Zhang-Wei Hong"
+      ],
+      "robot_name": "Franka Research 3",
+      "qa_notes": "global view has rotated camera, notes are confusing, not failure as banana is in the bowl (gripper not open)",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:57:17.694023+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-069",
+      "dataset_repo": "OopsieData-Submissions/MIT_Improbable",
+      "lab_id": "MIT_Improbable",
+      "repo_path": "inference_rollouts_h16/batch_016/inference_h16_0824_72fe85472ed06802.h5",
+      "bundle_path": "episodes/MIT_Improbable/inference_rollouts_h16/batch_016/inference_h16_0824_72fe85472ed06802.h5",
+      "video_files": {
+        "global": "episodes/MIT_Improbable/inference_rollouts_h16/batch_016/inference_h16_0824_72fe85472ed06802_global.mp4",
+        "wrist": "episodes/MIT_Improbable/inference_rollouts_h16/batch_016/inference_h16_0824_72fe85472ed06802_wrist.mp4"
+      },
+      "episode_id": "inference_h16_0824_72fe85472ed06802",
+      "language_instruction": "pick up the table tennis racket",
+      "operator": "Sunshine Jiang",
+      "annotators": [
+        "Sunshine Jiang"
+      ],
+      "robot_name": "Franka Research 3",
+      "qa_notes": "global view has rotated camera, notes are confusing, unclear if failure because video is short",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:56:37.019177+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-070",
+      "dataset_repo": "OopsieData-Submissions/MIT_Improbable",
+      "lab_id": "MIT_Improbable",
+      "repo_path": "inference_rollouts_h16/batch_016/inference_h16_0800_c598e7b888aac2f2.h5",
+      "bundle_path": "episodes/MIT_Improbable/inference_rollouts_h16/batch_016/inference_h16_0800_c598e7b888aac2f2.h5",
+      "video_files": {
+        "global": "episodes/MIT_Improbable/inference_rollouts_h16/batch_016/inference_h16_0800_c598e7b888aac2f2_global.mp4",
+        "wrist": "episodes/MIT_Improbable/inference_rollouts_h16/batch_016/inference_h16_0800_c598e7b888aac2f2_wrist.mp4"
+      },
+      "episode_id": "inference_h16_0800_c598e7b888aac2f2",
+      "language_instruction": "open the top drawer and put the tape inside",
+      "operator": "Zhang-Wei Hong",
+      "annotators": [
+        "Zhang-Wei Hong"
+      ],
+      "robot_name": "Franka Research 3",
+      "qa_notes": "global view has rotated camera, notes are confusing",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:55:21.889998+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-071",
+      "dataset_repo": "OopsieData-Submissions/MIT_Improbable",
+      "lab_id": "MIT_Improbable",
+      "repo_path": "inference_rollouts_h16/batch_007/inference_h16_0354_35435109cd31e1e7.h5",
+      "bundle_path": "episodes/MIT_Improbable/inference_rollouts_h16/batch_007/inference_h16_0354_35435109cd31e1e7.h5",
+      "video_files": {
+        "global": "episodes/MIT_Improbable/inference_rollouts_h16/batch_007/inference_h16_0354_35435109cd31e1e7_global.mp4",
+        "wrist": "episodes/MIT_Improbable/inference_rollouts_h16/batch_007/inference_h16_0354_35435109cd31e1e7_wrist.mp4"
+      },
+      "episode_id": "inference_h16_0354_35435109cd31e1e7",
+      "language_instruction": "put the donut in the bowl",
+      "operator": "Sunshine Jiang",
+      "annotators": [
+        "Sunshine Jiang"
+      ],
+      "robot_name": "Franka Research 3",
+      "qa_notes": "global view has rotated camera, notes are confusing, unclear if success because video is cut short",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:54:35.419512+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-072",
+      "dataset_repo": "OopsieData-Submissions/MIT_Improbable",
+      "lab_id": "MIT_Improbable",
+      "repo_path": "local_tape_bowl_dagger_fixed_iteration000/batch_000/local_tape_bowl_dagger_fixed_iteration000_783011a2_000004.h5",
+      "bundle_path": "episodes/MIT_Improbable/local_tape_bowl_dagger_fixed_iteration000/batch_000/local_tape_bowl_dagger_fixed_iteration000_783011a2_000004.h5",
+      "video_files": {
+        "global": "episodes/MIT_Improbable/local_tape_bowl_dagger_fixed_iteration000/batch_000/local_tape_bowl_dagger_fixed_iteration000_783011a2_000004_global.mp4",
+        "wrist": "episodes/MIT_Improbable/local_tape_bowl_dagger_fixed_iteration000/batch_000/local_tape_bowl_dagger_fixed_iteration000_783011a2_000004_wrist.mp4"
+      },
+      "episode_id": "local_tape_bowl_dagger_fixed_iteration000_783011a2_000004",
+      "language_instruction": "put the tape in the bowl",
+      "operator": "Zhang-Wei Hong",
+      "annotators": [
+        "Zhang-Wei Hong"
+      ],
+      "robot_name": "Franka Research 3",
+      "qa_notes": "global view has rotated camera, notes are confusing",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:58:23.302325+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-073",
+      "dataset_repo": "OopsieData-Submissions/MIT_Improbable",
+      "lab_id": "MIT_Improbable",
+      "repo_path": "inference_rollouts_h16/batch_014/inference_h16_0721_2dd31d62fee9a3a8.h5",
+      "bundle_path": "episodes/MIT_Improbable/inference_rollouts_h16/batch_014/inference_h16_0721_2dd31d62fee9a3a8.h5",
+      "video_files": {
+        "global": "episodes/MIT_Improbable/inference_rollouts_h16/batch_014/inference_h16_0721_2dd31d62fee9a3a8_global.mp4",
+        "wrist": "episodes/MIT_Improbable/inference_rollouts_h16/batch_014/inference_h16_0721_2dd31d62fee9a3a8_wrist.mp4"
+      },
+      "episode_id": "inference_h16_0721_2dd31d62fee9a3a8",
+      "language_instruction": "put the tape in front of the camera",
+      "operator": "Sunshine Jiang",
+      "annotators": [
+        "Sunshine Jiang"
+      ],
+      "robot_name": "Franka Research 3",
+      "qa_notes": "global view has rotated camera, notes are confusing, task description is confusing because tape is in camera view",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:55:06.442767+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-074",
+      "dataset_repo": "OopsieData-Submissions/MIT_Improbable",
+      "lab_id": "MIT_Improbable",
+      "repo_path": "inference_rollouts_h16/batch_009/inference_h16_0476_ed4c0c862ecbf4b3.h5",
+      "bundle_path": "episodes/MIT_Improbable/inference_rollouts_h16/batch_009/inference_h16_0476_ed4c0c862ecbf4b3.h5",
+      "video_files": {
+        "global": "episodes/MIT_Improbable/inference_rollouts_h16/batch_009/inference_h16_0476_ed4c0c862ecbf4b3_global.mp4",
+        "wrist": "episodes/MIT_Improbable/inference_rollouts_h16/batch_009/inference_h16_0476_ed4c0c862ecbf4b3_wrist.mp4"
+      },
+      "episode_id": "inference_h16_0476_ed4c0c862ecbf4b3",
+      "language_instruction": "put the white tape in the bowl",
+      "operator": "Zhang-Wei Hong",
+      "annotators": [
+        "Zhang-Wei Hong"
+      ],
+      "robot_name": "Franka Research 3",
+      "qa_notes": "global view has rotated camera, notes are confusing",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:54:40.994295+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-075",
+      "dataset_repo": "OopsieData-Submissions/MIT_Improbable",
+      "lab_id": "MIT_Improbable",
+      "repo_path": "inference_rollouts_h16/batch_003/inference_h16_0186_03e875e746cdcc7f.h5",
+      "bundle_path": "episodes/MIT_Improbable/inference_rollouts_h16/batch_003/inference_h16_0186_03e875e746cdcc7f.h5",
+      "video_files": {
+        "global": "episodes/MIT_Improbable/inference_rollouts_h16/batch_003/inference_h16_0186_03e875e746cdcc7f_global.mp4",
+        "wrist": "episodes/MIT_Improbable/inference_rollouts_h16/batch_003/inference_h16_0186_03e875e746cdcc7f_wrist.mp4"
+      },
+      "episode_id": "inference_h16_0186_03e875e746cdcc7f",
+      "language_instruction": "open the top drawer and put the bowl inside",
+      "operator": "Sunshine Jiang",
+      "annotators": [
+        "Sunshine Jiang"
+      ],
+      "robot_name": "Franka Research 3",
+      "qa_notes": "global view has rotated camera, notes are confusing, unclear if failure because video is cut short",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:54:29.342294+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-076",
+      "dataset_repo": "OopsieData-Submissions/MIT_Improbable",
+      "lab_id": "MIT_Improbable",
+      "repo_path": "inference_rollouts_h16/batch_016/inference_h16_0814_17c9be3fb59cecb2.h5",
+      "bundle_path": "episodes/MIT_Improbable/inference_rollouts_h16/batch_016/inference_h16_0814_17c9be3fb59cecb2.h5",
+      "video_files": {
+        "global": "episodes/MIT_Improbable/inference_rollouts_h16/batch_016/inference_h16_0814_17c9be3fb59cecb2_global.mp4",
+        "wrist": "episodes/MIT_Improbable/inference_rollouts_h16/batch_016/inference_h16_0814_17c9be3fb59cecb2_wrist.mp4"
+      },
+      "episode_id": "inference_h16_0814_17c9be3fb59cecb2",
+      "language_instruction": "open the bottom drawer",
+      "operator": "Zhang-Wei Hong",
+      "annotators": [
+        "Zhang-Wei Hong"
+      ],
+      "robot_name": "Franka Research 3",
+      "qa_notes": "global view has rotated camera, notes are confusing",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:55:42.784916+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-077",
+      "dataset_repo": "OopsieData-Submissions/MIT_Improbable",
+      "lab_id": "MIT_Improbable",
+      "repo_path": "inference_rollouts_h16/batch_017/inference_h16_0872_46cb0782c228e449.h5",
+      "bundle_path": "episodes/MIT_Improbable/inference_rollouts_h16/batch_017/inference_h16_0872_46cb0782c228e449.h5",
+      "video_files": {
+        "global": "episodes/MIT_Improbable/inference_rollouts_h16/batch_017/inference_h16_0872_46cb0782c228e449_global.mp4",
+        "wrist": "episodes/MIT_Improbable/inference_rollouts_h16/batch_017/inference_h16_0872_46cb0782c228e449_wrist.mp4"
+      },
+      "episode_id": "inference_h16_0872_46cb0782c228e449",
+      "language_instruction": "put the banana in the bowl",
+      "operator": "Sunshine Jiang",
+      "annotators": [
+        "Sunshine Jiang"
+      ],
+      "robot_name": "Franka Research 3",
+      "qa_notes": "global view has rotated camera, notes are confusing",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:57:32.839341+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-078",
+      "dataset_repo": "OopsieData-Submissions/MIT_Improbable",
+      "lab_id": "MIT_Improbable",
+      "repo_path": "inference_rollouts_h16/batch_016/inference_h16_0801_90c62202a380ba21.h5",
+      "bundle_path": "episodes/MIT_Improbable/inference_rollouts_h16/batch_016/inference_h16_0801_90c62202a380ba21.h5",
+      "video_files": {
+        "global": "episodes/MIT_Improbable/inference_rollouts_h16/batch_016/inference_h16_0801_90c62202a380ba21_global.mp4",
+        "wrist": "episodes/MIT_Improbable/inference_rollouts_h16/batch_016/inference_h16_0801_90c62202a380ba21_wrist.mp4"
+      },
+      "episode_id": "inference_h16_0801_90c62202a380ba21",
+      "language_instruction": "open the top drawer and put the tape inside",
+      "operator": "Zhang-Wei Hong",
+      "annotators": [
+        "Zhang-Wei Hong"
+      ],
+      "robot_name": "Franka Research 3",
+      "qa_notes": "global view has rotated camera, notes are confusing",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:55:33.324772+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-079",
+      "dataset_repo": "OopsieData-Submissions/MIT_Improbable",
+      "lab_id": "MIT_Improbable",
+      "repo_path": "inference_rollouts_h16/batch_019/inference_h16_0983_f29f921128fdfd98.h5",
+      "bundle_path": "episodes/MIT_Improbable/inference_rollouts_h16/batch_019/inference_h16_0983_f29f921128fdfd98.h5",
+      "video_files": {
+        "global": "episodes/MIT_Improbable/inference_rollouts_h16/batch_019/inference_h16_0983_f29f921128fdfd98_global.mp4",
+        "wrist": "episodes/MIT_Improbable/inference_rollouts_h16/batch_019/inference_h16_0983_f29f921128fdfd98_wrist.mp4"
+      },
+      "episode_id": "inference_h16_0983_f29f921128fdfd98",
+      "language_instruction": "put the scissor in the bowl",
+      "operator": "Sunshine Jiang",
+      "annotators": [
+        "Sunshine Jiang"
+      ],
+      "robot_name": "Franka Research 3",
+      "qa_notes": "global view has rotated camera, notes are confusing",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:57:40.415290+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-080",
+      "dataset_repo": "OopsieData-Submissions/MIT_Improbable",
+      "lab_id": "MIT_Improbable",
+      "repo_path": "inference_rollouts_h16/batch_016/inference_h16_0826_657adf51d40ca911.h5",
+      "bundle_path": "episodes/MIT_Improbable/inference_rollouts_h16/batch_016/inference_h16_0826_657adf51d40ca911.h5",
+      "video_files": {
+        "global": "episodes/MIT_Improbable/inference_rollouts_h16/batch_016/inference_h16_0826_657adf51d40ca911_global.mp4",
+        "wrist": "episodes/MIT_Improbable/inference_rollouts_h16/batch_016/inference_h16_0826_657adf51d40ca911_wrist.mp4"
+      },
+      "episode_id": "inference_h16_0826_657adf51d40ca911",
+      "language_instruction": "pick up the table tennis racket",
+      "operator": "Sunshine Jiang",
+      "annotators": [
+        "Sunshine Jiang"
+      ],
+      "robot_name": "Franka Research 3",
+      "qa_notes": "global view has rotated camera, notes are confusing, unclear if failure because video is short",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:56:46.184095+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-081",
+      "dataset_repo": "OopsieData-Submissions/McGill_DM_HL",
+      "lab_id": "McGill_DM_HL",
+      "repo_path": "peg_insertion_v1/000002.h5",
+      "bundle_path": "episodes/McGill_DM_HL/peg_insertion_v1/000002.h5",
+      "video_files": {
+        "front_cam": "episodes/McGill_DM_HL/peg_insertion_v1/000002_front_cam.mp4",
+        "wrist_cam": "episodes/McGill_DM_HL/peg_insertion_v1/000002_wrist_cam.mp4"
+      },
+      "episode_id": "000002",
+      "language_instruction": "Insert the peg into the hole.",
+      "operator": "McGill_MRL",
+      "annotators": [
+        "McGill_MRL"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:27:35.536625+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-082",
+      "dataset_repo": "OopsieData-Submissions/McGill_DM_HL",
+      "lab_id": "McGill_DM_HL",
+      "repo_path": "box_in_cube_v1/000125.h5",
+      "bundle_path": "episodes/McGill_DM_HL/box_in_cube_v1/000125.h5",
+      "video_files": {
+        "front_cam": "episodes/McGill_DM_HL/box_in_cube_v1/000125_front_cam.mp4",
+        "wrist_cam": "episodes/McGill_DM_HL/box_in_cube_v1/000125_wrist_cam.mp4"
+      },
+      "episode_id": "000125",
+      "language_instruction": "Open the box lid and put the cube in the box.",
+      "operator": "McGill_MRL",
+      "annotators": [
+        "McGill_MRL"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:23:13.910611+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-083",
+      "dataset_repo": "OopsieData-Submissions/McGill_DM_HL",
+      "lab_id": "McGill_DM_HL",
+      "repo_path": "stack_cube_v1/000117.h5",
+      "bundle_path": "episodes/McGill_DM_HL/stack_cube_v1/000117.h5",
+      "video_files": {
+        "front_cam": "episodes/McGill_DM_HL/stack_cube_v1/000117_front_cam.mp4",
+        "wrist_cam": "episodes/McGill_DM_HL/stack_cube_v1/000117_wrist_cam.mp4"
+      },
+      "episode_id": "000117",
+      "language_instruction": "Stack the left cube on top of the right cube.",
+      "operator": "McGill_MRL",
+      "annotators": [
+        "McGill_MRL"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:34:01.891351+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-084",
+      "dataset_repo": "OopsieData-Submissions/McGill_DM_HL",
+      "lab_id": "McGill_DM_HL",
+      "repo_path": "erase_board_v1/000137.h5",
+      "bundle_path": "episodes/McGill_DM_HL/erase_board_v1/000137.h5",
+      "video_files": {
+        "front_cam": "episodes/McGill_DM_HL/erase_board_v1/000137_front_cam.mp4",
+        "wrist_cam": "episodes/McGill_DM_HL/erase_board_v1/000137_wrist_cam.mp4"
+      },
+      "episode_id": "000137",
+      "language_instruction": "Pick up the eraser and clean the whiteboard.",
+      "operator": "McGill_MRL",
+      "annotators": [
+        "McGill_MRL"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "Unclear if failure as robot erases most of the lines but misses an edge",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:27:18.243410+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-085",
+      "dataset_repo": "OopsieData-Submissions/McGill_DM_HL",
+      "lab_id": "McGill_DM_HL",
+      "repo_path": "poke_cube_v1/000058.h5",
+      "bundle_path": "episodes/McGill_DM_HL/poke_cube_v1/000058.h5",
+      "video_files": {
+        "front_cam": "episodes/McGill_DM_HL/poke_cube_v1/000058_front_cam.mp4",
+        "wrist_cam": "episodes/McGill_DM_HL/poke_cube_v1/000058_wrist_cam.mp4"
+      },
+      "episode_id": "000058",
+      "language_instruction": "Poke the cube to the target.",
+      "operator": "McGill_MRL",
+      "annotators": [
+        "McGill_MRL"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "description is underspecified as robot is asked to use a tool to poke and not its gripper, cube does not fully land on target so potentially no full success, wrist camera does not show object that needs to be poked ever",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:31:16.082822+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-086",
+      "dataset_repo": "OopsieData-Submissions/McGill_DM_HL",
+      "lab_id": "McGill_DM_HL",
+      "repo_path": "box_in_cube_v1/000153.h5",
+      "bundle_path": "episodes/McGill_DM_HL/box_in_cube_v1/000153.h5",
+      "video_files": {
+        "front_cam": "episodes/McGill_DM_HL/box_in_cube_v1/000153_front_cam.mp4",
+        "wrist_cam": "episodes/McGill_DM_HL/box_in_cube_v1/000153_wrist_cam.mp4"
+      },
+      "episode_id": "000153",
+      "language_instruction": "Open the box lid and put the cube in the box.",
+      "operator": "McGill_MRL",
+      "annotators": [
+        "McGill_MRL"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:25:00.190639+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-087",
+      "dataset_repo": "OopsieData-Submissions/McGill_DM_HL",
+      "lab_id": "McGill_DM_HL",
+      "repo_path": "stack_cube_v1/000193.h5",
+      "bundle_path": "episodes/McGill_DM_HL/stack_cube_v1/000193.h5",
+      "video_files": {
+        "front_cam": "episodes/McGill_DM_HL/stack_cube_v1/000193_front_cam.mp4",
+        "wrist_cam": "episodes/McGill_DM_HL/stack_cube_v1/000193_wrist_cam.mp4"
+      },
+      "episode_id": "000193",
+      "language_instruction": "Stack the left cube on top of the right cube.",
+      "operator": "McGill_MRL",
+      "annotators": [
+        "McGill_MRL"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:34:38.084673+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-088",
+      "dataset_repo": "OopsieData-Submissions/McGill_DM_HL",
+      "lab_id": "McGill_DM_HL",
+      "repo_path": "erase_board_v1/000061.h5",
+      "bundle_path": "episodes/McGill_DM_HL/erase_board_v1/000061.h5",
+      "video_files": {
+        "front_cam": "episodes/McGill_DM_HL/erase_board_v1/000061_front_cam.mp4",
+        "wrist_cam": "episodes/McGill_DM_HL/erase_board_v1/000061_wrist_cam.mp4"
+      },
+      "episode_id": "000061",
+      "language_instruction": "Pick up the eraser and clean the whiteboard.",
+      "operator": "McGill_MRL",
+      "annotators": [
+        "McGill_MRL"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:25:46.616168+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-089",
+      "dataset_repo": "OopsieData-Submissions/McGill_DM_HL",
+      "lab_id": "McGill_DM_HL",
+      "repo_path": "peg_insertion_v1/000037.h5",
+      "bundle_path": "episodes/McGill_DM_HL/peg_insertion_v1/000037.h5",
+      "video_files": {
+        "front_cam": "episodes/McGill_DM_HL/peg_insertion_v1/000037_front_cam.mp4",
+        "wrist_cam": "episodes/McGill_DM_HL/peg_insertion_v1/000037_wrist_cam.mp4"
+      },
+      "episode_id": "000037",
+      "language_instruction": "Insert the peg into the hole.",
+      "operator": "McGill_MRL",
+      "annotators": [
+        "McGill_MRL"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:28:09.858776+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-090",
+      "dataset_repo": "OopsieData-Submissions/McGill_DM_HL",
+      "lab_id": "McGill_DM_HL",
+      "repo_path": "poke_cube_v1/000088.h5",
+      "bundle_path": "episodes/McGill_DM_HL/poke_cube_v1/000088.h5",
+      "video_files": {
+        "front_cam": "episodes/McGill_DM_HL/poke_cube_v1/000088_front_cam.mp4",
+        "wrist_cam": "episodes/McGill_DM_HL/poke_cube_v1/000088_wrist_cam.mp4"
+      },
+      "episode_id": "000088",
+      "language_instruction": "Poke the cube to the target.",
+      "operator": "McGill_MRL",
+      "annotators": [
+        "McGill_MRL"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "description is underspecified as robot is asked to use a tool to poke and not its gripper, wrist camera does not show object that needs to be poked ever",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:30:55.945324+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-091",
+      "dataset_repo": "OopsieData-Submissions/McGill_DM_HL",
+      "lab_id": "McGill_DM_HL",
+      "repo_path": "box_in_cube_v1/000150.h5",
+      "bundle_path": "episodes/McGill_DM_HL/box_in_cube_v1/000150.h5",
+      "video_files": {
+        "front_cam": "episodes/McGill_DM_HL/box_in_cube_v1/000150_front_cam.mp4",
+        "wrist_cam": "episodes/McGill_DM_HL/box_in_cube_v1/000150_wrist_cam.mp4"
+      },
+      "episode_id": "000150",
+      "language_instruction": "Open the box lid and put the cube in the box.",
+      "operator": "McGill_MRL",
+      "annotators": [
+        "McGill_MRL"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:24:24.138789+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-092",
+      "dataset_repo": "OopsieData-Submissions/McGill_DM_HL",
+      "lab_id": "McGill_DM_HL",
+      "repo_path": "stack_cube_v1/000114.h5",
+      "bundle_path": "episodes/McGill_DM_HL/stack_cube_v1/000114.h5",
+      "video_files": {
+        "front_cam": "episodes/McGill_DM_HL/stack_cube_v1/000114_front_cam.mp4",
+        "wrist_cam": "episodes/McGill_DM_HL/stack_cube_v1/000114_wrist_cam.mp4"
+      },
+      "episode_id": "000114",
+      "language_instruction": "Stack the left cube on top of the right cube.",
+      "operator": "McGill_MRL",
+      "annotators": [
+        "McGill_MRL"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "left and right are ill defined: from the camera perspective the right cube gets stacked onto the left so this is failure not success",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:33:30.537529+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-093",
+      "dataset_repo": "OopsieData-Submissions/McGill_DM_HL",
+      "lab_id": "McGill_DM_HL",
+      "repo_path": "erase_board_v1/000010.h5",
+      "bundle_path": "episodes/McGill_DM_HL/erase_board_v1/000010.h5",
+      "video_files": {
+        "front_cam": "episodes/McGill_DM_HL/erase_board_v1/000010_front_cam.mp4",
+        "wrist_cam": "episodes/McGill_DM_HL/erase_board_v1/000010_wrist_cam.mp4"
+      },
+      "episode_id": "000010",
+      "language_instruction": "Pick up the eraser and clean the whiteboard.",
+      "operator": "McGill_MRL",
+      "annotators": [
+        "McGill_MRL"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:25:28.989108+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-094",
+      "dataset_repo": "OopsieData-Submissions/McGill_DM_HL",
+      "lab_id": "McGill_DM_HL",
+      "repo_path": "peg_insertion_v1/000166.h5",
+      "bundle_path": "episodes/McGill_DM_HL/peg_insertion_v1/000166.h5",
+      "video_files": {
+        "front_cam": "episodes/McGill_DM_HL/peg_insertion_v1/000166_front_cam.mp4",
+        "wrist_cam": "episodes/McGill_DM_HL/peg_insertion_v1/000166_wrist_cam.mp4"
+      },
+      "episode_id": "000166",
+      "language_instruction": "Insert the peg into the hole.",
+      "operator": "McGill_MRL",
+      "annotators": [
+        "McGill_MRL"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:28:53.668744+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-095",
+      "dataset_repo": "OopsieData-Submissions/McGill_DM_HL",
+      "lab_id": "McGill_DM_HL",
+      "repo_path": "poke_cube_v1/000029.h5",
+      "bundle_path": "episodes/McGill_DM_HL/poke_cube_v1/000029.h5",
+      "video_files": {
+        "front_cam": "episodes/McGill_DM_HL/poke_cube_v1/000029_front_cam.mp4",
+        "wrist_cam": "episodes/McGill_DM_HL/poke_cube_v1/000029_wrist_cam.mp4"
+      },
+      "episode_id": "000029",
+      "language_instruction": "Poke the cube to the target.",
+      "operator": "McGill_MRL",
+      "annotators": [
+        "McGill_MRL"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "description is underspecified as robot is asked to use a tool to poke and not its gripper, wrist camera does not show object that needs to be poked ever",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:31:02.059153+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-096",
+      "dataset_repo": "OopsieData-Submissions/McGill_DM_HL",
+      "lab_id": "McGill_DM_HL",
+      "repo_path": "box_in_cube_v1/000148.h5",
+      "bundle_path": "episodes/McGill_DM_HL/box_in_cube_v1/000148.h5",
+      "video_files": {
+        "front_cam": "episodes/McGill_DM_HL/box_in_cube_v1/000148_front_cam.mp4",
+        "wrist_cam": "episodes/McGill_DM_HL/box_in_cube_v1/000148_wrist_cam.mp4"
+      },
+      "episode_id": "000148",
+      "language_instruction": "Open the box lid and put the cube in the box.",
+      "operator": "McGill_MRL",
+      "annotators": [
+        "McGill_MRL"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:23:41.638070+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-097",
+      "dataset_repo": "OopsieData-Submissions/McGill_DM_HL",
+      "lab_id": "McGill_DM_HL",
+      "repo_path": "erase_board_v1/000134.h5",
+      "bundle_path": "episodes/McGill_DM_HL/erase_board_v1/000134.h5",
+      "video_files": {
+        "front_cam": "episodes/McGill_DM_HL/erase_board_v1/000134_front_cam.mp4",
+        "wrist_cam": "episodes/McGill_DM_HL/erase_board_v1/000134_wrist_cam.mp4"
+      },
+      "episode_id": "000134",
+      "language_instruction": "Pick up the eraser and clean the whiteboard.",
+      "operator": "McGill_MRL",
+      "annotators": [
+        "McGill_MRL"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:26:23.308428+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-098",
+      "dataset_repo": "OopsieData-Submissions/McGill_DM_HL",
+      "lab_id": "McGill_DM_HL",
+      "repo_path": "stack_cube_v1/000131.h5",
+      "bundle_path": "episodes/McGill_DM_HL/stack_cube_v1/000131.h5",
+      "video_files": {
+        "front_cam": "episodes/McGill_DM_HL/stack_cube_v1/000131_front_cam.mp4",
+        "wrist_cam": "episodes/McGill_DM_HL/stack_cube_v1/000131_wrist_cam.mp4"
+      },
+      "episode_id": "000131",
+      "language_instruction": "Stack the left cube on top of the right cube.",
+      "operator": "McGill_MRL",
+      "annotators": [
+        "McGill_MRL"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:34:24.276719+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-099",
+      "dataset_repo": "OopsieData-Submissions/McGill_DM_HL",
+      "lab_id": "McGill_DM_HL",
+      "repo_path": "peg_insertion_v1/000094.h5",
+      "bundle_path": "episodes/McGill_DM_HL/peg_insertion_v1/000094.h5",
+      "video_files": {
+        "front_cam": "episodes/McGill_DM_HL/peg_insertion_v1/000094_front_cam.mp4",
+        "wrist_cam": "episodes/McGill_DM_HL/peg_insertion_v1/000094_wrist_cam.mp4"
+      },
+      "episode_id": "000094",
+      "language_instruction": "Insert the peg into the hole.",
+      "operator": "McGill_MRL",
+      "annotators": [
+        "McGill_MRL"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:28:27.620297+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_05-100",
+      "dataset_repo": "OopsieData-Submissions/McGill_DM_HL",
+      "lab_id": "McGill_DM_HL",
+      "repo_path": "poke_cube_v1/000215.h5",
+      "bundle_path": "episodes/McGill_DM_HL/poke_cube_v1/000215.h5",
+      "video_files": {
+        "front_cam": "episodes/McGill_DM_HL/poke_cube_v1/000215_front_cam.mp4",
+        "wrist_cam": "episodes/McGill_DM_HL/poke_cube_v1/000215_wrist_cam.mp4"
+      },
+      "episode_id": "000215",
+      "language_instruction": "Poke the cube to the target.",
+      "operator": "McGill_MRL",
+      "annotators": [
+        "McGill_MRL"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "description is underspecified as robot is asked to use a tool to poke and not its gripper, also there are multiple cubes, wrist camera does not clearly show object that needs to be poked ",
+      "qa_reviewer": "MarcelHussing",
+      "qa_updated_at": "2026-10-08T18:32:08.441800+00:00"
+    }
+  ]
+}

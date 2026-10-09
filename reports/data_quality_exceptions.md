@@ -42,6 +42,11 @@ Oct 4, 2026
 | cartesian\_position | Rotation tracking | Implemented | Median angle between action rotation and the next state's rotation above 20° → wrong frame/convention |
 | cartesian\_position | Delta-action detection (xyz) | Implemented | Action xyz looks like a delta instead of an absolute position |
 | cartesian\_position | Biarm ordering | Implemented | Action xyz matches the state better with left/right arms swapped |
+| Video | Resolution | Implemented | A camera's short side is below 360 px |
+| Video | Decoding | Implemented | Video file missing, ffmpeg decode errors, nothing decodes, or decoded frame count differs from the container's |
+| Video | Brightness | Implemented | Median frame brightness too dark or too bright, or ≥ 10% near-black / near-white frames |
+| Video | Speed | Implemented | Video fps ≠ `control_freq`, video duration ≠ trajectory duration, irregular frame timestamps, or cameras of one episode differing in duration |
+| Video | Frames | Implemented | Frozen or duplicated frames while the robot moves, sudden image jumps (cuts), or single corrupted frames |
 
 Note: the alpha/beta per-individual lab requirement pass/fail system is a separate compliance mechanism, not a data-integrity check, and isn't listed here.
 

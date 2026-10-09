@@ -65,6 +65,19 @@ def _video_files(h5_path: Path, repo_dir: Path) -> dict[str, tuple[Path, str]]:
     return out
 
 
+def repo_root(path: Path, repo_path: str) -> Path:
+    """The HF repo directory containing ``path``, whose path inside the repo is ``repo_path``."""
+    root = path.resolve()
+    for _ in PurePosixPath(repo_path).parts:
+        root = root.parent
+    return root
+
+
+def episode_videos(path: Path, repo_path: str) -> dict[str, Path]:
+    """Map camera -> mp4 file of the episode at ``path``."""
+    return {cam: src for cam, (src, _) in _video_files(path, repo_root(path, repo_path)).items()}
+
+
 def _load_one(args: tuple[str, str, Path, Path]) -> dict | str:
     dataset_repo, repo_path, path, repo_dir = args
     try:
@@ -90,10 +103,7 @@ def collect_records(
     for dataset_repo, repo_path, path in episodes:
         if not _include_in_public_stats({"dataset_repo": dataset_repo}, dataset_repo):
             continue
-        repo_dir = path.resolve()
-        for _ in PurePosixPath(repo_path).parts:
-            repo_dir = repo_dir.parent
-        jobs.append((dataset_repo, repo_path, path, repo_dir))
+        jobs.append((dataset_repo, repo_path, path, repo_root(path, repo_path)))
 
     records: list[dict] = []
     skipped: list[str] = []

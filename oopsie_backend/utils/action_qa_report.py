@@ -1,5 +1,5 @@
-"""Render action_qa.json (from run_action_qa.py) as a standalone HTML page: a dataset x
-check grid of flagged/checked episode counts, with each cell linking to the flagged
+"""Render action_qa.json (from run_action_qa.py, action and video checks) as a standalone
+HTML page: a dataset x check grid of flagged/checked episode counts, with each cell linking to the flagged
 episodes and the values that tripped the check.
 """
 
@@ -47,6 +47,11 @@ CHECK_DESCRIPTIONS = {
     ("cartesian_position", "delta_detection"): "xyz actions were saved as step-to-step changes instead of absolute positions",
     ("cartesian_position", "biarm_ordering"): "Left and right arms look swapped in the actions",
     ("cartesian_position", "quaternion_scalar_order"): "The quaternion's scalar (w) component looks like it was written first instead of last (rough heuristic, often unreliable)",
+    ("video", "resolution"): "A camera video's shorter side is below the minimum resolution",
+    ("video", "decoding"): "A camera video is missing, fails to decode, or decodes to the wrong frame count",
+    ("video", "brightness"): "A camera video is too dark or too bright",
+    ("video", "speed"): "Video timing doesn't match control_freq or the trajectory length, or cameras disagree",
+    ("video", "frames"): "Frozen or duplicated frames while the robot moves, image jumps, or corrupted frames",
 }
 
 MAX_ROWS_PER_CHECK = 50
@@ -287,12 +292,12 @@ def render_action_qa_report(report: dict, output_path: Path) -> None:
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Action QA</title>
+<title>Action and video QA</title>
 <style>{_STYLE}</style>
 </head>
 <body>
 <div class="wrap">
-<h1>Action QA</h1>
+<h1>Action and video QA</h1>
 <p class="muted">Generated {escape(str(generated))} · {escape(str(report.get("scope", "")))} ·
 {totals.get("episodes_checked", 0)} episodes checked · {totals.get("episodes_flagged", 0)} flagged ·
 {totals.get("episodes_skipped", 0)} errored</p>

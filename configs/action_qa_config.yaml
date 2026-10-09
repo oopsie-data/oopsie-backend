@@ -118,6 +118,40 @@ cartesian_velocity:
     enabled: true
     max_sign_flip_rate: 0.3  # flag if more than this share of steps reverse direction
 
+# Checks on the camera videos; each video is fully decoded (~2 CPU-seconds per episode).
+# Frame differences are mean absolute differences of 96x96 grayscale frames (0-255).
+video:
+  resolution:  # checks whether the video resolution is high enough
+    enabled: true
+    min_short_side: 360  # flag if the shorter image side has fewer pixels
+  decoding:  # checks whether the video file exists and decodes without errors
+    enabled: true
+    max_frame_count_diff: 1  # flag if decoded and container frame counts differ by more
+  brightness:  # checks whether the video is too dark or too bright
+    enabled: true
+    dark_median: 30.0  # flag if the median frame brightness is below this
+    bright_median: 225.0  # flag if the median frame brightness is above this
+    dark_frame: 15.0  # a frame darker than this counts as near black
+    bright_frame: 240.0  # a frame brighter than this counts as near white
+    extreme_frame_fraction: 0.1  # flag if at least this share of frames is near black or near white
+  speed:  # checks whether the video timing matches control_freq and the trajectory
+    enabled: true
+    fps_rel_tol: 0.05  # flag if video fps differs from control_freq by more than this fraction
+    duration_tol_s: 0.5  # flag if video and trajectory durations (or cameras) differ by more than this
+    duration_rel_tol: 0.05  # same, as a fraction of the trajectory duration (the larger tolerance applies)
+    frame_interval_cv: 0.1  # flag if frame intervals vary more than this (std / mean)
+  frames:  # checks for frozen, duplicated, jumping or corrupted frames
+    enabled: true
+    moving_fraction_of_p95: 0.1  # a step counts as robot motion above this fraction of the episode's 95th-percentile state change
+    static_diff: 0.05  # frames differing less than this count as static
+    duplicate_diff: 0.01  # frames differing less than this count as duplicates
+    frozen_s: 1.0  # flag static video for at least this long while the robot moves
+    choppy_fraction: 0.2  # flag if at least this share of frames during robot motion are duplicates
+    jump_diff: 40.0  # a jump needs at least this frame difference
+    jump_ratio: 20.0  # ... and this many times the median difference of the surrounding second
+    glitch_diff: 20.0  # a corrupted frame differs at least this much from both neighbours
+    glitch_ratio: 4.0  # ... and the neighbours differ this many times less from each other
+
 sampling:
   default_episode_limit: 200  # max episodes checked per dataset; --limit 0 means unlimited
   random: true  # random sample per dataset instead of the first N in sorted path order
@@ -133,3 +167,4 @@ run:  # defaults for the matching CLI flags
   output: reports/action_qa.json
   only_dataset: []  # e.g. ["OopsieData-Submissions/SomeLab"]; empty = every dataset
   verbose: false
+  workers: 8  # episodes checked in parallel

@@ -1,0 +1,2199 @@
+{
+  "bundle_id": "qa_bundle_08",
+  "created_at": "2026-10-07T19:21:12Z",
+  "seed": 0,
+  "reviewer": "siddhant",
+  "labs": [
+    "OopsieData-Submissions/Stanford_FFL",
+    "OopsieData-Submissions/Stanford_JW",
+    "OopsieData-Submissions/Stanford_MSL",
+    "OopsieData-Submissions/Stanford_SIALab",
+    "OopsieData-Submissions/TUD_JP"
+  ],
+  "episodes": [
+    {
+      "qa_id": "qa_bundle_08-001",
+      "dataset_repo": "OopsieData-Submissions/Stanford_FFL",
+      "lab_id": "Stanford_FFL",
+      "repo_path": "banana/banana_a0ca7624.h5",
+      "bundle_path": "episodes/Stanford_FFL/banana/banana_a0ca7624.h5",
+      "video_files": {
+        "agentview_left": "episodes/Stanford_FFL/banana/videos/banana_a0ca7624_agentview_left.mp4",
+        "agentview_right": "episodes/Stanford_FFL/banana/videos/banana_a0ca7624_agentview_right.mp4",
+        "wrist_left": "episodes/Stanford_FFL/banana/videos/banana_a0ca7624_wrist_left.mp4",
+        "wrist_right": "episodes/Stanford_FFL/banana/videos/banana_a0ca7624_wrist_right.mp4"
+      },
+      "episode_id": "banana_a0ca7624",
+      "language_instruction": "Pick up the banana and place it in the bowl",
+      "operator": "Evans Han",
+      "annotators": [
+        "Evans Han"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:14:54.692068+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-002",
+      "dataset_repo": "OopsieData-Submissions/Stanford_FFL",
+      "lab_id": "Stanford_FFL",
+      "repo_path": "i3l_r1pro_hgdagger/books/round_02/i3l_r1pro_books_hg_r2_e000006.h5",
+      "bundle_path": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/books/round_02/i3l_r1pro_books_hg_r2_e000006.h5",
+      "video_files": {
+        "head": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/books/round_02/i3l_r1pro_books_hg_r2_e000006_head.mp4",
+        "left_wrist": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/books/round_02/i3l_r1pro_books_hg_r2_e000006_left_wrist.mp4",
+        "right_wrist": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/books/round_02/i3l_r1pro_books_hg_r2_e000006_right_wrist.mp4"
+      },
+      "episode_id": "i3l_r1pro_books_hg_r2_e000006",
+      "language_instruction": "Place the basket onto the table, and put the two books from the shelf into the basket.",
+      "operator": "wensi",
+      "annotators": [
+        "wensi"
+      ],
+      "robot_name": "Galaxea R1 Pro (real robot)",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:31:04.809515+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-003",
+      "dataset_repo": "OopsieData-Submissions/Stanford_FFL",
+      "lab_id": "Stanford_FFL",
+      "repo_path": "cup_hang_blue_mug/cup_hang_blue_mug_3c720329.h5",
+      "bundle_path": "episodes/Stanford_FFL/cup_hang_blue_mug/cup_hang_blue_mug_3c720329.h5",
+      "video_files": {
+        "agentview_left": "episodes/Stanford_FFL/cup_hang_blue_mug/videos/cup_hang_blue_mug_3c720329_agentview_left.mp4",
+        "agentview_right": "episodes/Stanford_FFL/cup_hang_blue_mug/videos/cup_hang_blue_mug_3c720329_agentview_right.mp4",
+        "wrist_left": "episodes/Stanford_FFL/cup_hang_blue_mug/videos/cup_hang_blue_mug_3c720329_wrist_left.mp4",
+        "wrist_right": "episodes/Stanford_FFL/cup_hang_blue_mug/videos/cup_hang_blue_mug_3c720329_wrist_right.mp4"
+      },
+      "episode_id": "cup_hang_blue_mug_3c720329",
+      "language_instruction": "Hang the blue mug on the wooden rack",
+      "operator": "Evans Han",
+      "annotators": [
+        "Evans Han"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:27:44.327704+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-004",
+      "dataset_repo": "OopsieData-Submissions/Stanford_FFL",
+      "lab_id": "Stanford_FFL",
+      "repo_path": "i3l_r1pro_hgdagger/bread/round_04/i3l_r1pro_bread_hg_r4_e000013.h5",
+      "bundle_path": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/bread/round_04/i3l_r1pro_bread_hg_r4_e000013.h5",
+      "video_files": {
+        "head": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/bread/round_04/i3l_r1pro_bread_hg_r4_e000013_head.mp4",
+        "left_wrist": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/bread/round_04/i3l_r1pro_bread_hg_r4_e000013_left_wrist.mp4",
+        "right_wrist": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/bread/round_04/i3l_r1pro_bread_hg_r4_e000013_right_wrist.mp4"
+      },
+      "episode_id": "i3l_r1pro_bread_hg_r4_e000013",
+      "language_instruction": "Retrieve the bowl from the drawer, put the two bread in from the plate, and place the bowl on the right side of the countertop.",
+      "operator": "wensi",
+      "annotators": [
+        "wensi"
+      ],
+      "robot_name": "Galaxea R1 Pro (real robot)",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:36:35.357525+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-005",
+      "dataset_repo": "OopsieData-Submissions/Stanford_FFL",
+      "lab_id": "Stanford_FFL",
+      "repo_path": "toast/toast_21613d51.h5",
+      "bundle_path": "episodes/Stanford_FFL/toast/toast_21613d51.h5",
+      "video_files": {
+        "agentview_left": "episodes/Stanford_FFL/toast/videos/toast_21613d51_agentview_left.mp4",
+        "agentview_right": "episodes/Stanford_FFL/toast/videos/toast_21613d51_agentview_right.mp4",
+        "wrist_left": "episodes/Stanford_FFL/toast/videos/toast_21613d51_wrist_left.mp4",
+        "wrist_right": "episodes/Stanford_FFL/toast/videos/toast_21613d51_wrist_right.mp4"
+      },
+      "episode_id": "toast_21613d51",
+      "language_instruction": "Put the bread slice into the white toaster",
+      "operator": "Evans Han",
+      "annotators": [
+        "Evans Han"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "Bread not in toaster properly.",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:40:18.462446+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-006",
+      "dataset_repo": "OopsieData-Submissions/Stanford_FFL",
+      "lab_id": "Stanford_FFL",
+      "repo_path": "i3l_r1pro_hgdagger/popcorn/round_01/i3l_r1pro_popcorn_hg_r1_e000011.h5",
+      "bundle_path": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/popcorn/round_01/i3l_r1pro_popcorn_hg_r1_e000011.h5",
+      "video_files": {
+        "head": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/popcorn/round_01/i3l_r1pro_popcorn_hg_r1_e000011_head.mp4",
+        "left_wrist": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/popcorn/round_01/i3l_r1pro_popcorn_hg_r1_e000011_left_wrist.mp4",
+        "right_wrist": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/popcorn/round_01/i3l_r1pro_popcorn_hg_r1_e000011_right_wrist.mp4"
+      },
+      "episode_id": "i3l_r1pro_popcorn_hg_r1_e000011",
+      "language_instruction": "Pick up the red popcorn bag from the shelf and place it into the microwave.",
+      "operator": "wensi",
+      "annotators": [
+        "wensi"
+      ],
+      "robot_name": "Galaxea R1 Pro (real robot)",
+      "qa_notes": "ok\n",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:36:48.786435+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-007",
+      "dataset_repo": "OopsieData-Submissions/Stanford_FFL",
+      "lab_id": "Stanford_FFL",
+      "repo_path": "cup_hang_glass_cup/cup_hang_glass_cup_2f5e98c8.h5",
+      "bundle_path": "episodes/Stanford_FFL/cup_hang_glass_cup/cup_hang_glass_cup_2f5e98c8.h5",
+      "video_files": {
+        "agentview_left": "episodes/Stanford_FFL/cup_hang_glass_cup/videos/cup_hang_glass_cup_2f5e98c8_agentview_left.mp4",
+        "agentview_right": "episodes/Stanford_FFL/cup_hang_glass_cup/videos/cup_hang_glass_cup_2f5e98c8_agentview_right.mp4",
+        "wrist_left": "episodes/Stanford_FFL/cup_hang_glass_cup/videos/cup_hang_glass_cup_2f5e98c8_wrist_left.mp4",
+        "wrist_right": "episodes/Stanford_FFL/cup_hang_glass_cup/videos/cup_hang_glass_cup_2f5e98c8_wrist_right.mp4"
+      },
+      "episode_id": "cup_hang_glass_cup_2f5e98c8",
+      "language_instruction": "Hang the glass cup on the wooden rack",
+      "operator": "Evans Han",
+      "annotators": [
+        "Evans Han"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:29:00.510061+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-008",
+      "dataset_repo": "OopsieData-Submissions/Stanford_FFL",
+      "lab_id": "Stanford_FFL",
+      "repo_path": "i3l_r1pro_hgdagger/radio/round_02/i3l_r1pro_radio_hg_r2_e000012.h5",
+      "bundle_path": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/radio/round_02/i3l_r1pro_radio_hg_r2_e000012.h5",
+      "video_files": {
+        "head": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/radio/round_02/i3l_r1pro_radio_hg_r2_e000012_head.mp4",
+        "left_wrist": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/radio/round_02/i3l_r1pro_radio_hg_r2_e000012_left_wrist.mp4",
+        "right_wrist": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/radio/round_02/i3l_r1pro_radio_hg_r2_e000012_right_wrist.mp4"
+      },
+      "episode_id": "i3l_r1pro_radio_hg_r2_e000012",
+      "language_instruction": "Pick up the radio on the table and poke the orange button.",
+      "operator": "wensi",
+      "annotators": [
+        "wensi"
+      ],
+      "robot_name": "Galaxea R1 Pro (real robot)",
+      "qa_notes": "not sure if poking is clean.",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:38:48.446852+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-009",
+      "dataset_repo": "OopsieData-Submissions/Stanford_FFL",
+      "lab_id": "Stanford_FFL",
+      "repo_path": "bread/bread_82b6b6b4.h5",
+      "bundle_path": "episodes/Stanford_FFL/bread/bread_82b6b6b4.h5",
+      "video_files": {
+        "agentview_left": "episodes/Stanford_FFL/bread/videos/bread_82b6b6b4_agentview_left.mp4",
+        "agentview_right": "episodes/Stanford_FFL/bread/videos/bread_82b6b6b4_agentview_right.mp4",
+        "wrist_left": "episodes/Stanford_FFL/bread/videos/bread_82b6b6b4_wrist_left.mp4",
+        "wrist_right": "episodes/Stanford_FFL/bread/videos/bread_82b6b6b4_wrist_right.mp4"
+      },
+      "episode_id": "bread_82b6b6b4",
+      "language_instruction": "Put the bread slice into the silver toaster",
+      "operator": "Evans Han",
+      "annotators": [
+        "Evans Han"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:18:54.838087+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-010",
+      "dataset_repo": "OopsieData-Submissions/Stanford_FFL",
+      "lab_id": "Stanford_FFL",
+      "repo_path": "cup/cup_9a6aba01.h5",
+      "bundle_path": "episodes/Stanford_FFL/cup/cup_9a6aba01.h5",
+      "video_files": {
+        "agentview_left": "episodes/Stanford_FFL/cup/videos/cup_9a6aba01_agentview_left.mp4",
+        "agentview_right": "episodes/Stanford_FFL/cup/videos/cup_9a6aba01_agentview_right.mp4",
+        "wrist_left": "episodes/Stanford_FFL/cup/videos/cup_9a6aba01_wrist_left.mp4",
+        "wrist_right": "episodes/Stanford_FFL/cup/videos/cup_9a6aba01_wrist_right.mp4"
+      },
+      "episode_id": "cup_9a6aba01",
+      "language_instruction": "Pick up the orange cup",
+      "operator": "Evans Han",
+      "annotators": [
+        "Evans Han"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "Some frame corupted around 20 second mark. ",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:25:03.857047+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-011",
+      "dataset_repo": "OopsieData-Submissions/Stanford_FFL",
+      "lab_id": "Stanford_FFL",
+      "repo_path": "i3l_r1pro_hgdagger/popcorn/round_01/i3l_r1pro_popcorn_hg_r1_e000013.h5",
+      "bundle_path": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/popcorn/round_01/i3l_r1pro_popcorn_hg_r1_e000013.h5",
+      "video_files": {
+        "head": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/popcorn/round_01/i3l_r1pro_popcorn_hg_r1_e000013_head.mp4",
+        "left_wrist": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/popcorn/round_01/i3l_r1pro_popcorn_hg_r1_e000013_left_wrist.mp4",
+        "right_wrist": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/popcorn/round_01/i3l_r1pro_popcorn_hg_r1_e000013_right_wrist.mp4"
+      },
+      "episode_id": "i3l_r1pro_popcorn_hg_r1_e000013",
+      "language_instruction": "Pick up the red popcorn bag from the shelf and place it into the microwave.",
+      "operator": "wensi",
+      "annotators": [
+        "wensi"
+      ],
+      "robot_name": "Galaxea R1 Pro (real robot)",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:37:05.781702+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-012",
+      "dataset_repo": "OopsieData-Submissions/Stanford_FFL",
+      "lab_id": "Stanford_FFL",
+      "repo_path": "i3l_r1pro_hgdagger/books/round_02/i3l_r1pro_books_hg_r2_e000003.h5",
+      "bundle_path": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/books/round_02/i3l_r1pro_books_hg_r2_e000003.h5",
+      "video_files": {
+        "head": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/books/round_02/i3l_r1pro_books_hg_r2_e000003_head.mp4",
+        "left_wrist": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/books/round_02/i3l_r1pro_books_hg_r2_e000003_left_wrist.mp4",
+        "right_wrist": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/books/round_02/i3l_r1pro_books_hg_r2_e000003_right_wrist.mp4"
+      },
+      "episode_id": "i3l_r1pro_books_hg_r2_e000003",
+      "language_instruction": "Place the basket onto the table, and put the two books from the shelf into the basket.",
+      "operator": "wensi",
+      "annotators": [
+        "wensi"
+      ],
+      "robot_name": "Galaxea R1 Pro (real robot)",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:36:10.124362+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-013",
+      "dataset_repo": "OopsieData-Submissions/Stanford_FFL",
+      "lab_id": "Stanford_FFL",
+      "repo_path": "banana/banana_b84c2d8c.h5",
+      "bundle_path": "episodes/Stanford_FFL/banana/banana_b84c2d8c.h5",
+      "video_files": {
+        "agentview_left": "episodes/Stanford_FFL/banana/videos/banana_b84c2d8c_agentview_left.mp4",
+        "agentview_right": "episodes/Stanford_FFL/banana/videos/banana_b84c2d8c_agentview_right.mp4",
+        "wrist_left": "episodes/Stanford_FFL/banana/videos/banana_b84c2d8c_wrist_left.mp4",
+        "wrist_right": "episodes/Stanford_FFL/banana/videos/banana_b84c2d8c_wrist_right.mp4"
+      },
+      "episode_id": "banana_b84c2d8c",
+      "language_instruction": "Pick up the banana and place it in the bowl",
+      "operator": "Evans Han",
+      "annotators": [
+        "Evans Han"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "A human hand moves towards the object (potentially touching the object) towards the end of the trajectory. ",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:17:54.680935+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-014",
+      "dataset_repo": "OopsieData-Submissions/Stanford_FFL",
+      "lab_id": "Stanford_FFL",
+      "repo_path": "i3l_r1pro_hgdagger/bread/round_03/i3l_r1pro_bread_hg_r3_e000006.h5",
+      "bundle_path": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/bread/round_03/i3l_r1pro_bread_hg_r3_e000006.h5",
+      "video_files": {
+        "head": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/bread/round_03/i3l_r1pro_bread_hg_r3_e000006_head.mp4",
+        "left_wrist": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/bread/round_03/i3l_r1pro_bread_hg_r3_e000006_left_wrist.mp4",
+        "right_wrist": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/bread/round_03/i3l_r1pro_bread_hg_r3_e000006_right_wrist.mp4"
+      },
+      "episode_id": "i3l_r1pro_bread_hg_r3_e000006",
+      "language_instruction": "Retrieve the bowl from the drawer, put the two bread in from the plate, and place the bowl on the right side of the countertop.",
+      "operator": "wensi",
+      "annotators": [
+        "wensi"
+      ],
+      "robot_name": "Galaxea R1 Pro (real robot)",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:35:06.841717+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-015",
+      "dataset_repo": "OopsieData-Submissions/Stanford_FFL",
+      "lab_id": "Stanford_FFL",
+      "repo_path": "cup_hang_blue_mug/cup_hang_blue_mug_6a320b64.h5",
+      "bundle_path": "episodes/Stanford_FFL/cup_hang_blue_mug/cup_hang_blue_mug_6a320b64.h5",
+      "video_files": {
+        "agentview_left": "episodes/Stanford_FFL/cup_hang_blue_mug/videos/cup_hang_blue_mug_6a320b64_agentview_left.mp4",
+        "agentview_right": "episodes/Stanford_FFL/cup_hang_blue_mug/videos/cup_hang_blue_mug_6a320b64_agentview_right.mp4",
+        "wrist_left": "episodes/Stanford_FFL/cup_hang_blue_mug/videos/cup_hang_blue_mug_6a320b64_wrist_left.mp4",
+        "wrist_right": "episodes/Stanford_FFL/cup_hang_blue_mug/videos/cup_hang_blue_mug_6a320b64_wrist_right.mp4"
+      },
+      "episode_id": "cup_hang_blue_mug_6a320b64",
+      "language_instruction": "Hang the blue mug on the wooden rack",
+      "operator": "Evans Han",
+      "annotators": [
+        "Evans Han"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:28:33.078738+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-016",
+      "dataset_repo": "OopsieData-Submissions/Stanford_FFL",
+      "lab_id": "Stanford_FFL",
+      "repo_path": "i3l_r1pro_hgdagger/radio/round_04/i3l_r1pro_radio_hg_r4_e000005.h5",
+      "bundle_path": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/radio/round_04/i3l_r1pro_radio_hg_r4_e000005.h5",
+      "video_files": {
+        "head": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/radio/round_04/i3l_r1pro_radio_hg_r4_e000005_head.mp4",
+        "left_wrist": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/radio/round_04/i3l_r1pro_radio_hg_r4_e000005_left_wrist.mp4",
+        "right_wrist": "episodes/Stanford_FFL/i3l_r1pro_hgdagger/radio/round_04/i3l_r1pro_radio_hg_r4_e000005_right_wrist.mp4"
+      },
+      "episode_id": "i3l_r1pro_radio_hg_r4_e000005",
+      "language_instruction": "Pick up the radio on the table and poke the orange button.",
+      "operator": "wensi",
+      "annotators": [
+        "wensi"
+      ],
+      "robot_name": "Galaxea R1 Pro (real robot)",
+      "qa_notes": "Not sure if poking is clean.",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:39:18.129895+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-017",
+      "dataset_repo": "OopsieData-Submissions/Stanford_FFL",
+      "lab_id": "Stanford_FFL",
+      "repo_path": "toast/toast_39183c54.h5",
+      "bundle_path": "episodes/Stanford_FFL/toast/toast_39183c54.h5",
+      "video_files": {
+        "agentview_left": "episodes/Stanford_FFL/toast/videos/toast_39183c54_agentview_left.mp4",
+        "agentview_right": "episodes/Stanford_FFL/toast/videos/toast_39183c54_agentview_right.mp4",
+        "wrist_left": "episodes/Stanford_FFL/toast/videos/toast_39183c54_wrist_left.mp4",
+        "wrist_right": "episodes/Stanford_FFL/toast/videos/toast_39183c54_wrist_right.mp4"
+      },
+      "episode_id": "toast_39183c54",
+      "language_instruction": "Put the bread slice into the white toaster",
+      "operator": "Evans Han",
+      "annotators": [
+        "Evans Han"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:40:31.876990+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-018",
+      "dataset_repo": "OopsieData-Submissions/Stanford_FFL",
+      "lab_id": "Stanford_FFL",
+      "repo_path": "cup_hang_glass_cup/cup_hang_glass_cup_f6a6809c.h5",
+      "bundle_path": "episodes/Stanford_FFL/cup_hang_glass_cup/cup_hang_glass_cup_f6a6809c.h5",
+      "video_files": {
+        "agentview_left": "episodes/Stanford_FFL/cup_hang_glass_cup/videos/cup_hang_glass_cup_f6a6809c_agentview_left.mp4",
+        "agentview_right": "episodes/Stanford_FFL/cup_hang_glass_cup/videos/cup_hang_glass_cup_f6a6809c_agentview_right.mp4",
+        "wrist_left": "episodes/Stanford_FFL/cup_hang_glass_cup/videos/cup_hang_glass_cup_f6a6809c_wrist_left.mp4",
+        "wrist_right": "episodes/Stanford_FFL/cup_hang_glass_cup/videos/cup_hang_glass_cup_f6a6809c_wrist_right.mp4"
+      },
+      "episode_id": "cup_hang_glass_cup_f6a6809c",
+      "language_instruction": "Hang the glass cup on the wooden rack",
+      "operator": "Evans Han",
+      "annotators": [
+        "Evans Han"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok\n",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:29:24.291310+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-019",
+      "dataset_repo": "OopsieData-Submissions/Stanford_FFL",
+      "lab_id": "Stanford_FFL",
+      "repo_path": "bread/bread_a0ef64a2.h5",
+      "bundle_path": "episodes/Stanford_FFL/bread/bread_a0ef64a2.h5",
+      "video_files": {
+        "agentview_left": "episodes/Stanford_FFL/bread/videos/bread_a0ef64a2_agentview_left.mp4",
+        "agentview_right": "episodes/Stanford_FFL/bread/videos/bread_a0ef64a2_agentview_right.mp4",
+        "wrist_left": "episodes/Stanford_FFL/bread/videos/bread_a0ef64a2_wrist_left.mp4",
+        "wrist_right": "episodes/Stanford_FFL/bread/videos/bread_a0ef64a2_wrist_right.mp4"
+      },
+      "episode_id": "bread_a0ef64a2",
+      "language_instruction": "Put the bread slice into the silver toaster",
+      "operator": "Evans Han",
+      "annotators": [
+        "Evans Han"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "Some frame(s) is(are) corrupted around 9 second mark. (Image moved lfeft and wrapped around).",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:24:04.948346+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-020",
+      "dataset_repo": "OopsieData-Submissions/Stanford_FFL",
+      "lab_id": "Stanford_FFL",
+      "repo_path": "cup/cup_a73be3fd.h5",
+      "bundle_path": "episodes/Stanford_FFL/cup/cup_a73be3fd.h5",
+      "video_files": {
+        "agentview_left": "episodes/Stanford_FFL/cup/videos/cup_a73be3fd_agentview_left.mp4",
+        "agentview_right": "episodes/Stanford_FFL/cup/videos/cup_a73be3fd_agentview_right.mp4",
+        "wrist_left": "episodes/Stanford_FFL/cup/videos/cup_a73be3fd_wrist_left.mp4",
+        "wrist_right": "episodes/Stanford_FFL/cup/videos/cup_a73be3fd_wrist_right.mp4"
+      },
+      "episode_id": "cup_a73be3fd",
+      "language_instruction": "Pick up the orange cup",
+      "operator": "Evans Han",
+      "annotators": [
+        "Evans Han"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:26:56.305312+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-021",
+      "dataset_repo": "OopsieData-Submissions/Stanford_JW",
+      "lab_id": "Stanford_JW",
+      "repo_path": "battery_s07/battery_67e5794f97a2.h5",
+      "bundle_path": "episodes/Stanford_JW/battery_s07/battery_67e5794f97a2.h5",
+      "video_files": {
+        "front_cam": "episodes/Stanford_JW/battery_s07/battery_67e5794f97a2_front_cam.mp4",
+        "wrist_cam": "episodes/Stanford_JW/battery_s07/battery_67e5794f97a2_wrist_cam.mp4"
+      },
+      "episode_id": "battery_67e5794f97a2",
+      "language_instruction": "Pick up the battery and insert it into the second slot of the battery holder.",
+      "operator": "operator",
+      "annotators": [
+        "operator"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "no failure annotation",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:41:58.990833+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-022",
+      "dataset_repo": "OopsieData-Submissions/Stanford_JW",
+      "lab_id": "Stanford_JW",
+      "repo_path": "tong_s06/tong_28b969769f0b.h5",
+      "bundle_path": "episodes/Stanford_JW/tong_s06/tong_28b969769f0b.h5",
+      "video_files": {
+        "front_cam": "episodes/Stanford_JW/tong_s06/tong_28b969769f0b_front_cam.mp4",
+        "wrist_cam": "episodes/Stanford_JW/tong_s06/tong_28b969769f0b_wrist_cam.mp4"
+      },
+      "episode_id": "tong_28b969769f0b",
+      "language_instruction": "Pick up the tongs and use them to grab the toy, place the toy on the blue plate, then rest the tongs on the book.",
+      "operator": "operator",
+      "annotators": [
+        "operator"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:44:24.206560+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-023",
+      "dataset_repo": "OopsieData-Submissions/Stanford_JW",
+      "lab_id": "Stanford_JW",
+      "repo_path": "raspberry_s01/raspberry_c37750695893.h5",
+      "bundle_path": "episodes/Stanford_JW/raspberry_s01/raspberry_c37750695893.h5",
+      "video_files": {
+        "front_cam": "episodes/Stanford_JW/raspberry_s01/raspberry_c37750695893_front_cam.mp4",
+        "wrist_cam": "episodes/Stanford_JW/raspberry_s01/raspberry_c37750695893_wrist_cam.mp4"
+      },
+      "episode_id": "raspberry_c37750695893",
+      "language_instruction": "Pick up the raspberry without crushing it and place it in the glass bowl.",
+      "operator": "operator",
+      "annotators": [
+        "operator"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "no failure annotation",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:42:40.347479+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-024",
+      "dataset_repo": "OopsieData-Submissions/Stanford_JW",
+      "lab_id": "Stanford_JW",
+      "repo_path": "wuji_toy_s05/wuji_toy_f9a7674d6faa.h5",
+      "bundle_path": "episodes/Stanford_JW/wuji_toy_s05/wuji_toy_f9a7674d6faa.h5",
+      "video_files": {
+        "front_cam": "episodes/Stanford_JW/wuji_toy_s05/wuji_toy_f9a7674d6faa_front_cam.mp4",
+        "wrist_cam": "episodes/Stanford_JW/wuji_toy_s05/wuji_toy_f9a7674d6faa_wrist_cam.mp4"
+      },
+      "episode_id": "wuji_toy_f9a7674d6faa",
+      "language_instruction": "Pick up the two toys and put them in the tote.",
+      "operator": "operator",
+      "annotators": [
+        "operator"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:45:28.123568+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-025",
+      "dataset_repo": "OopsieData-Submissions/Stanford_JW",
+      "lab_id": "Stanford_JW",
+      "repo_path": "inspire_s01/inspire_35379ce93e8f.h5",
+      "bundle_path": "episodes/Stanford_JW/inspire_s01/inspire_35379ce93e8f.h5",
+      "video_files": {
+        "front_cam": "episodes/Stanford_JW/inspire_s01/inspire_35379ce93e8f_front_cam.mp4",
+        "wrist_cam": "episodes/Stanford_JW/inspire_s01/inspire_35379ce93e8f_wrist_cam.mp4"
+      },
+      "episode_id": "inspire_35379ce93e8f",
+      "language_instruction": "Lift the bunny.",
+      "operator": "operator",
+      "annotators": [
+        "operator"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "no failure annotation",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:42:12.687596+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-026",
+      "dataset_repo": "OopsieData-Submissions/Stanford_JW",
+      "lab_id": "Stanford_JW",
+      "repo_path": "wuji_drawer_s01/wuji_drawer_7c70c2095bab.h5",
+      "bundle_path": "episodes/Stanford_JW/wuji_drawer_s01/wuji_drawer_7c70c2095bab.h5",
+      "video_files": {
+        "front_cam": "episodes/Stanford_JW/wuji_drawer_s01/wuji_drawer_7c70c2095bab_front_cam.mp4",
+        "wrist_cam": "episodes/Stanford_JW/wuji_drawer_s01/wuji_drawer_7c70c2095bab_wrist_cam.mp4"
+      },
+      "episode_id": "wuji_drawer_7c70c2095bab",
+      "language_instruction": "Open the drawer, pick up the red cube and place it inside, then close the drawer.",
+      "operator": "operator",
+      "annotators": [
+        "operator"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:44:57.939231+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-027",
+      "dataset_repo": "OopsieData-Submissions/Stanford_JW",
+      "lab_id": "Stanford_JW",
+      "repo_path": "battery_s00/battery_d33a0048acf1.h5",
+      "bundle_path": "episodes/Stanford_JW/battery_s00/battery_d33a0048acf1.h5",
+      "video_files": {
+        "front_cam": "episodes/Stanford_JW/battery_s00/battery_d33a0048acf1_front_cam.mp4",
+        "wrist_cam": "episodes/Stanford_JW/battery_s00/battery_d33a0048acf1_wrist_cam.mp4"
+      },
+      "episode_id": "battery_d33a0048acf1",
+      "language_instruction": "Pick up the battery and insert it into the second slot of the battery holder.",
+      "operator": "operator",
+      "annotators": [
+        "operator"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "No failure annotation.",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:41:14.165762+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-028",
+      "dataset_repo": "OopsieData-Submissions/Stanford_JW",
+      "lab_id": "Stanford_JW",
+      "repo_path": "tong_s06/tong_384037a6801b.h5",
+      "bundle_path": "episodes/Stanford_JW/tong_s06/tong_384037a6801b.h5",
+      "video_files": {
+        "front_cam": "episodes/Stanford_JW/tong_s06/tong_384037a6801b_front_cam.mp4",
+        "wrist_cam": "episodes/Stanford_JW/tong_s06/tong_384037a6801b_wrist_cam.mp4"
+      },
+      "episode_id": "tong_384037a6801b",
+      "language_instruction": "Pick up the tongs and use them to grab the toy, place the toy on the blue plate, then rest the tongs on the book.",
+      "operator": "operator",
+      "annotators": [
+        "operator"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "no failure annotation",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:44:29.832722+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-029",
+      "dataset_repo": "OopsieData-Submissions/Stanford_JW",
+      "lab_id": "Stanford_JW",
+      "repo_path": "wuji_toy_s05/wuji_toy_7834226596d0.h5",
+      "bundle_path": "episodes/Stanford_JW/wuji_toy_s05/wuji_toy_7834226596d0.h5",
+      "video_files": {
+        "front_cam": "episodes/Stanford_JW/wuji_toy_s05/wuji_toy_7834226596d0_front_cam.mp4",
+        "wrist_cam": "episodes/Stanford_JW/wuji_toy_s05/wuji_toy_7834226596d0_wrist_cam.mp4"
+      },
+      "episode_id": "wuji_toy_7834226596d0",
+      "language_instruction": "Pick up the two toys and put them in the tote.",
+      "operator": "operator",
+      "annotators": [
+        "operator"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "no failure annotation",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:45:18.259661+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-030",
+      "dataset_repo": "OopsieData-Submissions/Stanford_JW",
+      "lab_id": "Stanford_JW",
+      "repo_path": "raspberry_s06/raspberry_ec6c4ff6c541.h5",
+      "bundle_path": "episodes/Stanford_JW/raspberry_s06/raspberry_ec6c4ff6c541.h5",
+      "video_files": {
+        "front_cam": "episodes/Stanford_JW/raspberry_s06/raspberry_ec6c4ff6c541_front_cam.mp4",
+        "wrist_cam": "episodes/Stanford_JW/raspberry_s06/raspberry_ec6c4ff6c541_wrist_cam.mp4"
+      },
+      "episode_id": "raspberry_ec6c4ff6c541",
+      "language_instruction": "Pick up the raspberry without crushing it and place it in the glass bowl.",
+      "operator": "operator",
+      "annotators": [
+        "operator"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "no failure annotation",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:43:06.129804+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-031",
+      "dataset_repo": "OopsieData-Submissions/Stanford_JW",
+      "lab_id": "Stanford_JW",
+      "repo_path": "wuji_drawer_s02/wuji_drawer_f27d685238a7.h5",
+      "bundle_path": "episodes/Stanford_JW/wuji_drawer_s02/wuji_drawer_f27d685238a7.h5",
+      "video_files": {
+        "front_cam": "episodes/Stanford_JW/wuji_drawer_s02/wuji_drawer_f27d685238a7_front_cam.mp4",
+        "wrist_cam": "episodes/Stanford_JW/wuji_drawer_s02/wuji_drawer_f27d685238a7_wrist_cam.mp4"
+      },
+      "episode_id": "wuji_drawer_f27d685238a7",
+      "language_instruction": "Open the drawer, pick up the red cube and place it inside, then close the drawer.",
+      "operator": "operator",
+      "annotators": [
+        "operator"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:45:07.102383+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-032",
+      "dataset_repo": "OopsieData-Submissions/Stanford_JW",
+      "lab_id": "Stanford_JW",
+      "repo_path": "inspire_s03/inspire_acf462f3b03f.h5",
+      "bundle_path": "episodes/Stanford_JW/inspire_s03/inspire_acf462f3b03f.h5",
+      "video_files": {
+        "front_cam": "episodes/Stanford_JW/inspire_s03/inspire_acf462f3b03f_front_cam.mp4",
+        "wrist_cam": "episodes/Stanford_JW/inspire_s03/inspire_acf462f3b03f_wrist_cam.mp4"
+      },
+      "episode_id": "inspire_acf462f3b03f",
+      "language_instruction": "Lift the bunny.",
+      "operator": "operator",
+      "annotators": [
+        "operator"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:42:21.062406+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-033",
+      "dataset_repo": "OopsieData-Submissions/Stanford_JW",
+      "lab_id": "Stanford_JW",
+      "repo_path": "wuji_toy_s07/wuji_toy_b00dc297d365.h5",
+      "bundle_path": "episodes/Stanford_JW/wuji_toy_s07/wuji_toy_b00dc297d365.h5",
+      "video_files": {
+        "front_cam": "episodes/Stanford_JW/wuji_toy_s07/wuji_toy_b00dc297d365_front_cam.mp4",
+        "wrist_cam": "episodes/Stanford_JW/wuji_toy_s07/wuji_toy_b00dc297d365_wrist_cam.mp4"
+      },
+      "episode_id": "wuji_toy_b00dc297d365",
+      "language_instruction": "Pick up the two toys and put them in the tote.",
+      "operator": "operator",
+      "annotators": [
+        "operator"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:45:34.489259+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-034",
+      "dataset_repo": "OopsieData-Submissions/Stanford_JW",
+      "lab_id": "Stanford_JW",
+      "repo_path": "tong_s05/tong_4e990f0d0654.h5",
+      "bundle_path": "episodes/Stanford_JW/tong_s05/tong_4e990f0d0654.h5",
+      "video_files": {
+        "front_cam": "episodes/Stanford_JW/tong_s05/tong_4e990f0d0654_front_cam.mp4",
+        "wrist_cam": "episodes/Stanford_JW/tong_s05/tong_4e990f0d0654_wrist_cam.mp4"
+      },
+      "episode_id": "tong_4e990f0d0654",
+      "language_instruction": "Pick up the tongs and use them to grab the toy, place the toy on the blue plate, then rest the tongs on the book.",
+      "operator": "operator",
+      "annotators": [
+        "operator"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "no failure annotation",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:44:12.066227+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-035",
+      "dataset_repo": "OopsieData-Submissions/Stanford_JW",
+      "lab_id": "Stanford_JW",
+      "repo_path": "battery_s01/battery_533bead90282.h5",
+      "bundle_path": "episodes/Stanford_JW/battery_s01/battery_533bead90282.h5",
+      "video_files": {
+        "front_cam": "episodes/Stanford_JW/battery_s01/battery_533bead90282_front_cam.mp4",
+        "wrist_cam": "episodes/Stanford_JW/battery_s01/battery_533bead90282_wrist_cam.mp4"
+      },
+      "episode_id": "battery_533bead90282",
+      "language_instruction": "Pick up the battery and insert it into the second slot of the battery holder.",
+      "operator": "operator",
+      "annotators": [
+        "operator"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:41:42.413731+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-036",
+      "dataset_repo": "OopsieData-Submissions/Stanford_JW",
+      "lab_id": "Stanford_JW",
+      "repo_path": "raspberry_s04/raspberry_e260c2049a26.h5",
+      "bundle_path": "episodes/Stanford_JW/raspberry_s04/raspberry_e260c2049a26.h5",
+      "video_files": {
+        "front_cam": "episodes/Stanford_JW/raspberry_s04/raspberry_e260c2049a26_front_cam.mp4",
+        "wrist_cam": "episodes/Stanford_JW/raspberry_s04/raspberry_e260c2049a26_wrist_cam.mp4"
+      },
+      "episode_id": "raspberry_e260c2049a26",
+      "language_instruction": "Pick up the raspberry without crushing it and place it in the glass bowl.",
+      "operator": "operator",
+      "annotators": [
+        "operator"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:42:44.855404+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-037",
+      "dataset_repo": "OopsieData-Submissions/Stanford_JW",
+      "lab_id": "Stanford_JW",
+      "repo_path": "wuji_drawer_s00/wuji_drawer_97d895a02ed3.h5",
+      "bundle_path": "episodes/Stanford_JW/wuji_drawer_s00/wuji_drawer_97d895a02ed3.h5",
+      "video_files": {
+        "front_cam": "episodes/Stanford_JW/wuji_drawer_s00/wuji_drawer_97d895a02ed3_front_cam.mp4",
+        "wrist_cam": "episodes/Stanford_JW/wuji_drawer_s00/wuji_drawer_97d895a02ed3_wrist_cam.mp4"
+      },
+      "episode_id": "wuji_drawer_97d895a02ed3",
+      "language_instruction": "Open the drawer, pick up the red cube and place it inside, then close the drawer.",
+      "operator": "operator",
+      "annotators": [
+        "operator"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:44:47.640096+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-038",
+      "dataset_repo": "OopsieData-Submissions/Stanford_JW",
+      "lab_id": "Stanford_JW",
+      "repo_path": "inspire_s05/inspire_889a258d5e56.h5",
+      "bundle_path": "episodes/Stanford_JW/inspire_s05/inspire_889a258d5e56.h5",
+      "video_files": {
+        "front_cam": "episodes/Stanford_JW/inspire_s05/inspire_889a258d5e56_front_cam.mp4",
+        "wrist_cam": "episodes/Stanford_JW/inspire_s05/inspire_889a258d5e56_wrist_cam.mp4"
+      },
+      "episode_id": "inspire_889a258d5e56",
+      "language_instruction": "Lift the bunny.",
+      "operator": "operator",
+      "annotators": [
+        "operator"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:42:28.077261+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-039",
+      "dataset_repo": "OopsieData-Submissions/Stanford_JW",
+      "lab_id": "Stanford_JW",
+      "repo_path": "tong_s04/tong_afbd00ac5758.h5",
+      "bundle_path": "episodes/Stanford_JW/tong_s04/tong_afbd00ac5758.h5",
+      "video_files": {
+        "front_cam": "episodes/Stanford_JW/tong_s04/tong_afbd00ac5758_front_cam.mp4",
+        "wrist_cam": "episodes/Stanford_JW/tong_s04/tong_afbd00ac5758_wrist_cam.mp4"
+      },
+      "episode_id": "tong_afbd00ac5758",
+      "language_instruction": "Pick up the tongs and use them to grab the toy, place the toy on the blue plate, then rest the tongs on the book.",
+      "operator": "operator",
+      "annotators": [
+        "operator"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "no failure annotation",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:43:23.768206+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-040",
+      "dataset_repo": "OopsieData-Submissions/Stanford_JW",
+      "lab_id": "Stanford_JW",
+      "repo_path": "raspberry_s07/raspberry_38393e6f809b.h5",
+      "bundle_path": "episodes/Stanford_JW/raspberry_s07/raspberry_38393e6f809b.h5",
+      "video_files": {
+        "front_cam": "episodes/Stanford_JW/raspberry_s07/raspberry_38393e6f809b_front_cam.mp4",
+        "wrist_cam": "episodes/Stanford_JW/raspberry_s07/raspberry_38393e6f809b_wrist_cam.mp4"
+      },
+      "episode_id": "raspberry_38393e6f809b",
+      "language_instruction": "Pick up the raspberry without crushing it and place it in the glass bowl.",
+      "operator": "operator",
+      "annotators": [
+        "operator"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "no failure annotation",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:43:18.883732+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-041",
+      "dataset_repo": "OopsieData-Submissions/Stanford_MSL",
+      "lab_id": "Stanford_MSL",
+      "repo_path": "episode_000156.h5",
+      "bundle_path": "episodes/Stanford_MSL/episode_000156.h5",
+      "video_files": {
+        "left": "episodes/Stanford_MSL/videos/episode_000156_left.mp4",
+        "wrist": "episodes/Stanford_MSL/videos/episode_000156_wrist.mp4"
+      },
+      "episode_id": "episode_000156",
+      "language_instruction": "pull the door",
+      "operator": "Ting Xu",
+      "annotators": [
+        "roboarena_human_evaluator"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:48:23.260079+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-042",
+      "dataset_repo": "OopsieData-Submissions/Stanford_MSL",
+      "lab_id": "Stanford_MSL",
+      "repo_path": "g1_pi0.5_4/session_2026-08-09_17-47-48/20260809_175518.h5",
+      "bundle_path": "episodes/Stanford_MSL/g1_pi0.5_4/session_2026-08-09_17-47-48/20260809_175518.h5",
+      "video_files": {
+        "ego_view": "episodes/Stanford_MSL/g1_pi0.5_4/session_2026-08-09_17-47-48/20260809_175518_ego_view.mp4"
+      },
+      "episode_id": "20260809_175518",
+      "language_instruction": "pick the orange, turn right, and place it on the plate",
+      "operator": "stanford_msl",
+      "annotators": [
+        "stanford_msl"
+      ],
+      "robot_name": "unitree_g1",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:45:44.665067+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-043",
+      "dataset_repo": "OopsieData-Submissions/Stanford_MSL",
+      "lab_id": "Stanford_MSL",
+      "repo_path": "episode_20260413_154211_5cd23b05.h5",
+      "bundle_path": "episodes/Stanford_MSL/episode_20260413_154211_5cd23b05.h5",
+      "video_files": {
+        "left": "episodes/Stanford_MSL/videos/episode_20260413_154211_5cd23b05_left.mp4",
+        "right": "episodes/Stanford_MSL/videos/episode_20260413_154211_5cd23b05_right.mp4",
+        "top": "episodes/Stanford_MSL/videos/episode_20260413_154211_5cd23b05_top.mp4"
+      },
+      "episode_id": "episode_20260413_154211_5cd23b05",
+      "language_instruction": "clean the whiteboard",
+      "operator": "Qianzhong Chen",
+      "annotators": [
+        "Qianzhong Chen"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:50:24.034316+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-044",
+      "dataset_repo": "OopsieData-Submissions/Stanford_MSL",
+      "lab_id": "Stanford_MSL",
+      "repo_path": "vifailback_004196.h5",
+      "bundle_path": "episodes/Stanford_MSL/vifailback_004196.h5",
+      "video_files": {
+        "high": "episodes/Stanford_MSL/vifailback_004196_high.mp4",
+        "left_wrist": "episodes/Stanford_MSL/vifailback_004196_left_wrist.mp4",
+        "right_wrist": "episodes/Stanford_MSL/vifailback_004196_right_wrist.mp4"
+      },
+      "episode_id": "vifailback_004196",
+      "language_instruction": "Use the left arm to pull open the top drawer.",
+      "operator": "Jiankai Sun",
+      "annotators": [
+        "vifailback_original_annotation"
+      ],
+      "robot_name": "ALOHA",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:53:36.155268+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-045",
+      "dataset_repo": "OopsieData-Submissions/Stanford_MSL",
+      "lab_id": "Stanford_MSL",
+      "repo_path": "episode_000116.h5",
+      "bundle_path": "episodes/Stanford_MSL/episode_000116.h5",
+      "video_files": {
+        "left": "episodes/Stanford_MSL/videos/episode_000116_left.mp4",
+        "right": "episodes/Stanford_MSL/videos/episode_000116_right.mp4",
+        "wrist": "episodes/Stanford_MSL/videos/episode_000116_wrist.mp4"
+      },
+      "episode_id": "episode_000116",
+      "language_instruction": "First pick up the wooden block and then pick up the bread.",
+      "operator": "Ting Xu",
+      "annotators": [
+        "roboarena_human_evaluator"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:47:45.748262+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-046",
+      "dataset_repo": "OopsieData-Submissions/Stanford_MSL",
+      "lab_id": "Stanford_MSL",
+      "repo_path": "episode_20260517_162809_0d187544.h5",
+      "bundle_path": "episodes/Stanford_MSL/episode_20260517_162809_0d187544.h5",
+      "video_files": {
+        "left": "episodes/Stanford_MSL/videos/episode_20260517_162809_0d187544_left.mp4",
+        "right": "episodes/Stanford_MSL/videos/episode_20260517_162809_0d187544_right.mp4",
+        "top": "episodes/Stanford_MSL/videos/episode_20260517_162809_0d187544_top.mp4"
+      },
+      "episode_id": "episode_20260517_162809_0d187544",
+      "language_instruction": "fold the shorts",
+      "operator": "Qianzhong Chen",
+      "annotators": [
+        "Qianzhong Chen"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:51:12.505550+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-047",
+      "dataset_repo": "OopsieData-Submissions/Stanford_MSL",
+      "lab_id": "Stanford_MSL",
+      "repo_path": "vifailback_003428.h5",
+      "bundle_path": "episodes/Stanford_MSL/vifailback_003428.h5",
+      "video_files": {
+        "high": "episodes/Stanford_MSL/vifailback_003428_high.mp4",
+        "left_wrist": "episodes/Stanford_MSL/vifailback_003428_left_wrist.mp4",
+        "right_wrist": "episodes/Stanford_MSL/vifailback_003428_right_wrist.mp4"
+      },
+      "episode_id": "vifailback_003428",
+      "language_instruction": "Use the right arm to pick up the spoon and place it into the rice cooker.",
+      "operator": "Jiankai Sun",
+      "annotators": [
+        "vifailback_original_annotation"
+      ],
+      "robot_name": "ALOHA",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:53:17.059276+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-048",
+      "dataset_repo": "OopsieData-Submissions/Stanford_MSL",
+      "lab_id": "Stanford_MSL",
+      "repo_path": "episode_000139.h5",
+      "bundle_path": "episodes/Stanford_MSL/episode_000139.h5",
+      "video_files": {
+        "left": "episodes/Stanford_MSL/videos/episode_000139_left.mp4",
+        "wrist": "episodes/Stanford_MSL/videos/episode_000139_wrist.mp4"
+      },
+      "episode_id": "episode_000139",
+      "language_instruction": "Cover the box.",
+      "operator": "Ting Xu",
+      "annotators": [
+        "roboarena_human_evaluator"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:47:57.317674+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-049",
+      "dataset_repo": "OopsieData-Submissions/Stanford_MSL",
+      "lab_id": "Stanford_MSL",
+      "repo_path": "g1_psi0_2/session_2026-08-08_03-28-00/20260808_033125.h5",
+      "bundle_path": "episodes/Stanford_MSL/g1_psi0_2/session_2026-08-08_03-28-00/20260808_033125.h5",
+      "video_files": {
+        "ego_view": "episodes/Stanford_MSL/g1_psi0_2/session_2026-08-08_03-28-00/20260808_033125_ego_view.mp4"
+      },
+      "episode_id": "20260808_033125",
+      "language_instruction": "pick the orange, turn right, and place it on the plate",
+      "operator": "stanford_msl",
+      "annotators": [
+        "stanford_msl"
+      ],
+      "robot_name": "unitree_g1",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:46:00.596582+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-050",
+      "dataset_repo": "OopsieData-Submissions/Stanford_MSL",
+      "lab_id": "Stanford_MSL",
+      "repo_path": "vifailback_001411.h5",
+      "bundle_path": "episodes/Stanford_MSL/vifailback_001411.h5",
+      "video_files": {
+        "high": "episodes/Stanford_MSL/vifailback_001411_high.mp4",
+        "left_wrist": "episodes/Stanford_MSL/vifailback_001411_left_wrist.mp4",
+        "right_wrist": "episodes/Stanford_MSL/vifailback_001411_right_wrist.mp4"
+      },
+      "episode_id": "vifailback_001411",
+      "language_instruction": "Use the left arm to pick up the pink cube from the drawer and place it on the plate.",
+      "operator": "Jiankai Sun",
+      "annotators": [
+        "vifailback_original_annotation"
+      ],
+      "robot_name": "ALOHA",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:52:29.216360+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-051",
+      "dataset_repo": "OopsieData-Submissions/Stanford_MSL",
+      "lab_id": "Stanford_MSL",
+      "repo_path": "episode_000230.h5",
+      "bundle_path": "episodes/Stanford_MSL/episode_000230.h5",
+      "video_files": {
+        "right": "episodes/Stanford_MSL/videos/episode_000230_right.mp4",
+        "wrist": "episodes/Stanford_MSL/videos/episode_000230_wrist.mp4"
+      },
+      "episode_id": "episode_000230",
+      "language_instruction": "cover the cup with the towel",
+      "operator": "Ting Xu",
+      "annotators": [
+        "roboarena_human_evaluator"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "the cup also fell. Would this be a failure?",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:49:40.084608+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-052",
+      "dataset_repo": "OopsieData-Submissions/Stanford_MSL",
+      "lab_id": "Stanford_MSL",
+      "repo_path": "vifailback_002318.h5",
+      "bundle_path": "episodes/Stanford_MSL/vifailback_002318.h5",
+      "video_files": {
+        "high": "episodes/Stanford_MSL/vifailback_002318_high.mp4",
+        "left_wrist": "episodes/Stanford_MSL/vifailback_002318_left_wrist.mp4",
+        "right_wrist": "episodes/Stanford_MSL/vifailback_002318_right_wrist.mp4"
+      },
+      "episode_id": "vifailback_002318",
+      "language_instruction": "Use the right arm to place the orange block into the bowl. Then, use the left arm to open the microwave door, use the right arm to put the bowl into the microwave, and finally, close the microwave door.",
+      "operator": "Jiankai Sun",
+      "annotators": [
+        "vifailback_original_annotation"
+      ],
+      "robot_name": "ALOHA",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:52:52.120175+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-053",
+      "dataset_repo": "OopsieData-Submissions/Stanford_MSL",
+      "lab_id": "Stanford_MSL",
+      "repo_path": "episode_000064.h5",
+      "bundle_path": "episodes/Stanford_MSL/episode_000064.h5",
+      "video_files": {
+        "right": "episodes/Stanford_MSL/videos/episode_000064_right.mp4",
+        "wrist": "episodes/Stanford_MSL/videos/episode_000064_wrist.mp4"
+      },
+      "episode_id": "episode_000064",
+      "language_instruction": "grasp the carrot and move it next to the cube",
+      "operator": "Ting Xu",
+      "annotators": [
+        "roboarena_human_evaluator"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:46:07.102073+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-054",
+      "dataset_repo": "OopsieData-Submissions/Stanford_MSL",
+      "lab_id": "Stanford_MSL",
+      "repo_path": "vifailback_003636.h5",
+      "bundle_path": "episodes/Stanford_MSL/vifailback_003636.h5",
+      "video_files": {
+        "high": "episodes/Stanford_MSL/vifailback_003636_high.mp4",
+        "left_wrist": "episodes/Stanford_MSL/vifailback_003636_left_wrist.mp4",
+        "right_wrist": "episodes/Stanford_MSL/vifailback_003636_right_wrist.mp4"
+      },
+      "episode_id": "vifailback_003636",
+      "language_instruction": "Use the left arm to place the pen into the open drawer.",
+      "operator": "Jiankai Sun",
+      "annotators": [
+        "vifailback_original_annotation"
+      ],
+      "robot_name": "ALOHA",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:53:27.398065+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-055",
+      "dataset_repo": "OopsieData-Submissions/Stanford_MSL",
+      "lab_id": "Stanford_MSL",
+      "repo_path": "episode_20260506_203752_b38a51fe.h5",
+      "bundle_path": "episodes/Stanford_MSL/episode_20260506_203752_b38a51fe.h5",
+      "video_files": {
+        "left": "episodes/Stanford_MSL/videos/episode_20260506_203752_b38a51fe_left.mp4",
+        "right": "episodes/Stanford_MSL/videos/episode_20260506_203752_b38a51fe_right.mp4",
+        "top": "episodes/Stanford_MSL/videos/episode_20260506_203752_b38a51fe_top.mp4"
+      },
+      "episode_id": "episode_20260506_203752_b38a51fe",
+      "language_instruction": "fold the shorts",
+      "operator": "Qianzhong Chen",
+      "annotators": [
+        "Qianzhong Chen"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "no failure annotation",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:50:39.938745+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-056",
+      "dataset_repo": "OopsieData-Submissions/Stanford_MSL",
+      "lab_id": "Stanford_MSL",
+      "repo_path": "vifailback_004909.h5",
+      "bundle_path": "episodes/Stanford_MSL/vifailback_004909.h5",
+      "video_files": {
+        "high": "episodes/Stanford_MSL/vifailback_004909_high.mp4",
+        "left_wrist": "episodes/Stanford_MSL/vifailback_004909_left_wrist.mp4",
+        "right_wrist": "episodes/Stanford_MSL/vifailback_004909_right_wrist.mp4"
+      },
+      "episode_id": "vifailback_004909",
+      "language_instruction": "Use the left arm to pick up the cup and place it on top of the closed book.",
+      "operator": "Jiankai Sun",
+      "annotators": [
+        "vifailback_original_annotation"
+      ],
+      "robot_name": "ALOHA",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:53:50.294219+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-057",
+      "dataset_repo": "OopsieData-Submissions/Stanford_MSL",
+      "lab_id": "Stanford_MSL",
+      "repo_path": "episode_000208.h5",
+      "bundle_path": "episodes/Stanford_MSL/episode_000208.h5",
+      "video_files": {
+        "left": "episodes/Stanford_MSL/videos/episode_000208_left.mp4",
+        "right": "episodes/Stanford_MSL/videos/episode_000208_right.mp4",
+        "wrist": "episodes/Stanford_MSL/videos/episode_000208_wrist.mp4"
+      },
+      "episode_id": "episode_000208",
+      "language_instruction": "Finish setting the table.",
+      "operator": "Ting Xu",
+      "annotators": [
+        "roboarena_human_evaluator"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:48:46.302558+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-058",
+      "dataset_repo": "OopsieData-Submissions/Stanford_MSL",
+      "lab_id": "Stanford_MSL",
+      "repo_path": "vifailback_000794.h5",
+      "bundle_path": "episodes/Stanford_MSL/vifailback_000794.h5",
+      "video_files": {
+        "high": "episodes/Stanford_MSL/vifailback_000794_high.mp4",
+        "left_wrist": "episodes/Stanford_MSL/vifailback_000794_left_wrist.mp4",
+        "right_wrist": "episodes/Stanford_MSL/vifailback_000794_right_wrist.mp4"
+      },
+      "episode_id": "vifailback_000794",
+      "language_instruction": "Use the right arm to open the drawer, then use the left arm to put the stapler inside.",
+      "operator": "Jiankai Sun",
+      "annotators": [
+        "vifailback_original_annotation"
+      ],
+      "robot_name": "ALOHA",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:52:19.168577+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-059",
+      "dataset_repo": "OopsieData-Submissions/Stanford_MSL",
+      "lab_id": "Stanford_MSL",
+      "repo_path": "episode_000205.h5",
+      "bundle_path": "episodes/Stanford_MSL/episode_000205.h5",
+      "video_files": {
+        "left": "episodes/Stanford_MSL/videos/episode_000205_left.mp4",
+        "right": "episodes/Stanford_MSL/videos/episode_000205_right.mp4",
+        "wrist": "episodes/Stanford_MSL/videos/episode_000205_wrist.mp4"
+      },
+      "episode_id": "episode_000205",
+      "language_instruction": "place the tape measure into the basket",
+      "operator": "Ting Xu",
+      "annotators": [
+        "roboarena_human_evaluator"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:48:33.544193+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-060",
+      "dataset_repo": "OopsieData-Submissions/Stanford_MSL",
+      "lab_id": "Stanford_MSL",
+      "repo_path": "vifailback_000695.h5",
+      "bundle_path": "episodes/Stanford_MSL/vifailback_000695.h5",
+      "video_files": {
+        "high": "episodes/Stanford_MSL/vifailback_000695_high.mp4",
+        "left_wrist": "episodes/Stanford_MSL/vifailback_000695_left_wrist.mp4",
+        "right_wrist": "episodes/Stanford_MSL/vifailback_000695_right_wrist.mp4"
+      },
+      "episode_id": "vifailback_000695",
+      "language_instruction": "Use the right arm to lift the lid off the pot, then use the left arm to place the green duck into the pot.",
+      "operator": "Jiankai Sun",
+      "annotators": [
+        "vifailback_original_annotation"
+      ],
+      "robot_name": "ALOHA",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:52:04.784936+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-061",
+      "dataset_repo": "OopsieData-Submissions/Stanford_SIALab",
+      "lab_id": "Stanford_SIALab",
+      "repo_path": "collection102/c102_r0085.h5",
+      "bundle_path": "episodes/Stanford_SIALab/collection102/c102_r0085.h5",
+      "video_files": {
+        "side_cam": "episodes/Stanford_SIALab/collection102/c102_r0085_side_cam.mp4",
+        "top_cam": "episodes/Stanford_SIALab/collection102/c102_r0085_top_cam.mp4",
+        "wrist_cam": "episodes/Stanford_SIALab/collection102/c102_r0085_wrist_cam.mp4"
+      },
+      "episode_id": "c102_r0085",
+      "language_instruction": "hang the blue tape on the hook",
+      "operator": "umut",
+      "annotators": [
+        "umut"
+      ],
+      "robot_name": "franka_fr3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:55:37.249752+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-062",
+      "dataset_repo": "OopsieData-Submissions/Stanford_SIALab",
+      "lab_id": "Stanford_SIALab",
+      "repo_path": "collection076/c076_r0055.h5",
+      "bundle_path": "episodes/Stanford_SIALab/collection076/c076_r0055.h5",
+      "video_files": {
+        "side_cam": "episodes/Stanford_SIALab/collection076/c076_r0055_side_cam.mp4",
+        "top_cam": "episodes/Stanford_SIALab/collection076/c076_r0055_top_cam.mp4",
+        "wrist_cam": "episodes/Stanford_SIALab/collection076/c076_r0055_wrist_cam.mp4"
+      },
+      "episode_id": "c076_r0055",
+      "language_instruction": "pick out a single cup from the cup stack and pour coffee beans into it",
+      "operator": "Albert Lin",
+      "annotators": [
+        "Albert Lin"
+      ],
+      "robot_name": "franka_fr3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:55:29.201921+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-063",
+      "dataset_repo": "OopsieData-Submissions/Stanford_SIALab",
+      "lab_id": "Stanford_SIALab",
+      "repo_path": "collection039/c039_r0003.h5",
+      "bundle_path": "episodes/Stanford_SIALab/collection039/c039_r0003.h5",
+      "video_files": {
+        "left_cam": "episodes/Stanford_SIALab/collection039/c039_r0003_left_cam.mp4",
+        "right_cam": "episodes/Stanford_SIALab/collection039/c039_r0003_right_cam.mp4",
+        "wrist_cam": "episodes/Stanford_SIALab/collection039/c039_r0003_wrist_cam.mp4"
+      },
+      "episode_id": "c039_r0003",
+      "language_instruction": "open the lunch box",
+      "operator": "Hao Wang, Joshua Bowden",
+      "annotators": [
+        "Hao Wang, Joshua Bowden"
+      ],
+      "robot_name": "franka_fr3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:55:00.008755+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-064",
+      "dataset_repo": "OopsieData-Submissions/Stanford_SIALab",
+      "lab_id": "Stanford_SIALab",
+      "repo_path": "collection212/c212_r0216.h5",
+      "bundle_path": "episodes/Stanford_SIALab/collection212/c212_r0216.h5",
+      "video_files": {
+        "side_cam": "episodes/Stanford_SIALab/collection212/c212_r0216_side_cam.mp4",
+        "top_cam": "episodes/Stanford_SIALab/collection212/c212_r0216_top_cam.mp4",
+        "wrist_cam": "episodes/Stanford_SIALab/collection212/c212_r0216_wrist_cam.mp4"
+      },
+      "episode_id": "c212_r0216",
+      "language_instruction": "put bottle to the plate",
+      "operator": "umut",
+      "annotators": [
+        "umut"
+      ],
+      "robot_name": "franka_fr3",
+      "qa_notes": "no failure annotation",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:57:31.008697+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-065",
+      "dataset_repo": "OopsieData-Submissions/Stanford_SIALab",
+      "lab_id": "Stanford_SIALab",
+      "repo_path": "collection153/c153_r0073.h5",
+      "bundle_path": "episodes/Stanford_SIALab/collection153/c153_r0073.h5",
+      "video_files": {
+        "side_cam": "episodes/Stanford_SIALab/collection153/c153_r0073_side_cam.mp4",
+        "top_cam": "episodes/Stanford_SIALab/collection153/c153_r0073_top_cam.mp4",
+        "wrist_cam": "episodes/Stanford_SIALab/collection153/c153_r0073_wrist_cam.mp4"
+      },
+      "episode_id": "c153_r0073",
+      "language_instruction": "dump the tomato from the dustpan into the bowl",
+      "operator": "Albert Lin",
+      "annotators": [
+        "Albert Lin"
+      ],
+      "robot_name": "franka_fr3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:56:20.594040+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-066",
+      "dataset_repo": "OopsieData-Submissions/Stanford_SIALab",
+      "lab_id": "Stanford_SIALab",
+      "repo_path": "collection008/c008_r0035.h5",
+      "bundle_path": "episodes/Stanford_SIALab/collection008/c008_r0035.h5",
+      "video_files": {
+        "left_cam": "episodes/Stanford_SIALab/collection008/c008_r0035_left_cam.mp4",
+        "right_cam": "episodes/Stanford_SIALab/collection008/c008_r0035_right_cam.mp4",
+        "wrist_cam": "episodes/Stanford_SIALab/collection008/c008_r0035_wrist_cam.mp4"
+      },
+      "episode_id": "c008_r0035",
+      "language_instruction": "pick up the small can and put it on the tall can",
+      "operator": "Hao Wang, Joshua Bowden",
+      "annotators": [
+        "Hao Wang, Joshua Bowden"
+      ],
+      "robot_name": "franka_fr3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:54:04.878154+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-067",
+      "dataset_repo": "OopsieData-Submissions/Stanford_SIALab",
+      "lab_id": "Stanford_SIALab",
+      "repo_path": "collection114/c114_r0010.h5",
+      "bundle_path": "episodes/Stanford_SIALab/collection114/c114_r0010.h5",
+      "video_files": {
+        "side_cam": "episodes/Stanford_SIALab/collection114/c114_r0010_side_cam.mp4",
+        "top_cam": "episodes/Stanford_SIALab/collection114/c114_r0010_top_cam.mp4",
+        "wrist_cam": "episodes/Stanford_SIALab/collection114/c114_r0010_wrist_cam.mp4"
+      },
+      "episode_id": "c114_r0010",
+      "language_instruction": "stack red cube on green cube",
+      "operator": "umut",
+      "annotators": [
+        "umut"
+      ],
+      "robot_name": "franka_fr3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:56:04.990282+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-068",
+      "dataset_repo": "OopsieData-Submissions/Stanford_SIALab",
+      "lab_id": "Stanford_SIALab",
+      "repo_path": "collection196/c196_r0089.h5",
+      "bundle_path": "episodes/Stanford_SIALab/collection196/c196_r0089.h5",
+      "video_files": {
+        "side_cam": "episodes/Stanford_SIALab/collection196/c196_r0089_side_cam.mp4",
+        "top_cam": "episodes/Stanford_SIALab/collection196/c196_r0089_top_cam.mp4",
+        "wrist_cam": "episodes/Stanford_SIALab/collection196/c196_r0089_wrist_cam.mp4"
+      },
+      "episode_id": "c196_r0089",
+      "language_instruction": "Carry the empty bottle to the trash bin without knocking any full bottle over.",
+      "operator": "Albert Lin",
+      "annotators": [
+        "Albert Lin"
+      ],
+      "robot_name": "franka_fr3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:56:36.263447+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-069",
+      "dataset_repo": "OopsieData-Submissions/Stanford_SIALab",
+      "lab_id": "Stanford_SIALab",
+      "repo_path": "collection047/c047_r0043.h5",
+      "bundle_path": "episodes/Stanford_SIALab/collection047/c047_r0043.h5",
+      "video_files": {
+        "side_cam": "episodes/Stanford_SIALab/collection047/c047_r0043_side_cam.mp4",
+        "top_cam": "episodes/Stanford_SIALab/collection047/c047_r0043_top_cam.mp4",
+        "wrist_cam": "episodes/Stanford_SIALab/collection047/c047_r0043_wrist_cam.mp4"
+      },
+      "episode_id": "c047_r0043",
+      "language_instruction": "pour the coffee beans into the cup",
+      "operator": "Albert Lin",
+      "annotators": [
+        "Albert Lin"
+      ],
+      "robot_name": "franka_fr3",
+      "qa_notes": "no failure annotation",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:55:09.722863+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-070",
+      "dataset_repo": "OopsieData-Submissions/Stanford_SIALab",
+      "lab_id": "Stanford_SIALab",
+      "repo_path": "collection109/c109_r0042.h5",
+      "bundle_path": "episodes/Stanford_SIALab/collection109/c109_r0042.h5",
+      "video_files": {
+        "side_cam": "episodes/Stanford_SIALab/collection109/c109_r0042_side_cam.mp4",
+        "top_cam": "episodes/Stanford_SIALab/collection109/c109_r0042_top_cam.mp4",
+        "wrist_cam": "episodes/Stanford_SIALab/collection109/c109_r0042_wrist_cam.mp4"
+      },
+      "episode_id": "c109_r0042",
+      "language_instruction": "hang the tape on the hook",
+      "operator": "umut",
+      "annotators": [
+        "umut"
+      ],
+      "robot_name": "franka_fr3",
+      "qa_notes": "no failure annotation",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:55:52.036064+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-071",
+      "dataset_repo": "OopsieData-Submissions/Stanford_SIALab",
+      "lab_id": "Stanford_SIALab",
+      "repo_path": "collection212/c212_r0204.h5",
+      "bundle_path": "episodes/Stanford_SIALab/collection212/c212_r0204.h5",
+      "video_files": {
+        "side_cam": "episodes/Stanford_SIALab/collection212/c212_r0204_side_cam.mp4",
+        "top_cam": "episodes/Stanford_SIALab/collection212/c212_r0204_top_cam.mp4",
+        "wrist_cam": "episodes/Stanford_SIALab/collection212/c212_r0204_wrist_cam.mp4"
+      },
+      "episode_id": "c212_r0204",
+      "language_instruction": "put bell pepper to the plate",
+      "operator": "umut",
+      "annotators": [
+        "umut"
+      ],
+      "robot_name": "franka_fr3",
+      "qa_notes": "no failure annotation",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:57:26.227983+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-072",
+      "dataset_repo": "OopsieData-Submissions/Stanford_SIALab",
+      "lab_id": "Stanford_SIALab",
+      "repo_path": "collection012/c012_r0022.h5",
+      "bundle_path": "episodes/Stanford_SIALab/collection012/c012_r0022.h5",
+      "video_files": {
+        "left_cam": "episodes/Stanford_SIALab/collection012/c012_r0022_left_cam.mp4",
+        "right_cam": "episodes/Stanford_SIALab/collection012/c012_r0022_right_cam.mp4",
+        "wrist_cam": "episodes/Stanford_SIALab/collection012/c012_r0022_wrist_cam.mp4"
+      },
+      "episode_id": "c012_r0022",
+      "language_instruction": "pour the black rice from the bowl onto the plate",
+      "operator": "Albert Lin",
+      "annotators": [
+        "Albert Lin"
+      ],
+      "robot_name": "franka_fr3",
+      "qa_notes": "no failure annotation",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:54:35.454783+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-073",
+      "dataset_repo": "OopsieData-Submissions/Stanford_SIALab",
+      "lab_id": "Stanford_SIALab",
+      "repo_path": "collection211/c211_r0104.h5",
+      "bundle_path": "episodes/Stanford_SIALab/collection211/c211_r0104.h5",
+      "video_files": {
+        "side_cam": "episodes/Stanford_SIALab/collection211/c211_r0104_side_cam.mp4",
+        "top_cam": "episodes/Stanford_SIALab/collection211/c211_r0104_top_cam.mp4",
+        "wrist_cam": "episodes/Stanford_SIALab/collection211/c211_r0104_wrist_cam.mp4"
+      },
+      "episode_id": "c211_r0104",
+      "language_instruction": "put asparagus to the plate",
+      "operator": "umut",
+      "annotators": [
+        "umut"
+      ],
+      "robot_name": "franka_fr3",
+      "qa_notes": "no failure annotation",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:57:17.887758+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-074",
+      "dataset_repo": "OopsieData-Submissions/Stanford_SIALab",
+      "lab_id": "Stanford_SIALab",
+      "repo_path": "collection012/c012_r0018.h5",
+      "bundle_path": "episodes/Stanford_SIALab/collection012/c012_r0018.h5",
+      "video_files": {
+        "left_cam": "episodes/Stanford_SIALab/collection012/c012_r0018_left_cam.mp4",
+        "right_cam": "episodes/Stanford_SIALab/collection012/c012_r0018_right_cam.mp4",
+        "wrist_cam": "episodes/Stanford_SIALab/collection012/c012_r0018_wrist_cam.mp4"
+      },
+      "episode_id": "c012_r0018",
+      "language_instruction": "pour the black rice from the cup into the bowl",
+      "operator": "Albert Lin",
+      "annotators": [
+        "Albert Lin"
+      ],
+      "robot_name": "franka_fr3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:54:18.128588+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-075",
+      "dataset_repo": "OopsieData-Submissions/Stanford_SIALab",
+      "lab_id": "Stanford_SIALab",
+      "repo_path": "collection212/c212_r0101.h5",
+      "bundle_path": "episodes/Stanford_SIALab/collection212/c212_r0101.h5",
+      "video_files": {
+        "side_cam": "episodes/Stanford_SIALab/collection212/c212_r0101_side_cam.mp4",
+        "top_cam": "episodes/Stanford_SIALab/collection212/c212_r0101_top_cam.mp4",
+        "wrist_cam": "episodes/Stanford_SIALab/collection212/c212_r0101_wrist_cam.mp4"
+      },
+      "episode_id": "c212_r0101",
+      "language_instruction": "put bowl to plate",
+      "operator": "umut",
+      "annotators": [
+        "umut"
+      ],
+      "robot_name": "franka_fr3",
+      "qa_notes": "no failure annotation",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:57:22.378621+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-076",
+      "dataset_repo": "OopsieData-Submissions/Stanford_SIALab",
+      "lab_id": "Stanford_SIALab",
+      "repo_path": "collection075/c075_r0001.h5",
+      "bundle_path": "episodes/Stanford_SIALab/collection075/c075_r0001.h5",
+      "video_files": {
+        "side_cam": "episodes/Stanford_SIALab/collection075/c075_r0001_side_cam.mp4",
+        "top_cam": "episodes/Stanford_SIALab/collection075/c075_r0001_top_cam.mp4",
+        "wrist_cam": "episodes/Stanford_SIALab/collection075/c075_r0001_wrist_cam.mp4"
+      },
+      "episode_id": "c075_r0001",
+      "language_instruction": "pick out a single cup from the cup stack and place it onto the table",
+      "operator": "Albert Lin",
+      "annotators": [
+        "Albert Lin"
+      ],
+      "robot_name": "franka_fr3",
+      "qa_notes": "no failure annotation",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:55:20.693146+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-077",
+      "dataset_repo": "OopsieData-Submissions/Stanford_SIALab",
+      "lab_id": "Stanford_SIALab",
+      "repo_path": "collection211/c211_r0044.h5",
+      "bundle_path": "episodes/Stanford_SIALab/collection211/c211_r0044.h5",
+      "video_files": {
+        "side_cam": "episodes/Stanford_SIALab/collection211/c211_r0044_side_cam.mp4",
+        "top_cam": "episodes/Stanford_SIALab/collection211/c211_r0044_top_cam.mp4",
+        "wrist_cam": "episodes/Stanford_SIALab/collection211/c211_r0044_wrist_cam.mp4"
+      },
+      "episode_id": "c211_r0044",
+      "language_instruction": "pick the bottle",
+      "operator": "umut",
+      "annotators": [
+        "umut"
+      ],
+      "robot_name": "franka_fr3",
+      "qa_notes": "no failure annotation",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:56:47.134120+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-078",
+      "dataset_repo": "OopsieData-Submissions/Stanford_SIALab",
+      "lab_id": "Stanford_SIALab",
+      "repo_path": "collection014/c014_r0023.h5",
+      "bundle_path": "episodes/Stanford_SIALab/collection014/c014_r0023.h5",
+      "video_files": {
+        "left_cam": "episodes/Stanford_SIALab/collection014/c014_r0023_left_cam.mp4",
+        "right_cam": "episodes/Stanford_SIALab/collection014/c014_r0023_right_cam.mp4",
+        "wrist_cam": "episodes/Stanford_SIALab/collection014/c014_r0023_wrist_cam.mp4"
+      },
+      "episode_id": "c014_r0023",
+      "language_instruction": "pick and place the plate",
+      "operator": "Albert Lin",
+      "annotators": [
+        "Albert Lin"
+      ],
+      "robot_name": "franka_fr3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:54:47.176423+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-079",
+      "dataset_repo": "OopsieData-Submissions/Stanford_SIALab",
+      "lab_id": "Stanford_SIALab",
+      "repo_path": "collection152/c152_r0002.h5",
+      "bundle_path": "episodes/Stanford_SIALab/collection152/c152_r0002.h5",
+      "video_files": {
+        "side_cam": "episodes/Stanford_SIALab/collection152/c152_r0002_side_cam.mp4",
+        "top_cam": "episodes/Stanford_SIALab/collection152/c152_r0002_top_cam.mp4",
+        "wrist_cam": "episodes/Stanford_SIALab/collection152/c152_r0002_wrist_cam.mp4"
+      },
+      "episode_id": "c152_r0002",
+      "language_instruction": "stack the can onto the can tower",
+      "operator": "Albert Lin",
+      "annotators": [
+        "Albert Lin"
+      ],
+      "robot_name": "franka_fr3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:56:12.190344+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-080",
+      "dataset_repo": "OopsieData-Submissions/Stanford_SIALab",
+      "lab_id": "Stanford_SIALab",
+      "repo_path": "collection210/c210_r0014.h5",
+      "bundle_path": "episodes/Stanford_SIALab/collection210/c210_r0014.h5",
+      "video_files": {
+        "side_cam": "episodes/Stanford_SIALab/collection210/c210_r0014_side_cam.mp4",
+        "top_cam": "episodes/Stanford_SIALab/collection210/c210_r0014_top_cam.mp4",
+        "wrist_cam": "episodes/Stanford_SIALab/collection210/c210_r0014_wrist_cam.mp4"
+      },
+      "episode_id": "c210_r0014",
+      "language_instruction": "stack cans",
+      "operator": "umut",
+      "annotators": [
+        "umut"
+      ],
+      "robot_name": "franka_fr3",
+      "qa_notes": "no failure annotation",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:56:41.774615+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-081",
+      "dataset_repo": "OopsieData-Submissions/TUD_JP",
+      "lab_id": "TUD_JP",
+      "repo_path": "20260930_223508.h5",
+      "bundle_path": "episodes/TUD_JP/20260930_223508.h5",
+      "video_files": {
+        "left_wrist": "episodes/TUD_JP/20260930_223508_left_wrist.mp4",
+        "middle_scene": "episodes/TUD_JP/20260930_223508_middle_scene.mp4",
+        "right_wrist": "episodes/TUD_JP/20260930_223508_right_wrist.mp4"
+      },
+      "episode_id": "20260930_223508",
+      "language_instruction": "Pick up the cup and place it under the coffee machine.",
+      "operator": "Theo",
+      "annotators": [
+        "Theo"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:57:42.473941+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-082",
+      "dataset_repo": "OopsieData-Submissions/TUD_JP",
+      "lab_id": "TUD_JP",
+      "repo_path": "20261001_000533.h5",
+      "bundle_path": "episodes/TUD_JP/20261001_000533.h5",
+      "video_files": {
+        "left_wrist": "episodes/TUD_JP/20261001_000533_left_wrist.mp4",
+        "middle_scene": "episodes/TUD_JP/20261001_000533_middle_scene.mp4",
+        "right_wrist": "episodes/TUD_JP/20261001_000533_right_wrist.mp4"
+      },
+      "episode_id": "20261001_000533",
+      "language_instruction": "Pick up the cup and place it under the coffee machine.",
+      "operator": "Ken",
+      "annotators": [
+        "Ken"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "incorrect description: cup dropped ",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T18:01:00.122534+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-083",
+      "dataset_repo": "OopsieData-Submissions/TUD_JP",
+      "lab_id": "TUD_JP",
+      "repo_path": "20261001_011121.h5",
+      "bundle_path": "episodes/TUD_JP/20261001_011121.h5",
+      "video_files": {
+        "left_wrist": "episodes/TUD_JP/20261001_011121_left_wrist.mp4",
+        "middle_scene": "episodes/TUD_JP/20261001_011121_middle_scene.mp4",
+        "right_wrist": "episodes/TUD_JP/20261001_011121_right_wrist.mp4"
+      },
+      "episode_id": "20261001_011121",
+      "language_instruction": "Pick up the cup and place it under the coffee machine.",
+      "operator": "Ken",
+      "annotators": [
+        "Ken"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T18:01:23.581027+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-084",
+      "dataset_repo": "OopsieData-Submissions/TUD_JP",
+      "lab_id": "TUD_JP",
+      "repo_path": "20261001_021230.h5",
+      "bundle_path": "episodes/TUD_JP/20261001_021230.h5",
+      "video_files": {
+        "left_wrist": "episodes/TUD_JP/20261001_021230_left_wrist.mp4",
+        "middle_scene": "episodes/TUD_JP/20261001_021230_middle_scene.mp4",
+        "right_wrist": "episodes/TUD_JP/20261001_021230_right_wrist.mp4"
+      },
+      "episode_id": "20261001_021230",
+      "language_instruction": "Pick up the cup and place it under the coffee machine.",
+      "operator": "Theo",
+      "annotators": [
+        "Theo"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T18:03:22.806524+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-085",
+      "dataset_repo": "OopsieData-Submissions/TUD_JP",
+      "lab_id": "TUD_JP",
+      "repo_path": "20261001_014655.h5",
+      "bundle_path": "episodes/TUD_JP/20261001_014655.h5",
+      "video_files": {
+        "left_wrist": "episodes/TUD_JP/20261001_014655_left_wrist.mp4",
+        "middle_scene": "episodes/TUD_JP/20261001_014655_middle_scene.mp4",
+        "right_wrist": "episodes/TUD_JP/20261001_014655_right_wrist.mp4"
+      },
+      "episode_id": "20261001_014655",
+      "language_instruction": "Pick up the cup and place it under the coffee machine.",
+      "operator": "Ken",
+      "annotators": [
+        "Ken"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T18:02:02.605974+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-086",
+      "dataset_repo": "OopsieData-Submissions/TUD_JP",
+      "lab_id": "TUD_JP",
+      "repo_path": "20260930_225956.h5",
+      "bundle_path": "episodes/TUD_JP/20260930_225956.h5",
+      "video_files": {
+        "left_wrist": "episodes/TUD_JP/20260930_225956_left_wrist.mp4",
+        "middle_scene": "episodes/TUD_JP/20260930_225956_middle_scene.mp4",
+        "right_wrist": "episodes/TUD_JP/20260930_225956_right_wrist.mp4"
+      },
+      "episode_id": "20260930_225956",
+      "language_instruction": "Pick up the cup and place it under the coffee machine.",
+      "operator": "Theo",
+      "annotators": [
+        "Theo"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:57:58.942440+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-087",
+      "dataset_repo": "OopsieData-Submissions/TUD_JP",
+      "lab_id": "TUD_JP",
+      "repo_path": "20261001_020638.h5",
+      "bundle_path": "episodes/TUD_JP/20261001_020638.h5",
+      "video_files": {
+        "left_wrist": "episodes/TUD_JP/20261001_020638_left_wrist.mp4",
+        "middle_scene": "episodes/TUD_JP/20261001_020638_middle_scene.mp4",
+        "right_wrist": "episodes/TUD_JP/20261001_020638_right_wrist.mp4"
+      },
+      "episode_id": "20261001_020638",
+      "language_instruction": "Pick up the cup and place it under the coffee machine.",
+      "operator": "Ken",
+      "annotators": [
+        "Ken"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T18:02:25.760304+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-088",
+      "dataset_repo": "OopsieData-Submissions/TUD_JP",
+      "lab_id": "TUD_JP",
+      "repo_path": "20261001_012207.h5",
+      "bundle_path": "episodes/TUD_JP/20261001_012207.h5",
+      "video_files": {
+        "left_wrist": "episodes/TUD_JP/20261001_012207_left_wrist.mp4",
+        "middle_scene": "episodes/TUD_JP/20261001_012207_middle_scene.mp4",
+        "right_wrist": "episodes/TUD_JP/20261001_012207_right_wrist.mp4"
+      },
+      "episode_id": "20261001_012207",
+      "language_instruction": "Pick up the cup and place it under the coffee machine.",
+      "operator": "Theo",
+      "annotators": [
+        "Theo"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T18:01:40.887109+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-089",
+      "dataset_repo": "OopsieData-Submissions/TUD_JP",
+      "lab_id": "TUD_JP",
+      "repo_path": "20260930_235825.h5",
+      "bundle_path": "episodes/TUD_JP/20260930_235825.h5",
+      "video_files": {
+        "left_wrist": "episodes/TUD_JP/20260930_235825_left_wrist.mp4",
+        "middle_scene": "episodes/TUD_JP/20260930_235825_middle_scene.mp4",
+        "right_wrist": "episodes/TUD_JP/20260930_235825_right_wrist.mp4"
+      },
+      "episode_id": "20260930_235825",
+      "language_instruction": "Pick up the cup and place it under the coffee machine.",
+      "operator": "Ken",
+      "annotators": [
+        "Ken"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:58:13.876739+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-090",
+      "dataset_repo": "OopsieData-Submissions/TUD_JP",
+      "lab_id": "TUD_JP",
+      "repo_path": "20261001_020920.h5",
+      "bundle_path": "episodes/TUD_JP/20261001_020920.h5",
+      "video_files": {
+        "left_wrist": "episodes/TUD_JP/20261001_020920_left_wrist.mp4",
+        "middle_scene": "episodes/TUD_JP/20261001_020920_middle_scene.mp4",
+        "right_wrist": "episodes/TUD_JP/20261001_020920_right_wrist.mp4"
+      },
+      "episode_id": "20261001_020920",
+      "language_instruction": "Pick up the cup and place it under the coffee machine.",
+      "operator": "Theo",
+      "annotators": [
+        "Theo"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "cup dropped",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T18:02:48.613278+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-091",
+      "dataset_repo": "OopsieData-Submissions/TUD_JP",
+      "lab_id": "TUD_JP",
+      "repo_path": "20261001_013026.h5",
+      "bundle_path": "episodes/TUD_JP/20261001_013026.h5",
+      "video_files": {
+        "left_wrist": "episodes/TUD_JP/20261001_013026_left_wrist.mp4",
+        "middle_scene": "episodes/TUD_JP/20261001_013026_middle_scene.mp4",
+        "right_wrist": "episodes/TUD_JP/20261001_013026_right_wrist.mp4"
+      },
+      "episode_id": "20261001_013026",
+      "language_instruction": "Pick up the cup and place it under the coffee machine.",
+      "operator": "Ken",
+      "annotators": [
+        "Ken"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T18:01:49.997367+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-092",
+      "dataset_repo": "OopsieData-Submissions/TUD_JP",
+      "lab_id": "TUD_JP",
+      "repo_path": "20260930_223947.h5",
+      "bundle_path": "episodes/TUD_JP/20260930_223947.h5",
+      "video_files": {
+        "left_wrist": "episodes/TUD_JP/20260930_223947_left_wrist.mp4",
+        "middle_scene": "episodes/TUD_JP/20260930_223947_middle_scene.mp4",
+        "right_wrist": "episodes/TUD_JP/20260930_223947_right_wrist.mp4"
+      },
+      "episode_id": "20260930_223947",
+      "language_instruction": "Pick up the cup and place it under the coffee machine.",
+      "operator": "Theo",
+      "annotators": [
+        "Theo"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:57:48.811669+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-093",
+      "dataset_repo": "OopsieData-Submissions/TUD_JP",
+      "lab_id": "TUD_JP",
+      "repo_path": "20261001_013438.h5",
+      "bundle_path": "episodes/TUD_JP/20261001_013438.h5",
+      "video_files": {
+        "left_wrist": "episodes/TUD_JP/20261001_013438_left_wrist.mp4",
+        "middle_scene": "episodes/TUD_JP/20261001_013438_middle_scene.mp4",
+        "right_wrist": "episodes/TUD_JP/20261001_013438_right_wrist.mp4"
+      },
+      "episode_id": "20261001_013438",
+      "language_instruction": "Pick up the cup and place it under the coffee machine.",
+      "operator": "Ken",
+      "annotators": [
+        "Ken"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T18:01:56.469082+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-094",
+      "dataset_repo": "OopsieData-Submissions/TUD_JP",
+      "lab_id": "TUD_JP",
+      "repo_path": "20260930_234117.h5",
+      "bundle_path": "episodes/TUD_JP/20260930_234117.h5",
+      "video_files": {
+        "left_wrist": "episodes/TUD_JP/20260930_234117_left_wrist.mp4",
+        "middle_scene": "episodes/TUD_JP/20260930_234117_middle_scene.mp4",
+        "right_wrist": "episodes/TUD_JP/20260930_234117_right_wrist.mp4"
+      },
+      "episode_id": "20260930_234117",
+      "language_instruction": "Pick up the cup and place it under the coffee machine.",
+      "operator": "Theo",
+      "annotators": [
+        "Theo"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T17:58:09.718650+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-095",
+      "dataset_repo": "OopsieData-Submissions/TUD_JP",
+      "lab_id": "TUD_JP",
+      "repo_path": "20261001_025344.h5",
+      "bundle_path": "episodes/TUD_JP/20261001_025344.h5",
+      "video_files": {
+        "left_wrist": "episodes/TUD_JP/20261001_025344_left_wrist.mp4",
+        "middle_scene": "episodes/TUD_JP/20261001_025344_middle_scene.mp4",
+        "right_wrist": "episodes/TUD_JP/20261001_025344_right_wrist.mp4"
+      },
+      "episode_id": "20261001_025344",
+      "language_instruction": "Pick up the cup and place it under the coffee machine.",
+      "operator": "Ken",
+      "annotators": [
+        "Ken"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T18:03:27.838474+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-096",
+      "dataset_repo": "OopsieData-Submissions/TUD_JP",
+      "lab_id": "TUD_JP",
+      "repo_path": "20261001_011029.h5",
+      "bundle_path": "episodes/TUD_JP/20261001_011029.h5",
+      "video_files": {
+        "left_wrist": "episodes/TUD_JP/20261001_011029_left_wrist.mp4",
+        "middle_scene": "episodes/TUD_JP/20261001_011029_middle_scene.mp4",
+        "right_wrist": "episodes/TUD_JP/20261001_011029_right_wrist.mp4"
+      },
+      "episode_id": "20261001_011029",
+      "language_instruction": "Pick up the cup and place it under the coffee machine.",
+      "operator": "Theo",
+      "annotators": [
+        "Theo"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T18:01:18.501084+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-097",
+      "dataset_repo": "OopsieData-Submissions/TUD_JP",
+      "lab_id": "TUD_JP",
+      "repo_path": "20261001_030134.h5",
+      "bundle_path": "episodes/TUD_JP/20261001_030134.h5",
+      "video_files": {
+        "left_wrist": "episodes/TUD_JP/20261001_030134_left_wrist.mp4",
+        "middle_scene": "episodes/TUD_JP/20261001_030134_middle_scene.mp4",
+        "right_wrist": "episodes/TUD_JP/20261001_030134_right_wrist.mp4"
+      },
+      "episode_id": "20261001_030134",
+      "language_instruction": "Pick up the cup and place it under the coffee machine.",
+      "operator": "Ken",
+      "annotators": [
+        "Ken"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T18:03:50.190966+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-098",
+      "dataset_repo": "OopsieData-Submissions/TUD_JP",
+      "lab_id": "TUD_JP",
+      "repo_path": "20261001_020105.h5",
+      "bundle_path": "episodes/TUD_JP/20261001_020105.h5",
+      "video_files": {
+        "left_wrist": "episodes/TUD_JP/20261001_020105_left_wrist.mp4",
+        "middle_scene": "episodes/TUD_JP/20261001_020105_middle_scene.mp4",
+        "right_wrist": "episodes/TUD_JP/20261001_020105_right_wrist.mp4"
+      },
+      "episode_id": "20261001_020105",
+      "language_instruction": "Pick up the cup and place it under the coffee machine.",
+      "operator": "Theo",
+      "annotators": [
+        "Theo"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T18:02:09.348737+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-099",
+      "dataset_repo": "OopsieData-Submissions/TUD_JP",
+      "lab_id": "TUD_JP",
+      "repo_path": "20261001_011854.h5",
+      "bundle_path": "episodes/TUD_JP/20261001_011854.h5",
+      "video_files": {
+        "left_wrist": "episodes/TUD_JP/20261001_011854_left_wrist.mp4",
+        "middle_scene": "episodes/TUD_JP/20261001_011854_middle_scene.mp4",
+        "right_wrist": "episodes/TUD_JP/20261001_011854_right_wrist.mp4"
+      },
+      "episode_id": "20261001_011854",
+      "language_instruction": "Pick up the cup and place it under the coffee machine.",
+      "operator": "Ken",
+      "annotators": [
+        "Ken"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T18:01:30.076351+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_08-100",
+      "dataset_repo": "OopsieData-Submissions/TUD_JP",
+      "lab_id": "TUD_JP",
+      "repo_path": "20261001_010658.h5",
+      "bundle_path": "episodes/TUD_JP/20261001_010658.h5",
+      "video_files": {
+        "left_wrist": "episodes/TUD_JP/20261001_010658_left_wrist.mp4",
+        "middle_scene": "episodes/TUD_JP/20261001_010658_middle_scene.mp4",
+        "right_wrist": "episodes/TUD_JP/20261001_010658_right_wrist.mp4"
+      },
+      "episode_id": "20261001_010658",
+      "language_instruction": "Pick up the cup and place it under the coffee machine.",
+      "operator": "Theo",
+      "annotators": [
+        "Theo"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "siddhant",
+      "qa_updated_at": "2026-10-09T18:01:12.044772+00:00"
+    }
+  ]
+}
