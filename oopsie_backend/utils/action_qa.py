@@ -1210,7 +1210,7 @@ def _run_joint_velocity_checks(
 
     _run_velocity_common(category, v_arm, cfg, tests, findings, checked)
 
-    state_tests = [t for t in ("integration", "looks_like_position") if t in tests]
+    state_tests = [t for t in ("tracking", "looks_like_position") if t in tests]
     if not state_tests:
         return
     state = states.get("joint_position")
@@ -1238,20 +1238,20 @@ def _run_joint_velocity_checks(
         if match < cfg["looks_like_position"]["max_position_match"]:
             findings.append(_finding(category, "looks_like_position", key, position_match=match))
 
-    if "integration" in state_tests:
+    if "tracking" in state_tests:
         motion = float(np.max(np.ptp(ps, axis=0))) if ps.size else 0.0
         if not control_freq or control_freq <= 0:
-            skip("no_control_freq", ["integration"])
-        elif motion < cfg["integration"]["min_motion_rad"]:
+            skip("no_control_freq", ["tracking"])
+        elif motion < cfg["tracking"]["min_motion_rad"]:
             # With barely any motion the comparison is all sensor noise.
-            skip("too_little_motion", ["integration"], max_joint_range_rad=motion)
+            skip("too_little_motion", ["tracking"], max_joint_range_rad=motion)
         else:
-            checked.add((category, "integration"))
+            checked.add((category, "tracking"))
             result = velocity_integration(pv / control_freq, np.diff(ps, axis=0))
-            reasons, suspected = _integration_problems(result, cfg["integration"], control_freq)
+            reasons, suspected = _integration_problems(result, cfg["tracking"], control_freq)
             if reasons:
                 findings.append(
-                    _finding(category, "integration", key, reasons=reasons, suspected=suspected, control_freq=control_freq, **result)
+                    _finding(category, "tracking", key, reasons=reasons, suspected=suspected, control_freq=control_freq, **result)
                 )
 
 
@@ -1312,7 +1312,7 @@ def _run_cartesian_velocity_checks(
 
     _run_velocity_common(category, v, cfg, tests, findings, checked)
 
-    state_tests = [t for t in ("integration", "linear_angular_order", "looks_like_position") if t in tests]
+    state_tests = [t for t in ("tracking", "linear_angular_order", "looks_like_position") if t in tests]
     if not state_tests:
         return
     state = states.get("cartesian_position")
@@ -1381,10 +1381,10 @@ def _run_cartesian_velocity_checks(
     frame = max(results, key=lambda f: results[f][0])
     _, lin_result, ang_result = results[frame]
 
-    icfg = cfg["integration"]
+    icfg = cfg["tracking"]
     moves = translation >= icfg["min_translation_m"]
     turns = has_rotation and rotation >= icfg["min_rotation_deg"]
-    if "integration" in state_tests:
+    if "tracking" in state_tests:
         details: dict = {"frame": frame, "control_freq": control_freq}
         reasons: list[str] = []
         if moves:
@@ -1396,13 +1396,13 @@ def _run_cartesian_velocity_checks(
             details["angular"] = {**ang_result, "suspected": ang_suspected}
             reasons += [f"angular_{r}" for r in ang_reasons]
         if not moves and not turns:
-            skip("too_little_motion", ["integration"], translation_m=translation, rotation_deg=rotation)
+            skip("too_little_motion", ["tracking"], translation_m=translation, rotation_deg=rotation)
         else:
-            checked.add((category, "integration"))
+            checked.add((category, "tracking"))
             if not has_rotation:
-                skip("unknown_state_orientation", ["integration"], note="linear part checked only")
+                skip("unknown_state_orientation", ["tracking"], note="linear part checked only")
             if reasons:
-                findings.append(_finding(category, "integration", key, reasons=reasons, **details))
+                findings.append(_finding(category, "tracking", key, reasons=reasons, **details))
 
     if "linear_angular_order" in state_tests:
         if not has_rotation:
@@ -1538,6 +1538,58 @@ def run_action_qa_on_arrays(
 
 def _str_list(value) -> list[str]:
     return [str(v) for v in value] if isinstance(value, list) else []
+
+
+# Episode metadata fields checked for placeholders: root attr or robot-profile key.
+METADATA_FIELDS = {
+    "operator_name": "attr",
+    "policy_name": "profile",
+    "robot_name": "profile",
+    "gripper_name": "profile",
+}
+
+
+def _normalize_name(value: str) -> str:
+    return re.sub(r"[\s\-]+", "_", value.strip().lower())
+
+
+def placeholder_reason(field: str, value, cfg: dict) -> str | None:
+    """Why a metadata value looks like a template/placeholder rather than a real name,
+    or None. Matching ignores case and treats spaces/hyphens as underscores."""
+    if value is None or not str(value).strip():
+        return "blank"
+    name = _normalize_name(str(value))
+    if name in {_normalize_name(v) for v in cfg["placeholder_values"]}:
+        return "placeholder"
+    if any(name.startswith(_normalize_name(p)) for p in cfg["template_prefixes"]):
+        return "template"
+    if field == "operator_name":
+        if name in {_normalize_name(v) for v in cfg["operator_placeholder_values"]}:
+            return "placeholder"
+        # A program, lab or eval run credited as the operator (e.g. "SOAR_policy",
+        # "autoeval_orchestrator", "cmu_aire_lab"), judged word by word, digits ignored.
+        words = {w.rstrip("0123456789") for w in re.split(r"[^a-z0-9]+", name) if w}
+        if words & {_normalize_name(w) for w in cfg["operator_non_person_words"]}:
+            return "not_a_person"
+    return None
+
+
+def run_metadata_checks(f: h5py.File, profile: dict, config: dict) -> dict:
+    """General ``placeholder_metadata`` check: operator/policy/robot/gripper names that
+    are blank or template placeholders. One finding per bad field, keyed by field name."""
+    result: dict = {"findings": [], "skips": [], "checked": []}
+    cfg = config["general"]["placeholder_metadata"]
+    if not cfg["enabled"]:
+        return result
+    result["checked"].append(("general", "placeholder_metadata"))
+    for field, source in METADATA_FIELDS.items():
+        value = _decode(f.attrs[field]) if source == "attr" and field in f.attrs else profile.get(field)
+        reason = placeholder_reason(field, value, cfg)
+        if reason:
+            result["findings"].append(
+                _finding("general", "placeholder_metadata", field, value=None if value is None else str(value), reason=reason)
+            )
+    return result
 
 
 def run_action_qa_on_h5(f: h5py.File, config: dict) -> dict | None:

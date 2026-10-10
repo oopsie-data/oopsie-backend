@@ -16,6 +16,7 @@ CHECK_DESCRIPTIONS = {
     ("general", "duplicate_pairs"): "Two different action types hold the same values (a likely copy-paste bug)",
     ("general", "length_mismatch"): "An action and its matching robot state have different numbers of steps",
     ("general", "action_copies_state"): "Actions are exact copies of the recorded state, not real commands",
+    ("general", "placeholder_metadata"): "Operator, policy, robot or gripper name is blank or a template placeholder",
     ("general", "scale_consistency"): "Gripper position actions are on a very different scale from the state",
     ("general", "tracking_residual"): "The commanded gripper position doesn't match where the gripper ends up",
     ("general", "delta_detection"): "Gripper actions were saved as step-to-step changes instead of absolute positions",
@@ -29,13 +30,13 @@ CHECK_DESCRIPTIONS = {
     ("joint_velocity", "dof"): "Number of joint velocities doesn't match the number of joint names",
     ("joint_velocity", "speed_limit"): "A joint is commanded faster than a real arm can move",
     ("joint_velocity", "normalized_range"): "Velocities peak at exactly +-1 (normalized, not real units)",
-    ("joint_velocity", "integration"): "Velocity x step time doesn't match how far the joints actually moved",
+    ("joint_velocity", "tracking"): "Velocity x step time doesn't match how far the joints actually moved",
     ("joint_velocity", "looks_like_position"): "The velocity is really a joint position saved under the wrong key",
     ("joint_velocity", "smoothness"): "Velocities flip direction from step to step",
     ("cartesian_velocity", "shape"): "Velocity isn't 6 values per arm (3 linear + 3 angular)",
     ("cartesian_velocity", "speed_limit"): "The end effector is commanded faster than a real arm can move",
     ("cartesian_velocity", "normalized_range"): "Velocities peak at exactly +-1 (normalized, not real units)",
-    ("cartesian_velocity", "integration"): "Velocity x step time doesn't match how the end effector actually moved and turned",
+    ("cartesian_velocity", "tracking"): "Velocity x step time doesn't match how the end effector actually moved and turned",
     ("cartesian_velocity", "linear_angular_order"): "Linear and angular halves look swapped",
     ("cartesian_velocity", "looks_like_position"): "The velocity is really a position saved under the wrong key",
     ("cartesian_velocity", "smoothness"): "Velocities flip direction from step to step",
@@ -94,6 +95,8 @@ th, td { padding: .35rem .5rem; border-bottom: 1px solid var(--border); text-ali
 .grid td.na { background: var(--na); color: var(--muted); }
 .grid td.bad a { font-weight: 600; }
 .grid tbody tr:hover td.name { text-decoration: underline; }
+.grid td.name.failing { background: rgba(var(--bad-rgb), .85); }
+.grid td.name.failing a { color: #fff; font-weight: 600; }
 details { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; margin: .4rem 0; }
 details > summary { cursor: pointer; padding: .45rem .7rem; }
 details[open] > summary { border-bottom: 1px solid var(--border); }
@@ -193,7 +196,7 @@ def _category_toggles(categories: dict[str, list[str]]) -> str:
     return f'<div class="legend"><span>Show checks:</span>{boxes}</div>'
 
 
-def _grid(report: dict, checks: list[tuple[str, str]]) -> str:
+def _grid(report: dict, checks: list[tuple[str, str]], highlight_ignore: set[str]) -> str:
     categories: dict[str, list[str]] = defaultdict(list)
     for cat, test in checks:
         categories[cat].append(test)
@@ -221,8 +224,15 @@ def _grid(report: dict, checks: list[tuple[str, str]]) -> str:
             for i, test in enumerate(tests):
                 cells.append(_cell(repo, cat, test, stats["tests"][cat][test], first=i == 0))
         errors = f' <span class="muted" title="episodes that failed to open">({stats["errors"]} err)</span>' if stats["errors"] else ""
+        # Red name = at least one check outside highlight_ignore flagged an episode.
+        failing = [
+            f"{cat}.{test}"
+            for cat, test in checks
+            if f"{cat}.{test}" not in highlight_ignore and stats["tests"][cat][test].get("flagged_episodes", 0) > 0
+        ]
+        name_cls, name_title = ("name failing", "Failing: " + ", ".join(failing)) if failing else ("name", "No counted check flagged")
         rows.append(
-            f'<tr><td class="name"><a href="#{_slug(repo)}">{escape(_short(repo))}</a></td>'
+            f'<tr><td class="{name_cls}" title="{escape(name_title, quote=True)}"><a href="#{_slug(repo)}">{escape(_short(repo))}</a></td>'
             f'<td class="num">{n}{errors}</td><td class="num">{flagged} ({pct})</td>{"".join(cells)}</tr>'
         )
     return (
@@ -272,7 +282,8 @@ def _drilldown(report: dict, checks: list[tuple[str, str]]) -> str:
     return "".join(sections) or '<p class="muted">Nothing flagged.</p>'
 
 
-def render_action_qa_report(report: dict, output_path: Path) -> None:
+def render_action_qa_report(report: dict, output_path: Path, highlight_ignore: list[str] | tuple[str, ...] = ()) -> None:
+    """``highlight_ignore``: ``category.check`` names that don't turn a dataset's name red."""
     checks = _checks(report)
     totals = report.get("totals", {})
     generated = report.get("generated_at", {})
@@ -303,12 +314,13 @@ def render_action_qa_report(report: dict, output_path: Path) -> None:
 {totals.get("episodes_skipped", 0)} errored</p>
 <div class="legend">
 <span>Each cell: <b>flagged / checked</b> episodes. Hover a column for what it checks, a cell for skip reasons; click a red cell for the episodes.</span>
+<span><span class="sw" style="background: rgba(var(--bad-rgb), .85)"></span>dataset name: at least one check flagged (hover for which; {escape(", ".join(highlight_ignore)) or "no checks"} not counted)</span>
 <span><span class="sw" style="background: var(--ok)"></span>none flagged</span>
 <span><span class="sw" style="background: rgba(var(--bad-rgb), .3)"></span><span class="sw" style="background: rgba(var(--bad-rgb), 1)"></span>more flagged = darker</span>
 <span><span class="sw" style="background: var(--na)"></span>not applicable / skipped</span>
 <span>* some episodes skipped</span>
 </div>
-{_grid(report, checks)}
+{_grid(report, checks, set(highlight_ignore))}
 <h2>Flagged episodes</h2>
 {truncated}
 {_drilldown(report, checks)}

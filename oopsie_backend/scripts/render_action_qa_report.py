@@ -41,7 +41,7 @@ def main(argv: list[str] | None = None) -> int:
 
     output_path = args.output or input_path.with_suffix(".html")
     report = json.loads(input_path.read_text(encoding="utf-8"))
-    render_action_qa_report(report, output_path)
+    render_action_qa_report(report, output_path, ACTION_QA_CONFIG["report"]["highlight_ignore"])
     print(f"Wrote action QA report: {output_path}", file=sys.stderr)
     return 0
 

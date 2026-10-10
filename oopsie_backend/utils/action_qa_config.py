@@ -17,25 +17,37 @@ DEFAULT_CHECKS: dict[str, dict[str, dict]] = {
     "general": {
         "duplicate_pairs": {"enabled": False, "atol": 1.0e-9, "rtol": 0.0},
         "length_mismatch": {"enabled": True},
+        "placeholder_metadata": {
+            "enabled": True,
+            "placeholder_values": [
+                "unknown", "none", "null", "n/a", "na", "tbd", "todo", "test", "default",
+                "placeholder", "example", "xxx", "-", "?", "robot", "gripper", "policy",
+            ],
+            "template_prefixes": ["your_", "example_", "my_"],
+            "operator_placeholder_values": [
+                "operator", "pending_operator", "test_operator", "user", "admin", "human", "teleoperator",
+            ],
+            "operator_non_person_words": [
+                "policy", "eval", "autoeval", "orchestrator", "script", "bot", "lab", "pipeline", "system", "oopsie",
+            ],
+        },
         "action_copies_state": {"enabled": True, "atol": 1.0e-6, "min_fraction": 0.9},
         "scale_consistency": {"enabled": False, "max_ratio": 5.0, "min_ratio": 0.2},
         "tracking_residual": {"enabled": False, "max_normalized_rms": 0.5},
         "delta_detection": {"enabled": False, "ratio_threshold": 0.3},
     },
     "joint_position": {
+        "delta_detection": {"enabled": True, "ratio_threshold": 0.3},
+        "tracking": {"enabled": True, "max_median_error_rad": 0.2},
         "joint_names": {"enabled": True},
         "dof": {"enabled": True},
         "radians": {"enabled": True, "max_abs_rad": 6.5},
-        "step_jump": {"enabled": True, "max_joint_speed_rad_s": 6.28},
+        "step_jump": {"enabled": True, "max_joint_speed_rad_s": 20.0},
         "gripper_in_joints": {"enabled": True},
-        "delta_detection": {"enabled": True, "ratio_threshold": 0.3},
-        "tracking": {"enabled": True, "max_median_error_rad": 0.2},
     },
     "joint_velocity": {
         "dof": {"enabled": True},
-        "speed_limit": {"enabled": True, "max_joint_speed_rad_s": 3.14},
-        "normalized_range": {"enabled": True},
-        "integration": {
+        "tracking": {
             "enabled": True,
             "min_ratio": 0.25,
             "max_ratio": 8.0,
@@ -43,6 +55,8 @@ DEFAULT_CHECKS: dict[str, dict[str, dict]] = {
             "min_motion_rad": 0.2,
         },
         "looks_like_position": {"enabled": True, "max_position_match": 0.2},
+        "normalized_range": {"enabled": True},
+        "speed_limit": {"enabled": True, "max_joint_speed_rad_s": 3.14},
         "smoothness": {"enabled": True, "max_sign_flip_rate": 0.3},
     },
     "cartesian_position": {
@@ -69,7 +83,7 @@ DEFAULT_CHECKS: dict[str, dict[str, dict]] = {
         "shape": {"enabled": True},
         "speed_limit": {"enabled": True, "max_linear_m_s": 2.0, "max_angular_rad_s": 6.28},
         "normalized_range": {"enabled": True},
-        "integration": {
+        "tracking": {
             "enabled": True,
             "min_ratio": 0.25,
             "max_ratio": 8.0,
@@ -114,7 +128,7 @@ DEFAULT_CHECKS: dict[str, dict[str, dict]] = {
     },
 }
 
-_NON_CHECK_SECTIONS = ("sampling", "scope", "run")
+_NON_CHECK_SECTIONS = ("sampling", "scope", "run", "report")
 
 
 def _resolve_path(value: str | None) -> Path | None:
@@ -136,7 +150,10 @@ def _reject_unknown(where: str, given, known) -> None:
 def _build_checks(raw: dict) -> dict:
     checks: dict[str, dict] = {}
     for category, defaults in DEFAULT_CHECKS.items():
-        raw_category = raw.get(category) or {}
+        raw_category = dict(raw.get(category) or {})
+        # Optional category-level master switch: ``enabled: false`` turns off every check
+        # in the category, whatever their own ``enabled`` says.
+        category_enabled = bool(raw_category.pop("enabled", True))
         _reject_unknown(f"check(s) under {category!r}", raw_category, defaults)
         checks[category] = {}
         for check, params in defaults.items():
@@ -145,6 +162,8 @@ def _build_checks(raw: dict) -> dict:
             checks[category][check] = {
                 name: type(default)(raw_check.get(name, default)) for name, default in params.items()
             }
+            if not category_enabled:
+                checks[category][check]["enabled"] = False
     return checks
 
 
@@ -153,6 +172,14 @@ def _build_config(raw: dict) -> dict:
     sampling_raw = raw.get("sampling") or {}
     scope_raw = raw.get("scope") or {}
     run_raw = raw.get("run") or {}
+    report_raw = raw.get("report") or {}
+    _reject_unknown("parameter(s) under 'report'", report_raw, ["highlight_ignore"])
+    highlight_ignore = [str(c) for c in (report_raw.get("highlight_ignore") or [])]
+    _reject_unknown(
+        "check(s) in report.highlight_ignore (use category.check)",
+        highlight_ignore,
+        [f"{cat}.{check}" for cat, checks in DEFAULT_CHECKS.items() for check in checks],
+    )
 
     return {
         **_build_checks(raw),
@@ -171,6 +198,7 @@ def _build_config(raw: dict) -> dict:
                 scope_raw.get("include_public_excluded_datasets", False)
             ),
         },
+        "report": {"highlight_ignore": highlight_ignore},
         "run": {
             "data_dir": _resolve_path(run_raw.get("data_dir")),
             "max_total_episodes": (

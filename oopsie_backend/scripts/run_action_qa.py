@@ -34,6 +34,7 @@ from oopsie_backend.utils.action_qa import (
     load_action_state_arrays,
     profile_control_freq,
     run_action_qa_on_arrays,
+    run_metadata_checks,
 )
 from oopsie_backend.utils.action_qa_config import CONFIG as ACTION_QA_CONFIG, DEFAULT_CHECKS
 from oopsie_backend.utils.action_qa_report import render_action_qa_report
@@ -67,7 +68,10 @@ def _check_episode(job: tuple[Path, str], qa_config: dict) -> tuple[dict | None,
     try:
         with h5py.File(path, "r") as f:
             actions, states, profile = load_action_state_arrays(f)
+            metadata = run_metadata_checks(f, profile, qa_config)
         result = run_action_qa_on_arrays(actions, states, profile, qa_config)
+        if metadata["checked"]:
+            result = _merge(result, metadata)
         video_cfg = qa_config["video"]
         if any(cfg["enabled"] for cfg in video_cfg.values()):
             videos = episode_videos(path, repo_path)
@@ -286,7 +290,7 @@ def main(argv: list[str] | None = None) -> int:
     }
     write_stats_json(output_path, report)
     html_path = Path(output_path).with_suffix(".html")
-    render_action_qa_report(report, html_path)
+    render_action_qa_report(report, html_path, qa_config["report"]["highlight_ignore"])
 
     flagged_datasets = sorted(ds for ds, s in per_dataset_stats.items() if s["episodes_flagged"] > 0)
     _log("")

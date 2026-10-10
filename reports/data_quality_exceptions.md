@@ -14,6 +14,7 @@ Oct 4, 2026
 | Action vs. Observations | Tracking residual | Implemented | Action doesn't correspond to where the robot's state actually ends up next step (misaligned data, wrong field) |
 | Action vs. Observations | Delta-action detection | Implemented | Action looks like *state\[t+1\] - state\[t\]* (a delta) rather than the absolute state we require |
 | Action vs. Observations | Action copies state | Implemented | Joint/cartesian action equals the recorded state (same or next step) in ≥90% of steps → actions were rebuilt from states afterwards, not logged commands |
+| General | Placeholder metadata | Implemented | `operator_name`, `policy_name`, `robot_name` or `gripper_name` is blank, a placeholder (`unknown`, `test`, `pending_operator`...), an unfilled template (`your_...`), or - for operators - a program/lab rather than a person (`SOAR_policy`, `autoeval_orchestrator`, `cmu_aire_lab`) |
 | Action vs. Observations | Length mismatch | Implemented | An action and the state it's observed through have different numbers of timesteps |
 | joint\_position | Joint names | Implemented | Profile's action/state joint names missing, blank/duplicated, not matching each other, or out of order (numbering, or base-to-wrist chain - e.g. an alphabetical ROS list) |
 | joint\_position | DOF | Implemented | Number of joint values doesn't match the number of joint names |
