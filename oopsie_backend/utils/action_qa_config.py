@@ -99,7 +99,7 @@ DEFAULT_CHECKS: dict[str, dict[str, dict]] = {
             "duration_rel_tol": 0.05,
             "frame_interval_cv": 0.1,
         },
-        "frames": {
+        "heavy_artifacts_and_desync": {
             "enabled": True,
             "moving_fraction_of_p95": 0.1,
             "static_diff": 0.05,
@@ -110,6 +110,13 @@ DEFAULT_CHECKS: dict[str, dict[str, dict]] = {
             "jump_ratio": 20.0,
             "glitch_diff": 20.0,
             "glitch_ratio": 4.0,
+        },
+        "periodic_skips": {
+            "enabled": True,
+            "jump_ratio": 3.0,
+            "min_jumps": 6,
+            "min_period_score": 0.4,
+            "min_coverage": 0.6,
         },
     },
 }

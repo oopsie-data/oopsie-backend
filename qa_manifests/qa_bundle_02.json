@@ -1,0 +1,2154 @@
+{
+  "bundle_id": "qa_bundle_02",
+  "created_at": "2026-10-07T19:21:12Z",
+  "seed": 0,
+  "reviewer": "arpit",
+  "labs": [
+    "OopsieData-Submissions/Berkeley_RAIL",
+    "OopsieData-Submissions/Brown_ST",
+    "OopsieData-Submissions/CMU_Aire",
+    "OopsieData-Submissions/CMU_Auton",
+    "OopsieData-Submissions/CMU_Intent"
+  ],
+  "episodes": [
+    {
+      "qa_id": "qa_bundle_02-001",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_RAIL",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "c6da112d2113.h5",
+      "bundle_path": "episodes/Berkeley_RAIL/c6da112d2113.h5",
+      "video_files": {
+        "right_shoulder_cam": "episodes/Berkeley_RAIL/c6da112d2113_right_shoulder_cam.mp4"
+      },
+      "episode_id": "c6da112d2113",
+      "language_instruction": "close the drawer",
+      "operator": "Andrew Wagenmaker",
+      "annotators": [
+        "Andrew Wagenmaker"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:09:49.283388+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-002",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_RAIL",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "20260614_150633/20260614_150917.h5",
+      "bundle_path": "episodes/Berkeley_RAIL/20260614_150633/20260614_150917.h5",
+      "video_files": {
+        "image_primary": "episodes/Berkeley_RAIL/20260614_150633/20260614_150917_image_primary.mp4"
+      },
+      "episode_id": "20260614_150917",
+      "language_instruction": "Move the left stuffed toy to the largest bowl.",
+      "operator": "jagdeep",
+      "annotators": [
+        "jagdeep"
+      ],
+      "robot_name": "widowx_250_s",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:08:16.315513+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-003",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_RAIL",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "20260615_164752/20260615_165804.h5",
+      "bundle_path": "episodes/Berkeley_RAIL/20260615_164752/20260615_165804.h5",
+      "video_files": {
+        "image_primary": "episodes/Berkeley_RAIL/20260615_164752/20260615_165804_image_primary.mp4"
+      },
+      "episode_id": "20260615_165804",
+      "language_instruction": "Move the hammer to the plate. Then, grasp the mushroom.",
+      "operator": "jagdeep",
+      "annotators": [
+        "Jagdeep",
+        "jagdeep"
+      ],
+      "robot_name": "widowx_250_s",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:08:35.759137+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-004",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_RAIL",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "3fc1c11e525f.h5",
+      "bundle_path": "episodes/Berkeley_RAIL/3fc1c11e525f.h5",
+      "video_files": {
+        "right_shoulder_cam": "episodes/Berkeley_RAIL/3fc1c11e525f_right_shoulder_cam.mp4"
+      },
+      "episode_id": "3fc1c11e525f",
+      "language_instruction": "put the corn on the green cloth",
+      "operator": "Andrew Wagenmaker",
+      "annotators": [
+        "Andrew",
+        "Andrew Wagenmaker"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:09:47.955280+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-005",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_RAIL",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "20260615_192548/20260615_195956.h5",
+      "bundle_path": "episodes/Berkeley_RAIL/20260615_192548/20260615_195956.h5",
+      "video_files": {
+        "image_primary": "episodes/Berkeley_RAIL/20260615_192548/20260615_195956_image_primary.mp4"
+      },
+      "episode_id": "20260615_195956",
+      "language_instruction": "Move the banana to the pot on the right and sushi to the bowl.",
+      "operator": "jagdeep",
+      "annotators": [
+        "Jagdeep",
+        "jagdeep"
+      ],
+      "robot_name": "widowx_250_s",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:08:51.967605+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-006",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_RAIL",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "2abf70f3ce74.h5",
+      "bundle_path": "episodes/Berkeley_RAIL/2abf70f3ce74.h5",
+      "video_files": {
+        "right_shoulder_cam": "episodes/Berkeley_RAIL/2abf70f3ce74_right_shoulder_cam.mp4"
+      },
+      "episode_id": "2abf70f3ce74",
+      "language_instruction": "stack the yellow block on the blue blocks",
+      "operator": "Andrew Wagenmaker",
+      "annotators": [
+        "Andrew",
+        "Andrew Wagenmaker"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:09:30.987197+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-007",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_RAIL",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "1ee24dd9b1cb.h5",
+      "bundle_path": "episodes/Berkeley_RAIL/1ee24dd9b1cb.h5",
+      "video_files": {
+        "right_shoulder_cam": "episodes/Berkeley_RAIL/1ee24dd9b1cb_right_shoulder_cam.mp4"
+      },
+      "episode_id": "1ee24dd9b1cb",
+      "language_instruction": "stack the blue block on the yellow block",
+      "operator": "Andrew Wagenmaker",
+      "annotators": [
+        "Andrew",
+        "Andrew Wagenmaker"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:09:28.948937+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-008",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_RAIL",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "3ac35a2215ca.h5",
+      "bundle_path": "episodes/Berkeley_RAIL/3ac35a2215ca.h5",
+      "video_files": {
+        "right_shoulder_cam": "episodes/Berkeley_RAIL/3ac35a2215ca_right_shoulder_cam.mp4"
+      },
+      "episode_id": "3ac35a2215ca",
+      "language_instruction": "remove the blue cloth from the yellow block",
+      "operator": "Andrew Wagenmaker",
+      "annotators": [
+        "Andrew",
+        "Andrew Wagenmaker"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:09:46.498205+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-009",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_RAIL",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "0d8ddcc836f9.h5",
+      "bundle_path": "episodes/Berkeley_RAIL/0d8ddcc836f9.h5",
+      "video_files": {
+        "right_shoulder_cam": "episodes/Berkeley_RAIL/0d8ddcc836f9_right_shoulder_cam.mp4"
+      },
+      "episode_id": "0d8ddcc836f9",
+      "language_instruction": "pick up the corn",
+      "operator": "Andrew Wagenmaker",
+      "annotators": [
+        "Andrew",
+        "Andrew Wagenmaker"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:09:24.394167+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-010",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_RAIL",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "0d29e5ab869b.h5",
+      "bundle_path": "episodes/Berkeley_RAIL/0d29e5ab869b.h5",
+      "video_files": {
+        "right_shoulder_cam": "episodes/Berkeley_RAIL/0d29e5ab869b_right_shoulder_cam.mp4"
+      },
+      "episode_id": "0d29e5ab869b",
+      "language_instruction": "put the corn in the pot",
+      "operator": "Andrew Wagenmaker",
+      "annotators": [
+        "Andrew",
+        "Andrew Wagenmaker"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:09:17.663248+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-011",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_RAIL",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "0b0c2160f46f.h5",
+      "bundle_path": "episodes/Berkeley_RAIL/0b0c2160f46f.h5",
+      "video_files": {
+        "right_shoulder_cam": "episodes/Berkeley_RAIL/0b0c2160f46f_right_shoulder_cam.mp4"
+      },
+      "episode_id": "0b0c2160f46f",
+      "language_instruction": "set the mushroom on the green cloth",
+      "operator": "Andrew Wagenmaker",
+      "annotators": [
+        "Andrew",
+        "Andrew Wagenmaker"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:09:10.972021+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-012",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_RAIL",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "20260615_170750/20260615_175412.h5",
+      "bundle_path": "episodes/Berkeley_RAIL/20260615_170750/20260615_175412.h5",
+      "video_files": {
+        "image_primary": "episodes/Berkeley_RAIL/20260615_170750/20260615_175412_image_primary.mp4"
+      },
+      "episode_id": "20260615_175412",
+      "language_instruction": "Move the hammer to the plate. Then, grasp the mushroom.",
+      "operator": "jagdeep",
+      "annotators": [
+        "Jagdeep",
+        "jagdeep"
+      ],
+      "robot_name": "widowx_250_s",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:08:42.436149+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-013",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_RAIL",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "20260615_192548/20260615_200349.h5",
+      "bundle_path": "episodes/Berkeley_RAIL/20260615_192548/20260615_200349.h5",
+      "video_files": {
+        "image_primary": "episodes/Berkeley_RAIL/20260615_192548/20260615_200349_image_primary.mp4"
+      },
+      "episode_id": "20260615_200349",
+      "language_instruction": "Move the banana to the pot on the right and sushi to the bowl.",
+      "operator": "jagdeep",
+      "annotators": [
+        "Jagdeep",
+        "jagdeep"
+      ],
+      "robot_name": "widowx_250_s",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:09:01.278860+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-014",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_RAIL",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "20260615_161300/20260615_162211.h5",
+      "bundle_path": "episodes/Berkeley_RAIL/20260615_161300/20260615_162211.h5",
+      "video_files": {
+        "image_primary": "episodes/Berkeley_RAIL/20260615_161300/20260615_162211_image_primary.mp4"
+      },
+      "episode_id": "20260615_162211",
+      "language_instruction": "Move the left stuffed toy to the largest bowl.",
+      "operator": "jagdeep",
+      "annotators": [
+        "Jagdeep",
+        "jagdeep"
+      ],
+      "robot_name": "widowx_250_s",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:08:30.438148+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-015",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_RAIL",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "2b50a5f1d10c.h5",
+      "bundle_path": "episodes/Berkeley_RAIL/2b50a5f1d10c.h5",
+      "video_files": {
+        "right_shoulder_cam": "episodes/Berkeley_RAIL/2b50a5f1d10c_right_shoulder_cam.mp4"
+      },
+      "episode_id": "2b50a5f1d10c",
+      "language_instruction": "close the drawer",
+      "operator": "Andrew Wagenmaker",
+      "annotators": [
+        "Andrew",
+        "Andrew Wagenmaker"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:09:35.797936+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-016",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_RAIL",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "1ccf7c89cd0a.h5",
+      "bundle_path": "episodes/Berkeley_RAIL/1ccf7c89cd0a.h5",
+      "video_files": {
+        "right_shoulder_cam": "episodes/Berkeley_RAIL/1ccf7c89cd0a_right_shoulder_cam.mp4"
+      },
+      "episode_id": "1ccf7c89cd0a",
+      "language_instruction": "put the corn on the green cloth",
+      "operator": "Andrew Wagenmaker",
+      "annotators": [
+        "Andrew",
+        "Andrew Wagenmaker"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:09:27.489412+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-017",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_RAIL",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "20260615_170750/20260615_180731.h5",
+      "bundle_path": "episodes/Berkeley_RAIL/20260615_170750/20260615_180731.h5",
+      "video_files": {
+        "image_primary": "episodes/Berkeley_RAIL/20260615_170750/20260615_180731_image_primary.mp4"
+      },
+      "episode_id": "20260615_180731",
+      "language_instruction": "Move the hammer to the plate. Then, grasp the mushroom.",
+      "operator": "jagdeep",
+      "annotators": [
+        "Jagdeep",
+        "jagdeep"
+      ],
+      "robot_name": "widowx_250_s",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:08:49.533966+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-018",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_RAIL",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "2fd4ad079a44.h5",
+      "bundle_path": "episodes/Berkeley_RAIL/2fd4ad079a44.h5",
+      "video_files": {
+        "right_shoulder_cam": "episodes/Berkeley_RAIL/2fd4ad079a44_right_shoulder_cam.mp4"
+      },
+      "episode_id": "2fd4ad079a44",
+      "language_instruction": "remove the blue cloth from the yellow block",
+      "operator": "Andrew Wagenmaker",
+      "annotators": [
+        "Andrew",
+        "Andrew Wagenmaker"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:09:44.730069+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-019",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_RAIL",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "02f745200119.h5",
+      "bundle_path": "episodes/Berkeley_RAIL/02f745200119.h5",
+      "video_files": {
+        "right_shoulder_cam": "episodes/Berkeley_RAIL/02f745200119_right_shoulder_cam.mp4"
+      },
+      "episode_id": "02f745200119",
+      "language_instruction": "stack the yellow block on the blue blocks",
+      "operator": "Andrew Wagenmaker",
+      "annotators": [
+        "Andrew",
+        "Andrew Wagenmaker"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:09:09.421996+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-020",
+      "dataset_repo": "OopsieData-Submissions/Berkeley_RAIL",
+      "lab_id": "Berkeley_RAIL",
+      "repo_path": "01cfc87789be.h5",
+      "bundle_path": "episodes/Berkeley_RAIL/01cfc87789be.h5",
+      "video_files": {
+        "right_shoulder_cam": "episodes/Berkeley_RAIL/01cfc87789be_right_shoulder_cam.mp4"
+      },
+      "episode_id": "01cfc87789be",
+      "language_instruction": "pick up the corn",
+      "operator": "Andrew Wagenmaker",
+      "annotators": [
+        "Andrew",
+        "Andrew Wagenmaker"
+      ],
+      "robot_name": "widow_x",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:09:06.538979+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-021",
+      "dataset_repo": "OopsieData-Submissions/Brown_ST",
+      "lab_id": "Brown_ST",
+      "repo_path": "20261005_201107/20261005_201107.h5",
+      "bundle_path": "episodes/Brown_ST/20261005_201107/20261005_201107.h5",
+      "video_files": {
+        "agentview": "episodes/Brown_ST/20261005_201107/20261005_201107_agentview.mp4",
+        "inhand": "episodes/Brown_ST/20261005_201107/20261005_201107_inhand.mp4"
+      },
+      "episode_id": "20261005_201107",
+      "language_instruction": "stack the yellow block on the green block",
+      "operator": "Lakshita Dodeja",
+      "annotators": [
+        "Lakshita Dodeja"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:10:34.180693+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-022",
+      "dataset_repo": "OopsieData-Submissions/Brown_ST",
+      "lab_id": "Brown_ST",
+      "repo_path": "20261004_234236/20261004_234236.h5",
+      "bundle_path": "episodes/Brown_ST/20261004_234236/20261004_234236.h5",
+      "video_files": {
+        "agentview": "episodes/Brown_ST/20261004_234236/20261004_234236_agentview.mp4",
+        "inhand": "episodes/Brown_ST/20261004_234236/20261004_234236_inhand.mp4"
+      },
+      "episode_id": "20261004_234236",
+      "language_instruction": "place the coffee pod on the green box",
+      "operator": "Lakshita Dodeja",
+      "annotators": [
+        "Lakshita Dodeja"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:10:24.845316+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-023",
+      "dataset_repo": "OopsieData-Submissions/Brown_ST",
+      "lab_id": "Brown_ST",
+      "repo_path": "20261004_184750/20261004_184750.h5",
+      "bundle_path": "episodes/Brown_ST/20261004_184750/20261004_184750.h5",
+      "video_files": {
+        "agentview": "episodes/Brown_ST/20261004_184750/20261004_184750_agentview.mp4",
+        "inhand": "episodes/Brown_ST/20261004_184750/20261004_184750_inhand.mp4"
+      },
+      "episode_id": "20261004_184750",
+      "language_instruction": "place screwdriver on plate",
+      "operator": "Lakshita Dodeja",
+      "annotators": [
+        "Lakshita Dodeja"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:10:18.149307+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-024",
+      "dataset_repo": "OopsieData-Submissions/Brown_ST",
+      "lab_id": "Brown_ST",
+      "repo_path": "20261006_002425/20261006_002425.h5",
+      "bundle_path": "episodes/Brown_ST/20261006_002425/20261006_002425.h5",
+      "video_files": {
+        "agentview": "episodes/Brown_ST/20261006_002425/20261006_002425_agentview.mp4",
+        "inhand": "episodes/Brown_ST/20261006_002425/20261006_002425_inhand.mp4"
+      },
+      "episode_id": "20261006_002425",
+      "language_instruction": "stack the green block on the yellow block",
+      "operator": "Lakshita Dodeja",
+      "annotators": [
+        "Lakshita Dodeja"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:10:38.905584+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-025",
+      "dataset_repo": "OopsieData-Submissions/Brown_ST",
+      "lab_id": "Brown_ST",
+      "repo_path": "20261005_220519/20261005_220519.h5",
+      "bundle_path": "episodes/Brown_ST/20261005_220519/20261005_220519.h5",
+      "video_files": {
+        "agentview": "episodes/Brown_ST/20261005_220519/20261005_220519_agentview.mp4",
+        "inhand": "episodes/Brown_ST/20261005_220519/20261005_220519_inhand.mp4"
+      },
+      "episode_id": "20261005_220519",
+      "language_instruction": "stack the yellow block on the green block",
+      "operator": "Lakshita Dodeja",
+      "annotators": [
+        "Lakshita Dodeja"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:10:37.756597+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-026",
+      "dataset_repo": "OopsieData-Submissions/Brown_ST",
+      "lab_id": "Brown_ST",
+      "repo_path": "20261005_010325/20261005_010325.h5",
+      "bundle_path": "episodes/Brown_ST/20261005_010325/20261005_010325.h5",
+      "video_files": {
+        "agentview": "episodes/Brown_ST/20261005_010325/20261005_010325_agentview.mp4",
+        "inhand": "episodes/Brown_ST/20261005_010325/20261005_010325_inhand.mp4"
+      },
+      "episode_id": "20261005_010325",
+      "language_instruction": "place the coffee pod on the green box",
+      "operator": "Lakshita Dodeja",
+      "annotators": [
+        "Lakshita Dodeja"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:10:27.154792+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-027",
+      "dataset_repo": "OopsieData-Submissions/Brown_ST",
+      "lab_id": "Brown_ST",
+      "repo_path": "20261002_141505/20261002_141505.h5",
+      "bundle_path": "episodes/Brown_ST/20261002_141505/20261002_141505.h5",
+      "video_files": {
+        "agentview": "episodes/Brown_ST/20261002_141505/20261002_141505_agentview.mp4",
+        "inhand": "episodes/Brown_ST/20261002_141505/20261002_141505_inhand.mp4"
+      },
+      "episode_id": "20261002_141505",
+      "language_instruction": "place screwdriver on plate",
+      "operator": "Lakshita Dodeja",
+      "annotators": [
+        "Lakshita Dodeja"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:10:07.291816+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-028",
+      "dataset_repo": "OopsieData-Submissions/Brown_ST",
+      "lab_id": "Brown_ST",
+      "repo_path": "20261006_003432/20261006_003432.h5",
+      "bundle_path": "episodes/Brown_ST/20261006_003432/20261006_003432.h5",
+      "video_files": {
+        "agentview": "episodes/Brown_ST/20261006_003432/20261006_003432_agentview.mp4",
+        "inhand": "episodes/Brown_ST/20261006_003432/20261006_003432_inhand.mp4"
+      },
+      "episode_id": "20261006_003432",
+      "language_instruction": "stack the green block on the yellow block",
+      "operator": "Lakshita Dodeja",
+      "annotators": [
+        "Lakshita Dodeja"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:10:40.798463+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-029",
+      "dataset_repo": "OopsieData-Submissions/Brown_ST",
+      "lab_id": "Brown_ST",
+      "repo_path": "20261005_164719/20261005_164719.h5",
+      "bundle_path": "episodes/Brown_ST/20261005_164719/20261005_164719.h5",
+      "video_files": {
+        "agentview": "episodes/Brown_ST/20261005_164719/20261005_164719_agentview.mp4",
+        "inhand": "episodes/Brown_ST/20261005_164719/20261005_164719_inhand.mp4"
+      },
+      "episode_id": "20261005_164719",
+      "language_instruction": "place the coffee pod on the green box",
+      "operator": "Lakshita Dodeja",
+      "annotators": [
+        "Lakshita Dodeja"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:10:28.188706+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-030",
+      "dataset_repo": "OopsieData-Submissions/Brown_ST",
+      "lab_id": "Brown_ST",
+      "repo_path": "20261005_211737/20261005_211737.h5",
+      "bundle_path": "episodes/Brown_ST/20261005_211737/20261005_211737.h5",
+      "video_files": {
+        "agentview": "episodes/Brown_ST/20261005_211737/20261005_211737_agentview.mp4",
+        "inhand": "episodes/Brown_ST/20261005_211737/20261005_211737_inhand.mp4"
+      },
+      "episode_id": "20261005_211737",
+      "language_instruction": "stack the yellow block on the green block",
+      "operator": "Lakshita Dodeja",
+      "annotators": [
+        "Lakshita Dodeja"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:10:35.378649+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-031",
+      "dataset_repo": "OopsieData-Submissions/Brown_ST",
+      "lab_id": "Brown_ST",
+      "repo_path": "20261004_164604/20261004_164604.h5",
+      "bundle_path": "episodes/Brown_ST/20261004_164604/20261004_164604.h5",
+      "video_files": {
+        "agentview": "episodes/Brown_ST/20261004_164604/20261004_164604_agentview.mp4",
+        "inhand": "episodes/Brown_ST/20261004_164604/20261004_164604_inhand.mp4"
+      },
+      "episode_id": "20261004_164604",
+      "language_instruction": "place screwdriver on plate",
+      "operator": "Lakshita Dodeja",
+      "annotators": [
+        "Lakshita Dodeja"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:10:15.716371+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-032",
+      "dataset_repo": "OopsieData-Submissions/Brown_ST",
+      "lab_id": "Brown_ST",
+      "repo_path": "20261006_002924/20261006_002924.h5",
+      "bundle_path": "episodes/Brown_ST/20261006_002924/20261006_002924.h5",
+      "video_files": {
+        "agentview": "episodes/Brown_ST/20261006_002924/20261006_002924_agentview.mp4",
+        "inhand": "episodes/Brown_ST/20261006_002924/20261006_002924_inhand.mp4"
+      },
+      "episode_id": "20261006_002924",
+      "language_instruction": "stack the green block on the yellow block",
+      "operator": "Lakshita Dodeja",
+      "annotators": [
+        "Lakshita Dodeja"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:10:39.768520+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-033",
+      "dataset_repo": "OopsieData-Submissions/Brown_ST",
+      "lab_id": "Brown_ST",
+      "repo_path": "20261004_225924/20261004_225924.h5",
+      "bundle_path": "episodes/Brown_ST/20261004_225924/20261004_225924.h5",
+      "video_files": {
+        "agentview": "episodes/Brown_ST/20261004_225924/20261004_225924_agentview.mp4",
+        "inhand": "episodes/Brown_ST/20261004_225924/20261004_225924_inhand.mp4"
+      },
+      "episode_id": "20261004_225924",
+      "language_instruction": "place the coffee pod on the green box",
+      "operator": "Lakshita Dodeja",
+      "annotators": [
+        "Lakshita Dodeja"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:10:23.597309+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-034",
+      "dataset_repo": "OopsieData-Submissions/Brown_ST",
+      "lab_id": "Brown_ST",
+      "repo_path": "20261005_212445/20261005_212445.h5",
+      "bundle_path": "episodes/Brown_ST/20261005_212445/20261005_212445.h5",
+      "video_files": {
+        "agentview": "episodes/Brown_ST/20261005_212445/20261005_212445_agentview.mp4",
+        "inhand": "episodes/Brown_ST/20261005_212445/20261005_212445_inhand.mp4"
+      },
+      "episode_id": "20261005_212445",
+      "language_instruction": "stack the yellow block on the green block",
+      "operator": "Lakshita Dodeja",
+      "annotators": [
+        "Lakshita Dodeja"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:10:36.738723+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-035",
+      "dataset_repo": "OopsieData-Submissions/Brown_ST",
+      "lab_id": "Brown_ST",
+      "repo_path": "20261004_190541/20261004_190541.h5",
+      "bundle_path": "episodes/Brown_ST/20261004_190541/20261004_190541.h5",
+      "video_files": {
+        "agentview": "episodes/Brown_ST/20261004_190541/20261004_190541_agentview.mp4",
+        "inhand": "episodes/Brown_ST/20261004_190541/20261004_190541_inhand.mp4"
+      },
+      "episode_id": "20261004_190541",
+      "language_instruction": "place screwdriver on plate",
+      "operator": "Lakshita Dodeja",
+      "annotators": [
+        "Lakshita Dodeja"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:10:20.703298+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-036",
+      "dataset_repo": "OopsieData-Submissions/Brown_ST",
+      "lab_id": "Brown_ST",
+      "repo_path": "20261006_005248/20261006_005248.h5",
+      "bundle_path": "episodes/Brown_ST/20261006_005248/20261006_005248.h5",
+      "video_files": {
+        "agentview": "episodes/Brown_ST/20261006_005248/20261006_005248_agentview.mp4",
+        "inhand": "episodes/Brown_ST/20261006_005248/20261006_005248_inhand.mp4"
+      },
+      "episode_id": "20261006_005248",
+      "language_instruction": "stack the green block on the yellow block",
+      "operator": "Lakshita Dodeja",
+      "annotators": [
+        "Lakshita Dodeja"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:10:43.512363+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-037",
+      "dataset_repo": "OopsieData-Submissions/Brown_ST",
+      "lab_id": "Brown_ST",
+      "repo_path": "20261005_002550/20261005_002550.h5",
+      "bundle_path": "episodes/Brown_ST/20261005_002550/20261005_002550.h5",
+      "video_files": {
+        "agentview": "episodes/Brown_ST/20261005_002550/20261005_002550_agentview.mp4",
+        "inhand": "episodes/Brown_ST/20261005_002550/20261005_002550_inhand.mp4"
+      },
+      "episode_id": "20261005_002550",
+      "language_instruction": "place the coffee pod on the green box",
+      "operator": "Lakshita Dodeja",
+      "annotators": [
+        "Lakshita Dodeja"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:10:26.055042+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-038",
+      "dataset_repo": "OopsieData-Submissions/Brown_ST",
+      "lab_id": "Brown_ST",
+      "repo_path": "20261004_181243/20261004_181243.h5",
+      "bundle_path": "episodes/Brown_ST/20261004_181243/20261004_181243.h5",
+      "video_files": {
+        "agentview": "episodes/Brown_ST/20261004_181243/20261004_181243_agentview.mp4",
+        "inhand": "episodes/Brown_ST/20261004_181243/20261004_181243_inhand.mp4"
+      },
+      "episode_id": "20261004_181243",
+      "language_instruction": "place screwdriver on plate",
+      "operator": "Lakshita Dodeja",
+      "annotators": [
+        "Lakshita Dodeja"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:10:16.998987+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-039",
+      "dataset_repo": "OopsieData-Submissions/Brown_ST",
+      "lab_id": "Brown_ST",
+      "repo_path": "20261005_200020/20261005_200020.h5",
+      "bundle_path": "episodes/Brown_ST/20261005_200020/20261005_200020.h5",
+      "video_files": {
+        "agentview": "episodes/Brown_ST/20261005_200020/20261005_200020_agentview.mp4",
+        "inhand": "episodes/Brown_ST/20261005_200020/20261005_200020_inhand.mp4"
+      },
+      "episode_id": "20261005_200020",
+      "language_instruction": "stack the yellow block on the green block",
+      "operator": "Lakshita Dodeja",
+      "annotators": [
+        "Lakshita Dodeja"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:10:32.734415+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-040",
+      "dataset_repo": "OopsieData-Submissions/Brown_ST",
+      "lab_id": "Brown_ST",
+      "repo_path": "20261006_004519/20261006_004519.h5",
+      "bundle_path": "episodes/Brown_ST/20261006_004519/20261006_004519.h5",
+      "video_files": {
+        "agentview": "episodes/Brown_ST/20261006_004519/20261006_004519_agentview.mp4",
+        "inhand": "episodes/Brown_ST/20261006_004519/20261006_004519_inhand.mp4"
+      },
+      "episode_id": "20261006_004519",
+      "language_instruction": "stack the green block on the yellow block",
+      "operator": "Lakshita Dodeja",
+      "annotators": [
+        "Lakshita Dodeja"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:10:42.321615+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-041",
+      "dataset_repo": "OopsieData-Submissions/CMU_Aire",
+      "lab_id": "CMU_Aire",
+      "repo_path": "yam_3lego_disassembly/success/yam3lego_testing_shape1_20260912_130059.h5",
+      "bundle_path": "episodes/CMU_Aire/yam_3lego_disassembly/success/yam3lego_testing_shape1_20260912_130059.h5",
+      "video_files": {
+        "left_wrist": "episodes/CMU_Aire/yam_3lego_disassembly/success/yam3lego_testing_shape1_20260912_130059_left_wrist.mp4",
+        "right_wrist": "episodes/CMU_Aire/yam_3lego_disassembly/success/yam3lego_testing_shape1_20260912_130059_right_wrist.mp4",
+        "top": "episodes/CMU_Aire/yam_3lego_disassembly/success/yam3lego_testing_shape1_20260912_130059_top.mp4"
+      },
+      "episode_id": "yam3lego_testing_shape1_20260912_130059",
+      "language_instruction": "Take apart the lego pieces",
+      "operator": "cmu_aire_lab",
+      "annotators": [
+        "cmu_aire_lab"
+      ],
+      "robot_name": "i2rt_yam_bimanual",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:12:18.662961+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-042",
+      "dataset_repo": "OopsieData-Submissions/CMU_Aire",
+      "lab_id": "CMU_Aire",
+      "repo_path": "rac_burger_packing/failure/rac_burger_round3_0627_ep19.h5",
+      "bundle_path": "episodes/CMU_Aire/rac_burger_packing/failure/rac_burger_round3_0627_ep19.h5",
+      "video_files": {
+        "left_wrist": "episodes/CMU_Aire/rac_burger_packing/failure/rac_burger_round3_0627_ep19_left_wrist.mp4",
+        "overhead_stereo_left": "episodes/CMU_Aire/rac_burger_packing/failure/rac_burger_round3_0627_ep19_overhead_stereo_left.mp4",
+        "overhead_stereo_right": "episodes/CMU_Aire/rac_burger_packing/failure/rac_burger_round3_0627_ep19_overhead_stereo_right.mp4",
+        "right_wrist": "episodes/CMU_Aire/rac_burger_packing/failure/rac_burger_round3_0627_ep19_right_wrist.mp4"
+      },
+      "episode_id": "rac_burger_round3_0627_ep19",
+      "language_instruction": "pack the burger into the takeout box and close the lid",
+      "operator": "cmu_aire_lab",
+      "annotators": [
+        "cmu_aire_lab"
+      ],
+      "robot_name": "dual_ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:12:03.385497+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-043",
+      "dataset_repo": "OopsieData-Submissions/CMU_Aire",
+      "lab_id": "CMU_Aire",
+      "repo_path": "grocery_packing/success/grocery_packing_214.h5",
+      "bundle_path": "episodes/CMU_Aire/grocery_packing/success/grocery_packing_214.h5",
+      "video_files": {
+        "left_wrist": "episodes/CMU_Aire/grocery_packing/success/grocery_packing_214_left_wrist.mp4",
+        "overhead_stereo_left": "episodes/CMU_Aire/grocery_packing/success/grocery_packing_214_overhead_stereo_left.mp4",
+        "overhead_stereo_right": "episodes/CMU_Aire/grocery_packing/success/grocery_packing_214_overhead_stereo_right.mp4",
+        "right_wrist": "episodes/CMU_Aire/grocery_packing/success/grocery_packing_214_right_wrist.mp4"
+      },
+      "episode_id": "grocery_packing_214",
+      "language_instruction": "Pack the objects one at a time, in this exact order, always doing the next not-yet-packed object: (1) Mustard into the large box, (2) Stuffed yak into the large box, (3) Soccer ball plush into the large box, (4) Pringles chip bag into the small box, (5) Nutella container into the small box, (6) Liquid hand soap into the small box, (7) Pink Orbit gum into the small box, (8) Altoids container into the small box, (9) Sponge into the small box.",
+      "operator": "cmu_aire_lab",
+      "annotators": [
+        "cmu_aire_lab"
+      ],
+      "robot_name": "dual_ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:12:00.065207+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-044",
+      "dataset_repo": "OopsieData-Submissions/CMU_Aire",
+      "lab_id": "CMU_Aire",
+      "repo_path": "rac_shirt_hanging/success/rac_hang_round2_0614_ep24.h5",
+      "bundle_path": "episodes/CMU_Aire/rac_shirt_hanging/success/rac_hang_round2_0614_ep24.h5",
+      "video_files": {
+        "left_wrist": "episodes/CMU_Aire/rac_shirt_hanging/success/rac_hang_round2_0614_ep24_left_wrist.mp4",
+        "overhead_stereo_left": "episodes/CMU_Aire/rac_shirt_hanging/success/rac_hang_round2_0614_ep24_overhead_stereo_left.mp4",
+        "overhead_stereo_right": "episodes/CMU_Aire/rac_shirt_hanging/success/rac_hang_round2_0614_ep24_overhead_stereo_right.mp4",
+        "right_wrist": "episodes/CMU_Aire/rac_shirt_hanging/success/rac_hang_round2_0614_ep24_right_wrist.mp4"
+      },
+      "episode_id": "rac_hang_round2_0614_ep24",
+      "language_instruction": "put shirt on hanger and place hanger on rack",
+      "operator": "cmu_aire_lab",
+      "annotators": [
+        "cmu_aire_lab"
+      ],
+      "robot_name": "dual_ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:12:07.904189+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-045",
+      "dataset_repo": "OopsieData-Submissions/CMU_Aire",
+      "lab_id": "CMU_Aire",
+      "repo_path": "rac_lid_sealing/success/rac_lid_round8_0712_ep2.h5",
+      "bundle_path": "episodes/CMU_Aire/rac_lid_sealing/success/rac_lid_round8_0712_ep2.h5",
+      "video_files": {
+        "left_wrist": "episodes/CMU_Aire/rac_lid_sealing/success/rac_lid_round8_0712_ep2_left_wrist.mp4",
+        "overhead_stereo_left": "episodes/CMU_Aire/rac_lid_sealing/success/rac_lid_round8_0712_ep2_overhead_stereo_left.mp4",
+        "overhead_stereo_right": "episodes/CMU_Aire/rac_lid_sealing/success/rac_lid_round8_0712_ep2_overhead_stereo_right.mp4",
+        "right_wrist": "episodes/CMU_Aire/rac_lid_sealing/success/rac_lid_round8_0712_ep2_right_wrist.mp4"
+      },
+      "episode_id": "rac_lid_round8_0712_ep2",
+      "language_instruction": "put the lid on the container and seal it",
+      "operator": "cmu_aire_lab",
+      "annotators": [
+        "cmu_aire_lab"
+      ],
+      "robot_name": "dual_ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:12:07.012603+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-046",
+      "dataset_repo": "OopsieData-Submissions/CMU_Aire",
+      "lab_id": "CMU_Aire",
+      "repo_path": "grocery_packing/failure/grocery_packing_142.h5",
+      "bundle_path": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_142.h5",
+      "video_files": {
+        "left_wrist": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_142_left_wrist.mp4",
+        "overhead_stereo_left": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_142_overhead_stereo_left.mp4",
+        "overhead_stereo_right": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_142_overhead_stereo_right.mp4",
+        "right_wrist": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_142_right_wrist.mp4"
+      },
+      "episode_id": "grocery_packing_142",
+      "language_instruction": "Pack the yellow mustard bottle, yak plush toy, and soccer ball plush into the large box. Pack the Pringles, Nutella jar, soap bottle, pink orbit gum, Altoids container, and sponge into the small box.",
+      "operator": "cmu_aire_lab",
+      "annotators": [
+        "cmu_aire_lab"
+      ],
+      "robot_name": "dual_ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:11:43.797085+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-047",
+      "dataset_repo": "OopsieData-Submissions/CMU_Aire",
+      "lab_id": "CMU_Aire",
+      "repo_path": "grocery_packing/failure/grocery_packing_125.h5",
+      "bundle_path": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_125.h5",
+      "video_files": {
+        "left_wrist": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_125_left_wrist.mp4",
+        "overhead_stereo_left": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_125_overhead_stereo_left.mp4",
+        "overhead_stereo_right": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_125_overhead_stereo_right.mp4",
+        "right_wrist": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_125_right_wrist.mp4"
+      },
+      "episode_id": "grocery_packing_125",
+      "language_instruction": "Pack the pink orbit gum, white donut, and black whiteboard marker into the large box. Pack the yellow and green sponge and brown cough syrup into the small box.",
+      "operator": "cmu_aire_lab",
+      "annotators": [
+        "cmu_aire_lab"
+      ],
+      "robot_name": "dual_ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:11:28.520753+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-048",
+      "dataset_repo": "OopsieData-Submissions/CMU_Aire",
+      "lab_id": "CMU_Aire",
+      "repo_path": "grocery_packing/success/grocery_packing_113.h5",
+      "bundle_path": "episodes/CMU_Aire/grocery_packing/success/grocery_packing_113.h5",
+      "video_files": {
+        "left_wrist": "episodes/CMU_Aire/grocery_packing/success/grocery_packing_113_left_wrist.mp4",
+        "overhead_stereo_left": "episodes/CMU_Aire/grocery_packing/success/grocery_packing_113_overhead_stereo_left.mp4",
+        "overhead_stereo_right": "episodes/CMU_Aire/grocery_packing/success/grocery_packing_113_overhead_stereo_right.mp4",
+        "right_wrist": "episodes/CMU_Aire/grocery_packing/success/grocery_packing_113_right_wrist.mp4"
+      },
+      "episode_id": "grocery_packing_113",
+      "language_instruction": "Pack the pink orbit gum, white donut, and black whiteboard marker into the large box. Pack the green and yellow sponge and brown cough syrup into the small box.",
+      "operator": "cmu_aire_lab",
+      "annotators": [
+        "cmu_aire_lab"
+      ],
+      "robot_name": "dual_ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:11:46.077345+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-049",
+      "dataset_repo": "OopsieData-Submissions/CMU_Aire",
+      "lab_id": "CMU_Aire",
+      "repo_path": "grocery_packing/failure/grocery_packing_127.h5",
+      "bundle_path": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_127.h5",
+      "video_files": {
+        "left_wrist": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_127_left_wrist.mp4",
+        "overhead_stereo_left": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_127_overhead_stereo_left.mp4",
+        "overhead_stereo_right": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_127_overhead_stereo_right.mp4",
+        "right_wrist": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_127_right_wrist.mp4"
+      },
+      "episode_id": "grocery_packing_127",
+      "language_instruction": "Remove the yellow mustard bottle and Altoids container from the large box. Pack the soccer ball plush, brown cough syrup, pink orbit gum, white donut, and yellow and green sponge into the small box. Pack the black whiteboard marker, Box of M&Ms into the large box.",
+      "operator": "cmu_aire_lab",
+      "annotators": [
+        "cmu_aire_lab"
+      ],
+      "robot_name": "dual_ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:11:30.565941+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-050",
+      "dataset_repo": "OopsieData-Submissions/CMU_Aire",
+      "lab_id": "CMU_Aire",
+      "repo_path": "grocery_packing/failure/grocery_packing_050.h5",
+      "bundle_path": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_050.h5",
+      "video_files": {
+        "left_wrist": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_050_left_wrist.mp4",
+        "overhead_stereo_left": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_050_overhead_stereo_left.mp4",
+        "overhead_stereo_right": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_050_overhead_stereo_right.mp4",
+        "right_wrist": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_050_right_wrist.mp4"
+      },
+      "episode_id": "grocery_packing_050",
+      "language_instruction": "Pack the Cling n' Seal wrap, Cheez-It container, Mustard, and Nesquik container into the large box.",
+      "operator": "cmu_aire_lab",
+      "annotators": [
+        "cmu_aire_lab"
+      ],
+      "robot_name": "dual_ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:11:26.655477+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-051",
+      "dataset_repo": "OopsieData-Submissions/CMU_Aire",
+      "lab_id": "CMU_Aire",
+      "repo_path": "grocery_packing/failure/grocery_packing_126.h5",
+      "bundle_path": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_126.h5",
+      "video_files": {
+        "left_wrist": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_126_left_wrist.mp4",
+        "overhead_stereo_left": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_126_overhead_stereo_left.mp4",
+        "overhead_stereo_right": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_126_overhead_stereo_right.mp4",
+        "right_wrist": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_126_right_wrist.mp4"
+      },
+      "episode_id": "grocery_packing_126",
+      "language_instruction": "Remove the objects from the large box. Pack the soccer ball plush, cough syrup, orbit gum, white donut, and sponge into the small box. Pack everything else into the large box.",
+      "operator": "cmu_aire_lab",
+      "annotators": [
+        "cmu_aire_lab"
+      ],
+      "robot_name": "dual_ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:11:29.543980+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-052",
+      "dataset_repo": "OopsieData-Submissions/CMU_Aire",
+      "lab_id": "CMU_Aire",
+      "repo_path": "grocery_packing/failure/grocery_packing_001.h5",
+      "bundle_path": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_001.h5",
+      "video_files": {
+        "left_wrist": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_001_left_wrist.mp4",
+        "overhead_stereo_left": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_001_overhead_stereo_left.mp4",
+        "overhead_stereo_right": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_001_overhead_stereo_right.mp4",
+        "right_wrist": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_001_right_wrist.mp4"
+      },
+      "episode_id": "grocery_packing_001",
+      "language_instruction": "Pack the pink orbit gum, white donut, and black whiteboard marker into the large box. Pack the black electrical tape and brown cough syrup into the small box.",
+      "operator": "cmu_aire_lab",
+      "annotators": [
+        "cmu_aire_lab"
+      ],
+      "robot_name": "dual_ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:11:24.471423+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-053",
+      "dataset_repo": "OopsieData-Submissions/CMU_Aire",
+      "lab_id": "CMU_Aire",
+      "repo_path": "yam_3lego_disassembly/success/yam3lego_3lego_task21_20260910_233218.h5",
+      "bundle_path": "episodes/CMU_Aire/yam_3lego_disassembly/success/yam3lego_3lego_task21_20260910_233218.h5",
+      "video_files": {
+        "left_wrist": "episodes/CMU_Aire/yam_3lego_disassembly/success/yam3lego_3lego_task21_20260910_233218_left_wrist.mp4",
+        "right_wrist": "episodes/CMU_Aire/yam_3lego_disassembly/success/yam3lego_3lego_task21_20260910_233218_right_wrist.mp4",
+        "top": "episodes/CMU_Aire/yam_3lego_disassembly/success/yam3lego_3lego_task21_20260910_233218_top.mp4"
+      },
+      "episode_id": "yam3lego_3lego_task21_20260910_233218",
+      "language_instruction": "Take apart the lego pieces",
+      "operator": "cmu_aire_lab",
+      "annotators": [
+        "cmu_aire_lab"
+      ],
+      "robot_name": "i2rt_yam_bimanual",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:12:10.342620+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-054",
+      "dataset_repo": "OopsieData-Submissions/CMU_Aire",
+      "lab_id": "CMU_Aire",
+      "repo_path": "yam_3lego_disassembly/success/yam3lego_sept12_evening_20260913_005439.h5",
+      "bundle_path": "episodes/CMU_Aire/yam_3lego_disassembly/success/yam3lego_sept12_evening_20260913_005439.h5",
+      "video_files": {
+        "left_wrist": "episodes/CMU_Aire/yam_3lego_disassembly/success/yam3lego_sept12_evening_20260913_005439_left_wrist.mp4",
+        "right_wrist": "episodes/CMU_Aire/yam_3lego_disassembly/success/yam3lego_sept12_evening_20260913_005439_right_wrist.mp4",
+        "top": "episodes/CMU_Aire/yam_3lego_disassembly/success/yam3lego_sept12_evening_20260913_005439_top.mp4"
+      },
+      "episode_id": "yam3lego_sept12_evening_20260913_005439",
+      "language_instruction": "Take apart the lego pieces",
+      "operator": "cmu_aire_lab",
+      "annotators": [
+        "cmu_aire_lab"
+      ],
+      "robot_name": "i2rt_yam_bimanual",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:12:11.228166+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-055",
+      "dataset_repo": "OopsieData-Submissions/CMU_Aire",
+      "lab_id": "CMU_Aire",
+      "repo_path": "grocery_packing/success/grocery_packing_230.h5",
+      "bundle_path": "episodes/CMU_Aire/grocery_packing/success/grocery_packing_230.h5",
+      "video_files": {
+        "left_wrist": "episodes/CMU_Aire/grocery_packing/success/grocery_packing_230_left_wrist.mp4",
+        "overhead_stereo_left": "episodes/CMU_Aire/grocery_packing/success/grocery_packing_230_overhead_stereo_left.mp4",
+        "overhead_stereo_right": "episodes/CMU_Aire/grocery_packing/success/grocery_packing_230_overhead_stereo_right.mp4",
+        "right_wrist": "episodes/CMU_Aire/grocery_packing/success/grocery_packing_230_right_wrist.mp4"
+      },
+      "episode_id": "grocery_packing_230",
+      "language_instruction": "Pack the objects one at a time, in this exact order, always doing the next not-yet-packed object: (1) Mustard into the large box, (2) Stuffed yak into the large box, (3) Soccer ball plush into the large box, (4) Pringles chip bag into the small box, (5) Nutella container into the small box, (6) Liquid hand soap into the small box, (7) Pink Orbit gum into the small box, (8) Altoids container into the small box, (9) Sponge into the small box.",
+      "operator": "cmu_aire_lab",
+      "annotators": [
+        "cmu_aire_lab"
+      ],
+      "robot_name": "dual_ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:12:01.385299+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-056",
+      "dataset_repo": "OopsieData-Submissions/CMU_Aire",
+      "lab_id": "CMU_Aire",
+      "repo_path": "rac_burger_packing/failure/rac_burger_round6_0707_ep34.h5",
+      "bundle_path": "episodes/CMU_Aire/rac_burger_packing/failure/rac_burger_round6_0707_ep34.h5",
+      "video_files": {
+        "left_wrist": "episodes/CMU_Aire/rac_burger_packing/failure/rac_burger_round6_0707_ep34_left_wrist.mp4",
+        "overhead_stereo_left": "episodes/CMU_Aire/rac_burger_packing/failure/rac_burger_round6_0707_ep34_overhead_stereo_left.mp4",
+        "overhead_stereo_right": "episodes/CMU_Aire/rac_burger_packing/failure/rac_burger_round6_0707_ep34_overhead_stereo_right.mp4",
+        "right_wrist": "episodes/CMU_Aire/rac_burger_packing/failure/rac_burger_round6_0707_ep34_right_wrist.mp4"
+      },
+      "episode_id": "rac_burger_round6_0707_ep34",
+      "language_instruction": "pack the burger into the takeout box and close the lid",
+      "operator": "cmu_aire_lab",
+      "annotators": [
+        "cmu_aire_lab"
+      ],
+      "robot_name": "dual_ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:12:04.587654+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-057",
+      "dataset_repo": "OopsieData-Submissions/CMU_Aire",
+      "lab_id": "CMU_Aire",
+      "repo_path": "rac_shirt_hanging/success/rac_hang_round6_0711_ep19.h5",
+      "bundle_path": "episodes/CMU_Aire/rac_shirt_hanging/success/rac_hang_round6_0711_ep19.h5",
+      "video_files": {
+        "left_wrist": "episodes/CMU_Aire/rac_shirt_hanging/success/rac_hang_round6_0711_ep19_left_wrist.mp4",
+        "overhead_stereo_left": "episodes/CMU_Aire/rac_shirt_hanging/success/rac_hang_round6_0711_ep19_overhead_stereo_left.mp4",
+        "overhead_stereo_right": "episodes/CMU_Aire/rac_shirt_hanging/success/rac_hang_round6_0711_ep19_overhead_stereo_right.mp4",
+        "right_wrist": "episodes/CMU_Aire/rac_shirt_hanging/success/rac_hang_round6_0711_ep19_right_wrist.mp4"
+      },
+      "episode_id": "rac_hang_round6_0711_ep19",
+      "language_instruction": "put shirt on hanger and place hanger on rack",
+      "operator": "cmu_aire_lab",
+      "annotators": [
+        "cmu_aire_lab"
+      ],
+      "robot_name": "dual_ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:12:08.892951+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-058",
+      "dataset_repo": "OopsieData-Submissions/CMU_Aire",
+      "lab_id": "CMU_Aire",
+      "repo_path": "rac_lid_sealing/failure/rac_lid_round3_0701_ep80.h5",
+      "bundle_path": "episodes/CMU_Aire/rac_lid_sealing/failure/rac_lid_round3_0701_ep80.h5",
+      "video_files": {
+        "left_wrist": "episodes/CMU_Aire/rac_lid_sealing/failure/rac_lid_round3_0701_ep80_left_wrist.mp4",
+        "overhead_stereo_left": "episodes/CMU_Aire/rac_lid_sealing/failure/rac_lid_round3_0701_ep80_overhead_stereo_left.mp4",
+        "overhead_stereo_right": "episodes/CMU_Aire/rac_lid_sealing/failure/rac_lid_round3_0701_ep80_overhead_stereo_right.mp4",
+        "right_wrist": "episodes/CMU_Aire/rac_lid_sealing/failure/rac_lid_round3_0701_ep80_right_wrist.mp4"
+      },
+      "episode_id": "rac_lid_round3_0701_ep80",
+      "language_instruction": "put the lid on the container and seal it",
+      "operator": "cmu_aire_lab",
+      "annotators": [
+        "cmu_aire_lab"
+      ],
+      "robot_name": "dual_ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:12:05.739383+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-059",
+      "dataset_repo": "OopsieData-Submissions/CMU_Aire",
+      "lab_id": "CMU_Aire",
+      "repo_path": "grocery_packing/success/grocery_packing_119.h5",
+      "bundle_path": "episodes/CMU_Aire/grocery_packing/success/grocery_packing_119.h5",
+      "video_files": {
+        "left_wrist": "episodes/CMU_Aire/grocery_packing/success/grocery_packing_119_left_wrist.mp4",
+        "overhead_stereo_left": "episodes/CMU_Aire/grocery_packing/success/grocery_packing_119_overhead_stereo_left.mp4",
+        "overhead_stereo_right": "episodes/CMU_Aire/grocery_packing/success/grocery_packing_119_overhead_stereo_right.mp4",
+        "right_wrist": "episodes/CMU_Aire/grocery_packing/success/grocery_packing_119_right_wrist.mp4"
+      },
+      "episode_id": "grocery_packing_119",
+      "language_instruction": "Pack the pink orbit gum, white donut, and black whiteboard marker into the large box. Pack the green and yellow sponge and brown cough syrup into the small box.",
+      "operator": "cmu_aire_lab",
+      "annotators": [
+        "cmu_aire_lab"
+      ],
+      "robot_name": "dual_ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:11:47.493978+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-060",
+      "dataset_repo": "OopsieData-Submissions/CMU_Aire",
+      "lab_id": "CMU_Aire",
+      "repo_path": "grocery_packing/failure/grocery_packing_129.h5",
+      "bundle_path": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_129.h5",
+      "video_files": {
+        "left_wrist": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_129_left_wrist.mp4",
+        "overhead_stereo_left": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_129_overhead_stereo_left.mp4",
+        "overhead_stereo_right": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_129_overhead_stereo_right.mp4",
+        "right_wrist": "episodes/CMU_Aire/grocery_packing/failure/grocery_packing_129_right_wrist.mp4"
+      },
+      "episode_id": "grocery_packing_129",
+      "language_instruction": "Pack the yellow mustard bottle, yak plush toy, and soccer ball plush into the large box. Pack the Pringles, Nutella jar, soap bottle, pink orbit gum, Altoids container, and sponge into the small box.",
+      "operator": "cmu_aire_lab",
+      "annotators": [
+        "cmu_aire_lab"
+      ],
+      "robot_name": "dual_ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:11:36.742133+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-061",
+      "dataset_repo": "OopsieData-Submissions/CMU_Auton",
+      "lab_id": "CMU_Auton",
+      "repo_path": "20261002_195241.h5",
+      "bundle_path": "episodes/CMU_Auton/20261002_195241.h5",
+      "video_files": {
+        "exterior_image_1": "episodes/CMU_Auton/20261002_195241_exterior_image_1.mp4"
+      },
+      "episode_id": "20261002_195241",
+      "language_instruction": "Close the drawer",
+      "operator": "Haoran Hao",
+      "annotators": [
+        "HaoranHao"
+      ],
+      "robot_name": "ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:12:28.269891+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-062",
+      "dataset_repo": "OopsieData-Submissions/CMU_Auton",
+      "lab_id": "CMU_Auton",
+      "repo_path": "20261001_175006.h5",
+      "bundle_path": "episodes/CMU_Auton/20261001_175006.h5",
+      "video_files": {
+        "exterior_image_1": "episodes/CMU_Auton/20261001_175006_exterior_image_1.mp4"
+      },
+      "episode_id": "20261001_175006",
+      "language_instruction": "Put the cup in the drawer and close the drawer",
+      "operator": "haoran",
+      "annotators": [
+        "haoran"
+      ],
+      "robot_name": "ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:12:20.146268+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-063",
+      "dataset_repo": "OopsieData-Submissions/CMU_Auton",
+      "lab_id": "CMU_Auton",
+      "repo_path": "20261005_120330.h5",
+      "bundle_path": "episodes/CMU_Auton/20261005_120330.h5",
+      "video_files": {
+        "exterior_image_1": "episodes/CMU_Auton/20261005_120330_exterior_image_1.mp4"
+      },
+      "episode_id": "20261005_120330",
+      "language_instruction": "Grab the handle of the drawer and pull it open",
+      "operator": "Haoran Hao",
+      "annotators": [
+        "HaoranHao"
+      ],
+      "robot_name": "ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:12:56.723660+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-064",
+      "dataset_repo": "OopsieData-Submissions/CMU_Auton",
+      "lab_id": "CMU_Auton",
+      "repo_path": "20261003_194206.h5",
+      "bundle_path": "episodes/CMU_Auton/20261003_194206.h5",
+      "video_files": {
+        "exterior_image_1": "episodes/CMU_Auton/20261003_194206_exterior_image_1.mp4"
+      },
+      "episode_id": "20261003_194206",
+      "language_instruction": "Pick up the lid and place it on the pot",
+      "operator": "Haoran Hao",
+      "annotators": [
+        "HaoranHao"
+      ],
+      "robot_name": "ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:12:29.482876+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-065",
+      "dataset_repo": "OopsieData-Submissions/CMU_Auton",
+      "lab_id": "CMU_Auton",
+      "repo_path": "20261005_174717.h5",
+      "bundle_path": "episodes/CMU_Auton/20261005_174717.h5",
+      "video_files": {
+        "exterior_image_1": "episodes/CMU_Auton/20261005_174717_exterior_image_1.mp4"
+      },
+      "episode_id": "20261005_174717",
+      "language_instruction": "Pick up the yellow mustard and throw it in the trash can",
+      "operator": "Haoran Hao",
+      "annotators": [
+        "HaoranHao"
+      ],
+      "robot_name": "ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:13:02.318183+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-066",
+      "dataset_repo": "OopsieData-Submissions/CMU_Auton",
+      "lab_id": "CMU_Auton",
+      "repo_path": "20261004_165416.h5",
+      "bundle_path": "episodes/CMU_Auton/20261004_165416.h5",
+      "video_files": {
+        "exterior_image_1": "episodes/CMU_Auton/20261004_165416_exterior_image_1.mp4"
+      },
+      "episode_id": "20261004_165416",
+      "language_instruction": "Pick up the teapot and pour water into the cup",
+      "operator": "Haoran Hao",
+      "annotators": [
+        "HaoranHao"
+      ],
+      "robot_name": "ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:12:51.369479+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-067",
+      "dataset_repo": "OopsieData-Submissions/CMU_Auton",
+      "lab_id": "CMU_Auton",
+      "repo_path": "20261005_201528.h5",
+      "bundle_path": "episodes/CMU_Auton/20261005_201528.h5",
+      "video_files": {
+        "exterior_image_1": "episodes/CMU_Auton/20261005_201528_exterior_image_1.mp4"
+      },
+      "episode_id": "20261005_201528",
+      "language_instruction": "Swap the positions of the mayonnaise and the barbecue sauce",
+      "operator": "Haoran Hao",
+      "annotators": [
+        "HaoranHao"
+      ],
+      "robot_name": "ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:13:06.349746+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-068",
+      "dataset_repo": "OopsieData-Submissions/CMU_Auton",
+      "lab_id": "CMU_Auton",
+      "repo_path": "20261001_175827.h5",
+      "bundle_path": "episodes/CMU_Auton/20261001_175827.h5",
+      "video_files": {
+        "exterior_image_1": "episodes/CMU_Auton/20261001_175827_exterior_image_1.mp4"
+      },
+      "episode_id": "20261001_175827",
+      "language_instruction": "Put the cup in the drawer and close the drawer",
+      "operator": "Haoran Hao",
+      "annotators": [
+        "haoran"
+      ],
+      "robot_name": "ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:12:22.440710+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-069",
+      "dataset_repo": "OopsieData-Submissions/CMU_Auton",
+      "lab_id": "CMU_Auton",
+      "repo_path": "20261001_175522.h5",
+      "bundle_path": "episodes/CMU_Auton/20261001_175522.h5",
+      "video_files": {
+        "exterior_image_1": "episodes/CMU_Auton/20261001_175522_exterior_image_1.mp4"
+      },
+      "episode_id": "20261001_175522",
+      "language_instruction": "Put the cup in the drawer and close the drawer",
+      "operator": "Haoran Hao",
+      "annotators": [
+        "haoran"
+      ],
+      "robot_name": "ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:12:21.429660+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-070",
+      "dataset_repo": "OopsieData-Submissions/CMU_Auton",
+      "lab_id": "CMU_Auton",
+      "repo_path": "20261001_182042.h5",
+      "bundle_path": "episodes/CMU_Auton/20261001_182042.h5",
+      "video_files": {
+        "exterior_image_1": "episodes/CMU_Auton/20261001_182042_exterior_image_1.mp4"
+      },
+      "episode_id": "20261001_182042",
+      "language_instruction": "Close the drawer",
+      "operator": "Haoran Hao",
+      "annotators": [
+        "HaoranHao"
+      ],
+      "robot_name": "ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:12:27.242819+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-071",
+      "dataset_repo": "OopsieData-Submissions/CMU_Auton",
+      "lab_id": "CMU_Auton",
+      "repo_path": "20261004_161447.h5",
+      "bundle_path": "episodes/CMU_Auton/20261004_161447.h5",
+      "video_files": {
+        "exterior_image_1": "episodes/CMU_Auton/20261004_161447_exterior_image_1.mp4"
+      },
+      "episode_id": "20261004_161447",
+      "language_instruction": "Pick up the teapot and pour water into the cup",
+      "operator": "Haoran Hao",
+      "annotators": [
+        "HaoranHao"
+      ],
+      "robot_name": "ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:12:48.131405+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-072",
+      "dataset_repo": "OopsieData-Submissions/CMU_Auton",
+      "lab_id": "CMU_Auton",
+      "repo_path": "20261005_161506.h5",
+      "bundle_path": "episodes/CMU_Auton/20261005_161506.h5",
+      "video_files": {
+        "exterior_image_1": "episodes/CMU_Auton/20261005_161506_exterior_image_1.mp4"
+      },
+      "episode_id": "20261005_161506",
+      "language_instruction": "Grab the handle of the drawer and pull it open",
+      "operator": "Haoran Hao",
+      "annotators": [
+        "HaoranHao"
+      ],
+      "robot_name": "ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:13:00.421012+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-073",
+      "dataset_repo": "OopsieData-Submissions/CMU_Auton",
+      "lab_id": "CMU_Auton",
+      "repo_path": "20261004_141836.h5",
+      "bundle_path": "episodes/CMU_Auton/20261004_141836.h5",
+      "video_files": {
+        "exterior_image_1": "episodes/CMU_Auton/20261004_141836_exterior_image_1.mp4"
+      },
+      "episode_id": "20261004_141836",
+      "language_instruction": "Pick up the lid and place it on the pot",
+      "operator": "Haoran Hao",
+      "annotators": [
+        "HaoranHao"
+      ],
+      "robot_name": "ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:12:44.926426+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-074",
+      "dataset_repo": "OopsieData-Submissions/CMU_Auton",
+      "lab_id": "CMU_Auton",
+      "repo_path": "20261005_180211.h5",
+      "bundle_path": "episodes/CMU_Auton/20261005_180211.h5",
+      "video_files": {
+        "exterior_image_1": "episodes/CMU_Auton/20261005_180211_exterior_image_1.mp4"
+      },
+      "episode_id": "20261005_180211",
+      "language_instruction": "Pick up the yellow mustard and throw it in the trash can",
+      "operator": "Haoran Hao",
+      "annotators": [
+        "HaoranHao"
+      ],
+      "robot_name": "ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:13:03.340528+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-075",
+      "dataset_repo": "OopsieData-Submissions/CMU_Auton",
+      "lab_id": "CMU_Auton",
+      "repo_path": "20261005_201225.h5",
+      "bundle_path": "episodes/CMU_Auton/20261005_201225.h5",
+      "video_files": {
+        "exterior_image_1": "episodes/CMU_Auton/20261005_201225_exterior_image_1.mp4"
+      },
+      "episode_id": "20261005_201225",
+      "language_instruction": "Swap the positions of the mayonnaise and the barbecue sauce",
+      "operator": "Haoran Hao",
+      "annotators": [
+        "HaoranHao"
+      ],
+      "robot_name": "ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:13:04.975807+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-076",
+      "dataset_repo": "OopsieData-Submissions/CMU_Auton",
+      "lab_id": "CMU_Auton",
+      "repo_path": "20261001_175950.h5",
+      "bundle_path": "episodes/CMU_Auton/20261001_175950.h5",
+      "video_files": {
+        "exterior_image_1": "episodes/CMU_Auton/20261001_175950_exterior_image_1.mp4"
+      },
+      "episode_id": "20261001_175950",
+      "language_instruction": "Put the cup in the drawer and close the drawer",
+      "operator": "Haoran Hao",
+      "annotators": [
+        "haoran"
+      ],
+      "robot_name": "ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:12:24.645094+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-077",
+      "dataset_repo": "OopsieData-Submissions/CMU_Auton",
+      "lab_id": "CMU_Auton",
+      "repo_path": "20261001_181248.h5",
+      "bundle_path": "episodes/CMU_Auton/20261001_181248.h5",
+      "video_files": {
+        "exterior_image_1": "episodes/CMU_Auton/20261001_181248_exterior_image_1.mp4"
+      },
+      "episode_id": "20261001_181248",
+      "language_instruction": "Close the drawer",
+      "operator": "Haoran Hao",
+      "annotators": [
+        "HaoranHao"
+      ],
+      "robot_name": "ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:12:26.180430+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-078",
+      "dataset_repo": "OopsieData-Submissions/CMU_Auton",
+      "lab_id": "CMU_Auton",
+      "repo_path": "20261004_192718.h5",
+      "bundle_path": "episodes/CMU_Auton/20261004_192718.h5",
+      "video_files": {
+        "exterior_image_1": "episodes/CMU_Auton/20261004_192718_exterior_image_1.mp4"
+      },
+      "episode_id": "20261004_192718",
+      "language_instruction": "Grab the handle of the drawer and pull it open",
+      "operator": "Haoran Hao",
+      "annotators": [
+        "HaoranHao"
+      ],
+      "robot_name": "ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:12:55.703150+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-079",
+      "dataset_repo": "OopsieData-Submissions/CMU_Auton",
+      "lab_id": "CMU_Auton",
+      "repo_path": "20261004_142800.h5",
+      "bundle_path": "episodes/CMU_Auton/20261004_142800.h5",
+      "video_files": {
+        "exterior_image_1": "episodes/CMU_Auton/20261004_142800_exterior_image_1.mp4"
+      },
+      "episode_id": "20261004_142800",
+      "language_instruction": "Pick up the lid and place it on the pot",
+      "operator": "Haoran Hao",
+      "annotators": [
+        "HaoranHao"
+      ],
+      "robot_name": "ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:12:46.415099+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-080",
+      "dataset_repo": "OopsieData-Submissions/CMU_Auton",
+      "lab_id": "CMU_Auton",
+      "repo_path": "20261001_175903.h5",
+      "bundle_path": "episodes/CMU_Auton/20261001_175903.h5",
+      "video_files": {
+        "exterior_image_1": "episodes/CMU_Auton/20261001_175903_exterior_image_1.mp4"
+      },
+      "episode_id": "20261001_175903",
+      "language_instruction": "Put the cup in the drawer and close the drawer",
+      "operator": "Haoran Hao",
+      "annotators": [
+        "haoran"
+      ],
+      "robot_name": "ufactory_xarm7",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:12:23.619456+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-081",
+      "dataset_repo": "OopsieData-Submissions/CMU_Intent",
+      "lab_id": "CMU_Intent",
+      "repo_path": "andrew_fail_episode_000013.h5",
+      "bundle_path": "episodes/CMU_Intent/andrew_fail_episode_000013.h5",
+      "video_files": {
+        "exterior": "episodes/CMU_Intent/videos/andrew_fail_episode_000013_exterior.mp4",
+        "wrist": "episodes/CMU_Intent/videos/andrew_fail_episode_000013_wrist.mp4"
+      },
+      "episode_id": "andrew_fail_episode_000013",
+      "language_instruction": "put the purple mug in the basket",
+      "operator": "andrew",
+      "annotators": [
+        "ken",
+        "source_label"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:13:13.733609+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-082",
+      "dataset_repo": "OopsieData-Submissions/CMU_Intent",
+      "lab_id": "CMU_Intent",
+      "repo_path": "dp_oopsie_yilin_episode_000013.h5",
+      "bundle_path": "episodes/CMU_Intent/dp_oopsie_yilin_episode_000013.h5",
+      "video_files": {
+        "front": "episodes/CMU_Intent/videos/dp_oopsie_yilin_episode_000013_front.mp4",
+        "tactile": "episodes/CMU_Intent/videos/dp_oopsie_yilin_episode_000013_tactile.mp4",
+        "wrist": "episodes/CMU_Intent/videos/dp_oopsie_yilin_episode_000013_wrist.mp4"
+      },
+      "episode_id": "dp_oopsie_yilin_episode_000013",
+      "language_instruction": "insert the purple peg into a hole",
+      "operator": "yilin",
+      "annotators": [
+        "yilin"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:13:36.088105+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-083",
+      "dataset_repo": "OopsieData-Submissions/CMU_Intent",
+      "lab_id": "CMU_Intent",
+      "repo_path": "multisafe_diffusion_spill_converted_episode_000016.h5",
+      "bundle_path": "episodes/CMU_Intent/multisafe_diffusion_spill_converted_episode_000016.h5",
+      "video_files": {
+        "tactile": "episodes/CMU_Intent/videos/multisafe_diffusion_spill_converted_episode_000016_tactile.mp4",
+        "zed": "episodes/CMU_Intent/videos/multisafe_diffusion_spill_converted_episode_000016_zed.mp4"
+      },
+      "episode_id": "multisafe_diffusion_spill_converted_episode_000016",
+      "language_instruction": "pick up the bottle",
+      "operator": "kensuke",
+      "annotators": [
+        "kensuke"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:13:50.765727+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-084",
+      "dataset_repo": "OopsieData-Submissions/CMU_Intent",
+      "lab_id": "CMU_Intent",
+      "repo_path": "junwon_coffee_bag_episode_000005.h5",
+      "bundle_path": "episodes/CMU_Intent/junwon_coffee_bag_episode_000005.h5",
+      "video_files": {
+        "left": "episodes/CMU_Intent/videos/junwon_coffee_bag_episode_000005_left.mp4",
+        "right": "episodes/CMU_Intent/videos/junwon_coffee_bag_episode_000005_right.mp4",
+        "wrist": "episodes/CMU_Intent/videos/junwon_coffee_bag_episode_000005_wrist.mp4"
+      },
+      "episode_id": "junwon_coffee_bag_episode_000005",
+      "language_instruction": "place the coffee bag in the blue basket",
+      "operator": "junwon",
+      "annotators": [
+        "ken",
+        "source_label"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:13:42.745069+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-085",
+      "dataset_repo": "OopsieData-Submissions/CMU_Intent",
+      "lab_id": "CMU_Intent",
+      "repo_path": "dp_oopsie_wipe_episode_000000.h5",
+      "bundle_path": "episodes/CMU_Intent/dp_oopsie_wipe_episode_000000.h5",
+      "video_files": {
+        "front": "episodes/CMU_Intent/videos/dp_oopsie_wipe_episode_000000_front.mp4",
+        "tactile": "episodes/CMU_Intent/videos/dp_oopsie_wipe_episode_000000_tactile.mp4",
+        "wrist": "episodes/CMU_Intent/videos/dp_oopsie_wipe_episode_000000_wrist.mp4"
+      },
+      "episode_id": "dp_oopsie_wipe_episode_000000",
+      "language_instruction": "wipe the orange marks",
+      "operator": "yilin",
+      "annotators": [
+        "ken",
+        "yilin"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:13:28.339672+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-086",
+      "dataset_repo": "OopsieData-Submissions/CMU_Intent",
+      "lab_id": "CMU_Intent",
+      "repo_path": "junwon_coffee_pour_episode_000015.h5",
+      "bundle_path": "episodes/CMU_Intent/junwon_coffee_pour_episode_000015.h5",
+      "video_files": {
+        "left": "episodes/CMU_Intent/videos/junwon_coffee_pour_episode_000015_left.mp4",
+        "right": "episodes/CMU_Intent/videos/junwon_coffee_pour_episode_000015_right.mp4",
+        "wrist": "episodes/CMU_Intent/videos/junwon_coffee_pour_episode_000015_wrist.mp4"
+      },
+      "episode_id": "junwon_coffee_pour_episode_000015",
+      "language_instruction": "pour the coffee beans into the cup",
+      "operator": "junwon",
+      "annotators": [
+        "ken",
+        "source_label"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:13:48.217635+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-087",
+      "dataset_repo": "OopsieData-Submissions/CMU_Intent",
+      "lab_id": "CMU_Intent",
+      "repo_path": "dp_oopsie_wipe_episode_000010.h5",
+      "bundle_path": "episodes/CMU_Intent/dp_oopsie_wipe_episode_000010.h5",
+      "video_files": {
+        "front": "episodes/CMU_Intent/videos/dp_oopsie_wipe_episode_000010_front.mp4",
+        "tactile": "episodes/CMU_Intent/videos/dp_oopsie_wipe_episode_000010_tactile.mp4",
+        "wrist": "episodes/CMU_Intent/videos/dp_oopsie_wipe_episode_000010_wrist.mp4"
+      },
+      "episode_id": "dp_oopsie_wipe_episode_000010",
+      "language_instruction": "wipe the black marks",
+      "operator": "yilin",
+      "annotators": [
+        "ken",
+        "yilin"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:13:34.171847+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-088",
+      "dataset_repo": "OopsieData-Submissions/CMU_Intent",
+      "lab_id": "CMU_Intent",
+      "repo_path": "jenga_oopsie_episode_000019.h5",
+      "bundle_path": "episodes/CMU_Intent/jenga_oopsie_episode_000019.h5",
+      "video_files": {
+        "front": "episodes/CMU_Intent/videos/jenga_oopsie_episode_000019_front.mp4",
+        "wrist": "episodes/CMU_Intent/videos/jenga_oopsie_episode_000019_wrist.mp4"
+      },
+      "episode_id": "jenga_oopsie_episode_000019",
+      "language_instruction": "pull out the block sticking out",
+      "operator": "junwon",
+      "annotators": [
+        "source_label"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:13:37.280212+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-089",
+      "dataset_repo": "OopsieData-Submissions/CMU_Intent",
+      "lab_id": "CMU_Intent",
+      "repo_path": "multisafe_diffusion_spill_converted_episode_000041.h5",
+      "bundle_path": "episodes/CMU_Intent/multisafe_diffusion_spill_converted_episode_000041.h5",
+      "video_files": {
+        "tactile": "episodes/CMU_Intent/videos/multisafe_diffusion_spill_converted_episode_000041_tactile.mp4",
+        "zed": "episodes/CMU_Intent/videos/multisafe_diffusion_spill_converted_episode_000041_zed.mp4"
+      },
+      "episode_id": "multisafe_diffusion_spill_converted_episode_000041",
+      "language_instruction": "pick up the bottle",
+      "operator": "kensuke",
+      "annotators": [
+        "kensuke"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:13:53.006510+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-090",
+      "dataset_repo": "OopsieData-Submissions/CMU_Intent",
+      "lab_id": "CMU_Intent",
+      "repo_path": "junwon_knife_place_episode_000010.h5",
+      "bundle_path": "episodes/CMU_Intent/junwon_knife_place_episode_000010.h5",
+      "video_files": {
+        "left": "episodes/CMU_Intent/videos/junwon_knife_place_episode_000010_left.mp4",
+        "right": "episodes/CMU_Intent/videos/junwon_knife_place_episode_000010_right.mp4",
+        "wrist": "episodes/CMU_Intent/videos/junwon_knife_place_episode_000010_wrist.mp4"
+      },
+      "episode_id": "junwon_knife_place_episode_000010",
+      "language_instruction": "place the knife in the bowl",
+      "operator": "junwon",
+      "annotators": [
+        "ken",
+        "source_label"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:13:49.377440+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-091",
+      "dataset_repo": "OopsieData-Submissions/CMU_Intent",
+      "lab_id": "CMU_Intent",
+      "repo_path": "dp_oopsie_liq_episode_000012.h5",
+      "bundle_path": "episodes/CMU_Intent/dp_oopsie_liq_episode_000012.h5",
+      "video_files": {
+        "front": "episodes/CMU_Intent/videos/dp_oopsie_liq_episode_000012_front.mp4",
+        "tactile": "episodes/CMU_Intent/videos/dp_oopsie_liq_episode_000012_tactile.mp4",
+        "wrist": "episodes/CMU_Intent/videos/dp_oopsie_liq_episode_000012_wrist.mp4"
+      },
+      "episode_id": "dp_oopsie_liq_episode_000012",
+      "language_instruction": "drop dye into one of the cups",
+      "operator": "yilin",
+      "annotators": [
+        "ken"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:13:26.730609+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-092",
+      "dataset_repo": "OopsieData-Submissions/CMU_Intent",
+      "lab_id": "CMU_Intent",
+      "repo_path": "andrew_oopsie_episode_000012.h5",
+      "bundle_path": "episodes/CMU_Intent/andrew_oopsie_episode_000012.h5",
+      "video_files": {
+        "exterior": "episodes/CMU_Intent/videos/andrew_oopsie_episode_000012_exterior.mp4",
+        "wrist": "episodes/CMU_Intent/videos/andrew_oopsie_episode_000012_wrist.mp4"
+      },
+      "episode_id": "andrew_oopsie_episode_000012",
+      "language_instruction": "put the purple mug in the basket",
+      "operator": "andrew",
+      "annotators": [
+        "ken",
+        "source_label"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:13:17.750545+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-093",
+      "dataset_repo": "OopsieData-Submissions/CMU_Intent",
+      "lab_id": "CMU_Intent",
+      "repo_path": "multisafe_diffusion_spill_converted_episode_000023.h5",
+      "bundle_path": "episodes/CMU_Intent/multisafe_diffusion_spill_converted_episode_000023.h5",
+      "video_files": {
+        "tactile": "episodes/CMU_Intent/videos/multisafe_diffusion_spill_converted_episode_000023_tactile.mp4",
+        "zed": "episodes/CMU_Intent/videos/multisafe_diffusion_spill_converted_episode_000023_zed.mp4"
+      },
+      "episode_id": "multisafe_diffusion_spill_converted_episode_000023",
+      "language_instruction": "pick up the bottle",
+      "operator": "kensuke",
+      "annotators": [
+        "kensuke"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:13:51.827968+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-094",
+      "dataset_repo": "OopsieData-Submissions/CMU_Intent",
+      "lab_id": "CMU_Intent",
+      "repo_path": "dp_oopsie_yilin_episode_000008.h5",
+      "bundle_path": "episodes/CMU_Intent/dp_oopsie_yilin_episode_000008.h5",
+      "video_files": {
+        "front": "episodes/CMU_Intent/videos/dp_oopsie_yilin_episode_000008_front.mp4",
+        "tactile": "episodes/CMU_Intent/videos/dp_oopsie_yilin_episode_000008_tactile.mp4",
+        "wrist": "episodes/CMU_Intent/videos/dp_oopsie_yilin_episode_000008_wrist.mp4"
+      },
+      "episode_id": "dp_oopsie_yilin_episode_000008",
+      "language_instruction": "insert the purple peg into a hole",
+      "operator": "yilin",
+      "annotators": [
+        "yilin"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:13:35.151573+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-095",
+      "dataset_repo": "OopsieData-Submissions/CMU_Intent",
+      "lab_id": "CMU_Intent",
+      "repo_path": "dp_oopsie_wipe_episode_000005.h5",
+      "bundle_path": "episodes/CMU_Intent/dp_oopsie_wipe_episode_000005.h5",
+      "video_files": {
+        "front": "episodes/CMU_Intent/videos/dp_oopsie_wipe_episode_000005_front.mp4",
+        "tactile": "episodes/CMU_Intent/videos/dp_oopsie_wipe_episode_000005_tactile.mp4",
+        "wrist": "episodes/CMU_Intent/videos/dp_oopsie_wipe_episode_000005_wrist.mp4"
+      },
+      "episode_id": "dp_oopsie_wipe_episode_000005",
+      "language_instruction": "wipe the orange marks",
+      "operator": "yilin",
+      "annotators": [
+        "ken",
+        "yilin"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:13:29.510213+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-096",
+      "dataset_repo": "OopsieData-Submissions/CMU_Intent",
+      "lab_id": "CMU_Intent",
+      "repo_path": "junwon_coffee_bag_episode_000006.h5",
+      "bundle_path": "episodes/CMU_Intent/junwon_coffee_bag_episode_000006.h5",
+      "video_files": {
+        "left": "episodes/CMU_Intent/videos/junwon_coffee_bag_episode_000006_left.mp4",
+        "right": "episodes/CMU_Intent/videos/junwon_coffee_bag_episode_000006_right.mp4",
+        "wrist": "episodes/CMU_Intent/videos/junwon_coffee_bag_episode_000006_wrist.mp4"
+      },
+      "episode_id": "junwon_coffee_bag_episode_000006",
+      "language_instruction": "place the coffee bag in the blue basket",
+      "operator": "junwon",
+      "annotators": [
+        "ken",
+        "source_label"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:13:44.535597+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-097",
+      "dataset_repo": "OopsieData-Submissions/CMU_Intent",
+      "lab_id": "CMU_Intent",
+      "repo_path": "dp_oopsie_wipe_episode_000009.h5",
+      "bundle_path": "episodes/CMU_Intent/dp_oopsie_wipe_episode_000009.h5",
+      "video_files": {
+        "front": "episodes/CMU_Intent/videos/dp_oopsie_wipe_episode_000009_front.mp4",
+        "tactile": "episodes/CMU_Intent/videos/dp_oopsie_wipe_episode_000009_tactile.mp4",
+        "wrist": "episodes/CMU_Intent/videos/dp_oopsie_wipe_episode_000009_wrist.mp4"
+      },
+      "episode_id": "dp_oopsie_wipe_episode_000009",
+      "language_instruction": "wipe the black marks",
+      "operator": "yilin",
+      "annotators": [
+        "ken",
+        "yilin"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:13:32.959985+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-098",
+      "dataset_repo": "OopsieData-Submissions/CMU_Intent",
+      "lab_id": "CMU_Intent",
+      "repo_path": "andrew_fail_episode_000024.h5",
+      "bundle_path": "episodes/CMU_Intent/andrew_fail_episode_000024.h5",
+      "video_files": {
+        "exterior": "episodes/CMU_Intent/videos/andrew_fail_episode_000024_exterior.mp4",
+        "wrist": "episodes/CMU_Intent/videos/andrew_fail_episode_000024_wrist.mp4"
+      },
+      "episode_id": "andrew_fail_episode_000024",
+      "language_instruction": "put the purple mug in the basket",
+      "operator": "andrew",
+      "annotators": [
+        "ken",
+        "source_label"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:13:16.325568+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-099",
+      "dataset_repo": "OopsieData-Submissions/CMU_Intent",
+      "lab_id": "CMU_Intent",
+      "repo_path": "junwon_coffee_pour_episode_000011.h5",
+      "bundle_path": "episodes/CMU_Intent/junwon_coffee_pour_episode_000011.h5",
+      "video_files": {
+        "left": "episodes/CMU_Intent/videos/junwon_coffee_pour_episode_000011_left.mp4",
+        "right": "episodes/CMU_Intent/videos/junwon_coffee_pour_episode_000011_right.mp4",
+        "wrist": "episodes/CMU_Intent/videos/junwon_coffee_pour_episode_000011_wrist.mp4"
+      },
+      "episode_id": "junwon_coffee_pour_episode_000011",
+      "language_instruction": "pour the coffee beans into the cup",
+      "operator": "junwon",
+      "annotators": [
+        "ken",
+        "source_label"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:13:46.032138+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_02-100",
+      "dataset_repo": "OopsieData-Submissions/CMU_Intent",
+      "lab_id": "CMU_Intent",
+      "repo_path": "multisafe_diffusion_spill_converted_episode_000046.h5",
+      "bundle_path": "episodes/CMU_Intent/multisafe_diffusion_spill_converted_episode_000046.h5",
+      "video_files": {
+        "tactile": "episodes/CMU_Intent/videos/multisafe_diffusion_spill_converted_episode_000046_tactile.mp4",
+        "zed": "episodes/CMU_Intent/videos/multisafe_diffusion_spill_converted_episode_000046_zed.mp4"
+      },
+      "episode_id": "multisafe_diffusion_spill_converted_episode_000046",
+      "language_instruction": "pick up the bottle",
+      "operator": "kensuke",
+      "annotators": [
+        "kensuke"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "arpit",
+      "qa_updated_at": "2026-10-09T21:14:07.782950+00:00"
+    }
+  ]
+}
