@@ -12,8 +12,12 @@ checks run on that probe:
 - ``speed``: container fps differs from ``control_freq``, video duration differs
   from the trajectory duration, irregular frame timestamps, or the cameras of one
   episode disagreeing in duration.
-- ``frames``: frozen runs or many duplicate frames while the robot moves, image
-  jumps (sudden one-way changes), and single corrupted frames.
+- ``heavy_artifacts_and_desync``: frozen runs or many duplicate frames while the
+  robot moves, image jumps (sudden one-way changes), and single corrupted frames.
+- ``periodic_skips``: recording pauses at a regular period (e.g. during each
+  action-chunk inference) while the low-level controller keeps the robot moving,
+  seen as robot state that jumps at that period throughout the motion.
+  Episode-level, from the robot state.
 
 Frame differences are mean absolute differences of 0-255 grayscale values.
 """
@@ -32,11 +36,14 @@ import numpy as np
 from oopsie_backend.utils.action_qa import _finding, _params, _skip
 
 CATEGORY = "video"
-CHECKS = ("resolution", "decoding", "brightness", "speed", "frames")
+ARTIFACTS = "heavy_artifacts_and_desync"
+CHECKS = ("resolution", "decoding", "brightness", "speed", ARTIFACTS, "periodic_skips")
 ALL_CAMERAS = "all cameras"
 PROBE_SIZE = 96
 _PTS_RE = re.compile(r"pts_time:\s*([-+\d.eE]+)")
 _ERROR_RE = re.compile(r"\[(error|fatal)\]")
+SKIP_WINDOW = 8
+SKIP_MAX_PERIOD = 30
 
 
 @dataclass
@@ -110,13 +117,9 @@ def probe_video(path: Path, size: int = PROBE_SIZE) -> VideoProbe:
     )
 
 
-def robot_moving(states: dict[str, np.ndarray], moving_fraction_of_p95: float) -> np.ndarray | None:
-    """Per-step mask of steps where the robot state changes noticeably.
-
-    Uses all non-gripper states, each scaled by its standard deviation. A step
-    counts as moving above ``moving_fraction_of_p95`` of the episode's 95th
-    percentile step size. None without usable state.
-    """
+def state_step(states: dict[str, np.ndarray]) -> np.ndarray | None:
+    """Per-step size of the robot state change, over all non-gripper states, each
+    scaled by its standard deviation. None without usable state."""
     arrays = [
         a.reshape(len(a), -1)
         for k, a in states.items()
@@ -128,7 +131,11 @@ def robot_moving(states: dict[str, np.ndarray], moving_fraction_of_p95: float) -
     state = np.concatenate([a[:n] for a in arrays], axis=1)
     scale = state.std(axis=0)
     scale[~np.isfinite(scale) | (scale == 0)] = 1.0
-    step = np.nan_to_num(np.linalg.norm(np.diff(state / scale, axis=0), axis=1))
+    return np.nan_to_num(np.linalg.norm(np.diff(state / scale, axis=0), axis=1))
+
+
+def robot_moving(step: np.ndarray, moving_fraction_of_p95: float) -> np.ndarray:
+    """Mask of steps above ``moving_fraction_of_p95`` of the 95th percentile step."""
     p95 = np.percentile(step, 95)
     if p95 <= 0:
         return np.zeros(len(step), dtype=bool)
@@ -140,6 +147,27 @@ def _resample(mask: np.ndarray, n: int) -> np.ndarray:
         return mask[:n]
     idx = np.round(np.linspace(0, len(mask) - 1, n)).astype(int)
     return mask[idx]
+
+
+def _rolling_median(x: np.ndarray, w: int) -> np.ndarray:
+    padded = np.pad(x, w, mode="edge")
+    return np.median(np.lib.stride_tricks.sliding_window_view(padded, 2 * w + 1), axis=1)
+
+
+def _best_period(gaps: np.ndarray) -> tuple[int, float]:
+    """Period ``p`` that best explains the gaps between events, as the share of gaps
+    within one step of a multiple of ``p`` minus that share for random gaps (3/p).
+    Among periods within 0.05 of the best score, the one with most exact multiples wins."""
+    scored = []
+    for p in range(3, SKIP_MAX_PERIOD + 1):
+        r = gaps % p
+        near = float((np.minimum(r, p - r) <= 1).mean()) - 3.0 / p
+        scored.append((p, near, float((r == 0).mean())))
+    top = max(s[1] for s in scored)
+    if top <= 0:
+        return 0, 0.0
+    p, near, _ = max((s for s in scored if s[1] >= top - 0.05), key=lambda s: s[2])
+    return p, near
 
 
 def _longest_run(mask: np.ndarray) -> int:
@@ -272,6 +300,46 @@ def check_frames(
     return issues
 
 
+def check_periodic_skips(
+    step: np.ndarray,
+    moving: np.ndarray,
+    control_freq: float | None,
+    jump_ratio: float,
+    min_jumps: int,
+    min_period_score: float,
+    min_coverage: float,
+) -> list[str]:
+    """Recording skips that drop time from state and video alike: isolated one-step
+    jumps of the robot state at a regular period throughout the motion.
+
+    A jump is a step above ``jump_ratio`` times the local median step (window of
+    +-SKIP_WINDOW steps) while the robot moves, with no jump on either neighbour.
+    Flags when at least ``min_jumps`` jumps have a period score of at least
+    ``min_period_score`` and cover at least ``min_coverage`` of the periods while
+    the robot moves (jumps x period / moving steps).
+    """
+    if len(step) < 2 * SKIP_WINDOW + 1 or not moving.any():
+        return []
+    med = _rolling_median(step, SKIP_WINDOW)
+    jump = (step > jump_ratio * med) & moving
+    jump &= ~(np.r_[False, jump[:-1]] | np.r_[jump[1:], False])
+    idx = np.flatnonzero(jump)
+    if len(idx) < min_jumps:
+        return []
+    period, score = _best_period(np.diff(idx))
+    if score < min_period_score:
+        return []
+    coverage = len(idx) * period / moving.sum()
+    if coverage < min_coverage:
+        return []
+    every = f"{period} steps" + (f" ({period / control_freq:.1f}s)" if control_freq else "")
+    issue = (
+        f"periodic skips every {every}: {len(idx)} jumps in robot state, "
+        f"in {min(coverage, 1.0):.0%} of the periods while the robot moves"
+    )
+    return [issue]
+
+
 def run_video_checks(
     videos: dict[str, Path],
     states: dict[str, np.ndarray],
@@ -298,11 +366,16 @@ def run_video_checks(
 
     n_steps = next((len(a) for a in states.values() if a.ndim >= 1), None)
     moving = None
-    if cfg["frames"]["enabled"]:
-        moving = robot_moving(states, cfg["frames"]["moving_fraction_of_p95"])
-        if moving is None:
-            skips.append(_skip(CATEGORY, "frames", ALL_CAMERAS, "no_robot_state"))
-    frames_params = {k: v for k, v in _params(cfg["frames"]).items() if k != "moving_fraction_of_p95"}
+    artifacts_params = _params(cfg[ARTIFACTS])
+    moving_fraction = artifacts_params.pop("moving_fraction_of_p95")
+    state_tests = [t for t in (ARTIFACTS, "periodic_skips") if cfg[t]["enabled"]]
+    step = state_step(states) if state_tests else None
+    if state_tests and step is None:
+        skips += [_skip(CATEGORY, t, ALL_CAMERAS, "no_robot_state") for t in state_tests]
+    if step is not None:
+        moving = robot_moving(step, moving_fraction)
+        if cfg["periodic_skips"]["enabled"]:
+            add("periodic_skips", ALL_CAMERAS, check_periodic_skips(step, moving, control_freq, **_params(cfg["periodic_skips"])))
 
     durations: dict[str, float] = {}
     for camera, path in sorted(videos.items()):
@@ -319,9 +392,9 @@ def run_video_checks(
             add("brightness", camera, check_brightness(p, **_params(cfg["brightness"])))
         if cfg["speed"]["enabled"]:
             add("speed", camera, check_speed(p, n_steps, control_freq, **_params(cfg["speed"])))
-        if cfg["frames"]["enabled"]:
+        if cfg[ARTIFACTS]["enabled"]:
             rate = p.fps or control_freq or 0.0
-            add("frames", camera, check_frames(p, moving, rate, **frames_params))
+            add(ARTIFACTS, camera, check_frames(p, moving, rate, **artifacts_params))
         if p.duration is not None:
             durations[camera] = p.duration
 

@@ -52,7 +52,8 @@ CHECK_DESCRIPTIONS = {
     ("video", "decoding"): "A camera video is missing, fails to decode, or decodes to the wrong frame count",
     ("video", "brightness"): "A camera video is too dark or too bright",
     ("video", "speed"): "Video timing doesn't match control_freq or the trajectory length, or cameras disagree",
-    ("video", "frames"): "Frozen or duplicated frames while the robot moves, image jumps, or corrupted frames",
+    ("video", "heavy_artifacts_and_desync"): "Frozen or duplicated frames while the robot moves, image jumps, or corrupted frames",
+    ("video", "periodic_skips"): "The recording skips time at a regular period (robot state jumps throughout the motion)",
 }
 
 MAX_ROWS_PER_CHECK = 50

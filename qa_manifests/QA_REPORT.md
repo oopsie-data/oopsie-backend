@@ -1,37 +1,42 @@
 # QA spot check report
 
-Source: the 10 returned manifests in `qa_manifests/` (980 episodes).
+Source: the 11 returned manifests in `qa_manifests/` (`qa_bundle_01.json` … `qa_bundle_11.json`; 1,080 episodes from 54 HF repos). Labs are named by HF repo; where an episode's `lab_id` differs, see [Metadata inconsistencies](#metadata-inconsistencies).
 
 ## Coverage
 
-| Bundle | Reviewer | Episodes | Notes "ok" | Notes blank | Flagged |
-|---|---|---|---|---|---|
-| 01 | Karen | 100 | 79 | 0 | 21 |
-| 03 | Claas | 100 | 80 | 0 | 20 |
-| 04 | rw435 | 100 | 0 | 86 | 14 |
-| 05 | MarcelHussing | 100 | 44 | 0 | 56 |
-| 06 | maxrudolph | 100 | 53 | 0 | 47 |
-| 07 | Carl | 100 | 92 | 0 | 8 |
-| 08 | siddhant | 100 | 70 | 0 | 30 |
-| 09 | Maria | 100 | 87 | 0 | 13 |
-| 10 | zhouzypaul | 100 | 0 | 61 | 39 |
-| 11 | Yifan | 80 | 65 | 0 | 15 |
+| Bundle | Reviewer | Episodes | Notes "ok" | Notes blank | Flagged | Review time |
+|---|---|---|---|---|---|---|
+| 01 | Karen | 100 | 79 | 0 | 21 | 31 min |
+| 02 | arpit | 100 | 100 | 0 | 0 | 6 min |
+| 03 | Claas | 100 | 80 | 0 | 20 | 156 min |
+| 04 | rw435 | 100 | 0 | 86 | 14 | 13 min |
+| 05 | MarcelHussing | 100 | 44 | 0 | 56 | 61 min |
+| 06 | maxrudolph | 100 | 53 | 0 | 47 | 65 min |
+| 07 | Carl | 100 | 92 | 0 | 8 | 24 min |
+| 08 | siddhant | 100 | 70 | 0 | 30 | 49 min |
+| 09 | Maria | 100 | 87 | 0 | 13 | 62 min |
+| 10 | zhouzypaul | 100 | 0 | 61 | 39 | 42 min |
+| 11 | Yifan | 80 | 66 | 0 | 14 | 55 min |
 
-- **Bundle 02 is missing.**
+Review time is the span between the first and last saved note.
+
+- **Bundle 02 was likely not reviewed in detail:** all 100 episodes are marked "ok" within 6 minutes, with a median of 1.5 s between saves (other bundles: 5–28 s). Its labs (Berkeley_RAIL, Brown_ST, CMU_Aire, CMU_Auton, CMU_Intent) are therefore unconfirmed rather than clean.
 - **Blank notes:** the reviewers of bundles 04 and 10 left notes empty rather than writing "ok". This probably means "ok", but it is unconfirmed.
-- **Reviewer strictness varies**, from 8 flags (Carl) to 56 (MarcelHussing). Flag counts therefore can't be compared directly across bundles.
+- **Reviewer strictness varies**, from 8 flags (Carl) to 56 (MarcelHussing), excluding bundle 02. Flag counts therefore can't be compared directly across bundles.
 - **Reviewer fields are consistent:** every episode's `qa_reviewer` matches its bundle's reviewer, and no episode appears twice.
 
 ## Clean labs (no flags)
 
 Araya, Berkeley_HybridRobotics, GT_PAIR, GT_RL2, INRIA_SC, Princeton_PRISM, UNC_MD, WUSTL_MIG.
 
+The five labs of bundle 02 also have no flags, but see the coverage notes above.
+
 ## Systematic problems at the lab level
 
 | Lab | Flagged | Issue |
 |---|---|---|
 | MIT_Improbable | 20/20 | Global camera is rotated. The failure notes are confusing, and several videos are cut short, so the success/failure label can't be checked. |
-| VUA_KL (`lab_id` UA_KL + VUA_KL) | 13/20 | Camera labels are swapped; one video is choppy. |
+| VUA_KL (`lab_id` UA_KL + VUA_KL) | 12/20 | Camera labels are swapped; one video is choppy. |
 | NUS_CLeAR | 18/20 | Descriptions look generated ("Push 4 of 7 in an object-centric push-planner run…"). Instructions contain "watch the video carefully" and an undefined "goal pose", and objects are named wrong. |
 | Stanford_JW / Stanford_SIALab | 10/20 each | Failures have no failure annotation (Stanford_MSL has 1 such case). |
 | KAIST_KL | 17/20 | Low resolution throughout; humans in the frame; vague instructions ("designated position", "PET" written as "pet"). |
@@ -49,7 +54,7 @@ Araya, Berkeley_HybridRobotics, GT_PAIR, GT_RL2, INRIA_SC, Princeton_PRISM, UNC_
 ## Problems across labs
 
 - **Privacy:** MIT_CLEAR has 2 episodes with unblurred faces in the wrist camera. Bystanders appear in NYU_Clark, NYU_AI4CE, KAIST_KL and Stanford_FFL; in Stanford_FFL a hand touches the object.
-- **Videos cut early or with idle padding:** NYU_AI4CE, PSU_FMC, USC_Lira, Berkeley_RAIL and UofT_TISL.
+- **Videos cut early or with idle padding:** NYU_AI4CE, PSU_FMC, USC_Lira, AutoEval_origin and UofT_TISL.
 - **Corrupted frames:** Stanford_FFL (2).
 - **Instruction doesn't match the scene:**
   - Armnet: there is no pink lamp.
@@ -89,7 +94,7 @@ The video checks of the action QA (`docs/video-checks.md`) were run on the 200 e
 | ETH_RK 03-046 | oakd_side_view | 22% duplicate frames while the robot moves; not verified visually | ok |
 | ETH_RK 03-060 | oakd_side_view | Image jump at 8.4 s; false positive (an object enters view between two frames) | ok |
 
-- **Low resolution:** every camera of Araya, AutoEval_origin (256×256) and Berkeley_HybridRobotics is flagged, as are some cameras of CMU_RPAD (320×240) and ETH_RK (224×224). Reviewers raised resolution only for Berkeley_RAIL (AutoEval_origin).
+- **Low resolution:** every camera of Araya, AutoEval_origin (256×256) and Berkeley_HybridRobotics is flagged, as are some cameras of CMU_RPAD (320×240) and ETH_RK (224×224). Reviewers raised resolution only for AutoEval_origin.
 - **No findings for decoding or brightness** in either bundle.
 - **Not detected:**
   - The Charles_UFAL "sped up" videos have consistent fps, frame counts and trajectory lengths, so the speed check cannot catch them.
@@ -97,7 +102,7 @@ The video checks of the action QA (`docs/video-checks.md`) were run on the 200 e
 
 ## Follow-ups
 
-1. Get the bundle 02 manifest back from its reviewer.
+1. Re-review bundle 02, or at least spot-check its five labs.
 2. Contact the labs with systematic issues: MIT_Improbable, VUA_KL, NUS_CLeAR, Stanford_JW, Stanford_SIALab, BONN_MB, ETH_RK and UTA_RPL.
 3. Check MIT_CLEAR for unblurred faces before release.
 4. Decide whether disputed category/severity calls (e.g. UCSD_ARCLAB) should change the labels or only be recorded.

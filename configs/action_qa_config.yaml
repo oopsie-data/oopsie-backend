@@ -147,7 +147,7 @@ video:
     duration_tol_s: 0.5  # flag if video and trajectory durations (or cameras) differ by more than this
     duration_rel_tol: 0.05  # same, as a fraction of the trajectory duration (the larger tolerance applies)
     frame_interval_cv: 0.1  # flag if frame intervals vary more than this (std / mean)
-  frames:  # checks for frozen, duplicated, jumping or corrupted frames
+  heavy_artifacts_and_desync:  # checks for frozen, duplicated, jumping or corrupted frames
     enabled: true
     moving_fraction_of_p95: 0.1  # a step counts as robot motion above this fraction of the episode's 95th-percentile state change
     static_diff: 0.05  # frames differing less than this count as static
@@ -158,6 +158,12 @@ video:
     jump_ratio: 20.0  # ... and this many times the median difference of the surrounding second
     glitch_diff: 20.0  # a corrupted frame differs at least this much from both neighbours
     glitch_ratio: 4.0  # ... and the neighbours differ this many times less from each other
+  periodic_skips:  # checks for recording skips that drop time from state and video at a regular period (from the robot state)
+    enabled: true
+    jump_ratio: 3.0  # a jump is a robot-state step this many times the local median step, with no jump on either neighbour
+    min_jumps: 6  # flag only with at least this many jumps
+    min_period_score: 0.4  # ... spaced this regularly (share of gaps at a multiple of the period, minus chance)
+    min_coverage: 0.6  # ... in at least this share of the periods while the robot moves (jumps x period / moving steps)
 
 sampling:
   default_episode_limit: 100  # max episodes checked per dataset; --limit 0 means unlimited
