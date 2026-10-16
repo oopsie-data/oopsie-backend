@@ -17,6 +17,10 @@ DEFAULT_CHECKS: dict[str, dict[str, dict]] = {
     "general": {
         "duplicate_pairs": {"enabled": False, "atol": 1.0e-9, "rtol": 0.0},
         "length_mismatch": {"enabled": True},
+        "action_chunk_shape": {"enabled": True},
+        "constant_action": {"enabled": True, "atol": 1.0e-9},
+        "command_rate": {"enabled": True, "atol": 1.0e-9, "min_holds": 10, "min_fraction": 0.8},
+        "required_state_keys": {"enabled": True},
         "placeholder_metadata": {
             "enabled": True,
             "placeholder_values": [
@@ -96,8 +100,22 @@ DEFAULT_CHECKS: dict[str, dict[str, dict]] = {
         "smoothness": {"enabled": True, "max_sign_flip_rate": 0.3},
     },
     "video": {
-        "resolution": {"enabled": True, "min_short_side": 360},
+        # Ordered as the report shows them: the critical checks first.
         "decoding": {"enabled": True, "max_frame_count_diff": 1},
+        "corrupted_frames": {"enabled": True, "glitch_diff": 20.0, "glitch_ratio": 4.0},
+        "state_jump": {"enabled": True, "jump_ratio": 10.0, "min_fraction_of_p95": 1.0},
+        "video_jump": {"enabled": True, "jump_diff": 40.0, "jump_ratio": 20.0, "state_jump_ratio": 5.0},
+        "recording_gap": {"enabled": True, "video_jump_ratio": 5.0},
+        "periodic_skips": {
+            "enabled": True,
+            "jump_ratio": 3.0,
+            "min_jumps": 6,
+            "min_period_score": 0.4,
+            "min_coverage": 0.6,
+        },
+        "choppy": {"enabled": True, "duplicate_diff": 0.01, "choppy_fraction": 0.2},
+        "frozen": {"enabled": True, "static_diff": 0.05, "frozen_s": 1.0},
+        "resolution": {"enabled": True, "min_short_side": 360},
         "brightness": {
             "enabled": True,
             "dark_median": 30.0,
@@ -106,36 +124,90 @@ DEFAULT_CHECKS: dict[str, dict[str, dict]] = {
             "bright_frame": 240.0,
             "extreme_frame_fraction": 0.1,
         },
-        "speed": {
-            "enabled": True,
-            "fps_rel_tol": 0.05,
-            "duration_tol_s": 0.5,
-            "duration_rel_tol": 0.05,
-            "frame_interval_cv": 0.1,
-        },
-        "heavy_artifacts_and_desync": {
-            "enabled": True,
-            "moving_fraction_of_p95": 0.1,
-            "static_diff": 0.05,
-            "duplicate_diff": 0.01,
-            "frozen_s": 1.0,
-            "choppy_fraction": 0.2,
-            "jump_diff": 40.0,
-            "jump_ratio": 20.0,
-            "glitch_diff": 20.0,
-            "glitch_ratio": 4.0,
-        },
-        "periodic_skips": {
-            "enabled": True,
-            "jump_ratio": 3.0,
-            "min_jumps": 6,
-            "min_period_score": 0.4,
-            "min_coverage": 0.6,
-        },
+        "fps": {"enabled": True, "fps_rel_tol": 0.05},
+        "duration": {"enabled": True, "duration_tol_s": 0.5, "duration_rel_tol": 0.05},
+        "camera_duration_mismatch": {"enabled": True, "duration_tol_s": 0.5},
     },
 }
 
 _NON_CHECK_SECTIONS = ("sampling", "scope", "run", "report")
+
+# How each check's findings appear in per-lab feedback, as (confidence, action):
+#   confidence - "high_confidence": a flag is a real problem; "lower_confidence": a heuristic that can flag fine episodes or miss real issues.
+#   action - "fix_and_resubmit": the lab fixes the data and resubmits; "confirm_and_discuss": the lab
+#   confirms the issue and talks to us (unclear findings, or real ones in already-collected data that
+#   can't be re-recorded); "exclude": left out of lab feedback.
+# Overridden per check by ``confidence:`` / ``action:`` in the YAML. A check missing here defaults to
+# DEFAULT_FEEDBACK, so a new check never reaches labs as a definite claim.
+CONFIDENCE_LEVELS = ("high_confidence", "lower_confidence")
+LAB_ACTIONS = ("fix_and_resubmit", "confirm_and_discuss", "exclude")
+DEFAULT_FEEDBACK = ("lower_confidence", "confirm_and_discuss")
+DEFAULT_LAB_FEEDBACK: dict[str, dict[str, tuple[str, str]]] = {
+    "general": {
+        "duplicate_pairs": ("high_confidence", "fix_and_resubmit"),
+        "length_mismatch": ("high_confidence", "fix_and_resubmit"),
+        "action_chunk_shape": ("high_confidence", "fix_and_resubmit"),
+        "constant_action": ("high_confidence", "confirm_and_discuss"),
+        "command_rate": ("lower_confidence", "confirm_and_discuss"),
+        "required_state_keys": ("high_confidence", "fix_and_resubmit"),
+        "placeholder_metadata": ("high_confidence", "fix_and_resubmit"),
+        "action_copies_state": ("lower_confidence", "confirm_and_discuss"),
+        "scale_consistency": ("lower_confidence", "exclude"),
+        "tracking_residual": ("lower_confidence", "exclude"),
+        "delta_detection": ("lower_confidence", "exclude"),
+    },
+    "joint_position": {
+        "delta_detection": ("high_confidence", "fix_and_resubmit"),
+        "tracking": ("lower_confidence", "confirm_and_discuss"),
+        "joint_names": ("lower_confidence", "confirm_and_discuss"),
+        "dof": ("high_confidence", "fix_and_resubmit"),
+        "radians": ("high_confidence", "fix_and_resubmit"),
+        "step_jump": ("lower_confidence", "confirm_and_discuss"),
+        "gripper_in_joints": ("high_confidence", "fix_and_resubmit"),
+    },
+    "joint_velocity": {
+        "dof": ("high_confidence", "fix_and_resubmit"),
+        "tracking": ("lower_confidence", "confirm_and_discuss"),
+        "looks_like_position": ("high_confidence", "fix_and_resubmit"),
+        "normalized_range": ("lower_confidence", "confirm_and_discuss"),
+        "speed_limit": ("lower_confidence", "confirm_and_discuss"),
+        "smoothness": ("lower_confidence", "exclude"),
+    },
+    "cartesian_position": {
+        "biarm_ordering": ("lower_confidence", "confirm_and_discuss"),
+        "delta_detection": ("high_confidence", "fix_and_resubmit"),
+        "pose_tracking": ("lower_confidence", "confirm_and_discuss"),
+        "position_units": ("high_confidence", "fix_and_resubmit"),
+        "quaternion_shape": ("high_confidence", "fix_and_resubmit"),
+        "quaternion_sign_flip": ("lower_confidence", "exclude"),
+        "rotation_jump": ("lower_confidence", "confirm_and_discuss"),
+        "quaternion_scalar_order": ("lower_confidence", "exclude"),
+    },
+    "cartesian_velocity": {
+        "shape": ("high_confidence", "fix_and_resubmit"),
+        "speed_limit": ("lower_confidence", "confirm_and_discuss"),
+        "normalized_range": ("lower_confidence", "confirm_and_discuss"),
+        "tracking": ("lower_confidence", "confirm_and_discuss"),
+        "linear_angular_order": ("lower_confidence", "confirm_and_discuss"),
+        "looks_like_position": ("high_confidence", "fix_and_resubmit"),
+        "smoothness": ("lower_confidence", "exclude"),
+    },
+    "video": {
+        "resolution": ("lower_confidence", "confirm_and_discuss"),
+        "decoding": ("high_confidence", "fix_and_resubmit"),
+        "brightness": ("lower_confidence", "exclude"),
+        "fps": ("high_confidence", "confirm_and_discuss"),
+        "duration": ("high_confidence", "confirm_and_discuss"),
+        "camera_duration_mismatch": ("high_confidence", "confirm_and_discuss"),
+        "corrupted_frames": ("lower_confidence", "confirm_and_discuss"),
+        "video_jump": ("lower_confidence", "confirm_and_discuss"),
+        "choppy": ("lower_confidence", "confirm_and_discuss"),
+        "frozen": ("lower_confidence", "confirm_and_discuss"),
+        "periodic_skips": ("lower_confidence", "confirm_and_discuss"),
+        "recording_gap": ("lower_confidence", "confirm_and_discuss"),
+        "state_jump": ("lower_confidence", "confirm_and_discuss"),
+    },
+}
 
 
 def _resolve_path(value: str | None) -> Path | None:
@@ -154,24 +226,53 @@ def _reject_unknown(where: str, given, known) -> None:
         raise ValueError(f"action_qa_config.yaml: unknown {where}: {unknown}")
 
 
-def _build_checks(raw: dict) -> dict:
+# Category-level settings that aren't checks, with their defaults. Returned under
+# CONFIG["<category>_settings"], e.g. CONFIG["video_settings"]["ignore_cameras"].
+CATEGORY_SETTINGS: dict[str, dict] = {
+    "video": {"ignore_cameras": [], "moving_fraction_of_p95": 0.1},
+}
+
+
+def _build_checks(raw: dict) -> tuple[dict, dict, dict]:
+    """Returns ``(checks, lab_feedback, settings)``: per-check parameters, the per-check
+    ``{"confidence", "action"}`` keyed ``"category.check"`` (kept apart so check functions
+    never see it), and the category-level settings from CATEGORY_SETTINGS."""
     checks: dict[str, dict] = {}
+    lab_feedback: dict[str, dict[str, str]] = {}
+    settings: dict[str, dict] = {}
     for category, defaults in DEFAULT_CHECKS.items():
         raw_category = dict(raw.get(category) or {})
         # Optional category-level master switch: ``enabled: false`` turns off every check
         # in the category, whatever their own ``enabled`` says.
         category_enabled = bool(raw_category.pop("enabled", True))
+        if category in CATEGORY_SETTINGS:
+            settings[f"{category}_settings"] = {
+                name: type(default)(raw_category.pop(name, default) or default)
+                for name, default in CATEGORY_SETTINGS[category].items()
+            }
         _reject_unknown(f"check(s) under {category!r}", raw_category, defaults)
         checks[category] = {}
         for check, params in defaults.items():
-            raw_check = raw_category.get(check) or {}
+            raw_check = dict(raw_category.get(check) or {})
+            default_conf, default_action = DEFAULT_LAB_FEEDBACK.get(category, {}).get(check, DEFAULT_FEEDBACK)
+            feedback = {
+                "confidence": str(raw_check.pop("confidence", default_conf)),
+                "action": str(raw_check.pop("action", default_action)),
+            }
+            for field_name, allowed in (("confidence", CONFIDENCE_LEVELS), ("action", LAB_ACTIONS)):
+                if feedback[field_name] not in allowed:
+                    raise ValueError(
+                        f"action_qa_config.yaml: {category}.{check}.{field_name} must be one of {allowed}, "
+                        f"got {feedback[field_name]!r}"
+                    )
+            lab_feedback[f"{category}.{check}"] = feedback
             _reject_unknown(f"parameter(s) under {category}.{check}", raw_check, params)
             checks[category][check] = {
                 name: type(default)(raw_check.get(name, default)) for name, default in params.items()
             }
             if not category_enabled:
                 checks[category][check]["enabled"] = False
-    return checks
+    return checks, lab_feedback, settings
 
 
 def _build_config(raw: dict) -> dict:
@@ -188,10 +289,18 @@ def _build_config(raw: dict) -> dict:
         [f"{cat}.{check}" for cat, checks in DEFAULT_CHECKS.items() for check in checks],
     )
 
+    checks, lab_feedback, settings = _build_checks(raw)
     return {
-        **_build_checks(raw),
+        **checks,
+        **settings,
+        "lab_feedback": lab_feedback,
         "sampling": {
             "default_episode_limit": int(sampling_raw.get("default_episode_limit", 200)),
+            # Of each dataset's sampled episodes, how many also get the (slow) video checks;
+            # None = all of them.
+            "video_episode_limit": (
+                int(sampling_raw["video_episode_limit"]) if sampling_raw.get("video_episode_limit") is not None else None
+            ),
             "random": bool(sampling_raw.get("random", True)),
             "random_seed": (
                 int(sampling_raw["random_seed"]) if sampling_raw.get("random_seed") is not None else None

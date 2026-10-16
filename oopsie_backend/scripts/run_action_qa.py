@@ -60,11 +60,12 @@ def _merge(a: dict | None, b: dict) -> dict:
     return {key: a[key] + b[key] for key in ("findings", "skips", "checked")}
 
 
-def _check_episode(job: tuple[Path, str], qa_config: dict) -> tuple[dict | None, str | None]:
-    """Action and video QA for one episode. Returns ``(result, error)``; ``result`` is
-    None when nothing applies (no declared action space and video checks disabled).
+def _check_episode(job: tuple[Path, str, bool], qa_config: dict) -> tuple[dict | None, str | None]:
+    """Action and video QA for one episode; the video checks only when ``job``'s flag
+    says so (see sampling.video_episode_limit). Returns ``(result, error)``; ``result``
+    is None when nothing applies (no declared action space and no video checks).
     """
-    path, repo_path = job
+    path, repo_path, run_video = job
     try:
         with h5py.File(path, "r") as f:
             actions, states, profile = load_action_state_arrays(f)
@@ -73,10 +74,13 @@ def _check_episode(job: tuple[Path, str], qa_config: dict) -> tuple[dict | None,
         if metadata["checked"]:
             result = _merge(result, metadata)
         video_cfg = qa_config["video"]
-        if any(cfg["enabled"] for cfg in video_cfg.values()):
+        if run_video and any(cfg["enabled"] for cfg in video_cfg.values()):
             videos = episode_videos(path, repo_path)
             result = _merge(
-                result, run_video_checks(videos, states, profile_control_freq(profile), video_cfg)
+                result, run_video_checks(
+                    videos, states, profile_control_freq(profile), video_cfg,
+                    qa_config["video_settings"],
+                )
             )
     except Exception as exc:
         return None, f"{type(exc).__name__}: {exc}"
@@ -102,6 +106,15 @@ def main(argv: list[str] | None = None) -> int:
             "Max episodes checked per dataset, first N (default: "
             "sampling.default_episode_limit from action_qa_config.yaml). "
             "0 means unlimited."
+        ),
+    )
+    parser.add_argument(
+        "--video-limit",
+        type=int,
+        default=None,
+        help=(
+            "Of each dataset's checked episodes, how many also get the video checks (default: "
+            "sampling.video_episode_limit from action_qa_config.yaml). 0 means all of them."
         ),
     )
     parser.add_argument(
@@ -150,6 +163,8 @@ def main(argv: list[str] | None = None) -> int:
 
     per_dataset_limit = args.limit if args.limit is not None else qa_config["sampling"]["default_episode_limit"]
     per_dataset_limit = None if per_dataset_limit in (0, None) else per_dataset_limit
+    video_limit = args.video_limit if args.video_limit is not None else qa_config["sampling"]["video_episode_limit"]
+    video_limit = None if video_limit in (0, None) else video_limit
     only_dataset = set(only_dataset_list) if only_dataset_list else None
     scope_cfg = qa_config["scope"]
 
@@ -189,6 +204,7 @@ def main(argv: list[str] | None = None) -> int:
         total_planned = min(total_planned, max_total_episodes)
     sample_kind = "random" if sampling_cfg["random"] else "first-N sorted"
     _log(f"Will check up to {total_planned} episode(s) across {len(planned)} dataset(s) ({sample_kind} sample)")
+    _log(f"Video checks on {'all of them' if video_limit is None else f'up to {video_limit} per dataset'}")
 
     check_categories = {
         category: [test for test, cfg in qa_config[category].items() if cfg["enabled"]]
@@ -216,7 +232,12 @@ def main(argv: list[str] | None = None) -> int:
             ds_skips = {cat: {t: Counter() for t in tests} for cat, tests in check_categories.items()}
 
             _log(f"[{index}/{len(planned)}] {dataset_repo}: {len(files)} episode(s)")
-            jobs = [(path, repo_path) for repo_path, path in files]
+            # The sample is already in random order (or sorted, if sampling.random is off),
+            # so its first video_limit episodes are a fair subset for the video checks.
+            jobs = [
+                (path, repo_path, video_limit is None or i < video_limit)
+                for i, (repo_path, path) in enumerate(files)
+            ]
             results = pool.map(partial(_check_episode, qa_config=qa_config), jobs, chunksize=2)
             for i, ((repo_path, path), (result, error)) in enumerate(zip(files, results), 1):
                 checked_total += 1
@@ -282,6 +303,12 @@ def main(argv: list[str] | None = None) -> int:
         "scope": f"local:{data_dir}",
         "config_snapshot": {
             **{k: v for k, v in qa_config.items() if k != "run"},
+            # The limits actually used, which --limit / --video-limit may have overridden.
+            "sampling": {
+                **qa_config["sampling"],
+                "default_episode_limit": per_dataset_limit or 0,
+                "video_episode_limit": video_limit or 0,
+            },
             "run": {**qa_config["run"], "data_dir": str(data_dir), "output": str(output_path)},
         },
         "totals": dict(totals),

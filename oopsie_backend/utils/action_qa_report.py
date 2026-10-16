@@ -16,6 +16,10 @@ CHECK_DESCRIPTIONS = {
     ("general", "duplicate_pairs"): "Two different action types hold the same values (a likely copy-paste bug)",
     ("general", "length_mismatch"): "An action and its matching robot state have different numbers of steps",
     ("general", "action_copies_state"): "Actions are exact copies of the recorded state, not real commands",
+    ("general", "action_chunk_shape"): "An arm action step holds a policy's whole action chunk instead of the one action executed",
+    ("general", "constant_action"): "An arm action never changes over the whole episode (stuck policy or placeholder actions)",
+    ("general", "command_rate"): "Each arm action is held for the same N steps: commands arrive at control_freq / N, not the declared control_freq",
+    ("general", "required_state_keys"): "A state the action space needs is missing (gripper_position always; joint/cartesian position for joint/cartesian actions)",
     ("general", "placeholder_metadata"): "Operator, policy, robot or gripper name is blank or a template placeholder",
     ("general", "scale_consistency"): "Gripper position actions are on a very different scale from the state",
     ("general", "tracking_residual"): "The commanded gripper position doesn't match where the gripper ends up",
@@ -51,8 +55,15 @@ CHECK_DESCRIPTIONS = {
     ("video", "resolution"): "A camera video's shorter side is below the minimum resolution",
     ("video", "decoding"): "A camera video is missing, fails to decode, or decodes to the wrong frame count",
     ("video", "brightness"): "A camera video is too dark or too bright",
-    ("video", "speed"): "Video timing doesn't match control_freq or the trajectory length, or cameras disagree",
-    ("video", "heavy_artifacts_and_desync"): "Frozen or duplicated frames while the robot moves, image jumps, or corrupted frames",
+    ("video", "fps"): "The video's fps header doesn't match control_freq (playback speed; frames may still align)",
+    ("video", "duration"): "The video is longer or shorter than the trajectory: frame count doesn't match the number of steps",
+    ("video", "camera_duration_mismatch"): "The cameras of one episode have different durations",
+    ("video", "corrupted_frames"): "A single frame is unlike both its neighbours (decoding or recording glitch)",
+    ("video", "video_jump"): "The image changes suddenly while the robot state changes smoothly (cut, dropped frames, or video out of step)",
+    ("video", "choppy"): "The video repeats frames while the robot moves",
+    ("video", "frozen"): "The video stops changing for a while as the robot moves",
+    ("video", "recording_gap"): "Robot state and video both jump at the same moment: time looks missing from the recording",
+    ("video", "state_jump"): "Robot state jumps in one step while the video doesn't: a state glitch, or state and video out of step",
     ("video", "periodic_skips"): "The recording skips time at a regular period (robot state jumps throughout the motion)",
 }
 
@@ -107,6 +118,35 @@ details td.det { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; wo
 :target { outline: 2px solid var(--link); }
 a { color: var(--link); }
 pre { margin: 0; padding: .7rem; overflow-x: auto; font-size: .8rem; }
+#panel { position: fixed; top: 0; right: 0; bottom: 0; width: min(960px, 100vw); background: var(--surface);
+  border-left: 1px solid var(--border); box-shadow: -6px 0 24px rgba(0,0,0,.18); z-index: 20; display: none;
+  flex-direction: column; }
+#panel.open { display: flex; }
+#panel header { display: flex; gap: .6rem; align-items: center; padding: .7rem 1rem; border-bottom: 1px solid var(--border); }
+#panel header h3 { margin: 0; flex: 1; font-size: 1rem; }
+#panel .body { overflow: auto; padding: .8rem 1rem 2rem; }
+#panel button { font: inherit; padding: .25rem .6rem; border: 1px solid var(--border); border-radius: 6px;
+  background: var(--surface); color: var(--ink); cursor: pointer; }
+.ep-list { list-style: none; margin: 0 0 1rem; padding: 0; }
+.ep-list li { padding: .4rem .5rem; border: 1px solid var(--border); border-radius: 6px; margin: .3rem 0; cursor: pointer; }
+.ep-list li:hover, .ep-list li.active { border-color: var(--link); }
+.ep-list li .ep { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .82rem; }
+.ep-list li .det { color: var(--muted); font-size: .8rem; }
+.ep-list li.v-real { border-left: 4px solid rgb(var(--bad-rgb)); } .ep-list li.v-fine { border-left: 4px solid #16a34a; }
+.ep-list li.v-unsure { border-left: 4px solid #d97706; }
+.vids { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: .6rem; margin: .6rem 0; }
+.vids figure { margin: 0; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+.vids figure.flagged { border: 2px solid rgb(var(--bad-rgb)); }
+.vids video { width: 100%; display: block; background: #000; }
+.vids figcaption { font-size: .78rem; padding: .2rem .4rem; }
+.chart { border: 1px solid var(--border); border-radius: 6px; padding: .4rem; margin: .5rem 0; }
+.chart svg { width: 100%; height: 190px; display: block; }
+.chart .ttl { font-size: .82rem; font-weight: 600; }
+.chart .lg { font-size: .75rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: .8rem; }
+.verdict button.on { color: #fff; border-color: transparent; }
+.verdict button[data-v=real].on { background: rgb(var(--bad-rgb)); } .verdict button[data-v=fine].on { background: #16a34a; }
+.verdict button[data-v=unsure].on { background: #d97706; }
+.vals { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .78rem; white-space: pre-wrap; }
 """
 
 # Opens the <details> a grid cell links to; show/hide a category's grid columns.
@@ -117,6 +157,141 @@ function openTarget() {
 }
 window.addEventListener("hashchange", openTarget);
 openTarget();
+
+// ---- Evidence panel: a red cell lists its flagged episodes; an episode loads its
+// evidence (videos, charts, values) from serve_action_qa_report.py.
+const CELL_EPISODES = JSON.parse(document.getElementById("cell-episodes").textContent);
+const VKEY = "qa_report_verdicts_v1";
+let verdicts = {};
+try { verdicts = JSON.parse(localStorage.getItem(VKEY) || "{}"); } catch (e) {}
+const saveVerdicts = () => { try { localStorage.setItem(VKEY, JSON.stringify(verdicts)); } catch (e) {} };
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+const panel = document.getElementById("panel"), pBody = panel.querySelector(".body"), pTitle = panel.querySelector("h3");
+let current = null;  // {cell: [dataset, category, test], episodes, index}
+// Server URLs built from origin + path: a page opened as http://user:pass@host/ would
+// otherwise hand its credentials to every request, which browsers refuse.
+const serverUrl = rel => new URL(rel, location.origin + location.pathname).href;
+
+document.getElementById("grid").addEventListener("click", e => {
+  const a = e.target.closest("a[data-cell]");
+  if (!a) return;
+  e.preventDefault();
+  const [dataset, category, test] = a.dataset.cell.split("|");
+  current = {cell: [dataset, category, test], episodes: CELL_EPISODES[a.dataset.cell] || [], index: -1};
+  pTitle.textContent = `${dataset.split("/").pop()} · ${category}.${test} · ${current.episodes.length} flagged episode(s)`;
+  panel.classList.add("open");
+  renderList();
+});
+panel.querySelector("[data-act=close]").addEventListener("click", () => panel.classList.remove("open"));
+document.addEventListener("keydown", e => { if (e.key === "Escape") panel.classList.remove("open"); });
+panel.querySelector("[data-act=export]").addEventListener("click", exportVerdicts);
+
+const vkey = (ep) => `${current.cell[0]}|${ep.p}|${current.cell[1]}.${current.cell[2]}`;
+
+function renderList() {
+  const items = current.episodes.map((ep, i) => {
+    const v = verdicts[vkey(ep)];
+    return `<li data-i="${i}" class="${i === current.index ? "active" : ""} ${v ? "v-" + v : ""}">
+      <div class="ep">${esc(ep.id || ep.p)}</div><div class="det">${esc(ep.d)}</div></li>`;
+  }).join("");
+  pBody.innerHTML = `<ul class="ep-list">${items || "<li>No episode details stored for this cell.</li>"}</ul><div id="evidence"></div>`;
+  pBody.querySelectorAll(".ep-list li[data-i]").forEach(li => li.addEventListener("click", () => showEvidence(+li.dataset.i)));
+}
+
+async function showEvidence(i) {
+  current.index = i;
+  renderList();
+  const ep = current.episodes[i], box = document.getElementById("evidence");
+  box.innerHTML = `<p class="muted">Loading evidence for ${esc(ep.id || ep.p)}…</p>`;
+  box.scrollIntoView({block: "start"});
+  const [dataset, category, test] = current.cell;
+  const q = new URLSearchParams({dataset, repo_path: ep.p, category, test});
+  let ev;
+  try {
+    const r = await fetch(serverUrl("evidence?" + q), {credentials: "same-origin"});
+    ev = await r.json();
+    if (!r.ok) throw new Error(ev.error || r.status);
+  } catch (err) {
+    box.innerHTML = `<p class="muted">Couldn't load evidence (${esc(err.message)}). Open this report through
+      <code>serve_action_qa_report.py</code> to see videos and charts.</p>`;
+    return;
+  }
+  const v = verdicts[vkey(ep)];
+  const findings = (ev.findings || []).map(f => esc(f.issue || ep.d)).filter(Boolean);
+  const seek = ev.seek_s != null ? Math.max(ev.seek_s - 1, 0) : 0;
+  const vids = (ev.videos || []).map(x => `<figure class="${x.flagged ? "flagged" : ""}">
+      <video src="${esc(serverUrl(x.url))}" controls muted playsinline preload="metadata" data-seek="${seek}"></video>
+      <figcaption>${esc(x.cam)}${x.flagged ? " · flagged" : ""}</figcaption></figure>`).join("");
+  box.innerHTML = `
+    <h3>${esc(ep.id || ep.p)}</h3>
+    <div>${(findings.length ? [...new Set(findings)] : [esc(ep.d)]).join("<br>")}</div>
+    <p class="verdict">Verdict:
+      <button data-v="real" class="${v === "real" ? "on" : ""}">Real issue</button>
+      <button data-v="fine" class="${v === "fine" ? "on" : ""}">False alarm</button>
+      <button data-v="unsure" class="${v === "unsure" ? "on" : ""}">Unsure</button></p>
+    ${vids ? `<p>${ev.seek_s != null ? `<button data-act="jump">Play all from ${seek.toFixed(1)}s (issue at ${ev.seek_s.toFixed(1)}s)</button>` : ""}
+      <button data-act="all">Play all together</button>
+      <label><input type="checkbox" data-act="slow"> slow motion (0.25x)</label></p><div class="vids">${vids}</div>` : ""}
+    ${(ev.charts || []).map(chartHtml).join("")}
+    <details><summary>Values</summary><div class="vals">${esc(JSON.stringify(ev.values, null, 1))}</div></details>`;
+  box.querySelectorAll("video").forEach(vid => vid.addEventListener("loadedmetadata", () => { vid.currentTime = +vid.dataset.seek; }, {once: true}));
+  box.querySelectorAll(".verdict button").forEach(b => b.addEventListener("click", () => {
+    const key = vkey(ep);
+    verdicts[key] = verdicts[key] === b.dataset.v ? undefined : b.dataset.v;
+    if (!verdicts[key]) delete verdicts[key];
+    saveVerdicts();
+    box.querySelectorAll(".verdict button").forEach(x => x.classList.toggle("on", x.dataset.v === verdicts[key]));
+    const li = pBody.querySelector(`.ep-list li[data-i="${i}"]`);
+    if (li) li.className = "active" + (verdicts[key] ? " v-" + verdicts[key] : "");
+  }));
+  const videos = [...box.querySelectorAll("video")];
+  box.querySelector("[data-act=jump]")?.addEventListener("click", () => videos.forEach(x => { x.currentTime = seek; x.play().catch(() => {}); }));
+  box.querySelector("[data-act=all]")?.addEventListener("click", () => {
+    const t = videos[0]?.currentTime || 0; videos.forEach(x => { x.currentTime = t; x.play().catch(() => {}); });
+  });
+  box.querySelector("[data-act=slow]")?.addEventListener("change", e => videos.forEach(x => x.playbackRate = e.target.checked ? 0.25 : 1));
+}
+
+const COLORS = ["#2563eb", "#dc2626", "#16a34a", "#d97706", "#7c3aed", "#0891b2"];
+function chartHtml(c) {
+  const pts = c.series.flatMap(s => s.x.map((x, k) => [x, s.y[k]])).filter(p => p[1] != null);
+  if (!pts.length) return `<div class="chart"><div class="ttl">${esc(c.title)}</div><p class="muted">No data</p></div>`;
+  let x0 = Math.min(...pts.map(p => p[0])), x1 = Math.max(...pts.map(p => p[0]));
+  let y0 = Math.min(...pts.map(p => p[1])), y1 = Math.max(...pts.map(p => p[1]));
+  if (c.hline != null) { y0 = Math.min(y0, c.hline); y1 = Math.max(y1, c.hline); }
+  if (x1 === x0) x1 = x0 + 1; if (y1 === y0) { y1 += 1; y0 -= 1; }
+  const W = 900, H = 190, L = 56, R = 8, T = 8, B = 22;
+  const sx = x => L + (x - x0) / (x1 - x0) * (W - L - R), sy = y => T + (1 - (y - y0) / (y1 - y0)) * (H - T - B);
+  const lines = c.series.map((s, k) => {
+    let d = "", pen = false;
+    s.x.forEach((x, j) => { const y = s.y[j]; if (y == null) { pen = false; return; }
+      d += `${pen ? "L" : "M"}${sx(x).toFixed(1)},${sy(y).toFixed(1)} `; pen = true; });
+    return `<path d="${d}" fill="none" stroke="${COLORS[k % COLORS.length]}" stroke-width="1.6"/>`;
+  }).join("");
+  const marks = (c.markers || []).filter(m => m >= x0 && m <= x1)
+    .map(m => `<line x1="${sx(m)}" x2="${sx(m)}" y1="${T}" y2="${H - B}" stroke="currentColor" stroke-dasharray="4 3"/>`).join("");
+  const hl = c.hline != null ? `<line x1="${L}" x2="${W - R}" y1="${sy(c.hline)}" y2="${sy(c.hline)}" stroke="#888" stroke-dasharray="6 4"/>` : "";
+  const fmt = v => Math.abs(v) >= 100 ? v.toFixed(0) : Math.abs(v) >= 1 ? v.toFixed(2) : v.toPrecision(2);
+  const axes = `<text x="4" y="${T + 10}" font-size="11" fill="currentColor">${fmt(y1)}</text>
+    <text x="4" y="${H - B}" font-size="11" fill="currentColor">${fmt(y0)}</text>
+    <text x="${L}" y="${H - 4}" font-size="11" fill="currentColor">${x0.toFixed(1)}s</text>
+    <text x="${W - R}" y="${H - 4}" font-size="11" fill="currentColor" text-anchor="end">${x1.toFixed(1)}s</text>`;
+  const legend = c.series.map((s, k) => `<span><span class="sw" style="background:${COLORS[k % COLORS.length]}"></span>${esc(s.name)}</span>`).join("")
+    + ((c.markers || []).length ? `<span>dashed line: flagged moment</span>` : "")
+    + (c.hline != null ? `<span>dashed grey: limit</span>` : "");
+  return `<div class="chart"><div class="ttl">${esc(c.title)} <span class="muted">(${esc(c.unit || "")})</span></div>
+    <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">${hl}${lines}${marks}${axes}</svg><div class="lg">${legend}</div></div>`;
+}
+
+function exportVerdicts() {
+  const q = s => `"${String(s).replace(/"/g, '""')}"`;
+  const rows = [["dataset", "repo_path", "check", "verdict"].join(",")];
+  Object.entries(verdicts).forEach(([k, v]) => { const [d, p, c] = k.split("|"); rows.push([d, p, c, v].map(q).join(",")); });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([rows.join("\\n")], {type: "text/csv"}));
+  a.download = "qa_verdicts.csv";
+  a.click();
+}
 
 function toggleCategory(checkbox) {
   const cells = document.querySelectorAll("#grid .cat-" + checkbox.dataset.cat);
@@ -184,7 +359,7 @@ def _cell(dataset_repo: str, category: str, test: str, stats: dict, *, first: bo
     href = "#" + _slug(dataset_repo, category, test)
     return (
         f'<td class="cell bad {cls}" title="{title}" style="background: rgba(var(--bad-rgb), {alpha:.2f}); color: {ink}">'
-        f'<a href="{href}">{flagged}/{checked}{mark}</a></td>'
+        f'<a href="{href}" data-cell="{escape(dataset_repo, quote=True)}|{category}|{test}">{flagged}/{checked}{mark}</a></td>'
     )
 
 
@@ -283,6 +458,22 @@ def _drilldown(report: dict, checks: list[tuple[str, str]]) -> str:
     return "".join(sections) or '<p class="muted">Nothing flagged.</p>'
 
 
+def _cell_episodes(report: dict) -> str:
+    """``"dataset|category|test"`` -> the flagged episodes of that grid cell, for the
+    evidence panel: repo path, episode id and the readable finding details."""
+    cells: dict[str, list[dict]] = defaultdict(list)
+    for ep in report.get("flagged_episodes", []):
+        by_test: dict[tuple[str, str], list[str]] = defaultdict(list)
+        for f in ep["findings"]:
+            details = {k: v for k, v in f.items() if k not in ("category", "test")}
+            by_test[(f["category"], f["test"])].append(_fmt(details))
+        for (cat, test), texts in by_test.items():
+            cells[f"{ep['dataset_repo']}|{cat}|{test}"].append(
+                {"p": ep["repo_path"], "id": str(ep.get("episode_id") or ""), "d": "; ".join(dict.fromkeys(texts))}
+            )
+    return json.dumps(cells).replace("</", "<\\/")
+
+
 def render_action_qa_report(report: dict, output_path: Path, highlight_ignore: list[str] | tuple[str, ...] = ()) -> None:
     """``highlight_ignore``: ``category.check`` names that don't turn a dataset's name red."""
     checks = _checks(report)
@@ -314,7 +505,7 @@ def render_action_qa_report(report: dict, output_path: Path, highlight_ignore: l
 {totals.get("episodes_checked", 0)} episodes checked · {totals.get("episodes_flagged", 0)} flagged ·
 {totals.get("episodes_skipped", 0)} errored</p>
 <div class="legend">
-<span>Each cell: <b>flagged / checked</b> episodes. Hover a column for what it checks, a cell for skip reasons; click a red cell for the episodes.</span>
+<span>Each cell: <b>flagged / checked</b> episodes. Hover a column for what it checks, a cell for skip reasons; click a red cell to see its episodes and their evidence (videos and charts need <code>serve_action_qa_report.py</code>).</span>
 <span><span class="sw" style="background: rgba(var(--bad-rgb), .85)"></span>dataset name: at least one check flagged (hover for which; {escape(", ".join(highlight_ignore)) or "no checks"} not counted)</span>
 <span><span class="sw" style="background: var(--ok)"></span>none flagged</span>
 <span><span class="sw" style="background: rgba(var(--bad-rgb), .3)"></span><span class="sw" style="background: rgba(var(--bad-rgb), 1)"></span>more flagged = darker</span>
@@ -328,6 +519,9 @@ def render_action_qa_report(report: dict, output_path: Path, highlight_ignore: l
 <h2>Config used</h2>
 <details><summary>Thresholds and toggles for this run</summary><pre>{escape(json.dumps(report.get("config_snapshot", {}), indent=2))}</pre></details>
 </div>
+<aside id="panel"><header><h3></h3><button data-act="export">Export verdicts (CSV)</button>
+<button data-act="close">Close</button></header><div class="body"></div></aside>
+<script type="application/json" id="cell-episodes">{_cell_episodes(report)}</script>
 <script>{_SCRIPT}</script>
 </body>
 </html>

@@ -78,14 +78,20 @@ def fetch_dataset_created_dates(org: str) -> dict[str, str | None]:
         return {}
 
 
+# Folders under the data dir that never hold lab submissions: the HF download cache, and
+# qa_out, where QA review bundles are unpacked (copies of other labs' episodes, so counting
+# them would add a phantom dataset and double-count that lab's episodes).
+IGNORED_DIR_NAMES = frozenset({".cache", "qa_out"})
+
+
 def discover_episodes(data_dir: Path) -> list[tuple[str, str, Path]]:
     """Return ``(dataset_repo, repo_relative_path, absolute_path)`` for each .h5."""
     data_dir = data_dir.resolve()
     episodes: list[tuple[str, str, Path]] = []
     for path in sorted(data_dir.rglob("*.h5")):
-        if ".cache" in path.parts:
-            continue
         rel = path.relative_to(data_dir)
+        if IGNORED_DIR_NAMES.intersection(rel.parts):
+            continue
         resolved = resolve_local_episode_path(data_dir, rel)
         if resolved is None:
             continue

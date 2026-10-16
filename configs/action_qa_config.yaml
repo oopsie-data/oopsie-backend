@@ -1,114 +1,202 @@
 # Action-space QA checks for run_action_qa.py, grouped by the action space they check; edit and rerun.
+# Lab feedback, per check:
+#   confidence: high_confidence = a flag is a real problem; lower_confidence = the check is a heuristic that can flag fine episodes or miss real issues
+#   action: fix_and_resubmit = the lab fixes the data and resubmits; confirm_and_discuss = the lab confirms the issue and talks to us
+#           (unclear findings, or real ones in data that can't be re-recorded); exclude = leave it out of lab feedback
 
 # Checks that apply to any declared action space.
 general:
   duplicate_pairs:  # checks whether two different action types hold the same values (a likely copy-paste bug)
     enabled: true
+    confidence: high_confidence
+    action: fix_and_resubmit
     atol: 1.0e-9  # how close two values must be to count as the same
     rtol: 0.0  # same, as a fraction of the value (0 = off)
   length_mismatch:  # checks whether an action and its matching robot state have the same number of steps
     enabled: true
+    confidence: high_confidence
+    action: fix_and_resubmit
+  action_chunk_shape:  # checks that each step holds one action, not a policy's whole action chunk (an arm action - joint/cartesian position or velocity - shaped (T, chunk, dof))
+    enabled: true
+    confidence: high_confidence
+    action: fix_and_resubmit
+  constant_action:  # checks whether an arm action never changes over the whole episode (stuck policy or placeholder actions)
+    enabled: true
+    confidence: high_confidence
+    action: confirm_and_discuss
+    atol: 1.0e-9  # how close two steps' actions must be to count as the same
+  command_rate:  # checks whether each new arm action is held for the same N > 1 steps all episode (commands arrive at control_freq / N, not control_freq)
+    enabled: true
+    confidence: lower_confidence
+    action: confirm_and_discuss
+    atol: 1.0e-9  # how close two steps' actions must be to count as the same
+    min_holds: 10  # skip episodes whose action changes fewer times than this
+    min_fraction: 0.8  # flag if at least this share of holds have the same length N >= 2
+  required_state_keys:  # checks that the states the action space needs are recorded (gripper_position always; joint/cartesian position for joint/cartesian actions)
+    enabled: true
+    confidence: high_confidence
+    action: fix_and_resubmit
   placeholder_metadata:  # checks whether operator, policy, robot or gripper names are blank or template placeholders
     enabled: true
+    confidence: high_confidence
+    action: fix_and_resubmit
     placeholder_values: [unknown, none, "null", n/a, na, tbd, todo, test, default, placeholder, example, xxx, "-", "?", robot, gripper, policy]  # values that are never a real name (case/spaces/hyphens ignored)
     template_prefixes: [your_, example_, my_]  # names starting with these are unfilled templates
     operator_placeholder_values: [operator, pending_operator, test_operator, user, admin, human, teleoperator]  # extra placeholders for operator_name only
     operator_non_person_words: [policy, eval, autoeval, orchestrator, script, bot, lab, pipeline, system, oopsie]  # operator_name containing one of these words is a program or lab, not a person
   action_copies_state:  # checks whether arm actions are just copies of the recorded state (rebuilt afterwards, not real commands)
     enabled: true
+    confidence: lower_confidence
+    action: confirm_and_discuss
     atol: 1.0e-6  # how close an action must be to the state to count as a copy
-    min_fraction: 0.9  # flag if at least this share of steps are copies (of the same or the next step's state)
+    min_fraction: 0.9  # flag if at least this share of steps are copies of the same step's state (the next step's state is not flagged)
   scale_consistency:  # checks whether actions are on the same scale as the robot state (gripper position only)
     enabled: false
+    confidence: lower_confidence
+    action: exclude
     max_ratio: 5.0  # flag if actions are more than this many times larger than the state
     min_ratio: 0.2  # flag if actions are less than this fraction of the state
   tracking_residual:  # checks whether the commanded position matches where the robot actually ends up (gripper position only)
     enabled: false
+    confidence: lower_confidence
+    action: exclude
     max_normalized_rms: 0.5  # flag if the miss is larger than this fraction of the action's size
   delta_detection:  # checks whether actions were saved as step-to-step changes instead of absolute positions (gripper position only)
     enabled: false
+    confidence: lower_confidence
+    action: exclude
     ratio_threshold: 0.3  # flag if the change-per-step reading fits this much better (lower = stricter)
 
 joint_position:
   delta_detection:  # checks whether joint actions were saved as step-to-step changes instead of absolute positions
     enabled: true
+    confidence: high_confidence
+    action: fix_and_resubmit
     ratio_threshold: 0.3  # flag if the change-per-step reading fits this much better (lower = stricter)
   tracking:  # checks whether the commanded joint positions match where the robot's joints actually end up
     enabled: true
+    confidence: lower_confidence
+    action: confirm_and_discuss
     max_median_error_rad: 0.2  # flag if any joint's typical (median) mismatch is larger than this
   joint_names:  # checks that the profile's action and state joint names are given, match each other and are in a sensible order
     enabled: true
+    confidence: lower_confidence
+    action: confirm_and_discuss
   dof:  # checks that the number of joint values matches the number of joint names (action and state)
     enabled: true
+    confidence: high_confidence
+    action: fix_and_resubmit
   radians:  # checks that joint values are in radians (catches degrees and the -100..100 range some arms use)
     enabled: true
+    confidence: high_confidence
+    action: fix_and_resubmit
     max_abs_rad: 6.5  # flag any joint value larger than this (a full turn is 6.28)
   step_jump:  # checks whether a joint moves unrealistically far between two steps
     enabled: true
+    confidence: lower_confidence
+    action: confirm_and_discuss
     max_joint_speed_rad_s: 20.0  # fastest believable joint speed; per-step limit = this / control_freq (raised from 6.28 - real fast teleop corrections routinely hit ~15-19 rad/s on benign episodes)
   gripper_in_joints:  # checks whether a gripper value is mixed into the joint vector (it belongs in the gripper action)
     enabled: true
+    confidence: high_confidence
+    action: fix_and_resubmit
 
 joint_velocity:
   dof:  # checks that the number of joint velocities matches the number of joint names
     enabled: true
+    confidence: high_confidence
+    action: fix_and_resubmit
   tracking:  # checks that velocity x step time roughly matches how far the joints actually moved
     enabled: true
+    confidence: lower_confidence
+    action: confirm_and_discuss
     min_ratio: 0.25  # flag if commanded motion is less than this fraction of the real motion (e.g. per-step changes stored)
     max_ratio: 8.0  # flag if commanded motion is more than this many times the real motion (e.g. deg/s)
     min_correlation: 0.3  # flag if commanded and real motion agree less than this (wrong joints/frame or garbage)
     min_motion_rad: 0.2  # skip episodes where no joint moves more than this (too little motion to judge)
   looks_like_position:  # checks whether the "velocity" is really a position (saved under the wrong key)
     enabled: true
+    confidence: high_confidence
+    action: fix_and_resubmit
     max_position_match: 0.2  # flag if the values sit this close to the position state (0 = identical)
   normalized_range:  # checks whether velocities peak at exactly +-1, i.e. were normalized instead of real units
     enabled: true
+    confidence: lower_confidence
+    action: confirm_and_discuss
   speed_limit:  # checks whether any joint is commanded faster than a real arm can move
     enabled: true
+    confidence: lower_confidence
+    action: confirm_and_discuss
     max_joint_speed_rad_s: 3.14
   smoothness:  # checks whether velocities flip direction from step to step (noise or misaligned timestamps)
     enabled: true
+    confidence: lower_confidence
+    action: exclude
     max_sign_flip_rate: 0.3  # flag if more than this share of steps reverse direction
 
 cartesian_position:
   biarm_ordering:  # checks whether the left and right arms are swapped in the actions (biarm only)
     enabled: true
+    confidence: lower_confidence
+    action: confirm_and_discuss
     max_swap_ratio: 0.5  # flag if swapping the arms makes the error at least this much smaller (0.5 = halves it)
   delta_detection:  # checks whether xyz actions were saved as step-to-step changes instead of absolute positions
     enabled: true
+    confidence: high_confidence
+    action: fix_and_resubmit
     ratio_threshold: 0.3  # flag if the change-per-step reading fits this much better (lower = stricter)
   pose_tracking:  # checks whether the commanded pose (position and orientation) matches where the robot actually ends up; flags if either is off
     enabled: true
+    confidence: lower_confidence
+    action: confirm_and_discuss
     max_median_position_error_m: 0.10  # flag if the typical (median) position mismatch is larger than this, in metres
     max_median_orientation_error_deg: 20.0  # flag if the typical (median) orientation mismatch is larger than this
   position_units:  # checks that positions are in metres (catches millimetres/centimetres or a far-away frame)
     enabled: true
+    confidence: high_confidence
+    action: fix_and_resubmit
     max_abs_position_m: 3.0  # flag any action or state position farther than this from the origin
     max_action_state_ratio: 10.0  # flag if action positions are this many times larger than the state's
     typical_reach_min_m: 0.2  # smallest typical arm reach, used to guess whether bad positions are in cm or mm
     typical_reach_max_m: 1.5  # largest typical arm reach, used for the same cm-or-mm guess
   quaternion_shape:  # checks that each arm's pose is [x, y, z, qx, qy, qz, qw] with a valid (unit-length) quaternion
     enabled: true
+    confidence: high_confidence
+    action: fix_and_resubmit
     norm_atol: 1.0e-3  # how far a quaternion's length may be from 1
   quaternion_sign_flip:  # checks whether the quaternion suddenly flips sign (q -> -q), same orientation but confusing for learning
-    enabled: true
+    enabled: false
+    confidence: lower_confidence
+    action: exclude
   rotation_jump:  # checks whether the commanded orientation turns unrealistically fast between two steps
     enabled: true
+    confidence: lower_confidence
+    action: confirm_and_discuss
     max_angular_speed_deg_s: 360.0  # fastest believable turn; per-step limit = this / control_freq
   quaternion_scalar_order:  # guesses whether qw was put first instead of last (rough heuristic, often unreliable - off by default)
     enabled: false
+    confidence: lower_confidence
+    action: exclude
 
 cartesian_velocity:
   shape:  # checks that each arm's velocity is 6 values: 3 linear then 3 angular
     enabled: true
+    confidence: high_confidence
+    action: fix_and_resubmit
   speed_limit:  # checks whether the end effector is commanded faster than a real arm can move
     enabled: true
+    confidence: lower_confidence
+    action: confirm_and_discuss
     max_linear_m_s: 2.0
     max_angular_rad_s: 6.28
   normalized_range:  # checks whether velocities peak at exactly +-1, i.e. were normalized instead of real units
     enabled: true
+    confidence: lower_confidence
+    action: confirm_and_discuss
   tracking:  # checks that velocity x step time roughly matches how far the end effector actually moved and turned
     enabled: true
+    confidence: lower_confidence
+    action: confirm_and_discuss
     min_ratio: 0.25  # flag if commanded motion is less than this fraction of the real motion (e.g. per-step changes stored)
     max_ratio: 8.0  # flag if commanded motion is more than this many times the real motion (e.g. deg/s)
     min_correlation: 0.3  # flag if commanded and real motion agree less than this (wrong joints/frame or garbage)
@@ -116,57 +204,109 @@ cartesian_velocity:
     min_rotation_deg: 15.0  # judge the angular part only if the end effector turns at least this much
   linear_angular_order:  # checks whether the linear and angular halves are swapped
     enabled: true
+    confidence: lower_confidence
+    action: confirm_and_discuss
     min_improvement: 0.2  # flag if swapping the halves matches the real motion this much better
   looks_like_position:  # checks whether the "velocity" is really a position (saved under the wrong key)
     enabled: true
+    confidence: high_confidence
+    action: fix_and_resubmit
     max_position_match: 0.2  # flag if the values sit this close to the position state (0 = identical)
   smoothness:  # checks whether velocities flip direction from step to step (noise or misaligned timestamps)
     enabled: true
+    confidence: lower_confidence
+    action: exclude
     max_sign_flip_rate: 0.3  # flag if more than this share of steps reverse direction
 
 # Checks on the camera videos; each video is fully decoded (~2 CPU-seconds per episode).
 # Frame differences are mean absolute differences of 96x96 grayscale frames (0-255).
 video:
   enabled: true  # master switch: false turns off every video check below (and skips decoding the videos)
-  resolution:  # checks whether the video resolution is high enough
-    enabled: true
-    min_short_side: 360  # flag if the shorter image side has fewer pixels
+  ignore_cameras: [tactile]  # camera names (any lab, case-insensitive) that are other sensors, not cameras; skipped by every video check
+  moving_fraction_of_p95: 0.1  # the robot counts as moving in a step whose state change is above this fraction of the episode's 95th-percentile step
   decoding:  # checks whether the video file exists and decodes without errors
     enabled: true
+    confidence: high_confidence
+    action: fix_and_resubmit
     max_frame_count_diff: 1  # flag if decoded and container frame counts differ by more
-  brightness:  # checks whether the video is too dark or too bright
+  corrupted_frames:  # checks for single frames unlike both their neighbours (decoding or recording glitches)
     enabled: true
+    confidence: lower_confidence
+    action: confirm_and_discuss
+    glitch_diff: 20.0  # a corrupted frame differs at least this much from both neighbours
+    glitch_ratio: 4.0  # ... and the neighbours differ this many times less from each other
+  state_jump:  # checks whether the robot state jumps in a single step while the robot is moving but the video doesn't (a state glitch, or state and video out of step)
+    enabled: true
+    confidence: lower_confidence
+    action: confirm_and_discuss
+    jump_ratio: 10.0  # a jump is a state step this many times the mean step of the surrounding second
+    min_fraction_of_p95: 1.0  # ... and at least this fraction of the episode's 95th-percentile step (ignores jitter while standing still)
+  video_jump:  # checks for sudden image changes while the robot state changes smoothly (a cut, dropped frames, or video out of step)
+    enabled: true
+    confidence: lower_confidence
+    action: confirm_and_discuss
+    jump_diff: 40.0  # a jump needs at least this frame difference
+    jump_ratio: 20.0  # ... and this many times the median difference of the surrounding second
+    state_jump_ratio: 5.0  # left out (a recording gap instead) if the robot state also jumps this many times its surrounding second's average
+  recording_gap:  # checks whether the robot state and the video jump at the same moment (time missing from the recording); uses state_jump's settings to find jumps
+    enabled: true
+    confidence: lower_confidence
+    action: confirm_and_discuss
+    video_jump_ratio: 5.0  # the video counts as jumping too if its frame change there is this many times the surrounding second's
+  periodic_skips:  # checks for recording skips that drop time from state and video at a regular period (from the robot state)
+    enabled: true
+    confidence: lower_confidence
+    action: confirm_and_discuss
+    jump_ratio: 3.0  # a jump is a robot-state step this many times the local median step, with no jump on either neighbour
+    min_jumps: 6  # flag only with at least this many jumps
+    min_period_score: 0.4  # ... spaced this regularly (share of gaps at a multiple of the period, minus chance)
+    min_coverage: 0.6  # ... in at least this share of the periods while the robot moves (jumps x period / moving steps)
+  choppy:  # checks whether the video repeats frames while the robot moves
+    enabled: true
+    confidence: lower_confidence
+    action: confirm_and_discuss
+    duplicate_diff: 0.01  # frames differing less than this count as duplicates
+    choppy_fraction: 0.2  # flag if at least this share of frames during robot motion are duplicates
+  frozen:  # checks whether the video stops changing for a while as the robot moves
+    enabled: true
+    confidence: lower_confidence
+    action: confirm_and_discuss
+    static_diff: 0.05  # frames differing less than this count as static
+    frozen_s: 1.0  # flag static video for at least this long while the robot moves
+  resolution:  # checks whether the video resolution is high enough
+    enabled: false
+    confidence: lower_confidence
+    action: exclude
+    min_short_side: 360  # flag if the shorter image side has fewer pixels
+  brightness:  # checks whether the video is too dark or too bright
+    enabled: false
+    confidence: lower_confidence
+    action: exclude
     dark_median: 30.0  # flag if the median frame brightness is below this
     bright_median: 225.0  # flag if the median frame brightness is above this
     dark_frame: 15.0  # a frame darker than this counts as near black
     bright_frame: 240.0  # a frame brighter than this counts as near white
     extreme_frame_fraction: 0.1  # flag if at least this share of frames is near black or near white
-  speed:  # checks whether the video timing matches control_freq and the trajectory
+  fps:  # checks whether the video's fps matches control_freq (a header value; playback speed, not frame alignment)
     enabled: true
+    confidence: high_confidence
+    action: confirm_and_discuss
     fps_rel_tol: 0.05  # flag if video fps differs from control_freq by more than this fraction
-    duration_tol_s: 0.5  # flag if video and trajectory durations (or cameras) differ by more than this
+  duration:  # checks whether the video lasts as long as the trajectory (decoded frames / fps vs T / control_freq) - i.e. whether frame i is still step i
+    enabled: true
+    confidence: high_confidence
+    action: confirm_and_discuss
+    duration_tol_s: 0.5  # flag if video and trajectory durations differ by more than this
     duration_rel_tol: 0.05  # same, as a fraction of the trajectory duration (the larger tolerance applies)
-    frame_interval_cv: 0.1  # flag if frame intervals vary more than this (std / mean)
-  heavy_artifacts_and_desync:  # checks for frozen, duplicated, jumping or corrupted frames
+  camera_duration_mismatch:  # checks whether the cameras of one episode have the same duration
     enabled: true
-    moving_fraction_of_p95: 0.1  # a step counts as robot motion above this fraction of the episode's 95th-percentile state change
-    static_diff: 0.05  # frames differing less than this count as static
-    duplicate_diff: 0.01  # frames differing less than this count as duplicates
-    frozen_s: 1.0  # flag static video for at least this long while the robot moves
-    choppy_fraction: 0.2  # flag if at least this share of frames during robot motion are duplicates
-    jump_diff: 40.0  # a jump needs at least this frame difference
-    jump_ratio: 20.0  # ... and this many times the median difference of the surrounding second
-    glitch_diff: 20.0  # a corrupted frame differs at least this much from both neighbours
-    glitch_ratio: 4.0  # ... and the neighbours differ this many times less from each other
-  periodic_skips:  # checks for recording skips that drop time from state and video at a regular period (from the robot state)
-    enabled: true
-    jump_ratio: 3.0  # a jump is a robot-state step this many times the local median step, with no jump on either neighbour
-    min_jumps: 6  # flag only with at least this many jumps
-    min_period_score: 0.4  # ... spaced this regularly (share of gaps at a multiple of the period, minus chance)
-    min_coverage: 0.6  # ... in at least this share of the periods while the robot moves (jumps x period / moving steps)
+    confidence: high_confidence
+    action: confirm_and_discuss
+    duration_tol_s: 0.5  # flag if the longest and shortest camera differ by more than this
 
 sampling:
-  default_episode_limit: 100  # max episodes checked per dataset; --limit 0 means unlimited
+  default_episode_limit: 200 # max episodes checked per dataset; --limit 0 means unlimited
+  video_episode_limit: 100  # of those, how many per dataset also get the video checks (decoding is slow); null = all of them
   random: true  # random sample per dataset instead of the first N in sorted path order
   random_seed: null  # set an int for a reproducible sample
 

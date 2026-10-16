@@ -13,8 +13,12 @@ Oct 4, 2026
 | Action vs. Observations | Scale consistency | Implemented | Action's magnitude is wildly out of proportion to the robot's own state (wrong units, bad normalization, corrupt data) |
 | Action vs. Observations | Tracking residual | Implemented | Action doesn't correspond to where the robot's state actually ends up next step (misaligned data, wrong field) |
 | Action vs. Observations | Delta-action detection | Implemented | Action looks like *state\[t+1\] - state\[t\]* (a delta) rather than the absolute state we require |
-| Action vs. Observations | Action copies state | Implemented | Joint/cartesian action equals the recorded state (same or next step) in ≥90% of steps → actions were rebuilt from states afterwards, not logged commands |
+| Action vs. Observations | Action copies state | Implemented | Joint/cartesian action equals the recorded state at the same step (lag 0 only; matching the next step's state is not flagged) in ≥90% of steps → actions were rebuilt from states afterwards, not logged commands |
 | General | Placeholder metadata | Implemented | `operator_name`, `policy_name`, `robot_name` or `gripper_name` is blank, a placeholder (`unknown`, `test`, `pending_operator`...), an unfilled template (`your_...`), or - for operators - a program/lab rather than a person (`SOAR_policy`, `autoeval_orchestrator`, `cmu_aire_lab`) |
+| Action vs. Observations | Required state keys | Implemented | A state the action space needs is missing or empty: `gripper_position` always, `joint_position` for joint actions, `cartesian_position` for cartesian actions (same rule oopsie-data-tools enforces on the robot profile since Jul 28 2026; older or converter-written data can lack it) |
+| General | Action chunk shape | Implemented | An arm action (`joint_position`, `joint_velocity`, `cartesian_position`, `cartesian_velocity`) is shaped *(T, chunk, dof)* instead of *(T,)* or *(T, dof)* → the policy's whole action chunk was saved at every step instead of the one action executed |
+| General | Constant action | Implemented | An arm action never changes over the whole episode → a stuck/failed policy, or a placeholder action written by a converter; reports the value and how far the matching state moved |
+| General | Command rate | Implemented | Each new arm action is held for the same N ≥ 2 steps in ≥ 80% of holds → commands arrive at `control_freq` / N, not at the declared `control_freq`; reports N and the effective rate |
 | Action vs. Observations | Length mismatch | Implemented | An action and the state it's observed through have different numbers of timesteps |
 | joint\_position | Joint names | Implemented | Profile's action/state joint names missing, blank/duplicated, not matching each other, or out of order (numbering, or base-to-wrist chain - e.g. an alphabetical ROS list) |
 | joint\_position | DOF | Implemented | Number of joint values doesn't match the number of joint names |
@@ -46,8 +50,15 @@ Oct 4, 2026
 | Video | Resolution | Implemented | A camera's short side is below 360 px |
 | Video | Decoding | Implemented | Video file missing, ffmpeg decode errors, nothing decodes, or decoded frame count differs from the container's |
 | Video | Brightness | Implemented | Median frame brightness too dark or too bright, or ≥ 10% near-black / near-white frames |
-| Video | Speed | Implemented | Video fps ≠ `control_freq`, video duration ≠ trajectory duration, irregular frame timestamps, or cameras of one episode differing in duration |
-| Video | Frames | Implemented | Frozen or duplicated frames while the robot moves, sudden image jumps (cuts), or single corrupted frames |
+| Video | FPS | Implemented | Video fps ≠ `control_freq` (header value → wrong playback speed; frames still align if the count matches T) |
+| Video | Duration | Implemented | Video duration ≠ trajectory duration → frame count doesn't match the number of steps, so video and actions are out of step |
+| Video | Camera duration mismatch | Implemented | Cameras of one episode differ in duration |
+| Video | Corrupted frames | Implemented | A single frame unlike both its neighbours |
+| Video | Video jump | Implemented | A sudden image change (cut) while the robot state changes smoothly |
+| Video | Choppy | Implemented | ≥ 20% duplicate frames while the robot moves |
+| Video | Frozen | Implemented | ≥ 1 s of static video while the robot moves |
+| Video | Recording gap | Implemented | Robot state and video jump at the same moment (state step ≥ 10x the surrounding second's average, video change ≥ 5x) → time is missing from the recording |
+| Video | State jump | Implemented | Robot state jumps in one step while the video doesn't → a state glitch, or state and video out of step |
 
 Note: the alpha/beta per-individual lab requirement pass/fail system is a separate compliance mechanism, not a data-integrity check, and isn't listed here.
 
@@ -110,6 +121,35 @@ This likely isn't an error — some converters intentionally provide the same ac
 **Suggested question:** Is recording multiple arm action representations per episode intentional? If so, is there a "primary" representation we should treat as canonical for a clean per-episode breakdown?
 
 **Status: open — not yet contacted.**
+
+## Action chunk checks
+
+Chunked policies (ACT, pi0, diffusion policy, ...) predict several future actions per query. Every recorded step must hold only the action executed at that step. Checked 2026-10-10 against all 188,307 submitted episodes (shapes) and a random sample of 25 episodes per lab (values).
+
+**Implemented: action chunk shape** (`general/action_chunk_shape`, arm action spaces only). An arm action stored as *(T, chunk, dof)* means the whole chunk was saved at every step. Its first axis still matches T and its last still matches the DOF, so the length and DOF checks miss it. **No episode in the current data has this.**
+
+**Considered and not added: value-based chunk checks.** A chunk logged wrongly with a valid per-step shape shows up as the same action repeated for several steps. The sample has three such patterns. Each was looked at as a possible chunk check, and each has an explanation where the recording is correct:
+
+| Pattern | Seen in | Why it isn't a chunk bug |
+| --- | --- | --- |
+| Holds in multiples of the chunk size (8 steps) | roboarena\_upload, `paligemma_binning_droid` | The held value is the binning policy's "no motion" bin (≈0.01 rad/s), and the joints really are still during it. Its 8 actions differ only when the arm moves. No hidden actions were executed. 3 of these episodes never move at all, which **Constant action** now catches. |
+| A short hold once per chunk (5–9 steps every 24–35) | AI2\_MOLMOACT2, KIT\_ALR, UIUC\_Reid | The robot keeps its last target while the next chunk is inferred. That's what it was actually commanded, so the data is accurate. The pause itself is what the video `periodic_skips` check covers. (Inferred from how regular it is; not confirmed with the labs.) |
+| Every action held for the same N steps | Stanford\_JW (N = 3 at 30 Hz), NUS\_CLeAR, Charles\_UFAL | Commands are sent at a lower rate than the recording rate. This isn't a chunk issue but a `control_freq` mismatch, which **Command rate** now catches. |
+
+A real chunk-logging bug would need the action held for N steps while the robot moves by a meaningful amount, *and* motion during the hold that doesn't match the held command. None was found, so the check isn't worth its false alarms yet. Revisit if a lab's inference script shows the bug. A chunk flattened into one *(chunk × dof)* vector also wasn't found: no action width is a multiple of its joint count or of the matching state's width.
+
+**Sample findings from the two new checks** (25 episodes per lab, not yet the full data):
+
+| Check | Lab | Flagged | Detail |
+| --- | --- | --- | --- |
+| Command rate | Stanford\_JW | 17/25 | `cartesian_position` held 3 steps → 10 Hz commands vs. declared 30 Hz |
+| Command rate | NUS\_CLeAR | 3/25 | `cartesian_position` held 2 steps → 10 Hz vs. 20 Hz |
+| Command rate | Charles\_UFAL | 1/25 | `joint_position` held 6 steps → 5 Hz vs. 30 Hz |
+| Constant action | roboarena\_upload | 3/25 | `joint_velocity` constant at ≈0.01 rad/s; arm moves ~0.001 rad (policy never moved) |
+| Constant action | VUA\_KL | 2/25 | `joint_position` fixed at the home pose while the joints move 1.8 rad → placeholder action |
+| Constant action | AutoEval\_origin | 1/25 | `cartesian_position` all zeros + identity quaternion, state also zero → placeholder data |
+
+**Status: checks implemented; findings from a sample only — rerun `run_action_qa.py` on the full data before contacting labs.**
 
 ## Labs to contact — summary
 
