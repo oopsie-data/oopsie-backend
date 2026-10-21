@@ -20,8 +20,9 @@ checks run on that probe:
 - ``frozen``: a long run of static frames while the robot moves.
 - ``periodic_skips``: recording pauses at a regular period (e.g. during each
   action-chunk inference) while the low-level controller keeps the robot moving,
-  seen as robot state that jumps at that period throughout the motion.
-  Episode-level, from the robot state.
+  seen as robot state that jumps at that period throughout the motion, with the
+  recorded robot position and the video both jumping perceptibly at the gaps.
+  Episode-level.
 
 Frame differences are mean absolute differences of 0-255 grayscale values.
 """
@@ -49,6 +50,8 @@ PROBE_SIZE = 96
 _ERROR_RE = re.compile(r"\[(error|fatal)\]")
 SKIP_WINDOW = 8
 SKIP_MAX_PERIOD = 30
+POSITION_STATES = ("joint_position", "cartesian_position")
+_DIFF_FLOOR = 0.05
 
 
 @dataclass
@@ -350,23 +353,95 @@ def state_jumps_at(step: np.ndarray, time_s: float, control_freq: float | None, 
     return max(step[i] for i in near) > state_jump_ratio * mean
 
 
+def _position_jump(states: dict[str, np.ndarray], idx: np.ndarray) -> tuple[str, np.ndarray] | None:
+    """Extra robot motion at steps ``idx`` beyond the local median step: the largest
+    joint change in rad from ``joint_position``, else the largest end-effector
+    translation in cm from ``cartesian_position`` ([x, y, z, qx, qy, qz, qw] per arm)."""
+    if "joint_position" in states:
+        q = states["joint_position"].reshape(len(states["joint_position"]), -1)
+        d, unit = np.abs(np.diff(q, axis=0)).max(axis=1), "rad"
+    elif "cartesian_position" in states:
+        c = states["cartesian_position"].reshape(len(states["cartesian_position"]), -1)
+        arms = [c[:, k : k + 3] for k in range(0, c.shape[1], 7)] if c.shape[1] % 7 == 0 else [c[:, :3]]
+        d, unit = 100 * np.max([np.linalg.norm(np.diff(a, axis=0), axis=1) for a in arms], axis=0), "cm"
+    else:
+        return None
+    d = np.nan_to_num(d)
+    return unit, (d - _rolling_median(d, SKIP_WINDOW))[np.minimum(idx, len(d) - 1)]
+
+
+def _position_series(series: dict[str, np.ndarray], space: str) -> np.ndarray:
+    x = series[space].reshape(len(series[space]), -1).astype(float)
+    if space == "cartesian_position" and x.shape[1] % 7 == 0:
+        x = np.concatenate([x[:, k : k + 3] for k in range(0, x.shape[1], 7)], axis=1)
+    return np.nan_to_num(x)
+
+
+def _command_explained(
+    actions: dict[str, np.ndarray] | None, states: dict[str, np.ndarray], idx: np.ndarray, ratio: float
+) -> np.ndarray:
+    """Mask of state jumps at ``idx`` that a logged position command explains: the
+    largest command change over the jump step and the two steps before it is at
+    least ``ratio`` times the state change, in the same space (joint, else xyz).
+    A held command changes by 0 and explains nothing."""
+    space = next((k for k in POSITION_STATES if actions and k in actions and k in states), None)
+    if space is None:
+        return np.zeros(len(idx), dtype=bool)
+    a, x = _position_series(actions, space), _position_series(states, space)
+    n = min(len(a), len(x))
+    da = np.linalg.norm(np.diff(a[:n], axis=0), axis=1)
+    ds = np.linalg.norm(np.diff(x[:n], axis=0), axis=1)
+    out = np.zeros(len(idx), dtype=bool)
+    for j, i in enumerate(idx):
+        if i < len(ds):
+            out[j] = da[max(0, i - 2) : i + 1].max() >= ratio * ds[i] > 0
+    return out
+
+
+def _video_jump(diff: np.ndarray, idx: np.ndarray, n_steps: int) -> np.ndarray:
+    """Largest frame difference within one frame of each state step in ``idx``,
+    relative to the local median frame difference."""
+    if len(diff) < 2 * SKIP_WINDOW + 1:
+        return np.zeros(len(idx))
+    frames = np.round(idx * (len(diff) - 1) / max(n_steps - 1, 1)).astype(int)
+    med = _rolling_median(diff, SKIP_WINDOW)
+    peak = np.array([diff[max(0, f - 1) : f + 2].max() for f in frames])
+    return peak / (med[frames] + _DIFF_FLOOR)
+
+
 def check_periodic_skips(
     step: np.ndarray,
     moving: np.ndarray,
+    states: dict[str, np.ndarray],
+    actions: dict[str, np.ndarray] | None,
+    diffs: dict[str, np.ndarray],
     control_freq: float | None,
     jump_ratio: float,
     min_jumps: int,
     min_period_score: float,
     min_coverage: float,
+    min_joint_jump_rad: float,
+    min_ee_jump_cm: float,
+    min_video_jump: float,
+    min_confirmed_fraction: float,
+    command_explains_ratio: float,
 ) -> list[str]:
-    """Recording skips that drop time from state and video alike: isolated one-step
-    jumps of the robot state at a regular period throughout the motion.
+    """Recording gaps at a regular period: isolated one-step jumps of the robot state
+    throughout the motion that the logged command doesn't explain, where the robot
+    position and the video both jump.
 
     A jump is a step above ``jump_ratio`` times the local median step (window of
     +-SKIP_WINDOW steps) while the robot moves, with no jump on either neighbour.
-    Flags when at least ``min_jumps`` jumps have a period score of at least
-    ``min_period_score`` and cover at least ``min_coverage`` of the periods while
-    the robot moves (jumps x period / moving steps).
+    Jumps where the position command changed at least ``command_explains_ratio``
+    times as much as the state (over the jump step and the two before) are a
+    legitimately large command and are dropped. The remaining jumps need a period score of at least ``min_period_score`` and must cover
+    at least ``min_coverage`` of the periods while the robot moves (jumps x period
+    / moving steps). A jump is confirmed when the robot position moves at least
+    ``min_joint_jump_rad`` (or ``min_ee_jump_cm`` without joint state) beyond a
+    normal step and some camera's frame difference reaches ``min_video_jump`` times
+    its local median. Flags when at least ``min_jumps`` jumps are found and at least
+    ``min_confirmed_fraction`` of them are confirmed. ``diffs`` maps camera name to
+    consecutive-frame differences.
     """
     if len(step) < 2 * SKIP_WINDOW + 1 or not moving.any():
         return []
@@ -374,6 +449,7 @@ def check_periodic_skips(
     jump = (step > jump_ratio * med) & moving
     jump &= ~(np.r_[False, jump[:-1]] | np.r_[jump[1:], False])
     idx = np.flatnonzero(jump)
+    idx = idx[~_command_explained(actions, states, idx, command_explains_ratio)]
     if len(idx) < min_jumps:
         return []
     period, score = _best_period(np.diff(idx))
@@ -382,10 +458,20 @@ def check_periodic_skips(
     coverage = len(idx) * period / moving.sum()
     if coverage < min_coverage:
         return []
+    position = _position_jump(states, idx)
+    if position is None or not diffs:
+        return []
+    unit, extra = position
+    state_ok = extra >= (min_joint_jump_rad if unit == "rad" else min_ee_jump_cm)
+    video = np.max([_video_jump(d, idx, len(step) + 1) for d in diffs.values()], axis=0)
+    confirmed = state_ok & (video >= min_video_jump)
+    if confirmed.mean() < min_confirmed_fraction:
+        return []
     every = f"{period} steps" + (f" ({period / control_freq:.1f}s)" if control_freq else "")
     issue = (
-        f"periodic skips every {every}: {len(idx)} jumps in robot state, "
-        f"in {min(coverage, 1.0):.0%} of the periods while the robot moves"
+        f"periodic recording gaps every {every}: {len(idx)} jumps in robot state, "
+        f"{confirmed.mean():.0%} with position and video jumping "
+        f"(median +{np.median(extra[confirmed]):.3g} {unit}, video {np.median(video[confirmed]):.1f}x)"
     )
     return [issue]
 
@@ -456,13 +542,11 @@ def run_video_checks(
     states: dict[str, np.ndarray],
     control_freq: float | None,
     cfg: dict,
-    settings: dict,
+    actions: dict[str, np.ndarray] | None = None,
 ) -> dict:
     """Run every enabled video check. ``videos`` maps camera name to mp4 path,
-    ``cfg`` is the ``video`` section of the action QA config and ``settings`` its
-    ``video_settings``: cameras named in ``ignore_cameras`` are left out of every check
-    (recorded as an ``ignored_camera`` skip), and ``moving_fraction_of_p95`` sets when the
-    robot counts as moving.
+    ``cfg`` is the ``video`` section of the action QA config, ``actions`` the
+    logged actions (used by ``periodic_skips`` to tell large commands from gaps).
 
     Returns ``{"findings", "skips", "checked"}`` like ``run_action_qa_on_episode``;
     findings are keyed by camera and carry the readable ``issue``.
@@ -494,12 +578,13 @@ def run_video_checks(
         skips += [_skip(CATEGORY, t, ALL_CAMERAS, "no_robot_state") for t in state_tests]
     if step is not None:
         moving = robot_moving(step, moving_fraction)
-        if cfg["periodic_skips"]["enabled"]:
-            add("periodic_skips", ALL_CAMERAS, check_periodic_skips(step, moving, control_freq, **_params(cfg["periodic_skips"])))
+    if cfg["periodic_skips"]["enabled"] and step is not None and not any(k in states for k in POSITION_STATES):
+        skips.append(_skip(CATEGORY, "periodic_skips", ALL_CAMERAS, "no_position_state"))
 
     durations: dict[str, float] = {}
     probes: dict[str, VideoProbe] = {}
     video_jumps: dict[str, list[float]] = {}
+    diffs: dict[str, np.ndarray] = {}
     for camera, path in sorted(videos.items()):
         if not Path(path).is_file():
             if cfg["decoding"]["enabled"]:
@@ -533,6 +618,7 @@ def run_video_checks(
             add("frozen", camera, check_frozen(p, moving, rate, **_params(cfg["frozen"])))
         if p.duration is not None:
             durations[camera] = p.duration
+        diffs[camera] = p.diff
 
     # State jumps, split by whether the video jumps at the same moment: both -> time is
     # missing from the recording (recording_gap); state only -> a state glitch or the
@@ -579,3 +665,8 @@ def run_video_checks(
             skips.append(_skip(CATEGORY, "camera_duration_mismatch", ALL_CAMERAS, "fewer_than_two_cameras"))
 
     return {"findings": findings, "skips": skips, "checked": [(CATEGORY, t) for t in checked]}
+    if cfg["periodic_skips"]["enabled"] and step is not None:
+        skip_params = _params(cfg["periodic_skips"])
+        add("periodic_skips", ALL_CAMERAS, check_periodic_skips(step, moving, states, actions, diffs, control_freq, **skip_params))
+
+    return {"findings": findings, "skips": skips, "checked": [(CATEGORY, t) for t in enabled]}

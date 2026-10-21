@@ -4,6 +4,8 @@ Oct 4, 2026
 
 ## Checks performed
 
+The per-episode action and video checks are documented in [docs/action-checks.md](../docs/action-checks.md) and [docs/video-checks.md](../docs/video-checks.md). The stats pipeline additionally performs these checks:
+
 | Category | Check | Status | What it flags |
 | --- | --- | --- | --- |
 | General | Implausible timestamp | Implemented | Timestamp decodes to before 2000 (e.g. a monotonic clock bug) → stamped with a placeholder date instead of a bogus 1970 date |

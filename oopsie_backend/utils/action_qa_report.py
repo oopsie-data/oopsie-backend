@@ -24,11 +24,15 @@ CHECK_DESCRIPTIONS = {
     ("general", "scale_consistency"): "Gripper position actions are on a very different scale from the state",
     ("general", "tracking_residual"): "The commanded gripper position doesn't match where the gripper ends up",
     ("general", "delta_detection"): "Gripper actions were saved as step-to-step changes instead of absolute positions",
+    ("general", "gripper_binary_present"): "No gripper_binary action is recorded",
+    ("general", "gripper_range"): "Binary gripper actions fall outside [0, 1] (e.g. -1/+1)",
+    ("general", "gripper_command_range"): "Gripper position commands go far beyond the range the gripper state covers",
     ("joint_position", "joint_names"): "Action/state joint names are missing, don't match, or are in an odd order",
     ("joint_position", "dof"): "Number of joint values doesn't match the number of joint names",
     ("joint_position", "radians"): "Joint values aren't in radians (degrees or a -100..100 range)",
     ("joint_position", "step_jump"): "A joint moves unrealistically far between two steps",
     ("joint_position", "gripper_in_joints"): "A gripper value is mixed into the joint vector",
+    ("joint_position", "normalized_range"): "Joint actions peak at exactly +-1 (normalized, not radians)",
     ("joint_position", "delta_detection"): "Joint actions were saved as step-to-step changes instead of absolute positions",
     ("joint_position", "tracking"): "The commanded joint positions don't match where the joints actually end up",
     ("joint_velocity", "dof"): "Number of joint velocities doesn't match the number of joint names",
@@ -48,6 +52,7 @@ CHECK_DESCRIPTIONS = {
     ("cartesian_position", "position_units"): "Positions aren't in metres (cm/mm or a far-away frame)",
     ("cartesian_position", "quaternion_sign_flip"): "The quaternion suddenly flips sign (q -> -q)",
     ("cartesian_position", "rotation_jump"): "The commanded orientation turns unrealistically fast between two steps",
+    ("cartesian_position", "normalized_range"): "xyz actions peak at exactly +-1 (normalized, not metres)",
     ("cartesian_position", "pose_tracking"): "The commanded position or orientation doesn't match where the robot ends up",
     ("cartesian_position", "delta_detection"): "xyz actions were saved as step-to-step changes instead of absolute positions",
     ("cartesian_position", "biarm_ordering"): "Left and right arms look swapped in the actions",
@@ -65,6 +70,8 @@ CHECK_DESCRIPTIONS = {
     ("video", "recording_gap"): "Robot state and video both jump at the same moment: time looks missing from the recording",
     ("video", "state_jump"): "Robot state jumps in one step while the video doesn't: a state glitch, or state and video out of step",
     ("video", "periodic_skips"): "The recording skips time at a regular period (robot state jumps throughout the motion)",
+    ("video", "speed"): "Video timing doesn't match control_freq or the trajectory length, or cameras disagree",
+    ("video", "heavy_artifacts_and_desync"): "Frozen or duplicated frames while the robot moves, image jumps, or corrupted frames",
 }
 
 MAX_ROWS_PER_CHECK = 50

@@ -10,7 +10,7 @@ Checks are grouped into categories matching ``configs/action_qa_config.yaml``'s
 sections: ``general`` (any action space) plus one per arm action space
 (``joint_position``, ``joint_velocity``, ``cartesian_position``, ``cartesian_velocity``).
 Every finding/skip carries its ``category`` and ``test``. See
-``reports/data_quality_exceptions.md`` for what each check means in plain language.
+``docs/action-checks.md`` for what each check flags.
 """
 
 from __future__ import annotations
@@ -233,6 +233,30 @@ def command_period(action: np.ndarray, atol: float) -> dict:
     }
 
 
+def gripper_range_violation(values: np.ndarray, atol: float) -> dict | None:
+    """Min/max of ``values`` if any falls outside ``[0, 1]`` by more than ``atol``."""
+    if not values.size:
+        return None
+    lo, hi = float(np.min(values)), float(np.max(values))
+    return {"min": lo, "max": hi} if lo < -atol or hi > 1.0 + atol else None
+
+
+def gripper_command_outside_state(action: np.ndarray, state: np.ndarray, max_fraction: float, min_margin: float) -> dict | None:
+    """How far the commanded gripper range exceeds the observed state range. The allowed
+    margin is ``max_fraction`` of the state's scale (the larger of its span and its largest
+    absolute value), but at least ``min_margin``. Returns details if exceeded, else ``None``."""
+    lo, hi = float(np.min(state)), float(np.max(state))
+    scale = max(hi - lo, abs(lo), abs(hi))
+    outside = max(lo - float(np.min(action)), float(np.max(action)) - hi, 0.0)
+    margin = max(max_fraction * scale, min_margin)
+    if outside <= margin:
+        return None
+    return {
+        "action_min": float(np.min(action)), "action_max": float(np.max(action)),
+        "state_min": lo, "state_max": hi, "outside": outside, "margin": margin,
+    }
+
+
 def _run_general_checks(
     actions: dict[str, np.ndarray],
     states: dict[str, np.ndarray],
@@ -357,6 +381,45 @@ def _run_general_checks(
             copy = action_copies_state(action_t, state_t, copy_cfg["atol"])
             if copy["matching_fraction"] >= copy_cfg["min_fraction"]:
                 findings.append(_finding(category, "action_copies_state", key, **copy))
+
+    if cfg["gripper_binary_present"]["enabled"]:
+        checked.add((category, "gripper_binary_present"))
+        if "gripper_binary" not in actions:
+            findings.append(
+                _finding(
+                    category, "gripper_binary_present", "gripper_binary",
+                    declared_gripper_keys=[k for k in declared if k.startswith("gripper")],
+                    recorded_gripper_keys=sorted(k for k in actions if k.startswith("gripper")),
+                )
+            )
+
+    if cfg["gripper_range"]["enabled"] and "gripper_binary" in declared:
+        key = "gripper_binary"
+        if key not in actions:
+            skips.append(_skip(category, "gripper_range", key, "declared_but_empty"))
+        elif not np.all(np.isfinite(actions[key])):
+            skips.append(_skip(category, "gripper_range", key, "non_finite_values"))
+        else:
+            checked.add((category, "gripper_range"))
+            result = gripper_range_violation(actions[key], cfg["gripper_range"]["atol"])
+            if result is not None:
+                findings.append(_finding(category, "gripper_range", key, **result))
+
+    if cfg["gripper_command_range"]["enabled"] and "gripper_position" in declared:
+        key = "gripper_position"
+        if key not in actions:
+            skips.append(_skip(category, "gripper_command_range", key, "declared_but_empty"))
+        elif key not in states:
+            skips.append(_skip(category, "gripper_command_range", key, "no_matching_state"))
+        elif not (actions[key].size and states[key].size):
+            skips.append(_skip(category, "gripper_command_range", key, "too_short"))
+        elif not (np.all(np.isfinite(actions[key])) and np.all(np.isfinite(states[key]))):
+            skips.append(_skip(category, "gripper_command_range", key, "non_finite_values"))
+        else:
+            checked.add((category, "gripper_command_range"))
+            result = gripper_command_outside_state(actions[key], states[key], **_params(cfg["gripper_command_range"]))
+            if result is not None:
+                findings.append(_finding(category, "gripper_command_range", key, **result))
 
     tests = [t for t in ("scale_consistency", "tracking_residual", "delta_detection") if cfg[t]["enabled"]]
     if not tests:
@@ -743,6 +806,12 @@ def _run_cartesian_position_checks(
         action_quats = [q / np.linalg.norm(q, axis=1, keepdims=True) for q in action_quats]
 
     # Action-only checks.
+    if "normalized_range" in tests:
+        checked.add((category, "normalized_range"))
+        xyz = np.concatenate(action_xyz, axis=1)
+        if looks_clipped_to_unit_range(xyz):
+            findings.append(_finding(category, "normalized_range", key, max_abs=float(np.max(np.abs(xyz)))))
+
     if "quaternion_sign_flip" in tests:
         checked.add((category, "quaternion_sign_flip"))
         flips = check_quaternion_sign_flips(action_quats)
@@ -1061,6 +1130,11 @@ def _run_joint_position_checks(
         skip("only_gripper_columns", [t for t in tests if t not in ("dof", "gripper_in_joints")])
         return
 
+    if "normalized_range" in tests:
+        checked.add((category, "normalized_range"))
+        if looks_clipped_to_unit_range(action[:, cols]):
+            findings.append(_finding(category, "normalized_range", key, max_abs=float(np.max(np.abs(action[:, cols])))))
+
     in_radians = True
     if "radians" in tests:
         checked.add((category, "radians"))
@@ -1226,7 +1300,7 @@ def sign_flip_rate(v: np.ndarray) -> float:
 
 
 def looks_clipped_to_unit_range(v: np.ndarray) -> bool:
-    """Peaks exactly at +-1 - the signature of velocities normalized to [-1, 1] and
+    """Peaks exactly at +-1 - the signature of values normalized to [-1, 1] and
     clipped (DROID-style), not physical units."""
     return bool(v.size and np.isclose(np.max(np.abs(v)), 1.0, rtol=0, atol=1e-6))
 

@@ -4,8 +4,8 @@ real per-timestep actions/* and observations/robot_states/* arrays, and the vide
 
 This is a separate, opt-in pass from compute_local_stats.py: it reads full arrays
 (not just HDF5 attrs), which costs much more per file, so it is not run as part of
-the nightly stats job. See reports/data_quality_exceptions.md for what each check
-means and configs/action_qa_config.yaml for toggles/thresholds.
+the nightly stats job. See docs/action-checks.md and docs/video-checks.md for what each
+check means and configs/action_qa_config.yaml for toggles/thresholds.
 
 Usage:
     uv run python -m oopsie_backend.scripts.run_action_qa \\
