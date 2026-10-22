@@ -79,7 +79,7 @@ def _check_episode(job: tuple[Path, str, bool], qa_config: dict) -> tuple[dict |
             result = _merge(
                 result, run_video_checks(
                     videos, states, profile_control_freq(profile), video_cfg,
-                    qa_config["video_settings"],
+                    qa_config["video_settings"], actions,
                 )
             )
     except Exception as exc:

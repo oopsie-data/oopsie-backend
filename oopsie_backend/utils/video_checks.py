@@ -542,11 +542,15 @@ def run_video_checks(
     states: dict[str, np.ndarray],
     control_freq: float | None,
     cfg: dict,
+    settings: dict,
     actions: dict[str, np.ndarray] | None = None,
 ) -> dict:
     """Run every enabled video check. ``videos`` maps camera name to mp4 path,
-    ``cfg`` is the ``video`` section of the action QA config, ``actions`` the
-    logged actions (used by ``periodic_skips`` to tell large commands from gaps).
+    ``cfg`` is the ``video`` section of the action QA config and ``settings`` its
+    ``video_settings``: cameras named in ``ignore_cameras`` are left out of every check
+    (recorded as an ``ignored_camera`` skip), and ``moving_fraction_of_p95`` sets when the
+    robot counts as moving. ``actions`` are the logged actions, used by ``periodic_skips``
+    to tell large commands from recording gaps.
 
     Returns ``{"findings", "skips", "checked"}`` like ``run_action_qa_on_episode``;
     findings are keyed by camera and carry the readable ``issue``.
@@ -664,9 +668,8 @@ def run_video_checks(
             checked.remove("camera_duration_mismatch")
             skips.append(_skip(CATEGORY, "camera_duration_mismatch", ALL_CAMERAS, "fewer_than_two_cameras"))
 
-    return {"findings": findings, "skips": skips, "checked": [(CATEGORY, t) for t in checked]}
     if cfg["periodic_skips"]["enabled"] and step is not None:
         skip_params = _params(cfg["periodic_skips"])
         add("periodic_skips", ALL_CAMERAS, check_periodic_skips(step, moving, states, actions, diffs, control_freq, **skip_params))
 
-    return {"findings": findings, "skips": skips, "checked": [(CATEGORY, t) for t in enabled]}
+    return {"findings": findings, "skips": skips, "checked": [(CATEGORY, t) for t in checked]}

@@ -70,8 +70,6 @@ CHECK_DESCRIPTIONS = {
     ("video", "recording_gap"): "Robot state and video both jump at the same moment: time looks missing from the recording",
     ("video", "state_jump"): "Robot state jumps in one step while the video doesn't: a state glitch, or state and video out of step",
     ("video", "periodic_skips"): "The recording skips time at a regular period (robot state jumps throughout the motion)",
-    ("video", "speed"): "Video timing doesn't match control_freq or the trajectory length, or cameras disagree",
-    ("video", "heavy_artifacts_and_desync"): "Frozen or duplicated frames while the robot moves, image jumps, or corrupted frames",
 }
 
 MAX_ROWS_PER_CHECK = 50
