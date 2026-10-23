@@ -7,6 +7,8 @@ import json
 import math
 from pathlib import Path
 
+from oopsie_backend.utils.stats_config import CONFIG as _STATS_CONFIG
+
 _LANG_STACK_COLORS = (
     "#0ea5e9",
     "#8b5cf6",
@@ -56,6 +58,156 @@ def _dataset_bar_rows(per_dataset: dict[str, dict]) -> str:
     return "\n".join(rows)
 
 
+def _non_bulk_totals(per_dataset: dict[str, dict]) -> dict:
+    """Episodes/labs/hours/successes/failures summed over non-bulk-import datasets only
+    (i.e. excluding SOAR-like repos) - what the top summary cards should show, matching
+    the dataset inventory's default (bulk-collapsed) view."""
+    episodes = successes = failures = 0
+    duration_hours = 0.0
+    labs: set[str] = set()
+    for info in per_dataset.values():
+        if info.get("bulk_import"):
+            continue
+        episodes += int(info.get("episodes") or 0)
+        successes += int(info.get("successes") or 0)
+        failures += int(info.get("failures") or 0)
+        duration_hours += float(info.get("duration_hours") or 0.0)
+        labs.update((info.get("lab_ids") or {}).keys())
+    return {
+        "episodes": episodes,
+        "labs": len(labs),
+        "duration_hours": round(duration_hours, 3),
+        "successes": successes,
+        "failures": failures,
+    }
+
+
+def _lab_signup_counts(dataset_inventory: dict[str, dict]) -> dict:
+    """Signed-up total plus a mutually exclusive partition of non-bulk-import dataset
+    repos (one per lab): met requirements / non-zero but not yet met / zero episodes.
+
+    Labs that pass requirements are counted only under ``met_requirements``, never
+    under ``non_zero``, so ``signed_up == met_requirements + non_zero + zero``.
+    """
+    non_bulk = [info for info in dataset_inventory.values() if not info.get("bulk_import")]
+    signed_up = len(non_bulk)
+    met = 0
+    non_zero = 0
+    zero = 0
+    for info in non_bulk:
+        if info.get("requirement_status") == "pass":
+            met += 1
+        elif int(info.get("episodes") or 0):
+            non_zero += 1
+        else:
+            zero += 1
+    return {
+        "signed_up": signed_up,
+        "met_requirements": met,
+        "non_zero": non_zero,
+        "zero": zero,
+    }
+
+
+_ARM_ACTION_KEYS = ("joint_position", "joint_velocity", "cartesian_position", "cartesian_velocity")
+_GRIPPER_ACTION_KEYS = ("gripper_position", "gripper_binary", "gripper_velocity")
+
+
+def _svg_donut(segments: list[tuple[str, int, str]], size: int = 96, stroke: int = 16) -> str:
+    """Tiny dependency-free SVG donut chart. ``segments`` is ``[(label, value, color), ...]``."""
+    total = sum(v for _, v, _ in segments)
+    radius = (size - stroke) / 2
+    cx = cy = size / 2
+    if total <= 0:
+        return (
+            f'<svg width="{size}" height="{size}" viewBox="0 0 {size} {size}">'
+            f'<circle cx="{cx}" cy="{cy}" r="{radius}" fill="none" stroke="#e2e8f0" stroke-width="{stroke}"></circle>'
+            f"</svg>"
+        )
+    circumference = 2 * math.pi * radius
+    parts = [
+        f'<circle cx="{cx}" cy="{cy}" r="{radius}" fill="none" stroke="#e2e8f0" stroke-width="{stroke}"></circle>'
+    ]
+    offset = 0.0
+    for label, value, color in segments:
+        if value <= 0:
+            continue
+        frac = value / total
+        dash = frac * circumference
+        gap = circumference - dash
+        pct = round(100 * frac, 1)
+        parts.append(
+            f'<circle cx="{cx}" cy="{cy}" r="{radius}" fill="none" stroke="{color}" '
+            f'stroke-width="{stroke}" stroke-dasharray="{dash:.2f} {gap:.2f}" '
+            f'stroke-dashoffset="{-offset:.2f}" transform="rotate(-90 {cx} {cy})">'
+            f"<title>{html.escape(str(label))}: {value:,} ({pct}%)</title>"
+            f"</circle>"
+        )
+        offset += dash
+    return f'<svg width="{size}" height="{size}" viewBox="0 0 {size} {size}">{"".join(parts)}</svg>'
+
+
+def _action_space_group(action_spaces: dict, keys: tuple[str, ...], title: str, episode_total: int, other_prefix: str | None = None) -> str:
+    items = [(k, int(action_spaces.get(k) or 0)) for k in keys]
+    items = [(k, v) for k, v in items if v > 0]
+    if other_prefix:
+        other = sum(
+            int(v or 0)
+            for k, v in action_spaces.items()
+            if k not in keys and str(k).startswith(other_prefix)
+        )
+        if other > 0:
+            items.append(("other", other))
+    items.sort(key=lambda kv: -kv[1])
+
+    total = sum(v for _, v in items)
+    segments = [(k, v, _LANG_STACK_COLORS[i % len(_LANG_STACK_COLORS)]) for i, (k, v) in enumerate(items)]
+    legend_rows = "\n".join(
+        f'<li><span class="action-space-swatch" style="background:{color}"></span>'
+        f'<span class="action-space-label">{html.escape(str(k))}</span>'
+        f'<span class="action-space-count">{v:,}</span></li>'
+        for k, v, color in segments
+    )
+    diff = total - episode_total
+    diff_note = "matches episode total" if diff == 0 else f"{diff:+,} vs. episode total"
+    return f"""
+<div class="action-space-card">
+  <h4>{html.escape(title)}</h4>
+  <div class="action-space-chart">
+    {_svg_donut(segments)}
+    <ul class="action-space-legend">
+      {legend_rows or '<li class="empty">No data</li>'}
+    </ul>
+  </div>
+  <p class="action-space-total">Total: {total:,} <span class="hint">({diff_note})</span></p>
+</div>
+"""
+
+
+def _action_space_section(action_spaces: dict, episode_total: int) -> str:
+    if not action_spaces:
+        return ""
+    arm_html = _action_space_group(action_spaces, _ARM_ACTION_KEYS, "Arm action space", episode_total)
+    gripper_html = _action_space_group(
+        action_spaces, _GRIPPER_ACTION_KEYS, "Gripper action space", episode_total, other_prefix="gripper"
+    )
+    return f"""
+<section class="dataset-section action-space-section">
+  <div class="section-head">
+    <h2>Action space coverage</h2>
+    <p class="section-desc">
+      Non-bulk episodes only ({episode_total:,}, same scope as the cards above). Each episode
+      is counted once per group, so a clean dataset has both totals ≈ the episode total.
+    </p>
+  </div>
+  <div class="action-space-row">
+    {arm_html}
+    {gripper_html}
+  </div>
+</section>
+"""
+
+
 def _dataset_section(per_dataset: dict[str, dict], totals: dict) -> str:
     n_repos = totals.get("all_datasets") or len(per_dataset)
     n_eps = totals.get("all_dataset_episodes") or sum(
@@ -71,6 +223,99 @@ def _dataset_section(per_dataset: dict[str, dict], totals: dict) -> str:
   <div class="panel dataset-panel">
     {_dataset_bar_rows(per_dataset)}
   </div>
+</section>
+"""
+
+
+def _dataset_inventory_section(dataset_inventory: dict[str, dict]) -> str:
+    if not dataset_inventory:
+        return ""
+    items = []
+    for repo, info in dataset_inventory.items():
+        items.append(
+            {
+                "repo": repo,
+                "short": _repo_short_name(repo),
+                "episodes": int(info.get("episodes") or 0),
+                "hours": round(float(info.get("duration_hours") or 0.0), 3),
+                "created_at": info.get("created_at"),
+                "created_source": info.get("created_at_source"),
+                "bulk": bool(info.get("bulk_import")),
+                "lab_type": info.get("lab_type"),
+                "status": info.get("requirement_status"),
+                "qualifying_individual": info.get("qualifying_individual"),
+                "best_individual": info.get("best_individual"),
+                "best_individual_stats": info.get("best_individual_stats"),
+                "individuals_considered": int(info.get("individuals_considered") or 0),
+                "placeholder_episodes": int(info.get("placeholder_operator_episodes") or 0),
+                "placeholder_names": info.get("placeholder_operator_names") or [],
+            }
+        )
+    payload = json.dumps(items, ensure_ascii=False).replace("</", "<\\/")
+    req = _STATS_CONFIG["requirements"]
+    thresholds = {
+        "alpha": {
+            "enabled": req["alpha"]["enabled"],
+            "min_qualifying_episodes": req["alpha"]["min_qualifying_episodes_per_individual"],
+        },
+        "beta": {
+            "enabled": req["beta"]["volume"]["enabled"],
+            "min_qualifying_episodes": req["beta"]["volume"]["min_qualifying_episodes_per_individual"],
+            "min_failures": req["beta"]["volume"]["min_failures_per_individual"],
+            "min_duration_hours": req["beta"]["volume"]["min_duration_hours_per_individual"],
+        },
+    }
+    thresholds_payload = json.dumps(thresholds, ensure_ascii=False).replace("</", "<\\/")
+    signup_counts = _lab_signup_counts(dataset_inventory)
+    n_labs = signup_counts["signed_up"]
+    n_zero = signup_counts["zero"]
+    n_bulk = sum(1 for it in items if it["bulk"])
+    n_pass = signup_counts["met_requirements"]
+    return f"""
+<section class="dataset-section dataset-inventory-section">
+  <div class="section-head">
+    <h2>All datasets</h2>
+    <p class="section-desc">
+      {n_labs} labs (based on HF datasets) · {n_zero} with no episodes yet ·
+      {n_bulk} bulk-import repo(s) (e.g. SOAR), hidden by default ·
+      {n_pass} meeting requirements
+    </p>
+  </div>
+  <div class="toolbar inventory-toolbar">
+    <input id="inventory-filter" type="search" placeholder="Filter datasets…" autocomplete="off">
+    <div class="inventory-sort" role="group" aria-label="Sort datasets by">
+      <button type="button" class="sort-btn" data-sort="created">Created <span class="sort-arrow"></span></button>
+      <button type="button" class="sort-btn" data-sort="episodes">Episodes <span class="sort-arrow"></span></button>
+      <button type="button" class="sort-btn" data-sort="hours">Hours <span class="sort-arrow"></span></button>
+    </div>
+    <label class="inventory-bulk-toggle">
+      <input type="checkbox" id="inventory-include-bulk">
+      Include bulk-import repos
+    </label>
+  </div>
+  <div class="inventory-legend">
+    <span class="legend-item"><span class="req-dot req-dot-pass"></span> Requirements met</span>
+    <span class="legend-item"><span class="req-dot req-dot-fail"></span> Not met</span>
+    <span class="legend-item"><span class="req-dot req-dot-no_data"></span> No individual data yet</span>
+    <span class="legend-item"><span class="req-dot req-dot-not_evaluated"></span> Requirement disabled</span>
+    <span class="legend-item"><span class="req-placeholder-dot"></span> Has placeholder-operator episodes</span>
+  </div>
+  <div class="inventory-head-row">
+    <span>Dataset</span>
+    <span>Episodes</span>
+    <span>Hours</span>
+    <span>Created</span>
+  </div>
+  <div class="inventory-axis-row" id="inventory-axis-row">
+    <span></span>
+    <div class="axis-ticks" id="inventory-axis-eps"></div>
+    <div class="axis-ticks" id="inventory-axis-hrs"></div>
+    <span></span>
+  </div>
+  <div class="panel dataset-panel" id="inventory-rows"></div>
+  <p id="inventory-no-match" class="no-match">No datasets match your filter.</p>
+  <script type="application/json" id="dataset-inventory-data">{payload}</script>
+  <script type="application/json" id="dataset-inventory-thresholds">{thresholds_payload}</script>
 </section>
 """
 
@@ -688,6 +933,8 @@ def _normalize_internal_data(data: dict) -> dict:
         "excluded_from_public_datasets": data.get("excluded_from_public_datasets") or [],
         "stats_totals": st,
         "per_dataset": stats.get("per_dataset") or {},
+        "dataset_inventory": data.get("dataset_inventory") or {},
+        "action_spaces_non_bulk": data.get("action_spaces_non_bulk") or {},
         "per_lab": people.get("per_lab") or {},
         "language_diversity": data.get("language_diversity"),
         "totals": {
@@ -729,10 +976,16 @@ def render_internal_report_html(data: dict) -> str:
     totals = data.get("totals") or {}
     per_lab = data.get("per_lab") or {}
     per_dataset = data.get("per_dataset") or {}
+    dataset_inventory = data.get("dataset_inventory") or {}
     stats_totals = data.get("stats_totals") or {}
+    non_bulk_totals = _non_bulk_totals(per_dataset)
+    signup_counts = _lab_signup_counts(dataset_inventory)
+    action_spaces_non_bulk = data.get("action_spaces_non_bulk") or {}
     language_diversity = data.get("language_diversity")
     labs_html = "\n".join(_lab_section(lab, per_lab[lab]) for lab in sorted(per_lab))
     dataset_html = _dataset_section(per_dataset, totals) if per_dataset else ""
+    dataset_inventory_html = _dataset_inventory_section(dataset_inventory)
+    action_space_html = _action_space_section(action_spaces_non_bulk, non_bulk_totals["episodes"])
     stats_summary_html = _stats_summary_section(stats_totals)
     language_html = _language_diversity_section(language_diversity)
     excluded = data.get("excluded_from_public_datasets") or []
@@ -806,6 +1059,19 @@ def render_internal_report_html(data: dict) -> str:
     }}
     .stat .val {{ font-size: 1.45rem; font-weight: 700; font-feature-settings: "tnum"; }}
     .stat .lbl {{ font-size: 0.78rem; color: var(--ink-muted); margin-top: 0.15rem; }}
+    .stat-group-grid {{
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }}
+    .stat-group-item {{
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }}
+    .stat-group-item .val {{ font-size: 0.95rem; font-weight: 700; font-feature-settings: "tnum"; }}
+    .stat-group-item .lbl {{ font-size: 0.7rem; color: var(--ink-muted); margin-top: 0; }}
     .dataset-section {{
       background: var(--surface);
       border: 1px solid var(--border);
@@ -931,6 +1197,174 @@ def render_internal_report_html(data: dict) -> str:
       padding: 1rem;
       text-align: center;
       color: var(--ink-muted);
+    }}
+    .inventory-toolbar {{ flex-wrap: wrap; }}
+    .inventory-sort {{ display: flex; gap: 0.4rem; }}
+    .sort-btn {{
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.45rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 0.82rem;
+      color: var(--ink-muted);
+      font-family: inherit;
+    }}
+    .sort-btn.is-active {{
+      color: var(--ink);
+      border-color: var(--accent);
+      background: #f0f9ff;
+      font-weight: 600;
+    }}
+    .sort-arrow {{ font-size: 0.65rem; width: 0.7em; display: inline-block; }}
+    .inventory-bulk-toggle {{
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.82rem;
+      color: var(--ink-muted);
+      white-space: nowrap;
+      cursor: pointer;
+    }}
+    .inventory-head-row, .inventory-row, .inventory-axis-row {{
+      display: grid;
+      grid-template-columns: minmax(110px, 18%) 1fr 1fr minmax(90px, auto);
+      gap: 0.75rem;
+      align-items: center;
+    }}
+    .inventory-head-row {{
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--ink-muted);
+      padding: 0 0 0.45rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0.3rem;
+    }}
+    .inventory-axis-row {{
+      font-size: 0.72rem;
+      color: var(--ink-muted);
+      font-feature-settings: "tnum";
+      margin-bottom: 0.3rem;
+    }}
+    .axis-ticks {{ position: relative; height: 1.1em; }}
+    .axis-tick {{ position: absolute; top: 0; white-space: nowrap; }}
+    .inventory-row {{
+      padding: 0.4rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85rem;
+    }}
+    .inventory-row:last-child {{ border-bottom: 0; }}
+    .inventory-row.is-bulk .inventory-label {{ color: #92400e; }}
+    .inventory-label {{
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      overflow: hidden;
+      font-weight: 500;
+    }}
+    .inventory-label-text {{
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }}
+    .req-dot {{
+      flex: 0 0 auto;
+      width: 0.6rem;
+      height: 0.6rem;
+      border-radius: 50%;
+      background: var(--ink-muted);
+    }}
+    .req-dot-pass {{ background: #16a34a; }}
+    .req-dot-fail {{ background: #dc2626; }}
+    .req-dot-no_data {{ background: #cbd5e1; border: 1px solid #94a3b8; }}
+    .req-dot-not_evaluated {{ background: #94a3b8; }}
+    .req-placeholder-flag {{
+      flex: 0 0 auto;
+      font-size: 0.72rem;
+      color: #b45309;
+      cursor: help;
+    }}
+    .req-placeholder-dot {{
+      display: inline-block;
+      width: 0.6rem;
+      height: 0.6rem;
+      border-radius: 50%;
+      background: #fde68a;
+      border: 1px solid #b45309;
+    }}
+    .inventory-legend {{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+      font-size: 0.75rem;
+      color: var(--ink-muted);
+      margin-bottom: 0.6rem;
+    }}
+    .legend-item {{ display: inline-flex; align-items: center; gap: 0.35rem; }}
+    .action-space-row {{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }}
+    .action-space-card {{ flex: 1 1 220px; min-width: 200px; }}
+    .action-space-card h4 {{ margin: 0 0 0.6rem; font-size: 0.9rem; }}
+    .action-space-chart {{ display: flex; align-items: center; gap: 0.85rem; }}
+    .action-space-chart svg {{ flex: 0 0 auto; }}
+    .action-space-legend {{
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-size: 0.8rem;
+      flex: 1;
+      min-width: 0;
+    }}
+    .action-space-legend li {{
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 0.3rem;
+    }}
+    .action-space-legend .empty {{ color: var(--ink-muted); }}
+    .action-space-swatch {{
+      width: 0.65rem;
+      height: 0.65rem;
+      border-radius: 2px;
+      flex: 0 0 auto;
+    }}
+    .action-space-label {{
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }}
+    .action-space-count {{
+      margin-left: auto;
+      color: var(--ink-muted);
+      font-feature-settings: "tnum";
+      flex: 0 0 auto;
+    }}
+    .action-space-total {{ margin: 0.65rem 0 0; font-size: 0.82rem; font-weight: 600; }}
+    .action-space-total .hint {{ font-weight: 400; color: var(--ink-muted); }}
+    .inventory-metric {{ display: flex; align-items: center; gap: 0.5rem; }}
+    .inventory-metric .bar-track {{ flex: 1; }}
+    .inventory-metric .bar-count {{ min-width: 3.4rem; }}
+    .inventory-date {{
+      color: var(--ink-muted);
+      font-size: 0.78rem;
+      text-align: right;
+      white-space: nowrap;
+    }}
+    .inventory-date.is-fallback {{ font-style: italic; }}
+    @media (max-width: 760px) {{
+      .inventory-head-row, .inventory-axis-row {{ display: none; }}
+      .inventory-row {{
+        grid-template-columns: minmax(90px, 1fr) 1fr;
+        row-gap: 0.3rem;
+      }}
+      .inventory-date {{ grid-column: 1 / -1; text-align: left; }}
     }}
     .language-section .lang-grid {{
       display: grid;
@@ -1497,12 +1931,23 @@ def render_internal_report_html(data: dict) -> str:
     </header>
 
     <div class="summary">
-      <div class="stat"><div class="val">{totals.get("operator_episodes", 0):,}</div><div class="lbl">Operator episodes</div></div>
-      <div class="stat"><div class="val">{totals.get("annotations", 0):,}</div><div class="lbl">Annotations</div></div>
-      <div class="stat"><div class="val">{totals.get("labs", 0):,}</div><div class="lbl">Labs</div></div>
-      <div class="stat"><div class="val">{totals.get("distinct_operators", 0):,}</div><div class="lbl">Distinct operators</div></div>
-      <div class="stat"><div class="val">{totals.get("distinct_annotators", 0):,}</div><div class="lbl">Distinct annotators</div></div>
+      <div class="stat stat-group">
+        <div class="stat-group-grid">
+          <div class="stat-group-item"><div class="val">{signup_counts["signed_up"]:,}</div><div class="lbl">Signed up</div></div>
+          <div class="stat-group-item"><div class="val">{signup_counts["met_requirements"]:,}</div><div class="lbl">Met requirements</div></div>
+          <div class="stat-group-item"><div class="val">{signup_counts["non_zero"]:,}</div><div class="lbl">Non-zero, not met</div></div>
+          <div class="stat-group-item"><div class="val">{signup_counts["zero"]:,}</div><div class="lbl">Zero submission</div></div>
+        </div>
+      </div>
+      <div class="stat"><div class="val">{non_bulk_totals["episodes"]:,}</div><div class="lbl">Episodes</div></div>
+      <div class="stat"><div class="val">{non_bulk_totals["duration_hours"]:,.1f}</div><div class="lbl">Hours</div></div>
+      <div class="stat"><div class="val">{non_bulk_totals["successes"]:,} / {non_bulk_totals["failures"]:,}</div><div class="lbl">S/F annotated</div></div>
     </div>
+    <p class="section-desc" style="margin:-0.5rem 0 1rem;">Excludes bulk-import repos (e.g. SOAR) - see "Full dataset totals" below for everything.</p>
+
+    {dataset_inventory_html}
+
+    {action_space_html}
 
     {stats_summary_html}
 
@@ -1562,6 +2007,225 @@ def render_internal_report_html(data: dict) -> str:
     document.getElementById('collapse-all').addEventListener('click', () => {{
       folds.forEach(f => setOpen(f, false));
     }});
+  }})();
+
+  (function () {{
+    const dataEl = document.getElementById('dataset-inventory-data');
+    if (!dataEl) return;
+    const rows = JSON.parse(dataEl.textContent || '[]');
+    const threshEl = document.getElementById('dataset-inventory-thresholds');
+    const THRESHOLDS = threshEl ? JSON.parse(threshEl.textContent || '{{}}') : {{}};
+
+    const rowsEl = document.getElementById('inventory-rows');
+    const noMatch = document.getElementById('inventory-no-match');
+    const filterInput = document.getElementById('inventory-filter');
+    const bulkToggle = document.getElementById('inventory-include-bulk');
+    const sortBtns = Array.from(document.querySelectorAll('.sort-btn'));
+    const axisEpsEl = document.getElementById('inventory-axis-eps');
+    const axisHrsEl = document.getElementById('inventory-axis-hrs');
+
+    const state = {{ sortKey: 'created', sortDir: 'desc', includeBulk: false, query: '' }};
+
+    function fmtInt(n) {{ return Number(n || 0).toLocaleString(); }}
+    function fmtHours(n) {{ return Number(n || 0).toFixed(2); }}
+    function esc(s) {{
+      return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {{
+        return ({{ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }})[c];
+      }});
+    }}
+
+    function statusLabel(status) {{
+      if (status === 'pass') return 'Meets requirements';
+      if (status === 'fail') return 'Does not meet requirements';
+      if (status === 'no_data') return 'No individual data yet';
+      if (status === 'not_evaluated') return 'Requirement disabled';
+      return 'Not evaluated';
+    }}
+
+    function requirementTooltip(it) {{
+      const lines = [];
+      const typeLabel = it.lab_type ? (it.lab_type === 'alpha' ? 'Alpha' : 'Beta') + ' lab' : 'Lab type unknown';
+      lines.push(typeLabel + ' — ' + statusLabel(it.status));
+
+      const th = THRESHOLDS[it.lab_type];
+      const who = it.status === 'pass' ? it.qualifying_individual : it.best_individual;
+      if (who && it.best_individual_stats && th) {{
+        const s = it.best_individual_stats;
+        const whoLabel = it.status === 'pass' ? who : ('Closest: ' + who);
+        if (it.lab_type === 'alpha') {{
+          lines.push(whoLabel + ' — ' + fmtInt(s.qualifying_episodes) + '/' + fmtInt(th.min_qualifying_episodes) + ' qualifying episodes');
+        }} else {{
+          lines.push(
+            whoLabel + ' — ' + fmtInt(s.qualifying_episodes) + '/' + fmtInt(th.min_qualifying_episodes) + ' qualifying, ' +
+            fmtInt(s.failures) + '/' + fmtInt(th.min_failures) + ' failures, ' +
+            s.duration_hours.toFixed(1) + '/' + th.min_duration_hours.toFixed(1) + ' hours'
+          );
+        }}
+        if (it.individuals_considered > 1) {{
+          lines.push('(' + it.individuals_considered + ' individuals considered)');
+        }}
+      }} else if (it.status === 'no_data') {{
+        lines.push('No non-placeholder individual submissions yet.');
+      }}
+      if (it.placeholder_episodes) {{
+        lines.push(
+          '⚠ ' + fmtInt(it.placeholder_episodes) + ' episode(s) credited to a placeholder operator name (' +
+          it.placeholder_names.join(', ') + ') — excluded from this check.'
+        );
+      }}
+      return lines.join('\\n');
+    }}
+
+    // "Nice" round step (1/2/5/10 x a power of ten) for axis ticks, e.g. 1k, 2k, 5k.
+    function niceStep(max, targetTicks) {{
+      const rawStep = max / targetTicks;
+      const magnitude = Math.pow(10, Math.floor(Math.log10(rawStep)));
+      const residual = rawStep / magnitude;
+      let niceResidual;
+      if (residual > 5) niceResidual = 10;
+      else if (residual > 2) niceResidual = 5;
+      else if (residual > 1) niceResidual = 2;
+      else niceResidual = 1;
+      return niceResidual * magnitude;
+    }}
+
+    function buildTicks(max, targetTicks) {{
+      if (!max || max <= 0) return {{ ticks: [0], niceMax: 1 }};
+      const step = niceStep(max, targetTicks);
+      const niceMax = Math.ceil(max / step) * step;
+      const ticks = [];
+      for (let v = 0; v <= niceMax + step / 1e6; v += step) {{
+        ticks.push(Math.round(v * 1e6) / 1e6);
+      }}
+      return {{ ticks: ticks, niceMax: niceMax }};
+    }}
+
+    function fmtAxisNumber(n) {{
+      if (Math.abs(n) >= 1000) {{
+        const v = Math.round(n / 100) / 10;
+        return (Number.isInteger(v) ? v : v.toFixed(1)) + 'k';
+      }}
+      return Number.isInteger(n) ? String(n) : String(Math.round(n * 100) / 100);
+    }}
+
+    function renderAxis(container, ticks, niceMax) {{
+      const n = ticks.length;
+      container.innerHTML = ticks.map(function (t, i) {{
+        const pct = niceMax > 0 ? (t / niceMax * 100) : 0;
+        const align = i === 0 ? 'translateX(0)' : (i === n - 1 ? 'translateX(-100%)' : 'translateX(-50%)');
+        return '<span class="axis-tick" style="left:' + pct + '%;transform:' + align + '">' + fmtAxisNumber(t) + '</span>';
+      }}).join('');
+    }}
+
+    function compare(a, b) {{
+      if (state.sortKey === 'created') {{
+        const av = a.created_at, bv = b.created_at;
+        if (!av && !bv) return 0;
+        if (!av) return 1;
+        if (!bv) return -1;
+        if (av === bv) return 0;
+        return state.sortDir === 'asc' ? (av < bv ? -1 : 1) : (av > bv ? -1 : 1);
+      }}
+      const av = Number(a[state.sortKey] || 0);
+      const bv = Number(b[state.sortKey] || 0);
+      if (av === bv) return a.short.localeCompare(b.short);
+      return state.sortDir === 'asc' ? av - bv : bv - av;
+    }}
+
+    function render() {{
+      const q = state.query.trim().toLowerCase();
+      const items = rows.filter(function (it) {{
+        if (!state.includeBulk && it.bulk) return false;
+        if (q && it.short.toLowerCase().indexOf(q) === -1) return false;
+        return true;
+      }});
+      items.sort(compare);
+
+      rowsEl.innerHTML = '';
+      noMatch.style.display = items.length ? 'none' : 'block';
+
+      const rawMaxEps = Math.max(0, ...items.map(function (it) {{ return it.episodes; }}));
+      const rawMaxHours = Math.max(0, ...items.map(function (it) {{ return it.hours; }}));
+      const epsAxis = buildTicks(rawMaxEps, 5);
+      const hrsAxis = buildTicks(rawMaxHours, 5);
+      renderAxis(axisEpsEl, epsAxis.ticks, epsAxis.niceMax);
+      renderAxis(axisHrsEl, hrsAxis.ticks, hrsAxis.niceMax);
+
+      items.forEach(function (it) {{
+        const epsWidth = Math.max(it.episodes ? 4 : 0, Math.round(100 * it.episodes / epsAxis.niceMax));
+        const hrsWidth = Math.max(it.hours ? 4 : 0, Math.round(100 * it.hours / hrsAxis.niceMax));
+        const fillClass = it.bulk ? 'bar-fill bar-fill-bulk' : 'bar-fill';
+        const epsTitle = fmtInt(it.episodes) + (it.episodes === 1 ? ' episode' : ' episodes');
+        const hrsTitle = it.hours.toFixed(3) + (it.hours === 1 ? ' hour' : ' hours');
+        let dateLabel = 'unknown';
+        let dateTitle = 'No creation date available';
+        let fallback = '';
+        if (it.created_at) {{
+          dateLabel = it.created_at.slice(0, 10);
+          if (it.created_source === 'first_episode') {{
+            fallback = ' is-fallback';
+            dateTitle = 'No HF repo date on file; approximated from earliest episode (' + it.created_at + ')';
+          }} else {{
+            dateTitle = 'HF repo created ' + it.created_at;
+          }}
+        }}
+        const reqTooltip = requirementTooltip(it);
+        const dotClass = 'req-dot req-dot-' + (it.status || 'no_data');
+        const placeholderBadge = it.placeholder_episodes
+          ? '<span class="req-placeholder-flag" title="' + esc(fmtInt(it.placeholder_episodes) + ' placeholder-operator episode(s): ' + it.placeholder_names.join(', ')) + '">⚠</span>'
+          : '';
+
+        const row = document.createElement('div');
+        row.className = 'inventory-row' + (it.bulk ? ' is-bulk' : '');
+        row.title = it.short + ': ' + epsTitle + ' · ' + hrsTitle + (reqTooltip ? '\\n' + reqTooltip : '');
+        row.innerHTML =
+          '<span class="inventory-label" title="' + esc(it.repo) + '">' +
+            '<span class="' + dotClass + '" aria-hidden="true"></span>' +
+            '<span class="inventory-label-text">' + esc(it.short) + '</span>' +
+            placeholderBadge +
+          '</span>' +
+          '<div class="inventory-metric" title="' + esc(epsTitle) + '"><div class="bar-track"><div class="' + fillClass + '" style="width:' + epsWidth + '%"></div></div>' +
+            '<span class="bar-count">' + fmtInt(it.episodes) + '</span></div>' +
+          '<div class="inventory-metric" title="' + esc(hrsTitle) + '"><div class="bar-track"><div class="' + fillClass + '" style="width:' + hrsWidth + '%"></div></div>' +
+            '<span class="bar-count">' + fmtHours(it.hours) + '</span></div>' +
+          '<span class="inventory-date' + fallback + '" title="' + esc(dateTitle) + '">' + esc(dateLabel) + '</span>';
+        rowsEl.appendChild(row);
+      }});
+    }}
+
+    function updateSortButtons() {{
+      sortBtns.forEach(function (btn) {{
+        const active = btn.dataset.sort === state.sortKey;
+        btn.classList.toggle('is-active', active);
+        btn.querySelector('.sort-arrow').textContent = active ? (state.sortDir === 'asc' ? '▲' : '▼') : '';
+      }});
+    }}
+
+    function setSort(key) {{
+      if (state.sortKey === key) {{
+        state.sortDir = state.sortDir === 'asc' ? 'desc' : 'asc';
+      }} else {{
+        state.sortKey = key;
+        state.sortDir = 'desc';
+      }}
+      updateSortButtons();
+      render();
+    }}
+
+    sortBtns.forEach(function (btn) {{
+      btn.addEventListener('click', function () {{ setSort(btn.dataset.sort); }});
+    }});
+    filterInput.addEventListener('input', function () {{
+      state.query = filterInput.value;
+      render();
+    }});
+    bulkToggle.addEventListener('change', function () {{
+      state.includeBulk = bulkToggle.checked;
+      render();
+    }});
+
+    updateSortButtons();
+    render();
   }})();
 
   (function () {{

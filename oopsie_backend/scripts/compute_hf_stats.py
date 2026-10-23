@@ -35,6 +35,7 @@ from oopsie_backend.utils.episode_stats import (
     write_public_artifacts,
 )
 from oopsie_backend.utils.hf import (
+    list_dataset_created_dates_for_org,
     list_dataset_repos_for_org,
     list_h5_files,
     parse_org_arg,
@@ -159,6 +160,7 @@ def main(argv: list[str] | None = None) -> int:
     records: list[dict] = []
     skipped = 0
     datasets_included: list[str] = []
+    dataset_created_at: dict[str, str | None] = {}
     aggregate_label: str
 
     if args.repo is not None:
@@ -199,6 +201,16 @@ def main(argv: list[str] | None = None) -> int:
         except Exception as exc:
             print(f"error: could not list datasets for org {org_slug!r}: {exc}", file=sys.stderr)
             return 1
+
+        try:
+            dataset_created_at = list_dataset_created_dates_for_org(org_slug, args.token)
+        except Exception as exc:
+            print(
+                f"  (could not fetch dataset creation dates: {exc}; "
+                "internal report will fall back to episode timestamps)",
+                file=sys.stderr,
+            )
+            dataset_created_at = {}
 
         if not dataset_ids:
             print(
@@ -261,6 +273,8 @@ def main(argv: list[str] | None = None) -> int:
             aggregate_label,
             args.internal_output,
             write_html=not args.no_internal_report,
+            all_dataset_repos=list(dataset_created_at) if dataset_created_at else None,
+            dataset_created_at=dataset_created_at or None,
         )
 
     t = stats["totals"]

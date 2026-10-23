@@ -1,0 +1,1704 @@
+{
+  "bundle_id": "qa_bundle_11",
+  "created_at": "2026-10-07T19:21:12Z",
+  "seed": 0,
+  "reviewer": "Yifan",
+  "labs": [
+    "OopsieData-Submissions/UofT_RVL",
+    "OopsieData-Submissions/UofT_TISL",
+    "OopsieData-Submissions/VUA_KL",
+    "OopsieData-Submissions/WUSTL_MIG"
+  ],
+  "episodes": [
+    {
+      "qa_id": "qa_bundle_11-001",
+      "dataset_repo": "OopsieData-Submissions/UofT_RVL",
+      "lab_id": "UofT_RVL",
+      "repo_path": "pick_place_mug_teleop/franka-teleop-pick_place_mug-episode-0064.h5",
+      "bundle_path": "episodes/UofT_RVL/pick_place_mug_teleop/franka-teleop-pick_place_mug-episode-0064.h5",
+      "video_files": {
+        "high_left": "episodes/UofT_RVL/pick_place_mug_teleop/videos/franka-teleop-pick_place_mug-episode-0064-high_left.mp4",
+        "high_right": "episodes/UofT_RVL/pick_place_mug_teleop/videos/franka-teleop-pick_place_mug-episode-0064-high_right.mp4",
+        "wrist": "episodes/UofT_RVL/pick_place_mug_teleop/videos/franka-teleop-pick_place_mug-episode-0064-wrist.mp4"
+      },
+      "episode_id": "franka-teleop-pick_place_mug-episode-0064",
+      "language_instruction": "Pick up the green mug and place it into the sink",
+      "operator": "James Ross",
+      "annotators": [
+        "jross02"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:30:57.013318+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-002",
+      "dataset_repo": "OopsieData-Submissions/UofT_RVL",
+      "lab_id": "UofT_RVL",
+      "repo_path": "replug_eval_qpos_fr_replug_70/dfc-replug_eval_qpos_fr_replug_70-episode-0001.h5",
+      "bundle_path": "episodes/UofT_RVL/replug_eval_qpos_fr_replug_70/dfc-replug_eval_qpos_fr_replug_70-episode-0001.h5",
+      "video_files": {
+        "static_left": "episodes/UofT_RVL/replug_eval_qpos_fr_replug_70/videos/dfc-replug_eval_qpos_fr_replug_70-episode-0001-static_left.mp4",
+        "wrist_right": "episodes/UofT_RVL/replug_eval_qpos_fr_replug_70/videos/dfc-replug_eval_qpos_fr_replug_70-episode-0001-wrist_right.mp4"
+      },
+      "episode_id": "dfc-replug_eval_qpos_fr_replug_70-episode-0001",
+      "language_instruction": "Unplug the charger block and plug it into the middle outlet.",
+      "operator": "Kirill Utyashev",
+      "annotators": [
+        "kutyash"
+      ],
+      "robot_name": "flexiv_rizon_4s",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:33:10.132654+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-003",
+      "dataset_repo": "OopsieData-Submissions/UofT_RVL",
+      "lab_id": "UofT_RVL",
+      "repo_path": "20260612_155702/20260612_155704.h5",
+      "bundle_path": "episodes/UofT_RVL/20260612_155702/20260612_155704.h5",
+      "video_files": {
+        "external": "episodes/UofT_RVL/20260612_155702/20260612_155704_external.mp4",
+        "wrist": "episodes/UofT_RVL/20260612_155702/20260612_155704_wrist.mp4"
+      },
+      "episode_id": "20260612_155704",
+      "language_instruction": "Pick up the stuffed animal and place it in the box",
+      "operator": "",
+      "annotators": [],
+      "robot_name": "franka_panda",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:26:55.074942+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-004",
+      "dataset_repo": "OopsieData-Submissions/UofT_RVL",
+      "lab_id": "UofT_RVL",
+      "repo_path": "rope_straightening_eval_1f6b5fd0/franka-franka-rope_straightening_eval_1f6b5fd0-episode-0007.h5",
+      "bundle_path": "episodes/UofT_RVL/rope_straightening_eval_1f6b5fd0/franka-franka-rope_straightening_eval_1f6b5fd0-episode-0007.h5",
+      "video_files": {
+        "static_left": "episodes/UofT_RVL/rope_straightening_eval_1f6b5fd0/videos/franka-franka-rope_straightening_eval_1f6b5fd0-episode-0007-static_left.mp4",
+        "wrist_left": "episodes/UofT_RVL/rope_straightening_eval_1f6b5fd0/videos/franka-franka-rope_straightening_eval_1f6b5fd0-episode-0007-wrist_left.mp4"
+      },
+      "episode_id": "franka-franka-rope_straightening_eval_1f6b5fd0-episode-0007",
+      "language_instruction": "Pull the rope into a vertical line on the red mark",
+      "operator": "Natasha Yang",
+      "annotators": [
+        "natashay"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:34:18.771420+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-005",
+      "dataset_repo": "OopsieData-Submissions/UofT_RVL",
+      "lab_id": "UofT_RVL",
+      "repo_path": "20260430_180242.h5",
+      "bundle_path": "episodes/UofT_RVL/20260430_180242.h5",
+      "video_files": {
+        "external": "episodes/UofT_RVL/20260430_180242_external.mp4",
+        "wrist": "episodes/UofT_RVL/20260430_180242_wrist.mp4"
+      },
+      "episode_id": "20260430_180242",
+      "language_instruction": "Pick up the object and place it at in the bucket",
+      "operator": "james",
+      "annotators": [],
+      "robot_name": "franka_panda",
+      "qa_notes": "this one is a success, but does not seem to be labelled as such. Also, the task instruction seems wrong, as there is no bucket.",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:39:38.268914+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-006",
+      "dataset_repo": "OopsieData-Submissions/UofT_RVL",
+      "lab_id": "UofT_RVL",
+      "repo_path": "pusht_novel_view_low_exposure_eval/franka-franka-pusht_novel_view_low_exposure_eval-episode-0004.h5",
+      "bundle_path": "episodes/UofT_RVL/pusht_novel_view_low_exposure_eval/franka-franka-pusht_novel_view_low_exposure_eval-episode-0004.h5",
+      "video_files": {
+        "static_left": "episodes/UofT_RVL/pusht_novel_view_low_exposure_eval/videos/franka-franka-pusht_novel_view_low_exposure_eval-episode-0004-static_left.mp4",
+        "wrist_left": "episodes/UofT_RVL/pusht_novel_view_low_exposure_eval/videos/franka-franka-pusht_novel_view_low_exposure_eval-episode-0004-wrist_left.mp4"
+      },
+      "episode_id": "franka-franka-pusht_novel_view_low_exposure_eval-episode-0004",
+      "language_instruction": "Push the green T shape into the black outline of the T shape on the table",
+      "operator": "Kirill Utyashev",
+      "annotators": [
+        "kutyash"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:32:19.693099+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-007",
+      "dataset_repo": "OopsieData-Submissions/UofT_RVL",
+      "lab_id": "UofT_RVL",
+      "repo_path": "20260617_125327/20260617_125330.h5",
+      "bundle_path": "episodes/UofT_RVL/20260617_125327/20260617_125330.h5",
+      "video_files": {
+        "external": "episodes/UofT_RVL/20260617_125327/20260617_125330_external.mp4",
+        "wrist": "episodes/UofT_RVL/20260617_125327/20260617_125330_wrist.mp4"
+      },
+      "episode_id": "20260617_125330",
+      "language_instruction": "Pick up the stuffed animal and place it in the cardboard box.",
+      "operator": "",
+      "annotators": [],
+      "robot_name": "franka_panda",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:28:08.263158+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-008",
+      "dataset_repo": "OopsieData-Submissions/UofT_RVL",
+      "lab_id": "UofT_RVL",
+      "repo_path": "20260615_103938/20260615_103941.h5",
+      "bundle_path": "episodes/UofT_RVL/20260615_103938/20260615_103941.h5",
+      "video_files": {
+        "external": "episodes/UofT_RVL/20260615_103938/20260615_103941_external.mp4",
+        "wrist": "episodes/UofT_RVL/20260615_103938/20260615_103941_wrist.mp4"
+      },
+      "episode_id": "20260615_103941",
+      "language_instruction": "Pick up the stuffed animal and place it in the sink",
+      "operator": "",
+      "annotators": [],
+      "robot_name": "franka_panda",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:27:43.315885+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-009",
+      "dataset_repo": "OopsieData-Submissions/UofT_RVL",
+      "lab_id": "UofT_RVL",
+      "repo_path": "replug_eval_force-adaln-baseline/dfc-replug_eval_force-adaln-baseline-episode-0004.h5",
+      "bundle_path": "episodes/UofT_RVL/replug_eval_force-adaln-baseline/dfc-replug_eval_force-adaln-baseline-episode-0004.h5",
+      "video_files": {
+        "static_left": "episodes/UofT_RVL/replug_eval_force-adaln-baseline/videos/dfc-replug_eval_force-adaln-baseline-episode-0004-static_left.mp4",
+        "wrist_right": "episodes/UofT_RVL/replug_eval_force-adaln-baseline/videos/dfc-replug_eval_force-adaln-baseline-episode-0004-wrist_right.mp4"
+      },
+      "episode_id": "dfc-replug_eval_force-adaln-baseline-episode-0004",
+      "language_instruction": "Unplug the charger block and plug it into the middle outlet.",
+      "operator": "Kirill Utyashev",
+      "annotators": [
+        "kutyash"
+      ],
+      "robot_name": "flexiv_rizon_4s",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:32:52.388250+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-010",
+      "dataset_repo": "OopsieData-Submissions/UofT_RVL",
+      "lab_id": "UofT_RVL",
+      "repo_path": "pick_place_mug_eval_mug-fr-qvel-20k/franka-franka-pick_place_mug_eval_mug-fr-qvel-20k-episode-0148.h5",
+      "bundle_path": "episodes/UofT_RVL/pick_place_mug_eval_mug-fr-qvel-20k/franka-franka-pick_place_mug_eval_mug-fr-qvel-20k-episode-0148.h5",
+      "video_files": {
+        "static_left": "episodes/UofT_RVL/pick_place_mug_eval_mug-fr-qvel-20k/videos/franka-franka-pick_place_mug_eval_mug-fr-qvel-20k-episode-0148-static_left.mp4",
+        "wrist_left": "episodes/UofT_RVL/pick_place_mug_eval_mug-fr-qvel-20k/videos/franka-franka-pick_place_mug_eval_mug-fr-qvel-20k-episode-0148-wrist_left.mp4"
+      },
+      "episode_id": "franka-franka-pick_place_mug_eval_mug-fr-qvel-20k-episode-0148",
+      "language_instruction": "Pick up the green mug and place it into the sink",
+      "operator": "James Ross",
+      "annotators": [
+        "jross02"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "okay ",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:29:55.104519+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-011",
+      "dataset_repo": "OopsieData-Submissions/UofT_RVL",
+      "lab_id": "UofT_RVL",
+      "repo_path": "rope_straightening_eval_pi0.5-droid/franka-franka-rope_straightening_eval_pi0.5-droid-episode-0002.h5",
+      "bundle_path": "episodes/UofT_RVL/rope_straightening_eval_pi0.5-droid/franka-franka-rope_straightening_eval_pi0.5-droid-episode-0002.h5",
+      "video_files": {
+        "static_left": "episodes/UofT_RVL/rope_straightening_eval_pi0.5-droid/videos/franka-franka-rope_straightening_eval_pi0.5-droid-episode-0002-static_left.mp4",
+        "wrist_left": "episodes/UofT_RVL/rope_straightening_eval_pi0.5-droid/videos/franka-franka-rope_straightening_eval_pi0.5-droid-episode-0002-wrist_left.mp4"
+      },
+      "episode_id": "franka-franka-rope_straightening_eval_pi0.5-droid-episode-0002",
+      "language_instruction": "Pull the rope into a vertical line on the red mark",
+      "operator": "Natasha Yang",
+      "annotators": [
+        "natashay"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:34:32.646874+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-012",
+      "dataset_repo": "OopsieData-Submissions/UofT_RVL",
+      "lab_id": "UofT_RVL",
+      "repo_path": "pusht_initial_lora_qvel_buggy_eval/franka-franka-pusht_initial_lora_qvel_buggy_eval-episode-0001.h5",
+      "bundle_path": "episodes/UofT_RVL/pusht_initial_lora_qvel_buggy_eval/franka-franka-pusht_initial_lora_qvel_buggy_eval-episode-0001.h5",
+      "video_files": {
+        "static_left": "episodes/UofT_RVL/pusht_initial_lora_qvel_buggy_eval/videos/franka-franka-pusht_initial_lora_qvel_buggy_eval-episode-0001-static_left.mp4",
+        "wrist_left": "episodes/UofT_RVL/pusht_initial_lora_qvel_buggy_eval/videos/franka-franka-pusht_initial_lora_qvel_buggy_eval-episode-0001-wrist_left.mp4"
+      },
+      "episode_id": "franka-franka-pusht_initial_lora_qvel_buggy_eval-episode-0001",
+      "language_instruction": "Push the green T shape into the black outline of the T shape on the table",
+      "operator": "Natasha Yang",
+      "annotators": [
+        "natashay"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:31:55.135456+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-013",
+      "dataset_repo": "OopsieData-Submissions/UofT_RVL",
+      "lab_id": "UofT_RVL",
+      "repo_path": "replug_eval_qpos_fr_replug_70/dfc-replug_eval_qpos_fr_replug_70-episode-0005.h5",
+      "bundle_path": "episodes/UofT_RVL/replug_eval_qpos_fr_replug_70/dfc-replug_eval_qpos_fr_replug_70-episode-0005.h5",
+      "video_files": {
+        "static_left": "episodes/UofT_RVL/replug_eval_qpos_fr_replug_70/videos/dfc-replug_eval_qpos_fr_replug_70-episode-0005-static_left.mp4",
+        "wrist_right": "episodes/UofT_RVL/replug_eval_qpos_fr_replug_70/videos/dfc-replug_eval_qpos_fr_replug_70-episode-0005-wrist_right.mp4"
+      },
+      "episode_id": "dfc-replug_eval_qpos_fr_replug_70-episode-0005",
+      "language_instruction": "Unplug the charger block and plug it into the middle outlet.",
+      "operator": "Kirill Utyashev",
+      "annotators": [
+        "kutyash"
+      ],
+      "robot_name": "flexiv_rizon_4s",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:33:31.268827+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-014",
+      "dataset_repo": "OopsieData-Submissions/UofT_RVL",
+      "lab_id": "UofT_RVL",
+      "repo_path": "train_test_rtc_mug_fr_20k_eval/franka-franka-train_test_rtc_mug_fr_20k_eval-episode-0016.h5",
+      "bundle_path": "episodes/UofT_RVL/train_test_rtc_mug_fr_20k_eval/franka-franka-train_test_rtc_mug_fr_20k_eval-episode-0016.h5",
+      "video_files": {
+        "static_left": "episodes/UofT_RVL/train_test_rtc_mug_fr_20k_eval/videos/franka-franka-train_test_rtc_mug_fr_20k_eval-episode-0016-static_left.mp4",
+        "wrist_left": "episodes/UofT_RVL/train_test_rtc_mug_fr_20k_eval/videos/franka-franka-train_test_rtc_mug_fr_20k_eval-episode-0016-wrist_left.mp4"
+      },
+      "episode_id": "franka-franka-train_test_rtc_mug_fr_20k_eval-episode-0016",
+      "language_instruction": "Pick up the green mug and place it into the sink",
+      "operator": "James Ross",
+      "annotators": [
+        "jross02"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:38:09.246215+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-015",
+      "dataset_repo": "OopsieData-Submissions/UofT_RVL",
+      "lab_id": "UofT_RVL",
+      "repo_path": "20260619_194829/20260619_194831.h5",
+      "bundle_path": "episodes/UofT_RVL/20260619_194829/20260619_194831.h5",
+      "video_files": {
+        "external": "episodes/UofT_RVL/20260619_194829/20260619_194831_external.mp4",
+        "wrist": "episodes/UofT_RVL/20260619_194829/20260619_194831_wrist.mp4"
+      },
+      "episode_id": "20260619_194831",
+      "language_instruction": "Pick up the stuffed animal and place it in the box",
+      "operator": "",
+      "annotators": [],
+      "robot_name": "franka_panda",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:29:02.562303+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-016",
+      "dataset_repo": "OopsieData-Submissions/UofT_RVL",
+      "lab_id": "UofT_RVL",
+      "repo_path": "20260617_125557/20260617_125602.h5",
+      "bundle_path": "episodes/UofT_RVL/20260617_125557/20260617_125602.h5",
+      "video_files": {
+        "external": "episodes/UofT_RVL/20260617_125557/20260617_125602_external.mp4",
+        "wrist": "episodes/UofT_RVL/20260617_125557/20260617_125602_wrist.mp4"
+      },
+      "episode_id": "20260617_125602",
+      "language_instruction": "Pick up the stuffed animal and place it in the cardboard box.",
+      "operator": "",
+      "annotators": [],
+      "robot_name": "franka_panda",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:28:32.185997+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-017",
+      "dataset_repo": "OopsieData-Submissions/UofT_RVL",
+      "lab_id": "UofT_RVL",
+      "repo_path": "rope_teleop/franka-teleop-rope-episode-0021.h5",
+      "bundle_path": "episodes/UofT_RVL/rope_teleop/franka-teleop-rope-episode-0021.h5",
+      "video_files": {
+        "high_left": "episodes/UofT_RVL/rope_teleop/videos/franka-teleop-rope-episode-0021-high_left.mp4",
+        "high_right": "episodes/UofT_RVL/rope_teleop/videos/franka-teleop-rope-episode-0021-high_right.mp4",
+        "wrist": "episodes/UofT_RVL/rope_teleop/videos/franka-teleop-rope-episode-0021-wrist.mp4"
+      },
+      "episode_id": "franka-teleop-rope-episode-0021",
+      "language_instruction": "Pull the rope into a vertical line on the red mark",
+      "operator": "James Ross",
+      "annotators": [
+        "jross02"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:34:52.264217+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-018",
+      "dataset_repo": "OopsieData-Submissions/UofT_RVL",
+      "lab_id": "UofT_RVL",
+      "repo_path": "replug_eval_force-vae-adaln/dfc-replug_eval_force-vae-adaln-episode-0009.h5",
+      "bundle_path": "episodes/UofT_RVL/replug_eval_force-vae-adaln/dfc-replug_eval_force-vae-adaln-episode-0009.h5",
+      "video_files": {
+        "static_left": "episodes/UofT_RVL/replug_eval_force-vae-adaln/videos/dfc-replug_eval_force-vae-adaln-episode-0009-static_left.mp4",
+        "wrist_right": "episodes/UofT_RVL/replug_eval_force-vae-adaln/videos/dfc-replug_eval_force-vae-adaln-episode-0009-wrist_right.mp4"
+      },
+      "episode_id": "dfc-replug_eval_force-vae-adaln-episode-0009",
+      "language_instruction": "Unplug the charger block and plug it into the middle outlet.",
+      "operator": "Kirill Utyashev",
+      "annotators": [
+        "kutyash"
+      ],
+      "robot_name": "flexiv_rizon_4s",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:33:01.546397+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-019",
+      "dataset_repo": "OopsieData-Submissions/UofT_RVL",
+      "lab_id": "UofT_RVL",
+      "repo_path": "pusht_bw_eval_pi05-droid-pusht-qvel-full-20k-20260917/franka-franka-pusht_bw_eval_pi05-droid-pusht-qvel-full-20k-20260917-episode-0020.h5",
+      "bundle_path": "episodes/UofT_RVL/pusht_bw_eval_pi05-droid-pusht-qvel-full-20k-20260917/franka-franka-pusht_bw_eval_pi05-droid-pusht-qvel-full-20k-20260917-episode-0020.h5",
+      "video_files": {
+        "static_left": "episodes/UofT_RVL/pusht_bw_eval_pi05-droid-pusht-qvel-full-20k-20260917/videos/franka-franka-pusht_bw_eval_pi05-droid-pusht-qvel-full-20k-20260917-episode-0020-static_left.mp4",
+        "wrist_left": "episodes/UofT_RVL/pusht_bw_eval_pi05-droid-pusht-qvel-full-20k-20260917/videos/franka-franka-pusht_bw_eval_pi05-droid-pusht-qvel-full-20k-20260917-episode-0020-wrist_left.mp4"
+      },
+      "episode_id": "franka-franka-pusht_bw_eval_pi05-droid-pusht-qvel-full-20k-20260917-episode-0020",
+      "language_instruction": "Push the green T shape into the black outline of the T shape on the table",
+      "operator": "Natasha Yang",
+      "annotators": [
+        "natashay"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:31:21.228280+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-020",
+      "dataset_repo": "OopsieData-Submissions/UofT_RVL",
+      "lab_id": "UofT_RVL",
+      "repo_path": "replug_eval_force-adaln-baseline/dfc-replug_eval_force-adaln-baseline-episode-0001.h5",
+      "bundle_path": "episodes/UofT_RVL/replug_eval_force-adaln-baseline/dfc-replug_eval_force-adaln-baseline-episode-0001.h5",
+      "video_files": {
+        "static_left": "episodes/UofT_RVL/replug_eval_force-adaln-baseline/videos/dfc-replug_eval_force-adaln-baseline-episode-0001-static_left.mp4",
+        "wrist_right": "episodes/UofT_RVL/replug_eval_force-adaln-baseline/videos/dfc-replug_eval_force-adaln-baseline-episode-0001-wrist_right.mp4"
+      },
+      "episode_id": "dfc-replug_eval_force-adaln-baseline-episode-0001",
+      "language_instruction": "Unplug the charger block and plug it into the middle outlet.",
+      "operator": "Kirill Utyashev",
+      "annotators": [
+        "kutyash"
+      ],
+      "robot_name": "flexiv_rizon_4s",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:32:41.511927+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-021",
+      "dataset_repo": "OopsieData-Submissions/UofT_TISL",
+      "lab_id": "UofT_TISL",
+      "repo_path": "20260608_171328_episode_37.h5",
+      "bundle_path": "episodes/UofT_TISL/20260608_171328_episode_37.h5",
+      "video_files": {
+        "camera_high": "episodes/UofT_TISL/20260608_171328_episode_37_camera_high.mp4",
+        "camera_wrist_left": "episodes/UofT_TISL/20260608_171328_episode_37_camera_wrist_left.mp4",
+        "camera_wrist_right": "episodes/UofT_TISL/20260608_171328_episode_37_camera_wrist_right.mp4"
+      },
+      "episode_id": "episode_37",
+      "language_instruction": "Pick up the green cup and stack it on the purple cup",
+      "operator": "mattarian",
+      "annotators": [
+        "mattarian"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:45:10.281015+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-022",
+      "dataset_repo": "OopsieData-Submissions/UofT_TISL",
+      "lab_id": "UofT_TISL",
+      "repo_path": "20260618_123042/20260618_123706_episode_6.h5",
+      "bundle_path": "episodes/UofT_TISL/20260618_123042/20260618_123706_episode_6.h5",
+      "video_files": {
+        "camera_high": "episodes/UofT_TISL/20260618_123042/20260618_123706_episode_6_camera_high.mp4",
+        "camera_wrist_left": "episodes/UofT_TISL/20260618_123042/20260618_123706_episode_6_camera_wrist_left.mp4",
+        "camera_wrist_right": "episodes/UofT_TISL/20260618_123042/20260618_123706_episode_6_camera_wrist_right.mp4"
+      },
+      "episode_id": "episode_6",
+      "language_instruction": "Pick up the ball and place it in the bowl",
+      "operator": "mattarian",
+      "annotators": [
+        "mattarian"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:40:55.410619+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-023",
+      "dataset_repo": "OopsieData-Submissions/UofT_TISL",
+      "lab_id": "UofT_TISL",
+      "repo_path": "cups_converted/20260508_221156_episode_16.h5",
+      "bundle_path": "episodes/UofT_TISL/cups_converted/20260508_221156_episode_16.h5",
+      "video_files": {
+        "left_wrist": "episodes/UofT_TISL/cups_converted/20260508_221156_episode_16_left_wrist.mp4",
+        "right_wrist": "episodes/UofT_TISL/cups_converted/20260508_221156_episode_16_right_wrist.mp4",
+        "top": "episodes/UofT_TISL/cups_converted/20260508_221156_episode_16_top.mp4"
+      },
+      "episode_id": "episode_16",
+      "language_instruction": "Pick up the green cup and stack it on the purple",
+      "operator": "mattarian",
+      "annotators": [
+        "mattarian"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:41:05.446745+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-024",
+      "dataset_repo": "OopsieData-Submissions/UofT_TISL",
+      "lab_id": "UofT_TISL",
+      "repo_path": "pen_converted/20260508_222456_episode_40.h5",
+      "bundle_path": "episodes/UofT_TISL/pen_converted/20260508_222456_episode_40.h5",
+      "video_files": {
+        "left_wrist": "episodes/UofT_TISL/pen_converted/20260508_222456_episode_40_left_wrist.mp4",
+        "right_wrist": "episodes/UofT_TISL/pen_converted/20260508_222456_episode_40_right_wrist.mp4",
+        "top": "episodes/UofT_TISL/pen_converted/20260508_222456_episode_40_top.mp4"
+      },
+      "episode_id": "episode_40",
+      "language_instruction": "Pick up the pen cap with the right hand and the cap with the left and insert it on the pen",
+      "operator": "mattarian",
+      "annotators": [
+        "mattarian"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:42:26.594601+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-025",
+      "dataset_repo": "OopsieData-Submissions/UofT_TISL",
+      "lab_id": "UofT_TISL",
+      "repo_path": "20260608_140204_episode_9.h5",
+      "bundle_path": "episodes/UofT_TISL/20260608_140204_episode_9.h5",
+      "video_files": {
+        "camera_high": "episodes/UofT_TISL/20260608_140204_episode_9_camera_high.mp4",
+        "camera_wrist_left": "episodes/UofT_TISL/20260608_140204_episode_9_camera_wrist_left.mp4",
+        "camera_wrist_right": "episodes/UofT_TISL/20260608_140204_episode_9_camera_wrist_right.mp4"
+      },
+      "episode_id": "episode_9",
+      "language_instruction": "Pick up the block and place it on the cardboard",
+      "operator": "mattarian",
+      "annotators": [
+        "mattarian"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:44:52.449030+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-026",
+      "dataset_repo": "OopsieData-Submissions/UofT_TISL",
+      "lab_id": "UofT_TISL",
+      "repo_path": "20260618_123042/20260618_123621_episode_5.h5",
+      "bundle_path": "episodes/UofT_TISL/20260618_123042/20260618_123621_episode_5.h5",
+      "video_files": {
+        "camera_high": "episodes/UofT_TISL/20260618_123042/20260618_123621_episode_5_camera_high.mp4",
+        "camera_wrist_left": "episodes/UofT_TISL/20260618_123042/20260618_123621_episode_5_camera_wrist_left.mp4",
+        "camera_wrist_right": "episodes/UofT_TISL/20260618_123042/20260618_123621_episode_5_camera_wrist_right.mp4"
+      },
+      "episode_id": "episode_5",
+      "language_instruction": "Pick up the ball and place it in the bowl",
+      "operator": "mattarian",
+      "annotators": [
+        "mattarian"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:40:22.302899+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-027",
+      "dataset_repo": "OopsieData-Submissions/UofT_TISL",
+      "lab_id": "UofT_TISL",
+      "repo_path": "cups_converted/20260508_221504_episode_28.h5",
+      "bundle_path": "episodes/UofT_TISL/cups_converted/20260508_221504_episode_28.h5",
+      "video_files": {
+        "left_wrist": "episodes/UofT_TISL/cups_converted/20260508_221504_episode_28_left_wrist.mp4",
+        "right_wrist": "episodes/UofT_TISL/cups_converted/20260508_221504_episode_28_right_wrist.mp4",
+        "top": "episodes/UofT_TISL/cups_converted/20260508_221504_episode_28_top.mp4"
+      },
+      "episode_id": "episode_28",
+      "language_instruction": "Pick up the green cup and stack it on the purple",
+      "operator": "mattarian",
+      "annotators": [
+        "mattarian"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:41:19.021783+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-028",
+      "dataset_repo": "OopsieData-Submissions/UofT_TISL",
+      "lab_id": "UofT_TISL",
+      "repo_path": "20260608_171318_episode_36.h5",
+      "bundle_path": "episodes/UofT_TISL/20260608_171318_episode_36.h5",
+      "video_files": {
+        "camera_high": "episodes/UofT_TISL/20260608_171318_episode_36_camera_high.mp4",
+        "camera_wrist_left": "episodes/UofT_TISL/20260608_171318_episode_36_camera_wrist_left.mp4",
+        "camera_wrist_right": "episodes/UofT_TISL/20260608_171318_episode_36_camera_wrist_right.mp4"
+      },
+      "episode_id": "episode_36",
+      "language_instruction": "Pick up the green cup and stack it on the purple cup",
+      "operator": "mattarian",
+      "annotators": [
+        "mattarian"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:45:01.948694+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-029",
+      "dataset_repo": "OopsieData-Submissions/UofT_TISL",
+      "lab_id": "UofT_TISL",
+      "repo_path": "pen_converted/20260508_221719_episode_24.h5",
+      "bundle_path": "episodes/UofT_TISL/pen_converted/20260508_221719_episode_24.h5",
+      "video_files": {
+        "left_wrist": "episodes/UofT_TISL/pen_converted/20260508_221719_episode_24_left_wrist.mp4",
+        "right_wrist": "episodes/UofT_TISL/pen_converted/20260508_221719_episode_24_right_wrist.mp4",
+        "top": "episodes/UofT_TISL/pen_converted/20260508_221719_episode_24_top.mp4"
+      },
+      "episode_id": "episode_24",
+      "language_instruction": "Pick up the pen cap with the right hand and the cap with the left and insert it on the pen",
+      "operator": "mattarian",
+      "annotators": [
+        "mattarian"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:42:11.089184+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-030",
+      "dataset_repo": "OopsieData-Submissions/UofT_TISL",
+      "lab_id": "UofT_TISL",
+      "repo_path": "20260608_135441_episode_29.h5",
+      "bundle_path": "episodes/UofT_TISL/20260608_135441_episode_29.h5",
+      "video_files": {
+        "camera_high": "episodes/UofT_TISL/20260608_135441_episode_29_camera_high.mp4",
+        "camera_wrist_left": "episodes/UofT_TISL/20260608_135441_episode_29_camera_wrist_left.mp4",
+        "camera_wrist_right": "episodes/UofT_TISL/20260608_135441_episode_29_camera_wrist_right.mp4"
+      },
+      "episode_id": "episode_29",
+      "language_instruction": "Pick up the block and place it on the cardboard",
+      "operator": "mattarian",
+      "annotators": [
+        "mattarian"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:42:41.255621+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-031",
+      "dataset_repo": "OopsieData-Submissions/UofT_TISL",
+      "lab_id": "UofT_TISL",
+      "repo_path": "20260618_123042/20260618_123042_episode_0.h5",
+      "bundle_path": "episodes/UofT_TISL/20260618_123042/20260618_123042_episode_0.h5",
+      "video_files": {
+        "camera_high": "episodes/UofT_TISL/20260618_123042/20260618_123042_episode_0_camera_high.mp4",
+        "camera_wrist_left": "episodes/UofT_TISL/20260618_123042/20260618_123042_episode_0_camera_wrist_left.mp4",
+        "camera_wrist_right": "episodes/UofT_TISL/20260618_123042/20260618_123042_episode_0_camera_wrist_right.mp4"
+      },
+      "episode_id": "episode_0",
+      "language_instruction": "Pick up the ball and place it in the bowl",
+      "operator": "mattarian",
+      "annotators": [
+        "mattarian"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:39:53.100731+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-032",
+      "dataset_repo": "OopsieData-Submissions/UofT_TISL",
+      "lab_id": "UofT_TISL",
+      "repo_path": "cups_converted/20260508_222016_episode_48.h5",
+      "bundle_path": "episodes/UofT_TISL/cups_converted/20260508_222016_episode_48.h5",
+      "video_files": {
+        "left_wrist": "episodes/UofT_TISL/cups_converted/20260508_222016_episode_48_left_wrist.mp4",
+        "right_wrist": "episodes/UofT_TISL/cups_converted/20260508_222016_episode_48_right_wrist.mp4",
+        "top": "episodes/UofT_TISL/cups_converted/20260508_222016_episode_48_top.mp4"
+      },
+      "episode_id": "episode_48",
+      "language_instruction": "Pick up the green cup and stack it on the purple",
+      "operator": "mattarian",
+      "annotators": [
+        "mattarian"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:41:26.286699+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-033",
+      "dataset_repo": "OopsieData-Submissions/UofT_TISL",
+      "lab_id": "UofT_TISL",
+      "repo_path": "20260608_135638_episode_35.h5",
+      "bundle_path": "episodes/UofT_TISL/20260608_135638_episode_35.h5",
+      "video_files": {
+        "camera_high": "episodes/UofT_TISL/20260608_135638_episode_35_camera_high.mp4",
+        "camera_wrist_left": "episodes/UofT_TISL/20260608_135638_episode_35_camera_wrist_left.mp4",
+        "camera_wrist_right": "episodes/UofT_TISL/20260608_135638_episode_35_camera_wrist_right.mp4"
+      },
+      "episode_id": "episode_35",
+      "language_instruction": "Pick up the block and place it on the cardboard",
+      "operator": "mattarian",
+      "annotators": [
+        "mattarian"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:43:36.159705+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-034",
+      "dataset_repo": "OopsieData-Submissions/UofT_TISL",
+      "lab_id": "UofT_TISL",
+      "repo_path": "pen_converted/20260508_221952_episode_3.h5",
+      "bundle_path": "episodes/UofT_TISL/pen_converted/20260508_221952_episode_3.h5",
+      "video_files": {
+        "left_wrist": "episodes/UofT_TISL/pen_converted/20260508_221952_episode_3_left_wrist.mp4",
+        "right_wrist": "episodes/UofT_TISL/pen_converted/20260508_221952_episode_3_right_wrist.mp4",
+        "top": "episodes/UofT_TISL/pen_converted/20260508_221952_episode_3_top.mp4"
+      },
+      "episode_id": "episode_3",
+      "language_instruction": "Pick up the pen cap with the right hand and the cap with the left and insert it on the pen",
+      "operator": "mattarian",
+      "annotators": [
+        "mattarian"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:42:16.506154+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-035",
+      "dataset_repo": "OopsieData-Submissions/UofT_TISL",
+      "lab_id": "UofT_TISL",
+      "repo_path": "20260608_171619_episode_9.h5",
+      "bundle_path": "episodes/UofT_TISL/20260608_171619_episode_9.h5",
+      "video_files": {
+        "camera_high": "episodes/UofT_TISL/20260608_171619_episode_9_camera_high.mp4",
+        "camera_wrist_left": "episodes/UofT_TISL/20260608_171619_episode_9_camera_wrist_left.mp4",
+        "camera_wrist_right": "episodes/UofT_TISL/20260608_171619_episode_9_camera_wrist_right.mp4"
+      },
+      "episode_id": "episode_9",
+      "language_instruction": "Pick up the green cup and stack it on the purple cup",
+      "operator": "mattarian",
+      "annotators": [
+        "mattarian"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:45:23.364098+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-036",
+      "dataset_repo": "OopsieData-Submissions/UofT_TISL",
+      "lab_id": "UofT_TISL",
+      "repo_path": "20260618_123042/20260618_123242_episode_23.h5",
+      "bundle_path": "episodes/UofT_TISL/20260618_123042/20260618_123242_episode_23.h5",
+      "video_files": {
+        "camera_high": "episodes/UofT_TISL/20260618_123042/20260618_123242_episode_23_camera_high.mp4",
+        "camera_wrist_left": "episodes/UofT_TISL/20260618_123042/20260618_123242_episode_23_camera_wrist_left.mp4",
+        "camera_wrist_right": "episodes/UofT_TISL/20260618_123042/20260618_123242_episode_23_camera_wrist_right.mp4"
+      },
+      "episode_id": "episode_23",
+      "language_instruction": "Pick up the ball and place it in the bowl",
+      "operator": "mattarian",
+      "annotators": [
+        "mattarian"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:40:04.476011+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-037",
+      "dataset_repo": "OopsieData-Submissions/UofT_TISL",
+      "lab_id": "UofT_TISL",
+      "repo_path": "cups_converted/20260508_221450_episode_27.h5",
+      "bundle_path": "episodes/UofT_TISL/cups_converted/20260508_221450_episode_27.h5",
+      "video_files": {
+        "left_wrist": "episodes/UofT_TISL/cups_converted/20260508_221450_episode_27_left_wrist.mp4",
+        "right_wrist": "episodes/UofT_TISL/cups_converted/20260508_221450_episode_27_right_wrist.mp4",
+        "top": "episodes/UofT_TISL/cups_converted/20260508_221450_episode_27_top.mp4"
+      },
+      "episode_id": "episode_27",
+      "language_instruction": "Pick up the green cup and stack it on the purple",
+      "operator": "mattarian",
+      "annotators": [
+        "mattarian"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:41:12.076782+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-038",
+      "dataset_repo": "OopsieData-Submissions/UofT_TISL",
+      "lab_id": "UofT_TISL",
+      "repo_path": "20260608_135109_episode_18.h5",
+      "bundle_path": "episodes/UofT_TISL/20260608_135109_episode_18.h5",
+      "video_files": {
+        "camera_high": "episodes/UofT_TISL/20260608_135109_episode_18_camera_high.mp4",
+        "camera_wrist_left": "episodes/UofT_TISL/20260608_135109_episode_18_camera_wrist_left.mp4",
+        "camera_wrist_right": "episodes/UofT_TISL/20260608_135109_episode_18_camera_wrist_right.mp4"
+      },
+      "episode_id": "episode_18",
+      "language_instruction": "Pick up the block and place it on the cardboard",
+      "operator": "mattarian",
+      "annotators": [
+        "mattarian"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:42:34.994014+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-039",
+      "dataset_repo": "OopsieData-Submissions/UofT_TISL",
+      "lab_id": "UofT_TISL",
+      "repo_path": "pen_converted/20260508_221355_episode_17.h5",
+      "bundle_path": "episodes/UofT_TISL/pen_converted/20260508_221355_episode_17.h5",
+      "video_files": {
+        "left_wrist": "episodes/UofT_TISL/pen_converted/20260508_221355_episode_17_left_wrist.mp4",
+        "right_wrist": "episodes/UofT_TISL/pen_converted/20260508_221355_episode_17_right_wrist.mp4",
+        "top": "episodes/UofT_TISL/pen_converted/20260508_221355_episode_17_top.mp4"
+      },
+      "episode_id": "episode_17",
+      "language_instruction": "Pick up the pen cap with the right hand and the cap with the left and insert it on the pen",
+      "operator": "mattarian",
+      "annotators": [
+        "mattarian"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "the episode runs a little longer past the success point, but otherwise okay.",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:42:02.723061+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-040",
+      "dataset_repo": "OopsieData-Submissions/UofT_TISL",
+      "lab_id": "UofT_TISL",
+      "repo_path": "20260608_171358_episode_4.h5",
+      "bundle_path": "episodes/UofT_TISL/20260608_171358_episode_4.h5",
+      "video_files": {
+        "camera_high": "episodes/UofT_TISL/20260608_171358_episode_4_camera_high.mp4",
+        "camera_wrist_left": "episodes/UofT_TISL/20260608_171358_episode_4_camera_wrist_left.mp4",
+        "camera_wrist_right": "episodes/UofT_TISL/20260608_171358_episode_4_camera_wrist_right.mp4"
+      },
+      "episode_id": "episode_4",
+      "language_instruction": "Pick up the green cup and stack it on the purple cup",
+      "operator": "mattarian",
+      "annotators": [
+        "mattarian"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:45:17.159820+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-041",
+      "dataset_repo": "OopsieData-Submissions/VUA_KL",
+      "lab_id": "UA_KL",
+      "repo_path": "M01_pour_spacemouse_aggregate/20260921_112842.h5",
+      "bundle_path": "episodes/VUA_KL/M01_pour_spacemouse_aggregate/20260921_112842.h5",
+      "video_files": {
+        "overhead_cam": "episodes/VUA_KL/M01_pour_spacemouse_aggregate/20260921_112842_overhead_cam.mp4",
+        "wrist_cam": "episodes/VUA_KL/M01_pour_spacemouse_aggregate/20260921_112842_wrist_cam.mp4"
+      },
+      "episode_id": "20260921_112842",
+      "language_instruction": "Empty the green cup into the blue cup",
+      "operator": "oopsie-data",
+      "annotators": [
+        "oopsie-data"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "camera labels are inverted",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:08:28.380495+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-042",
+      "dataset_repo": "OopsieData-Submissions/VUA_KL",
+      "lab_id": "VUA_KL",
+      "repo_path": "20261002_144952/20261002_150404_2.h5",
+      "bundle_path": "episodes/VUA_KL/20261002_144952/20261002_150404_2.h5",
+      "video_files": {
+        "TCP_camera": "episodes/VUA_KL/20261002_144952/20261002_150404_2_TCP_camera.mp4",
+        "top_camera": "episodes/VUA_KL/20261002_144952/20261002_150404_2_top_camera.mp4"
+      },
+      "episode_id": "20261002_150404_2",
+      "language_instruction": "Dispense 10mg of sodium_bicarbonate into the target container. Margin of 10% is considered successful.",
+      "operator": "Nikola Radulov",
+      "annotators": [
+        "Nikola Radulov"
+      ],
+      "robot_name": "Franka Research 3",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:59:14.407417+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-043",
+      "dataset_repo": "OopsieData-Submissions/VUA_KL",
+      "lab_id": "VUA_KL",
+      "repo_path": "P01_stack_ps4_20260824-135941/20260824_140132.h5",
+      "bundle_path": "episodes/VUA_KL/P01_stack_ps4_20260824-135941/20260824_140132.h5",
+      "video_files": {
+        "overhead_cam": "episodes/VUA_KL/P01_stack_ps4_20260824-135941/20260824_140132_overhead_cam.mp4",
+        "wrist_cam": "episodes/VUA_KL/P01_stack_ps4_20260824-135941/20260824_140132_wrist_cam.mp4"
+      },
+      "episode_id": "20260824_140132",
+      "language_instruction": "stack the pink on the blue",
+      "operator": "michael",
+      "annotators": [
+        "michael"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "unclear how the placement is imperfect, and also camera labels are inverted",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:11:27.871957+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-044",
+      "dataset_repo": "OopsieData-Submissions/VUA_KL",
+      "lab_id": "VUA_KL",
+      "repo_path": "20261002_152626/20261002_155433_2.h5",
+      "bundle_path": "episodes/VUA_KL/20261002_152626/20261002_155433_2.h5",
+      "video_files": {
+        "TCP_camera": "episodes/VUA_KL/20261002_152626/20261002_155433_2_TCP_camera.mp4",
+        "top_camera": "episodes/VUA_KL/20261002_152626/20261002_155433_2_top_camera.mp4"
+      },
+      "episode_id": "20261002_155433_2",
+      "language_instruction": "Dispense 12mg of semolina into the target container. Margin of 10% is considered successful.",
+      "operator": "Nikola Radulov",
+      "annotators": [
+        "Nikola Radulov"
+      ],
+      "robot_name": "Franka Research 3",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:01:11.893362+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-045",
+      "dataset_repo": "OopsieData-Submissions/VUA_KL",
+      "lab_id": "UA_KL",
+      "repo_path": "M01_pour_spacemouse_aggregate/20260921_120509.h5",
+      "bundle_path": "episodes/VUA_KL/M01_pour_spacemouse_aggregate/20260921_120509.h5",
+      "video_files": {
+        "overhead_cam": "episodes/VUA_KL/M01_pour_spacemouse_aggregate/20260921_120509_overhead_cam.mp4",
+        "wrist_cam": "episodes/VUA_KL/M01_pour_spacemouse_aggregate/20260921_120509_wrist_cam.mp4"
+      },
+      "episode_id": "20260921_120509",
+      "language_instruction": "Pour the yellow cup into the blue cup",
+      "operator": "oopsie-data",
+      "annotators": [
+        "oopsie-data"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "camera labels are inverted",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:09:09.780945+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-046",
+      "dataset_repo": "OopsieData-Submissions/VUA_KL",
+      "lab_id": "VUA_KL",
+      "repo_path": "P01_stack_spacemouse_20260825-113526/20260825_114804.h5",
+      "bundle_path": "episodes/VUA_KL/P01_stack_spacemouse_20260825-113526/20260825_114804.h5",
+      "video_files": {
+        "overhead_cam": "episodes/VUA_KL/P01_stack_spacemouse_20260825-113526/20260825_114804_overhead_cam.mp4",
+        "wrist_cam": "episodes/VUA_KL/P01_stack_spacemouse_20260825-113526/20260825_114804_wrist_cam.mp4"
+      },
+      "episode_id": "20260825_114804",
+      "language_instruction": "remove the yellow cup from the green cup and put it into the pink cup",
+      "operator": "michael",
+      "annotators": [
+        "michael"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "camera labels inverted",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:12:36.770944+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-047",
+      "dataset_repo": "OopsieData-Submissions/VUA_KL",
+      "lab_id": "VUA_KL",
+      "repo_path": "20261002_152626/20261002_153456_2.h5",
+      "bundle_path": "episodes/VUA_KL/20261002_152626/20261002_153456_2.h5",
+      "video_files": {
+        "TCP_camera": "episodes/VUA_KL/20261002_152626/20261002_153456_2_TCP_camera.mp4",
+        "top_camera": "episodes/VUA_KL/20261002_152626/20261002_153456_2_top_camera.mp4"
+      },
+      "episode_id": "20261002_153456_2",
+      "language_instruction": "Dispense 18mg of semolina into the target container. Margin of 10% is considered successful.",
+      "operator": "Nikola Radulov",
+      "annotators": [
+        "Nikola Radulov"
+      ],
+      "robot_name": "Franka Research 3",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:00:38.593131+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-048",
+      "dataset_repo": "OopsieData-Submissions/VUA_KL",
+      "lab_id": "UA_KL",
+      "repo_path": "XR0_stack_ps4_aggregate/20260929_225016.h5",
+      "bundle_path": "episodes/VUA_KL/XR0_stack_ps4_aggregate/20260929_225016.h5",
+      "video_files": {
+        "overhead_cam": "episodes/VUA_KL/XR0_stack_ps4_aggregate/20260929_225016_overhead_cam.mp4",
+        "wrist_cam": "episodes/VUA_KL/XR0_stack_ps4_aggregate/20260929_225016_wrist_cam.mp4"
+      },
+      "episode_id": "20260929_225016",
+      "language_instruction": "stack the pink cup on the blue cup",
+      "operator": "oopsie-data",
+      "annotators": [
+        "oopsie-data"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "camera labels inverted.",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:17:09.028384+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-049",
+      "dataset_repo": "OopsieData-Submissions/VUA_KL",
+      "lab_id": "VUA_KL",
+      "repo_path": "P01_stack_spacemouse_20260825-113526/20260825_114623.h5",
+      "bundle_path": "episodes/VUA_KL/P01_stack_spacemouse_20260825-113526/20260825_114623.h5",
+      "video_files": {
+        "overhead_cam": "episodes/VUA_KL/P01_stack_spacemouse_20260825-113526/20260825_114623_overhead_cam.mp4",
+        "wrist_cam": "episodes/VUA_KL/P01_stack_spacemouse_20260825-113526/20260825_114623_wrist_cam.mp4"
+      },
+      "episode_id": "20260825_114623",
+      "language_instruction": "place the blue cup into the green cup",
+      "operator": "michael",
+      "annotators": [
+        "michael"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "camera labels inverted",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:12:04.159620+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-050",
+      "dataset_repo": "OopsieData-Submissions/VUA_KL",
+      "lab_id": "VUA_KL",
+      "repo_path": "20261002_113441/20261002_143420_2.h5",
+      "bundle_path": "episodes/VUA_KL/20261002_113441/20261002_143420_2.h5",
+      "video_files": {
+        "TCP_camera": "episodes/VUA_KL/20261002_113441/20261002_143420_2_TCP_camera.mp4",
+        "top_camera": "episodes/VUA_KL/20261002_113441/20261002_143420_2_top_camera.mp4"
+      },
+      "episode_id": "20261002_143420_2",
+      "language_instruction": "Dispense 18mg of sodium_bicarbonate into the target container. Margin of 10% is considered successful.",
+      "operator": "Nikola Radulov",
+      "annotators": [
+        "Nikola Radulov"
+      ],
+      "robot_name": "Franka Research 3",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:59:23.251539+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-051",
+      "dataset_repo": "OopsieData-Submissions/VUA_KL",
+      "lab_id": "UA_KL",
+      "repo_path": "MP01_pour_spacemouse_aggregate/20260911_152833.h5",
+      "bundle_path": "episodes/VUA_KL/MP01_pour_spacemouse_aggregate/20260911_152833.h5",
+      "video_files": {
+        "overhead_cam": "episodes/VUA_KL/MP01_pour_spacemouse_aggregate/20260911_152833_overhead_cam.mp4",
+        "wrist_cam": "episodes/VUA_KL/MP01_pour_spacemouse_aggregate/20260911_152833_wrist_cam.mp4"
+      },
+      "episode_id": "20260911_152833",
+      "language_instruction": "Empty the pink cup into the yellow cup",
+      "operator": "oopsie-data",
+      "annotators": [
+        "oopsie-data"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "camera labels inverted",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:10:32.838616+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-052",
+      "dataset_repo": "OopsieData-Submissions/VUA_KL",
+      "lab_id": "VUA_KL",
+      "repo_path": "P01_stack_spacemouse_20260825-113526/20260825_113749.h5",
+      "bundle_path": "episodes/VUA_KL/P01_stack_spacemouse_20260825-113526/20260825_113749.h5",
+      "video_files": {
+        "overhead_cam": "episodes/VUA_KL/P01_stack_spacemouse_20260825-113526/20260825_113749_overhead_cam.mp4",
+        "wrist_cam": "episodes/VUA_KL/P01_stack_spacemouse_20260825-113526/20260825_113749_wrist_cam.mp4"
+      },
+      "episode_id": "20260825_113749",
+      "language_instruction": "grasp the blue cup and insert it into the green cup",
+      "operator": "michael",
+      "annotators": [
+        "michael"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "camera labels inverted",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:11:46.498572+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-053",
+      "dataset_repo": "OopsieData-Submissions/VUA_KL",
+      "lab_id": "VUA_KL",
+      "repo_path": "20261001_105514/20261001_105827_2.h5",
+      "bundle_path": "episodes/VUA_KL/20261001_105514/20261001_105827_2.h5",
+      "video_files": {
+        "TCP_camera": "episodes/VUA_KL/20261001_105514/20261001_105827_2_TCP_camera.mp4",
+        "top_camera": "episodes/VUA_KL/20261001_105514/20261001_105827_2_top_camera.mp4"
+      },
+      "episode_id": "20261001_105827_2",
+      "language_instruction": "Dispense 17mg of sand into the target container. Margin of 10% is considered successful.",
+      "operator": "Nikola Radulov",
+      "annotators": [
+        "Nikola Radulov"
+      ],
+      "robot_name": "Franka Research 3",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:46:47.900141+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-054",
+      "dataset_repo": "OopsieData-Submissions/VUA_KL",
+      "lab_id": "UA_KL",
+      "repo_path": "M01_pour_spacemouse_aggregate/20260921_130556.h5",
+      "bundle_path": "episodes/VUA_KL/M01_pour_spacemouse_aggregate/20260921_130556.h5",
+      "video_files": {
+        "overhead_cam": "episodes/VUA_KL/M01_pour_spacemouse_aggregate/20260921_130556_overhead_cam.mp4",
+        "wrist_cam": "episodes/VUA_KL/M01_pour_spacemouse_aggregate/20260921_130556_wrist_cam.mp4"
+      },
+      "episode_id": "20260921_130556",
+      "language_instruction": "Pour the yellow cup into the pink cup",
+      "operator": "oopsie-data",
+      "annotators": [
+        "oopsie-data"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "camera labels inverted",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:09:57.334928+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-055",
+      "dataset_repo": "OopsieData-Submissions/VUA_KL",
+      "lab_id": "VUA_KL",
+      "repo_path": "20261001_105514/20261001_114429_2.h5",
+      "bundle_path": "episodes/VUA_KL/20261001_105514/20261001_114429_2.h5",
+      "video_files": {
+        "TCP_camera": "episodes/VUA_KL/20261001_105514/20261001_114429_2_TCP_camera.mp4",
+        "top_camera": "episodes/VUA_KL/20261001_105514/20261001_114429_2_top_camera.mp4"
+      },
+      "episode_id": "20261001_114429_2",
+      "language_instruction": "Dispense 16mg of sand into the target container. Margin of 10% is considered successful.",
+      "operator": "Nikola Radulov",
+      "annotators": [
+        "Nikola Radulov"
+      ],
+      "robot_name": "Franka Research 3",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:47:28.478151+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-056",
+      "dataset_repo": "OopsieData-Submissions/VUA_KL",
+      "lab_id": "VUA_KL",
+      "repo_path": "P01_stack_spacemouse_20260825-113526/20260825_115337.h5",
+      "bundle_path": "episodes/VUA_KL/P01_stack_spacemouse_20260825-113526/20260825_115337.h5",
+      "video_files": {
+        "overhead_cam": "episodes/VUA_KL/P01_stack_spacemouse_20260825-113526/20260825_115337_overhead_cam.mp4",
+        "wrist_cam": "episodes/VUA_KL/P01_stack_spacemouse_20260825-113526/20260825_115337_wrist_cam.mp4"
+      },
+      "episode_id": "20260825_115337",
+      "language_instruction": "place the pink cup into the blue cup",
+      "operator": "michael",
+      "annotators": [
+        "michael"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "camera labels inverted",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:13:58.743264+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-057",
+      "dataset_repo": "OopsieData-Submissions/VUA_KL",
+      "lab_id": "VUA_KL",
+      "repo_path": "20261001_105514/20261001_134626_2.h5",
+      "bundle_path": "episodes/VUA_KL/20261001_105514/20261001_134626_2.h5",
+      "video_files": {
+        "TCP_camera": "episodes/VUA_KL/20261001_105514/20261001_134626_2_TCP_camera.mp4",
+        "top_camera": "episodes/VUA_KL/20261001_105514/20261001_134626_2_top_camera.mp4"
+      },
+      "episode_id": "20261001_134626_2",
+      "language_instruction": "Dispense 15mg of sand into the target container. Margin of 10% is considered successful.",
+      "operator": "Nikola Radulov",
+      "annotators": [
+        "Nikola Radulov"
+      ],
+      "robot_name": "Franka Research 3",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:00:04.689244+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-058",
+      "dataset_repo": "OopsieData-Submissions/VUA_KL",
+      "lab_id": "UA_KL",
+      "repo_path": "XR0_stack_ps4_aggregate/20260929_182252.h5",
+      "bundle_path": "episodes/VUA_KL/XR0_stack_ps4_aggregate/20260929_182252.h5",
+      "video_files": {
+        "overhead_cam": "episodes/VUA_KL/XR0_stack_ps4_aggregate/20260929_182252_overhead_cam.mp4",
+        "wrist_cam": "episodes/VUA_KL/XR0_stack_ps4_aggregate/20260929_182252_wrist_cam.mp4"
+      },
+      "episode_id": "20260929_182252",
+      "language_instruction": "put the blue cup in the pink cup",
+      "operator": "oopsie-data",
+      "annotators": [
+        "oopsie-data"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "video gets quite choppy. seems like there are missing frame especially in the critical moment. Also, the camera labels are inverted.",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:16:16.777876+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-059",
+      "dataset_repo": "OopsieData-Submissions/VUA_KL",
+      "lab_id": "VUA_KL",
+      "repo_path": "P01_stack_spacemouse_20260825-113526/20260825_114910.h5",
+      "bundle_path": "episodes/VUA_KL/P01_stack_spacemouse_20260825-113526/20260825_114910.h5",
+      "video_files": {
+        "overhead_cam": "episodes/VUA_KL/P01_stack_spacemouse_20260825-113526/20260825_114910_overhead_cam.mp4",
+        "wrist_cam": "episodes/VUA_KL/P01_stack_spacemouse_20260825-113526/20260825_114910_wrist_cam.mp4"
+      },
+      "episode_id": "20260825_114910",
+      "language_instruction": "remove the pink cup from the green cup and insert it into the yellow cup",
+      "operator": "michael",
+      "annotators": [
+        "michael"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "camera labels inverted",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:13:10.764644+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-060",
+      "dataset_repo": "OopsieData-Submissions/VUA_KL",
+      "lab_id": "VUA_KL",
+      "repo_path": "20261002_113441/20261002_122657_2.h5",
+      "bundle_path": "episodes/VUA_KL/20261002_113441/20261002_122657_2.h5",
+      "video_files": {
+        "TCP_camera": "episodes/VUA_KL/20261002_113441/20261002_122657_2_TCP_camera.mp4",
+        "top_camera": "episodes/VUA_KL/20261002_113441/20261002_122657_2_top_camera.mp4"
+      },
+      "episode_id": "20261002_122657_2",
+      "language_instruction": "Dispense 13mg of sodium_bicarbonate into the target container. Margin of 10% is considered successful.",
+      "operator": "Nikola Radulov",
+      "annotators": [
+        "Nikola Radulov"
+      ],
+      "robot_name": "Franka Research 3",
+      "qa_notes": "okay.",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T14:59:52.082606+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-061",
+      "dataset_repo": "OopsieData-Submissions/WUSTL_MIG",
+      "lab_id": "WUSTL_MIG",
+      "repo_path": "put_tin_box_in_tray/20261001_161556.h5",
+      "bundle_path": "episodes/WUSTL_MIG/put_tin_box_in_tray/20261001_161556.h5",
+      "video_files": {
+        "external": "episodes/WUSTL_MIG/put_tin_box_in_tray/20261001_161556_external.mp4",
+        "wrist": "episodes/WUSTL_MIG/put_tin_box_in_tray/20261001_161556_wrist.mp4"
+      },
+      "episode_id": "20261001_161556",
+      "language_instruction": "Grasp the tin box and put it into the tray.",
+      "operator": "Buzhao Liu",
+      "annotators": [
+        "Buzhao Liu"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:21:00.251616+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-062",
+      "dataset_repo": "OopsieData-Submissions/WUSTL_MIG",
+      "lab_id": "WUSTL_MIG",
+      "repo_path": "pick_pot_lid/20261002_222245.h5",
+      "bundle_path": "episodes/WUSTL_MIG/pick_pot_lid/20261002_222245.h5",
+      "video_files": {
+        "external": "episodes/WUSTL_MIG/pick_pot_lid/20261002_222245_external.mp4",
+        "wrist": "episodes/WUSTL_MIG/pick_pot_lid/20261002_222245_wrist.mp4"
+      },
+      "episode_id": "20261002_222245",
+      "language_instruction": "Pick up the pot lid.",
+      "operator": "Tyler Dinh",
+      "annotators": [
+        "Tyler Dinh"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:19:30.819335+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-063",
+      "dataset_repo": "OopsieData-Submissions/WUSTL_MIG",
+      "lab_id": "WUSTL_MIG",
+      "repo_path": "stack_bottles/20261004_010056.h5",
+      "bundle_path": "episodes/WUSTL_MIG/stack_bottles/20261004_010056.h5",
+      "video_files": {
+        "external": "episodes/WUSTL_MIG/stack_bottles/20261004_010056_external.mp4",
+        "wrist": "episodes/WUSTL_MIG/stack_bottles/20261004_010056_wrist.mp4"
+      },
+      "episode_id": "20261004_010056",
+      "language_instruction": "Stack the front amber stock bottle on top of the other amber stock bottle.",
+      "operator": "Noah Wolk",
+      "annotators": [
+        "Noah Wolk"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:21:11.632311+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-064",
+      "dataset_repo": "OopsieData-Submissions/WUSTL_MIG",
+      "lab_id": "WUSTL_MIG",
+      "repo_path": "push_tin_box/20261004_193107.h5",
+      "bundle_path": "episodes/WUSTL_MIG/push_tin_box/20261004_193107.h5",
+      "video_files": {
+        "external": "episodes/WUSTL_MIG/push_tin_box/20261004_193107_external.mp4",
+        "wrist": "episodes/WUSTL_MIG/push_tin_box/20261004_193107_wrist.mp4"
+      },
+      "episode_id": "20261004_193107",
+      "language_instruction": "Brace the tin box with both grippers and steadily push it forward a little.",
+      "operator": "Jianing Ye",
+      "annotators": [
+        "Jianing Ye"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:20:40.587153+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-065",
+      "dataset_repo": "OopsieData-Submissions/WUSTL_MIG",
+      "lab_id": "WUSTL_MIG",
+      "repo_path": "grasp_pingpong_among_colored/20261005_042726.h5",
+      "bundle_path": "episodes/WUSTL_MIG/grasp_pingpong_among_colored/20261005_042726.h5",
+      "video_files": {
+        "external": "episodes/WUSTL_MIG/grasp_pingpong_among_colored/20261005_042726_external.mp4",
+        "wrist": "episodes/WUSTL_MIG/grasp_pingpong_among_colored/20261005_042726_wrist.mp4"
+      },
+      "episode_id": "20261005_042726",
+      "language_instruction": "Grasp the white ping pong ball among all the colored balls from the bowl.",
+      "operator": "Xiu Yuan",
+      "annotators": [
+        "Xiu Yuan"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:18:34.262200+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-066",
+      "dataset_repo": "OopsieData-Submissions/WUSTL_MIG",
+      "lab_id": "WUSTL_MIG",
+      "repo_path": "20260929_172531.h5",
+      "bundle_path": "episodes/WUSTL_MIG/20260929_172531.h5",
+      "video_files": {
+        "external": "episodes/WUSTL_MIG/20260929_172531_external.mp4",
+        "wrist": "episodes/WUSTL_MIG/20260929_172531_wrist.mp4"
+      },
+      "episode_id": "20260929_172531",
+      "language_instruction": "Pick up the white ping pong ball on the plate",
+      "operator": "Jianing",
+      "annotators": [
+        "Jianing"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:21:40.182654+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-067",
+      "dataset_repo": "OopsieData-Submissions/WUSTL_MIG",
+      "lab_id": "WUSTL_MIG",
+      "repo_path": "20260929_172707.h5",
+      "bundle_path": "episodes/WUSTL_MIG/20260929_172707.h5",
+      "video_files": {
+        "external": "episodes/WUSTL_MIG/20260929_172707_external.mp4",
+        "wrist": "episodes/WUSTL_MIG/20260929_172707_wrist.mp4"
+      },
+      "episode_id": "20260929_172707",
+      "language_instruction": "Pick up the white ping pong ball on the plate",
+      "operator": "Xiu",
+      "annotators": [
+        "Xiu"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:21:46.116912+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-068",
+      "dataset_repo": "OopsieData-Submissions/WUSTL_MIG",
+      "lab_id": "WUSTL_MIG",
+      "repo_path": "20260929_172356.h5",
+      "bundle_path": "episodes/WUSTL_MIG/20260929_172356.h5",
+      "video_files": {
+        "external": "episodes/WUSTL_MIG/20260929_172356_external.mp4",
+        "wrist": "episodes/WUSTL_MIG/20260929_172356_wrist.mp4"
+      },
+      "episode_id": "20260929_172356",
+      "language_instruction": "Pick up the white ping pong ball on the plate",
+      "operator": "Tyler",
+      "annotators": [
+        "Tyler"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:21:25.776878+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-069",
+      "dataset_repo": "OopsieData-Submissions/WUSTL_MIG",
+      "lab_id": "WUSTL_MIG",
+      "repo_path": "20260929_172443.h5",
+      "bundle_path": "episodes/WUSTL_MIG/20260929_172443.h5",
+      "video_files": {
+        "external": "episodes/WUSTL_MIG/20260929_172443_external.mp4",
+        "wrist": "episodes/WUSTL_MIG/20260929_172443_wrist.mp4"
+      },
+      "episode_id": "20260929_172443",
+      "language_instruction": "Pick up the white ping pong ball on the plate",
+      "operator": "Noah",
+      "annotators": [
+        "Noah"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:21:35.348649+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-070",
+      "dataset_repo": "OopsieData-Submissions/WUSTL_MIG",
+      "lab_id": "WUSTL_MIG",
+      "repo_path": "place_cup_upright/20260929_195555.h5",
+      "bundle_path": "episodes/WUSTL_MIG/place_cup_upright/20260929_195555.h5",
+      "video_files": {
+        "external": "episodes/WUSTL_MIG/place_cup_upright/20260929_195555_external.mp4",
+        "wrist": "episodes/WUSTL_MIG/place_cup_upright/20260929_195555_wrist.mp4"
+      },
+      "episode_id": "20260929_195555",
+      "language_instruction": "Place the white cup upright on the plate, making sure it doesn’t tip over.",
+      "operator": "Buzhao Liu",
+      "annotators": [
+        "Buzhao Liu"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:20:29.737839+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-071",
+      "dataset_repo": "OopsieData-Submissions/WUSTL_MIG",
+      "lab_id": "WUSTL_MIG",
+      "repo_path": "pick_lunchbox/20261003_202843.h5",
+      "bundle_path": "episodes/WUSTL_MIG/pick_lunchbox/20261003_202843.h5",
+      "video_files": {
+        "external": "episodes/WUSTL_MIG/pick_lunchbox/20261003_202843_external.mp4",
+        "wrist": "episodes/WUSTL_MIG/pick_lunchbox/20261003_202843_wrist.mp4"
+      },
+      "episode_id": "20261003_202843",
+      "language_instruction": "Pick up the lunchbox by its handle.",
+      "operator": "Tyler Dinh",
+      "annotators": [
+        "Tyler Dinh"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:19:13.461065+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-072",
+      "dataset_repo": "OopsieData-Submissions/WUSTL_MIG",
+      "lab_id": "WUSTL_MIG",
+      "repo_path": "pick_up_lid/20261003_022828.h5",
+      "bundle_path": "episodes/WUSTL_MIG/pick_up_lid/20261003_022828.h5",
+      "video_files": {
+        "external": "episodes/WUSTL_MIG/pick_up_lid/20261003_022828_external.mp4",
+        "wrist": "episodes/WUSTL_MIG/pick_up_lid/20261003_022828_wrist.mp4"
+      },
+      "episode_id": "20261003_022828",
+      "language_instruction": "Lift loose lid from tin card deck box.",
+      "operator": "Noah Wolk",
+      "annotators": [
+        "Noah Wolk"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:19:50.721136+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-073",
+      "dataset_repo": "OopsieData-Submissions/WUSTL_MIG",
+      "lab_id": "WUSTL_MIG",
+      "repo_path": "pick_bottle/20260930_143150.h5",
+      "bundle_path": "episodes/WUSTL_MIG/pick_bottle/20260930_143150.h5",
+      "video_files": {
+        "external": "episodes/WUSTL_MIG/pick_bottle/20260930_143150_external.mp4",
+        "wrist": "episodes/WUSTL_MIG/pick_bottle/20260930_143150_wrist.mp4"
+      },
+      "episode_id": "20260930_143150",
+      "language_instruction": "Pick up the prescription bottle.",
+      "operator": "Jianing Ye",
+      "annotators": [
+        "Jianing Ye"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:18:57.150810+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-074",
+      "dataset_repo": "OopsieData-Submissions/WUSTL_MIG",
+      "lab_id": "WUSTL_MIG",
+      "repo_path": "grasp_tin_box/20261002_180553.h5",
+      "bundle_path": "episodes/WUSTL_MIG/grasp_tin_box/20261002_180553.h5",
+      "video_files": {
+        "external": "episodes/WUSTL_MIG/grasp_tin_box/20261002_180553_external.mp4",
+        "wrist": "episodes/WUSTL_MIG/grasp_tin_box/20261002_180553_wrist.mp4"
+      },
+      "episode_id": "20261002_180553",
+      "language_instruction": "Grasp the tin box.",
+      "operator": "Xiu Yuan",
+      "annotators": [
+        "Xiu Yuan"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:18:51.770482+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-075",
+      "dataset_repo": "OopsieData-Submissions/WUSTL_MIG",
+      "lab_id": "WUSTL_MIG",
+      "repo_path": "20260929_162712.h5",
+      "bundle_path": "episodes/WUSTL_MIG/20260929_162712.h5",
+      "video_files": {
+        "external": "episodes/WUSTL_MIG/20260929_162712_external.mp4",
+        "wrist": "episodes/WUSTL_MIG/20260929_162712_wrist.mp4"
+      },
+      "episode_id": "20260929_162712",
+      "language_instruction": "Pick up the prescription bottle",
+      "operator": "Jianing",
+      "annotators": [
+        "Jianing"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:21:16.840938+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-076",
+      "dataset_repo": "OopsieData-Submissions/WUSTL_MIG",
+      "lab_id": "WUSTL_MIG",
+      "repo_path": "pick_tall_can/20261003_180320.h5",
+      "bundle_path": "episodes/WUSTL_MIG/pick_tall_can/20261003_180320.h5",
+      "video_files": {
+        "external": "episodes/WUSTL_MIG/pick_tall_can/20261003_180320_external.mp4",
+        "wrist": "episodes/WUSTL_MIG/pick_tall_can/20261003_180320_wrist.mp4"
+      },
+      "episode_id": "20261003_180320",
+      "language_instruction": "Pick up the tall mousse canister.",
+      "operator": "Tyler Dinh",
+      "annotators": [
+        "Tyler Dinh"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:19:45.087991+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-077",
+      "dataset_repo": "OopsieData-Submissions/WUSTL_MIG",
+      "lab_id": "WUSTL_MIG",
+      "repo_path": "grasp_bowl/20261001_212922.h5",
+      "bundle_path": "episodes/WUSTL_MIG/grasp_bowl/20261001_212922.h5",
+      "video_files": {
+        "external": "episodes/WUSTL_MIG/grasp_bowl/20261001_212922_external.mp4",
+        "wrist": "episodes/WUSTL_MIG/grasp_bowl/20261001_212922_wrist.mp4"
+      },
+      "episode_id": "20261001_212922",
+      "language_instruction": "Grasp the bowl.",
+      "operator": "Buzhao Liu",
+      "annotators": [
+        "Buzhao Liu"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:18:15.770000+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-078",
+      "dataset_repo": "OopsieData-Submissions/WUSTL_MIG",
+      "lab_id": "WUSTL_MIG",
+      "repo_path": "bishop_diagonal/20261004_113517.h5",
+      "bundle_path": "episodes/WUSTL_MIG/bishop_diagonal/20261004_113517.h5",
+      "video_files": {
+        "external": "episodes/WUSTL_MIG/bishop_diagonal/20261004_113517_external.mp4",
+        "wrist": "episodes/WUSTL_MIG/bishop_diagonal/20261004_113517_wrist.mp4"
+      },
+      "episode_id": "20261004_113517",
+      "language_instruction": "Move bishop diagonally up to the right.",
+      "operator": "Noah Wolk",
+      "annotators": [
+        "Noah Wolk"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:18:09.445244+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-079",
+      "dataset_repo": "OopsieData-Submissions/WUSTL_MIG",
+      "lab_id": "WUSTL_MIG",
+      "repo_path": "pick_pingpong_ball/20260929_183541.h5",
+      "bundle_path": "episodes/WUSTL_MIG/pick_pingpong_ball/20260929_183541.h5",
+      "video_files": {
+        "external": "episodes/WUSTL_MIG/pick_pingpong_ball/20260929_183541_external.mp4",
+        "wrist": "episodes/WUSTL_MIG/pick_pingpong_ball/20260929_183541_wrist.mp4"
+      },
+      "episode_id": "20260929_183541",
+      "language_instruction": "Pick up the white ping pong ball on the plate.",
+      "operator": "Jianing Ye",
+      "annotators": [
+        "Jianing Ye"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:19:25.038455+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_11-080",
+      "dataset_repo": "OopsieData-Submissions/WUSTL_MIG",
+      "lab_id": "WUSTL_MIG",
+      "repo_path": "grasp_pingpong_from_bowl/20261002_185231.h5",
+      "bundle_path": "episodes/WUSTL_MIG/grasp_pingpong_from_bowl/20261002_185231.h5",
+      "video_files": {
+        "external": "episodes/WUSTL_MIG/grasp_pingpong_from_bowl/20261002_185231_external.mp4",
+        "wrist": "episodes/WUSTL_MIG/grasp_pingpong_from_bowl/20261002_185231_wrist.mp4"
+      },
+      "episode_id": "20261002_185231",
+      "language_instruction": "Grasp the white ping pong ball from the bowl.",
+      "operator": "Xiu Yuan",
+      "annotators": [
+        "Xiu Yuan"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "okay",
+      "qa_reviewer": "Yifan",
+      "qa_updated_at": "2026-10-09T15:18:41.850598+00:00"
+    }
+  ]
+}

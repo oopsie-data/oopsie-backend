@@ -1,0 +1,2175 @@
+{
+  "bundle_id": "qa_bundle_09",
+  "created_at": "2026-10-07T19:21:12Z",
+  "seed": 0,
+  "reviewer": "Maria",
+  "labs": [
+    "OopsieData-Submissions/Toloka",
+    "OopsieData-Submissions/UCSD_ARCLAB",
+    "OopsieData-Submissions/UIUC_DASLAB",
+    "OopsieData-Submissions/UIUC_Reid",
+    "OopsieData-Submissions/UNC_MD"
+  ],
+  "episodes": [
+    {
+      "qa_id": "qa_bundle_09-001",
+      "dataset_repo": "OopsieData-Submissions/Toloka",
+      "lab_id": "Toloka",
+      "repo_path": "toloka_qc_2026-10-05_trossen_b07/teleop_8bf15e9bee41.h5",
+      "bundle_path": "episodes/Toloka/toloka_qc_2026-10-05_trossen_b07/teleop_8bf15e9bee41.h5",
+      "video_files": {
+        "head": "episodes/Toloka/toloka_qc_2026-10-05_trossen_b07/videos/teleop_8bf15e9bee41_head.mp4",
+        "left_wrist": "episodes/Toloka/toloka_qc_2026-10-05_trossen_b07/videos/teleop_8bf15e9bee41_left_wrist.mp4",
+        "right_wrist": "episodes/Toloka/toloka_qc_2026-10-05_trossen_b07/videos/teleop_8bf15e9bee41_right_wrist.mp4"
+      },
+      "episode_id": "teleop_8bf15e9bee41",
+      "language_instruction": "Carefully put the USB hub into the box, into its slot.",
+      "operator": "irinadiaconu",
+      "annotators": [
+        "vasilytoropov"
+      ],
+      "robot_name": "trossen_ai_follower_bimanual",
+      "qa_notes": "Closing the box was not in the instruction.",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:20:44.966781+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-002",
+      "dataset_repo": "OopsieData-Submissions/Toloka",
+      "lab_id": "Toloka",
+      "repo_path": "toloka_qc_2026-09-21_trossen_b12/teleop_6fbe1c027459.h5",
+      "bundle_path": "episodes/Toloka/toloka_qc_2026-09-21_trossen_b12/teleop_6fbe1c027459.h5",
+      "video_files": {
+        "head": "episodes/Toloka/toloka_qc_2026-09-21_trossen_b12/videos/teleop_6fbe1c027459_head.mp4",
+        "left_wrist": "episodes/Toloka/toloka_qc_2026-09-21_trossen_b12/videos/teleop_6fbe1c027459_left_wrist.mp4",
+        "right_wrist": "episodes/Toloka/toloka_qc_2026-09-21_trossen_b12/videos/teleop_6fbe1c027459_right_wrist.mp4"
+      },
+      "episode_id": "teleop_6fbe1c027459",
+      "language_instruction": "Stack the light blue brick onto the long yellow brick.",
+      "operator": "vmt29",
+      "annotators": [
+        "vmt29"
+      ],
+      "robot_name": "trossen_ai_follower_bimanual",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:10:30.765049+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-003",
+      "dataset_repo": "OopsieData-Submissions/Toloka",
+      "lab_id": "Toloka",
+      "repo_path": "toloka_qc_2026-10-01_franka_b01/teleop_8b1f9ff7af41.h5",
+      "bundle_path": "episodes/Toloka/toloka_qc_2026-10-01_franka_b01/teleop_8b1f9ff7af41.h5",
+      "video_files": {
+        "head": "episodes/Toloka/toloka_qc_2026-10-01_franka_b01/videos/teleop_8b1f9ff7af41_head.mp4",
+        "main_wrist": "episodes/Toloka/toloka_qc_2026-10-01_franka_b01/videos/teleop_8b1f9ff7af41_main_wrist.mp4"
+      },
+      "episode_id": "teleop_8b1f9ff7af41",
+      "language_instruction": "Put it into the box.",
+      "operator": "zarinat",
+      "annotators": [
+        "vasilytoropov"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:14:45.497951+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-004",
+      "dataset_repo": "OopsieData-Submissions/Toloka",
+      "lab_id": "Toloka",
+      "repo_path": "toloka_2026-08-25_batch_1/teleop_772936ad759d.h5",
+      "bundle_path": "episodes/Toloka/toloka_2026-08-25_batch_1/teleop_772936ad759d.h5",
+      "video_files": {
+        "head": "episodes/Toloka/toloka_2026-08-25_batch_1/videos/teleop_772936ad759d_head.mp4",
+        "left_wrist": "episodes/Toloka/toloka_2026-08-25_batch_1/videos/teleop_772936ad759d_left_wrist.mp4",
+        "right_wrist": "episodes/Toloka/toloka_2026-08-25_batch_1/videos/teleop_772936ad759d_right_wrist.mp4"
+      },
+      "episode_id": "teleop_772936ad759d",
+      "language_instruction": "Pick up the tape roll.",
+      "operator": "zarinat",
+      "annotators": [
+        "vmt29",
+        "zarinat"
+      ],
+      "robot_name": "trossen_ai_follower_bimanual",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:07:28.878882+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-005",
+      "dataset_repo": "OopsieData-Submissions/Toloka",
+      "lab_id": "Toloka",
+      "repo_path": "toloka_2026-08-25_batch_1/teleop_47b582f2c0ed.h5",
+      "bundle_path": "episodes/Toloka/toloka_2026-08-25_batch_1/teleop_47b582f2c0ed.h5",
+      "video_files": {
+        "head": "episodes/Toloka/toloka_2026-08-25_batch_1/videos/teleop_47b582f2c0ed_head.mp4",
+        "left_wrist": "episodes/Toloka/toloka_2026-08-25_batch_1/videos/teleop_47b582f2c0ed_left_wrist.mp4",
+        "right_wrist": "episodes/Toloka/toloka_2026-08-25_batch_1/videos/teleop_47b582f2c0ed_right_wrist.mp4"
+      },
+      "episode_id": "teleop_47b582f2c0ed",
+      "language_instruction": "Pass it to the other arm.",
+      "operator": "irinadiaconu",
+      "annotators": [
+        "irinadiaconu",
+        "vmt29"
+      ],
+      "robot_name": "trossen_ai_follower_bimanual",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:06:35.974113+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-006",
+      "dataset_repo": "OopsieData-Submissions/Toloka",
+      "lab_id": "Toloka",
+      "repo_path": "toloka_qc_2026-10-01_franka_b05/teleop_be4146ffc621.h5",
+      "bundle_path": "episodes/Toloka/toloka_qc_2026-10-01_franka_b05/teleop_be4146ffc621.h5",
+      "video_files": {
+        "head": "episodes/Toloka/toloka_qc_2026-10-01_franka_b05/videos/teleop_be4146ffc621_head.mp4",
+        "main_wrist": "episodes/Toloka/toloka_qc_2026-10-01_franka_b05/videos/teleop_be4146ffc621_main_wrist.mp4"
+      },
+      "episode_id": "teleop_be4146ffc621",
+      "language_instruction": "Pick up the object.",
+      "operator": "vmt29",
+      "annotators": [
+        "vasilytoropov"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:15:09.407197+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-007",
+      "dataset_repo": "OopsieData-Submissions/Toloka",
+      "lab_id": "Toloka",
+      "repo_path": "toloka_2026-08-25_batch_1/teleop_5e2b25b50717.h5",
+      "bundle_path": "episodes/Toloka/toloka_2026-08-25_batch_1/teleop_5e2b25b50717.h5",
+      "video_files": {
+        "head": "episodes/Toloka/toloka_2026-08-25_batch_1/videos/teleop_5e2b25b50717_head.mp4",
+        "left_wrist": "episodes/Toloka/toloka_2026-08-25_batch_1/videos/teleop_5e2b25b50717_left_wrist.mp4",
+        "right_wrist": "episodes/Toloka/toloka_2026-08-25_batch_1/videos/teleop_5e2b25b50717_right_wrist.mp4"
+      },
+      "episode_id": "teleop_5e2b25b50717",
+      "language_instruction": "Pick up the light blue ball.",
+      "operator": "irinadiaconu",
+      "annotators": [
+        "irinadiaconu",
+        "vmt29"
+      ],
+      "robot_name": "trossen_ai_follower_bimanual",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:06:53.659518+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-008",
+      "dataset_repo": "OopsieData-Submissions/Toloka",
+      "lab_id": "Toloka",
+      "repo_path": "toloka_2026-08-25_batch_1/teleop_cd7b201e2875.h5",
+      "bundle_path": "episodes/Toloka/toloka_2026-08-25_batch_1/teleop_cd7b201e2875.h5",
+      "video_files": {
+        "head": "episodes/Toloka/toloka_2026-08-25_batch_1/videos/teleop_cd7b201e2875_head.mp4",
+        "left_wrist": "episodes/Toloka/toloka_2026-08-25_batch_1/videos/teleop_cd7b201e2875_left_wrist.mp4",
+        "right_wrist": "episodes/Toloka/toloka_2026-08-25_batch_1/videos/teleop_cd7b201e2875_right_wrist.mp4"
+      },
+      "episode_id": "teleop_cd7b201e2875",
+      "language_instruction": "Pick up the doll.",
+      "operator": "zarinat",
+      "annotators": [
+        "vmt29",
+        "zarinat"
+      ],
+      "robot_name": "trossen_ai_follower_bimanual",
+      "qa_notes": "I don't know what to do with this. It looks like a success to me?",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:16:16.298394+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-009",
+      "dataset_repo": "OopsieData-Submissions/Toloka",
+      "lab_id": "Toloka",
+      "repo_path": "toloka_qc_2026-10-03_franka_b05/teleop_519184f4129b.h5",
+      "bundle_path": "episodes/Toloka/toloka_qc_2026-10-03_franka_b05/teleop_519184f4129b.h5",
+      "video_files": {
+        "head": "episodes/Toloka/toloka_qc_2026-10-03_franka_b05/videos/teleop_519184f4129b_head.mp4",
+        "main_wrist": "episodes/Toloka/toloka_qc_2026-10-03_franka_b05/videos/teleop_519184f4129b_main_wrist.mp4"
+      },
+      "episode_id": "teleop_519184f4129b",
+      "language_instruction": "Pick up the object and put it into the box.",
+      "operator": "vmt29",
+      "annotators": [
+        "vasilytoropov"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:16:42.175195+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-010",
+      "dataset_repo": "OopsieData-Submissions/Toloka",
+      "lab_id": "Toloka",
+      "repo_path": "toloka_2026-08-25_batch_1/teleop_0df504fff3d2.h5",
+      "bundle_path": "episodes/Toloka/toloka_2026-08-25_batch_1/teleop_0df504fff3d2.h5",
+      "video_files": {
+        "head": "episodes/Toloka/toloka_2026-08-25_batch_1/videos/teleop_0df504fff3d2_head.mp4",
+        "left_wrist": "episodes/Toloka/toloka_2026-08-25_batch_1/videos/teleop_0df504fff3d2_left_wrist.mp4",
+        "right_wrist": "episodes/Toloka/toloka_2026-08-25_batch_1/videos/teleop_0df504fff3d2_right_wrist.mp4"
+      },
+      "episode_id": "teleop_0df504fff3d2",
+      "language_instruction": "Pick up the wooden hairbrush.",
+      "operator": "irinadiaconu",
+      "annotators": [
+        "irinadiaconu",
+        "vmt29"
+      ],
+      "robot_name": "trossen_ai_follower_bimanual",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:05:44.780100+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-011",
+      "dataset_repo": "OopsieData-Submissions/Toloka",
+      "lab_id": "Toloka",
+      "repo_path": "toloka_2026-08-25_batch_1/teleop_b4406ea86094.h5",
+      "bundle_path": "episodes/Toloka/toloka_2026-08-25_batch_1/teleop_b4406ea86094.h5",
+      "video_files": {
+        "head": "episodes/Toloka/toloka_2026-08-25_batch_1/videos/teleop_b4406ea86094_head.mp4",
+        "left_wrist": "episodes/Toloka/toloka_2026-08-25_batch_1/videos/teleop_b4406ea86094_left_wrist.mp4",
+        "right_wrist": "episodes/Toloka/toloka_2026-08-25_batch_1/videos/teleop_b4406ea86094_right_wrist.mp4"
+      },
+      "episode_id": "teleop_b4406ea86094",
+      "language_instruction": "Pick up the black phone holder.",
+      "operator": "zarinat",
+      "annotators": [
+        "vmt29",
+        "zarinat"
+      ],
+      "robot_name": "trossen_ai_follower_bimanual",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:07:49.324776+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-012",
+      "dataset_repo": "OopsieData-Submissions/Toloka",
+      "lab_id": "Toloka",
+      "repo_path": "toloka_qc_2026-10-03_franka_b01/teleop_d84817f34300.h5",
+      "bundle_path": "episodes/Toloka/toloka_qc_2026-10-03_franka_b01/teleop_d84817f34300.h5",
+      "video_files": {
+        "head": "episodes/Toloka/toloka_qc_2026-10-03_franka_b01/videos/teleop_d84817f34300_head.mp4",
+        "main_wrist": "episodes/Toloka/toloka_qc_2026-10-03_franka_b01/videos/teleop_d84817f34300_main_wrist.mp4"
+      },
+      "episode_id": "teleop_d84817f34300",
+      "language_instruction": "Pick up the white box.",
+      "operator": "vmt29",
+      "annotators": [
+        "vasilytoropov"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:16:29.759294+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-013",
+      "dataset_repo": "OopsieData-Submissions/Toloka",
+      "lab_id": "Toloka",
+      "repo_path": "toloka_qc_2026-10-04_franka_b05/teleop_ac95c3ec0db1.h5",
+      "bundle_path": "episodes/Toloka/toloka_qc_2026-10-04_franka_b05/teleop_ac95c3ec0db1.h5",
+      "video_files": {
+        "head": "episodes/Toloka/toloka_qc_2026-10-04_franka_b05/videos/teleop_ac95c3ec0db1_head.mp4",
+        "main_wrist": "episodes/Toloka/toloka_qc_2026-10-04_franka_b05/videos/teleop_ac95c3ec0db1_main_wrist.mp4"
+      },
+      "episode_id": "teleop_ac95c3ec0db1",
+      "language_instruction": "Pick up the round pink gum case.",
+      "operator": "irinadiaconu",
+      "annotators": [
+        "vasilytoropov"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:19:45.527197+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-014",
+      "dataset_repo": "OopsieData-Submissions/Toloka",
+      "lab_id": "Toloka",
+      "repo_path": "toloka_2026-08-25_batch_1/teleop_befddc55d9d8.h5",
+      "bundle_path": "episodes/Toloka/toloka_2026-08-25_batch_1/teleop_befddc55d9d8.h5",
+      "video_files": {
+        "head": "episodes/Toloka/toloka_2026-08-25_batch_1/videos/teleop_befddc55d9d8_head.mp4",
+        "left_wrist": "episodes/Toloka/toloka_2026-08-25_batch_1/videos/teleop_befddc55d9d8_left_wrist.mp4",
+        "right_wrist": "episodes/Toloka/toloka_2026-08-25_batch_1/videos/teleop_befddc55d9d8_right_wrist.mp4"
+      },
+      "episode_id": "teleop_befddc55d9d8",
+      "language_instruction": "Pick up the red/black plastic spring clamp.",
+      "operator": "irinadiaconu",
+      "annotators": [
+        "irinadiaconu",
+        "vmt29"
+      ],
+      "robot_name": "trossen_ai_follower_bimanual",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:08:33.090742+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-015",
+      "dataset_repo": "OopsieData-Submissions/Toloka",
+      "lab_id": "Toloka",
+      "repo_path": "toloka_qc_2026-10-04_franka_b01/teleop_d54489a75bfe.h5",
+      "bundle_path": "episodes/Toloka/toloka_qc_2026-10-04_franka_b01/teleop_d54489a75bfe.h5",
+      "video_files": {
+        "head": "episodes/Toloka/toloka_qc_2026-10-04_franka_b01/videos/teleop_d54489a75bfe_head.mp4",
+        "main_wrist": "episodes/Toloka/toloka_qc_2026-10-04_franka_b01/videos/teleop_d54489a75bfe_main_wrist.mp4"
+      },
+      "episode_id": "teleop_d54489a75bfe",
+      "language_instruction": "Pick up the round pink gum case and put it into the box.",
+      "operator": "zarinat",
+      "annotators": [
+        "vasilytoropov"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:18:43.648699+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-016",
+      "dataset_repo": "OopsieData-Submissions/Toloka",
+      "lab_id": "Toloka",
+      "repo_path": "toloka_2026-08-25_batch_1/teleop_d52e9b070b50.h5",
+      "bundle_path": "episodes/Toloka/toloka_2026-08-25_batch_1/teleop_d52e9b070b50.h5",
+      "video_files": {
+        "head": "episodes/Toloka/toloka_2026-08-25_batch_1/videos/teleop_d52e9b070b50_head.mp4",
+        "left_wrist": "episodes/Toloka/toloka_2026-08-25_batch_1/videos/teleop_d52e9b070b50_left_wrist.mp4",
+        "right_wrist": "episodes/Toloka/toloka_2026-08-25_batch_1/videos/teleop_d52e9b070b50_right_wrist.mp4"
+      },
+      "episode_id": "teleop_d52e9b070b50",
+      "language_instruction": "Put it into the big box.",
+      "operator": "irinadiaconu",
+      "annotators": [
+        "irinadiaconu",
+        "vmt29"
+      ],
+      "robot_name": "trossen_ai_follower_bimanual",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:09:51.128684+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-017",
+      "dataset_repo": "OopsieData-Submissions/Toloka",
+      "lab_id": "Toloka",
+      "repo_path": "toloka_qc_2026-10-04_franka_b01/teleop_befb5900389d.h5",
+      "bundle_path": "episodes/Toloka/toloka_qc_2026-10-04_franka_b01/teleop_befb5900389d.h5",
+      "video_files": {
+        "head": "episodes/Toloka/toloka_qc_2026-10-04_franka_b01/videos/teleop_befb5900389d_head.mp4",
+        "main_wrist": "episodes/Toloka/toloka_qc_2026-10-04_franka_b01/videos/teleop_befb5900389d_main_wrist.mp4"
+      },
+      "episode_id": "teleop_befb5900389d",
+      "language_instruction": "Pick up the wrapped item and put it into the box.",
+      "operator": "zarinat",
+      "annotators": [
+        "vasilytoropov"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:18:33.052986+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-018",
+      "dataset_repo": "OopsieData-Submissions/Toloka",
+      "lab_id": "Toloka",
+      "repo_path": "toloka_qc_2026-09-21_trossen_b14/teleop_1be55855da2f.h5",
+      "bundle_path": "episodes/Toloka/toloka_qc_2026-09-21_trossen_b14/teleop_1be55855da2f.h5",
+      "video_files": {
+        "head": "episodes/Toloka/toloka_qc_2026-09-21_trossen_b14/videos/teleop_1be55855da2f_head.mp4",
+        "left_wrist": "episodes/Toloka/toloka_qc_2026-09-21_trossen_b14/videos/teleop_1be55855da2f_left_wrist.mp4",
+        "right_wrist": "episodes/Toloka/toloka_qc_2026-09-21_trossen_b14/videos/teleop_1be55855da2f_right_wrist.mp4"
+      },
+      "episode_id": "teleop_1be55855da2f",
+      "language_instruction": "Carefully put it into the box, into its slot.",
+      "operator": "vmt29",
+      "annotators": [
+        "vasilytoropov"
+      ],
+      "robot_name": "trossen_ai_follower_bimanual",
+      "qa_notes": "I would have tagged this as low severity.",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:12:04.434778+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-019",
+      "dataset_repo": "OopsieData-Submissions/Toloka",
+      "lab_id": "Toloka",
+      "repo_path": "toloka_2026-08-25_batch_1/teleop_67ed301cc523.h5",
+      "bundle_path": "episodes/Toloka/toloka_2026-08-25_batch_1/teleop_67ed301cc523.h5",
+      "video_files": {
+        "head": "episodes/Toloka/toloka_2026-08-25_batch_1/videos/teleop_67ed301cc523_head.mp4",
+        "left_wrist": "episodes/Toloka/toloka_2026-08-25_batch_1/videos/teleop_67ed301cc523_left_wrist.mp4",
+        "right_wrist": "episodes/Toloka/toloka_2026-08-25_batch_1/videos/teleop_67ed301cc523_right_wrist.mp4"
+      },
+      "episode_id": "teleop_67ed301cc523",
+      "language_instruction": "Pick up the small green cube.",
+      "operator": "irinadiaconu",
+      "annotators": [
+        "irinadiaconu",
+        "vmt29"
+      ],
+      "robot_name": "trossen_ai_follower_bimanual",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:07:08.143839+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-020",
+      "dataset_repo": "OopsieData-Submissions/Toloka",
+      "lab_id": "Toloka",
+      "repo_path": "toloka_qc_2026-10-04_franka_b01/teleop_2f88bd06672a.h5",
+      "bundle_path": "episodes/Toloka/toloka_qc_2026-10-04_franka_b01/teleop_2f88bd06672a.h5",
+      "video_files": {
+        "head": "episodes/Toloka/toloka_qc_2026-10-04_franka_b01/videos/teleop_2f88bd06672a_head.mp4",
+        "main_wrist": "episodes/Toloka/toloka_qc_2026-10-04_franka_b01/videos/teleop_2f88bd06672a_main_wrist.mp4"
+      },
+      "episode_id": "teleop_2f88bd06672a",
+      "language_instruction": "Pick up the white box and put it into the box.",
+      "operator": "zarinat",
+      "annotators": [
+        "vasilytoropov"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:17:05.434216+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-021",
+      "dataset_repo": "OopsieData-Submissions/UCSD_ARCLAB",
+      "lab_id": "UCSD_ARCLAB",
+      "repo_path": "20260929_143354.h5",
+      "bundle_path": "episodes/UCSD_ARCLAB/20260929_143354.h5",
+      "video_files": {
+        "third_person": "episodes/UCSD_ARCLAB/20260929_143354_third_person.mp4",
+        "wrist": "episodes/UCSD_ARCLAB/20260929_143354_wrist.mp4"
+      },
+      "episode_id": "20260929_143354",
+      "language_instruction": "Insert the hexagonal peg into the hexagonal hole.",
+      "operator": "Seungho Yeom",
+      "annotators": [
+        "Seungho Yeom"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:29:43.342117+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-022",
+      "dataset_repo": "OopsieData-Submissions/UCSD_ARCLAB",
+      "lab_id": "UCSD_ARCLAB",
+      "repo_path": "20260930_192822.h5",
+      "bundle_path": "episodes/UCSD_ARCLAB/20260930_192822.h5",
+      "video_files": {
+        "third_person": "episodes/UCSD_ARCLAB/20260930_192822_third_person.mp4",
+        "wrist": "episodes/UCSD_ARCLAB/20260930_192822_wrist.mp4"
+      },
+      "episode_id": "20260930_192822",
+      "language_instruction": "Stack the bowls and then press the button.",
+      "operator": "Kuancheng Wang",
+      "annotators": [
+        "Kuancheng Wang"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:32:07.723439+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-023",
+      "dataset_repo": "OopsieData-Submissions/UCSD_ARCLAB",
+      "lab_id": "UCSD_ARCLAB",
+      "repo_path": "20260926_195503.h5",
+      "bundle_path": "episodes/UCSD_ARCLAB/20260926_195503.h5",
+      "video_files": {
+        "third_person": "episodes/UCSD_ARCLAB/20260926_195503_third_person.mp4",
+        "wrist": "episodes/UCSD_ARCLAB/20260926_195503_wrist.mp4"
+      },
+      "episode_id": "20260926_195503",
+      "language_instruction": "Sort the fruits in bowls of each color.",
+      "operator": "Seungho Yeom",
+      "annotators": [
+        "Seungho Yeom"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "I wouldn't have tagged this as severity medium. Also wouldn't have tagged it as \"reaching\", probably \"dropping\" or \"manipulation\".",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:27:47.043811+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-024",
+      "dataset_repo": "OopsieData-Submissions/UCSD_ARCLAB",
+      "lab_id": "UCSD_ARCLAB",
+      "repo_path": "20260925_124521.h5",
+      "bundle_path": "episodes/UCSD_ARCLAB/20260925_124521.h5",
+      "video_files": {
+        "third_person": "episodes/UCSD_ARCLAB/20260925_124521_third_person.mp4",
+        "wrist": "episodes/UCSD_ARCLAB/20260925_124521_wrist.mp4"
+      },
+      "episode_id": "20260925_124521",
+      "language_instruction": "Pick and place all the dolls on the table in the basket to clean the table.",
+      "operator": "Kuancheng Wang",
+      "annotators": [
+        "Kuancheng Wang"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "I wouldn't have tagged this as severity medium.",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:26:23.708202+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-025",
+      "dataset_repo": "OopsieData-Submissions/UCSD_ARCLAB",
+      "lab_id": "UCSD_ARCLAB",
+      "repo_path": "20261004_184251.h5",
+      "bundle_path": "episodes/UCSD_ARCLAB/20261004_184251.h5",
+      "video_files": {
+        "third_person": "episodes/UCSD_ARCLAB/20261004_184251_third_person.mp4",
+        "wrist": "episodes/UCSD_ARCLAB/20261004_184251_wrist.mp4"
+      },
+      "episode_id": "20261004_184251",
+      "language_instruction": "Insert the peg into a corresponding hole.",
+      "operator": "Seungho Yeom",
+      "annotators": [
+        "Seungho Yeom"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "Wouldn't have called this a collision. Just manipulation or misalignment or reaching.",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:33:13.366959+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-026",
+      "dataset_repo": "OopsieData-Submissions/UCSD_ARCLAB",
+      "lab_id": "UCSD_ARCLAB",
+      "repo_path": "20260930_162356.h5",
+      "bundle_path": "episodes/UCSD_ARCLAB/20260930_162356.h5",
+      "video_files": {
+        "third_person": "episodes/UCSD_ARCLAB/20260930_162356_third_person.mp4",
+        "wrist": "episodes/UCSD_ARCLAB/20260930_162356_wrist.mp4"
+      },
+      "episode_id": "20260930_162356",
+      "language_instruction": "Stack the bowls and then press the button.",
+      "operator": "Kuancheng Wang",
+      "annotators": [
+        "Kuancheng Wang"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:31:08.879599+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-027",
+      "dataset_repo": "OopsieData-Submissions/UCSD_ARCLAB",
+      "lab_id": "UCSD_ARCLAB",
+      "repo_path": "20260929_212741.h5",
+      "bundle_path": "episodes/UCSD_ARCLAB/20260929_212741.h5",
+      "video_files": {
+        "third_person": "episodes/UCSD_ARCLAB/20260929_212741_third_person.mp4",
+        "wrist": "episodes/UCSD_ARCLAB/20260929_212741_wrist.mp4"
+      },
+      "episode_id": "20260929_212741",
+      "language_instruction": "Insert the hexagonal peg into the hexagonal hole.",
+      "operator": "Seungho Yeom",
+      "annotators": [
+        "Seungho Yeom"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:30:56.251062+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-028",
+      "dataset_repo": "OopsieData-Submissions/UCSD_ARCLAB",
+      "lab_id": "UCSD_ARCLAB",
+      "repo_path": "20260924_151536.h5",
+      "bundle_path": "episodes/UCSD_ARCLAB/20260924_151536.h5",
+      "video_files": {
+        "third_person": "episodes/UCSD_ARCLAB/20260924_151536_third_person.mp4",
+        "wrist": "episodes/UCSD_ARCLAB/20260924_151536_wrist.mp4"
+      },
+      "episode_id": "20260924_151536",
+      "language_instruction": "Pick and place all the dolls on the table in the basket to clean the table.",
+      "operator": "Kuancheng Wang",
+      "annotators": [
+        "Kuancheng Wang"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:21:25.377968+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-029",
+      "dataset_repo": "OopsieData-Submissions/UCSD_ARCLAB",
+      "lab_id": "UCSD_ARCLAB",
+      "repo_path": "20260926_194639.h5",
+      "bundle_path": "episodes/UCSD_ARCLAB/20260926_194639.h5",
+      "video_files": {
+        "third_person": "episodes/UCSD_ARCLAB/20260926_194639_third_person.mp4",
+        "wrist": "episodes/UCSD_ARCLAB/20260926_194639_wrist.mp4"
+      },
+      "episode_id": "20260926_194639",
+      "language_instruction": "Sort the fruits in bowls of each color.",
+      "operator": "Seungho Yeom",
+      "annotators": [
+        "Seungho Yeom"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:26:52.555612+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-030",
+      "dataset_repo": "OopsieData-Submissions/UCSD_ARCLAB",
+      "lab_id": "UCSD_ARCLAB",
+      "repo_path": "20261004_230008.h5",
+      "bundle_path": "episodes/UCSD_ARCLAB/20261004_230008.h5",
+      "video_files": {
+        "third_person": "episodes/UCSD_ARCLAB/20261004_230008_third_person.mp4",
+        "wrist": "episodes/UCSD_ARCLAB/20261004_230008_wrist.mp4"
+      },
+      "episode_id": "20261004_230008",
+      "language_instruction": "Insert the peg into a corresponding hole.",
+      "operator": "Seungho Yeom",
+      "annotators": [
+        "Seungho Yeom"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "Wouldn't have called this a collision. Just manipulation or misalignment or reaching.",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:33:31.648111+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-031",
+      "dataset_repo": "OopsieData-Submissions/UCSD_ARCLAB",
+      "lab_id": "UCSD_ARCLAB",
+      "repo_path": "20260930_172642.h5",
+      "bundle_path": "episodes/UCSD_ARCLAB/20260930_172642.h5",
+      "video_files": {
+        "third_person": "episodes/UCSD_ARCLAB/20260930_172642_third_person.mp4",
+        "wrist": "episodes/UCSD_ARCLAB/20260930_172642_wrist.mp4"
+      },
+      "episode_id": "20260930_172642",
+      "language_instruction": "Stack the bowls and then press the button.",
+      "operator": "Kuancheng Wang",
+      "annotators": [
+        "Kuancheng Wang"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "Wouldn't have tagged it as severity medium, looks low to me.",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:31:37.456320+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-032",
+      "dataset_repo": "OopsieData-Submissions/UCSD_ARCLAB",
+      "lab_id": "UCSD_ARCLAB",
+      "repo_path": "20260924_191830.h5",
+      "bundle_path": "episodes/UCSD_ARCLAB/20260924_191830.h5",
+      "video_files": {
+        "third_person": "episodes/UCSD_ARCLAB/20260924_191830_third_person.mp4",
+        "wrist": "episodes/UCSD_ARCLAB/20260924_191830_wrist.mp4"
+      },
+      "episode_id": "20260924_191830",
+      "language_instruction": "Pick and place all the dolls on the table in the basket to clean the table.",
+      "operator": "Kuancheng Wang",
+      "annotators": [
+        "Kuancheng Wang"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:25:33.049548+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-033",
+      "dataset_repo": "OopsieData-Submissions/UCSD_ARCLAB",
+      "lab_id": "UCSD_ARCLAB",
+      "repo_path": "20260926_214526.h5",
+      "bundle_path": "episodes/UCSD_ARCLAB/20260926_214526.h5",
+      "video_files": {
+        "third_person": "episodes/UCSD_ARCLAB/20260926_214526_third_person.mp4",
+        "wrist": "episodes/UCSD_ARCLAB/20260926_214526_wrist.mp4"
+      },
+      "episode_id": "20260926_214526",
+      "language_instruction": "Sort the fruits in bowls of each color.",
+      "operator": "Seungho Yeom",
+      "annotators": [
+        "Seungho Yeom"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:28:40.414817+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-034",
+      "dataset_repo": "OopsieData-Submissions/UCSD_ARCLAB",
+      "lab_id": "UCSD_ARCLAB",
+      "repo_path": "20260929_165508.h5",
+      "bundle_path": "episodes/UCSD_ARCLAB/20260929_165508.h5",
+      "video_files": {
+        "third_person": "episodes/UCSD_ARCLAB/20260929_165508_third_person.mp4",
+        "wrist": "episodes/UCSD_ARCLAB/20260929_165508_wrist.mp4"
+      },
+      "episode_id": "20260929_165508",
+      "language_instruction": "Insert the hexagonal peg into the hexagonal hole.",
+      "operator": "Seungho Yeom",
+      "annotators": [
+        "Seungho Yeom"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:29:57.198415+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-035",
+      "dataset_repo": "OopsieData-Submissions/UCSD_ARCLAB",
+      "lab_id": "UCSD_ARCLAB",
+      "repo_path": "20261004_180625.h5",
+      "bundle_path": "episodes/UCSD_ARCLAB/20261004_180625.h5",
+      "video_files": {
+        "third_person": "episodes/UCSD_ARCLAB/20261004_180625_third_person.mp4",
+        "wrist": "episodes/UCSD_ARCLAB/20261004_180625_wrist.mp4"
+      },
+      "episode_id": "20261004_180625",
+      "language_instruction": "Insert the peg into a corresponding hole.",
+      "operator": "Seungho Yeom",
+      "annotators": [
+        "Seungho Yeom"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:32:29.216680+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-036",
+      "dataset_repo": "OopsieData-Submissions/UCSD_ARCLAB",
+      "lab_id": "UCSD_ARCLAB",
+      "repo_path": "20260930_174029.h5",
+      "bundle_path": "episodes/UCSD_ARCLAB/20260930_174029.h5",
+      "video_files": {
+        "third_person": "episodes/UCSD_ARCLAB/20260930_174029_third_person.mp4",
+        "wrist": "episodes/UCSD_ARCLAB/20260930_174029_wrist.mp4"
+      },
+      "episode_id": "20260930_174029",
+      "language_instruction": "Stack the bowls and then press the button.",
+      "operator": "Kuancheng Wang",
+      "annotators": [
+        "Kuancheng Wang"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:31:45.483249+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-037",
+      "dataset_repo": "OopsieData-Submissions/UCSD_ARCLAB",
+      "lab_id": "UCSD_ARCLAB",
+      "repo_path": "20260924_200639.h5",
+      "bundle_path": "episodes/UCSD_ARCLAB/20260924_200639.h5",
+      "video_files": {
+        "third_person": "episodes/UCSD_ARCLAB/20260924_200639_third_person.mp4",
+        "wrist": "episodes/UCSD_ARCLAB/20260924_200639_wrist.mp4"
+      },
+      "episode_id": "20260924_200639",
+      "language_instruction": "Pick and place all the dolls on the table in the basket to clean the table.",
+      "operator": "Kuancheng Wang",
+      "annotators": [
+        "Kuancheng Wang"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:26:03.033346+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-038",
+      "dataset_repo": "OopsieData-Submissions/UCSD_ARCLAB",
+      "lab_id": "UCSD_ARCLAB",
+      "repo_path": "20260929_195047.h5",
+      "bundle_path": "episodes/UCSD_ARCLAB/20260929_195047.h5",
+      "video_files": {
+        "third_person": "episodes/UCSD_ARCLAB/20260929_195047_third_person.mp4",
+        "wrist": "episodes/UCSD_ARCLAB/20260929_195047_wrist.mp4"
+      },
+      "episode_id": "20260929_195047",
+      "language_instruction": "Insert the hexagonal peg into the hexagonal hole.",
+      "operator": "Seungho Yeom",
+      "annotators": [
+        "Seungho Yeom"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "Wouldn't have tagged it as collision or as severity medium.",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:30:31.779173+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-039",
+      "dataset_repo": "OopsieData-Submissions/UCSD_ARCLAB",
+      "lab_id": "UCSD_ARCLAB",
+      "repo_path": "20260927_120710.h5",
+      "bundle_path": "episodes/UCSD_ARCLAB/20260927_120710.h5",
+      "video_files": {
+        "third_person": "episodes/UCSD_ARCLAB/20260927_120710_third_person.mp4",
+        "wrist": "episodes/UCSD_ARCLAB/20260927_120710_wrist.mp4"
+      },
+      "episode_id": "20260927_120710",
+      "language_instruction": "Sort the fruits in bowls of each color.",
+      "operator": "Seungho Yeom",
+      "annotators": [
+        "Seungho Yeom"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "Probably severity medium given how much the arm is shaking.",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:29:21.587237+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-040",
+      "dataset_repo": "OopsieData-Submissions/UCSD_ARCLAB",
+      "lab_id": "UCSD_ARCLAB",
+      "repo_path": "20261001_173258.h5",
+      "bundle_path": "episodes/UCSD_ARCLAB/20261001_173258.h5",
+      "video_files": {
+        "third_person": "episodes/UCSD_ARCLAB/20261001_173258_third_person.mp4",
+        "wrist": "episodes/UCSD_ARCLAB/20261001_173258_wrist.mp4"
+      },
+      "episode_id": "20261001_173258",
+      "language_instruction": "Stack the bowls and then press the button.",
+      "operator": "Kuancheng Wang",
+      "annotators": [
+        "Kuancheng Wang"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:32:15.484833+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-041",
+      "dataset_repo": "OopsieData-Submissions/UIUC_DASLAB",
+      "lab_id": "UIUC_DASLAB",
+      "repo_path": "20261002/20261002_172941/20261002_173839.h5",
+      "bundle_path": "episodes/UIUC_DASLAB/20261002/20261002_172941/20261002_173839.h5",
+      "video_files": {
+        "base": "episodes/UIUC_DASLAB/20261002/20261002_172941/20261002_173839_base.mp4",
+        "wrist": "episodes/UIUC_DASLAB/20261002/20261002_172941/20261002_173839_wrist.mp4"
+      },
+      "episode_id": "20261002_173839",
+      "language_instruction": "pick the glue stick and put it in the plate",
+      "operator": "jose-cuaran",
+      "annotators": [
+        "Francisco-Affonso",
+        "jose-cuaran"
+      ],
+      "robot_name": "ufactory_lite6",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:54:04.968560+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-042",
+      "dataset_repo": "OopsieData-Submissions/UIUC_DASLAB",
+      "lab_id": "UIUC_DASLAB",
+      "repo_path": "20260930/20260930_174343/20260930_175518.h5",
+      "bundle_path": "episodes/UIUC_DASLAB/20260930/20260930_174343/20260930_175518.h5",
+      "video_files": {
+        "base": "episodes/UIUC_DASLAB/20260930/20260930_174343/20260930_175518_base.mp4",
+        "wrist": "episodes/UIUC_DASLAB/20260930/20260930_174343/20260930_175518_wrist.mp4"
+      },
+      "episode_id": "20260930_175518",
+      "language_instruction": "pick the yellow fruit and put it in the box",
+      "operator": "jose-cuaran",
+      "annotators": [
+        "jose-cuaran"
+      ],
+      "robot_name": "ufactory_lite6",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:53:42.177353+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-043",
+      "dataset_repo": "OopsieData-Submissions/UIUC_DASLAB",
+      "lab_id": "UIUC_DASLAB",
+      "repo_path": "20261002/20261002_180650/20261002_181330.h5",
+      "bundle_path": "episodes/UIUC_DASLAB/20261002/20261002_180650/20261002_181330.h5",
+      "video_files": {
+        "base": "episodes/UIUC_DASLAB/20261002/20261002_180650/20261002_181330_base.mp4",
+        "wrist": "episodes/UIUC_DASLAB/20261002/20261002_180650/20261002_181330_wrist.mp4"
+      },
+      "episode_id": "20261002_181330",
+      "language_instruction": "pick the glue stick and put it in the white box",
+      "operator": "jose-cuaran",
+      "annotators": [
+        "Francisco-Affonso",
+        "jose-cuaran"
+      ],
+      "robot_name": "ufactory_lite6",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:54:19.410871+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-044",
+      "dataset_repo": "OopsieData-Submissions/UIUC_DASLAB",
+      "lab_id": "UIUC_DASLAB",
+      "repo_path": "20261003/20261003_162147/20261003_162630.h5",
+      "bundle_path": "episodes/UIUC_DASLAB/20261003/20261003_162147/20261003_162630.h5",
+      "video_files": {
+        "base": "episodes/UIUC_DASLAB/20261003/20261003_162147/20261003_162630_base.mp4",
+        "wrist": "episodes/UIUC_DASLAB/20261003/20261003_162147/20261003_162630_wrist.mp4"
+      },
+      "episode_id": "20261003_162630",
+      "language_instruction": "push the bottle to the square",
+      "operator": "jose-cuaran",
+      "annotators": [
+        "Francisco-Affonso",
+        "jose-cuaran"
+      ],
+      "robot_name": "ufactory_lite6",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:55:50.076209+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-045",
+      "dataset_repo": "OopsieData-Submissions/UIUC_DASLAB",
+      "lab_id": "UIUC_DASLAB",
+      "repo_path": "20260928/20260928_170624/20260928_171509.h5",
+      "bundle_path": "episodes/UIUC_DASLAB/20260928/20260928_170624/20260928_171509.h5",
+      "video_files": {
+        "base": "episodes/UIUC_DASLAB/20260928/20260928_170624/20260928_171509_base.mp4",
+        "wrist": "episodes/UIUC_DASLAB/20260928/20260928_170624/20260928_171509_wrist.mp4"
+      },
+      "episode_id": "20260928_171509",
+      "language_instruction": "push the black box to the red square",
+      "operator": "jose-cuaran",
+      "annotators": [
+        "Francisco-Affonso",
+        "jose-cuaran"
+      ],
+      "robot_name": "ufactory_lite6",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:52:44.447557+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-046",
+      "dataset_repo": "OopsieData-Submissions/UIUC_DASLAB",
+      "lab_id": "UIUC_DASLAB",
+      "repo_path": "20261002/20261002_191745/20261002_193120.h5",
+      "bundle_path": "episodes/UIUC_DASLAB/20261002/20261002_191745/20261002_193120.h5",
+      "video_files": {
+        "base": "episodes/UIUC_DASLAB/20261002/20261002_191745/20261002_193120_base.mp4",
+        "wrist": "episodes/UIUC_DASLAB/20261002/20261002_191745/20261002_193120_wrist.mp4"
+      },
+      "episode_id": "20261002_193120",
+      "language_instruction": "pick the foam piece and put it in the orange plate",
+      "operator": "jose-cuaran",
+      "annotators": [
+        "Francisco-Affonso",
+        "jose-cuaran"
+      ],
+      "robot_name": "ufactory_lite6",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:54:33.958661+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-047",
+      "dataset_repo": "OopsieData-Submissions/UIUC_DASLAB",
+      "lab_id": "UIUC_DASLAB",
+      "repo_path": "20260926/20260926_154349/20260926_154915.h5",
+      "bundle_path": "episodes/UIUC_DASLAB/20260926/20260926_154349/20260926_154915.h5",
+      "video_files": {
+        "base": "episodes/UIUC_DASLAB/20260926/20260926_154349/20260926_154915_base.mp4",
+        "wrist": "episodes/UIUC_DASLAB/20260926/20260926_154349/20260926_154915_wrist.mp4"
+      },
+      "episode_id": "20260926_154915",
+      "language_instruction": "push the brown box to the triangle",
+      "operator": "jose-cuaran",
+      "annotators": [
+        "Francisco-Affonso",
+        "jose-cuaran"
+      ],
+      "robot_name": "ufactory_lite6",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:34:58.147928+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-048",
+      "dataset_repo": "OopsieData-Submissions/UIUC_DASLAB",
+      "lab_id": "UIUC_DASLAB",
+      "repo_path": "20261002/20261002_162722/20261002_170028.h5",
+      "bundle_path": "episodes/UIUC_DASLAB/20261002/20261002_162722/20261002_170028.h5",
+      "video_files": {
+        "base": "episodes/UIUC_DASLAB/20261002/20261002_162722/20261002_170028_base.mp4",
+        "wrist": "episodes/UIUC_DASLAB/20261002/20261002_162722/20261002_170028_wrist.mp4"
+      },
+      "episode_id": "20261002_170028",
+      "language_instruction": "pick the foam piece and put it in the plate",
+      "operator": "jose-cuaran",
+      "annotators": [
+        "Francisco-Affonso",
+        "jose-cuaran"
+      ],
+      "robot_name": "ufactory_lite6",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:53:55.662300+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-049",
+      "dataset_repo": "OopsieData-Submissions/UIUC_DASLAB",
+      "lab_id": "UIUC_DASLAB",
+      "repo_path": "20260928/20260928_160208/20260928_162249.h5",
+      "bundle_path": "episodes/UIUC_DASLAB/20260928/20260928_160208/20260928_162249.h5",
+      "video_files": {
+        "base": "episodes/UIUC_DASLAB/20260928/20260928_160208/20260928_162249_base.mp4",
+        "wrist": "episodes/UIUC_DASLAB/20260928/20260928_160208/20260928_162249_wrist.mp4"
+      },
+      "episode_id": "20260928_162249",
+      "language_instruction": "pick the orange fruit and put it in the white box",
+      "operator": "jose-cuaran",
+      "annotators": [
+        "Francisco-Affonso",
+        "jose-cuaran"
+      ],
+      "robot_name": "ufactory_lite6",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:52:31.550605+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-050",
+      "dataset_repo": "OopsieData-Submissions/UIUC_DASLAB",
+      "lab_id": "UIUC_DASLAB",
+      "repo_path": "20261003/20261003_184348/20261003_184619.h5",
+      "bundle_path": "episodes/UIUC_DASLAB/20261003/20261003_184348/20261003_184619.h5",
+      "video_files": {
+        "base": "episodes/UIUC_DASLAB/20261003/20261003_184348/20261003_184619_base.mp4",
+        "wrist": "episodes/UIUC_DASLAB/20261003/20261003_184348/20261003_184619_wrist.mp4"
+      },
+      "episode_id": "20261003_184619",
+      "language_instruction": "pick the red fruit and put it in the cup",
+      "operator": "jose-cuaran",
+      "annotators": [
+        "Francisco-Affonso",
+        "jose-cuaran"
+      ],
+      "robot_name": "ufactory_lite6",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:56:31.164017+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-051",
+      "dataset_repo": "OopsieData-Submissions/UIUC_DASLAB",
+      "lab_id": "UIUC_DASLAB",
+      "repo_path": "20260928/20260928_160208/20260928_160801.h5",
+      "bundle_path": "episodes/UIUC_DASLAB/20260928/20260928_160208/20260928_160801.h5",
+      "video_files": {
+        "base": "episodes/UIUC_DASLAB/20260928/20260928_160208/20260928_160801_base.mp4",
+        "wrist": "episodes/UIUC_DASLAB/20260928/20260928_160208/20260928_160801_wrist.mp4"
+      },
+      "episode_id": "20260928_160801",
+      "language_instruction": "pick the red fruit and put it in the box",
+      "operator": "jose-cuaran",
+      "annotators": [
+        "Francisco-Affonso",
+        "jose-cuaran"
+      ],
+      "robot_name": "ufactory_lite6",
+      "qa_notes": "I would have just said grasp, not sequencing_semantic.",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:51:52.036551+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-052",
+      "dataset_repo": "OopsieData-Submissions/UIUC_DASLAB",
+      "lab_id": "UIUC_DASLAB",
+      "repo_path": "20261003/20261003_173755/20261003_181209.h5",
+      "bundle_path": "episodes/UIUC_DASLAB/20261003/20261003_173755/20261003_181209.h5",
+      "video_files": {
+        "base": "episodes/UIUC_DASLAB/20261003/20261003_173755/20261003_181209_base.mp4",
+        "wrist": "episodes/UIUC_DASLAB/20261003/20261003_173755/20261003_181209_wrist.mp4"
+      },
+      "episode_id": "20261003_181209",
+      "language_instruction": "push the cylinder to the triangle",
+      "operator": "jose-cuaran",
+      "annotators": [
+        "Francisco-Affonso",
+        "jose-cuaran"
+      ],
+      "robot_name": "ufactory_lite6",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:56:03.851847+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-053",
+      "dataset_repo": "OopsieData-Submissions/UIUC_DASLAB",
+      "lab_id": "UIUC_DASLAB",
+      "repo_path": "20260928/20260928_170624/20260928_173259.h5",
+      "bundle_path": "episodes/UIUC_DASLAB/20260928/20260928_170624/20260928_173259.h5",
+      "video_files": {
+        "base": "episodes/UIUC_DASLAB/20260928/20260928_170624/20260928_173259_base.mp4",
+        "wrist": "episodes/UIUC_DASLAB/20260928/20260928_170624/20260928_173259_wrist.mp4"
+      },
+      "episode_id": "20260928_173259",
+      "language_instruction": "push the brown box to the red square",
+      "operator": "jose-cuaran",
+      "annotators": [
+        "Francisco-Affonso",
+        "jose-cuaran"
+      ],
+      "robot_name": "ufactory_lite6",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:53:12.032821+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-054",
+      "dataset_repo": "OopsieData-Submissions/UIUC_DASLAB",
+      "lab_id": "UIUC_DASLAB",
+      "repo_path": "20260928/20260928_175348/20260928_180117.h5",
+      "bundle_path": "episodes/UIUC_DASLAB/20260928/20260928_175348/20260928_180117.h5",
+      "video_files": {
+        "base": "episodes/UIUC_DASLAB/20260928/20260928_175348/20260928_180117_base.mp4",
+        "wrist": "episodes/UIUC_DASLAB/20260928/20260928_175348/20260928_180117_wrist.mp4"
+      },
+      "episode_id": "20260928_180117",
+      "language_instruction": "push the tape to the red square",
+      "operator": "jose-cuaran",
+      "annotators": [
+        "Francisco-Affonso",
+        "jose-cuaran"
+      ],
+      "robot_name": "ufactory_lite6",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:53:23.031212+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-055",
+      "dataset_repo": "OopsieData-Submissions/UIUC_DASLAB",
+      "lab_id": "UIUC_DASLAB",
+      "repo_path": "20260928/20260928_160208/20260928_161803.h5",
+      "bundle_path": "episodes/UIUC_DASLAB/20260928/20260928_160208/20260928_161803.h5",
+      "video_files": {
+        "base": "episodes/UIUC_DASLAB/20260928/20260928_160208/20260928_161803_base.mp4",
+        "wrist": "episodes/UIUC_DASLAB/20260928/20260928_160208/20260928_161803_wrist.mp4"
+      },
+      "episode_id": "20260928_161803",
+      "language_instruction": "pick the yellow fruit and put it in the white box",
+      "operator": "jose-cuaran",
+      "annotators": [
+        "Francisco-Affonso",
+        "jose-cuaran"
+      ],
+      "robot_name": "ufactory_lite6",
+      "qa_notes": "I would have just said grasp, not sequencing_semantic.",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:52:07.189949+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-056",
+      "dataset_repo": "OopsieData-Submissions/UIUC_DASLAB",
+      "lab_id": "UIUC_DASLAB",
+      "repo_path": "20260926/20260926_154349/20260926_155546.h5",
+      "bundle_path": "episodes/UIUC_DASLAB/20260926/20260926_154349/20260926_155546.h5",
+      "video_files": {
+        "base": "episodes/UIUC_DASLAB/20260926/20260926_154349/20260926_155546_base.mp4",
+        "wrist": "episodes/UIUC_DASLAB/20260926/20260926_154349/20260926_155546_wrist.mp4"
+      },
+      "episode_id": "20260926_155546",
+      "language_instruction": "push the tape to the triangle",
+      "operator": "jose-cuaran",
+      "annotators": [
+        "Francisco-Affonso",
+        "jose-cuaran"
+      ],
+      "robot_name": "ufactory_lite6",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:35:22.558210+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-057",
+      "dataset_repo": "OopsieData-Submissions/UIUC_DASLAB",
+      "lab_id": "UIUC_DASLAB",
+      "repo_path": "20260928/20260928_145654/20260928_151310.h5",
+      "bundle_path": "episodes/UIUC_DASLAB/20260928/20260928_145654/20260928_151310.h5",
+      "video_files": {
+        "base": "episodes/UIUC_DASLAB/20260928/20260928_145654/20260928_151310_base.mp4",
+        "wrist": "episodes/UIUC_DASLAB/20260928/20260928_145654/20260928_151310_wrist.mp4"
+      },
+      "episode_id": "20260928_151310",
+      "language_instruction": "pick the red fruit and put it in the red box",
+      "operator": "jose-cuaran",
+      "annotators": [
+        "Francisco-Affonso",
+        "jose-cuaran"
+      ],
+      "robot_name": "ufactory_lite6",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:35:43.541639+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-058",
+      "dataset_repo": "OopsieData-Submissions/UIUC_DASLAB",
+      "lab_id": "UIUC_DASLAB",
+      "repo_path": "20260928/20260928_170624/20260928_172145.h5",
+      "bundle_path": "episodes/UIUC_DASLAB/20260928/20260928_170624/20260928_172145.h5",
+      "video_files": {
+        "base": "episodes/UIUC_DASLAB/20260928/20260928_170624/20260928_172145_base.mp4",
+        "wrist": "episodes/UIUC_DASLAB/20260928/20260928_170624/20260928_172145_wrist.mp4"
+      },
+      "episode_id": "20260928_172145",
+      "language_instruction": "push the tape to the blue square",
+      "operator": "jose-cuaran",
+      "annotators": [
+        "Francisco-Affonso",
+        "jose-cuaran"
+      ],
+      "robot_name": "ufactory_lite6",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:53:00.322621+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-059",
+      "dataset_repo": "OopsieData-Submissions/UIUC_DASLAB",
+      "lab_id": "UIUC_DASLAB",
+      "repo_path": "20260928/20260928_145654/20260928_153538.h5",
+      "bundle_path": "episodes/UIUC_DASLAB/20260928/20260928_145654/20260928_153538.h5",
+      "video_files": {
+        "base": "episodes/UIUC_DASLAB/20260928/20260928_145654/20260928_153538_base.mp4",
+        "wrist": "episodes/UIUC_DASLAB/20260928/20260928_145654/20260928_153538_wrist.mp4"
+      },
+      "episode_id": "20260928_153538",
+      "language_instruction": "pick the brown box and put it in the plate",
+      "operator": "jose-cuaran",
+      "annotators": [
+        "Francisco-Affonso",
+        "jose-cuaran"
+      ],
+      "robot_name": "ufactory_lite6",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:35:52.056329+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-060",
+      "dataset_repo": "OopsieData-Submissions/UIUC_DASLAB",
+      "lab_id": "UIUC_DASLAB",
+      "repo_path": "20260926/20260926_133750/20260926_140211.h5",
+      "bundle_path": "episodes/UIUC_DASLAB/20260926/20260926_133750/20260926_140211.h5",
+      "video_files": {
+        "base": "episodes/UIUC_DASLAB/20260926/20260926_133750/20260926_140211_base.mp4",
+        "wrist": "episodes/UIUC_DASLAB/20260926/20260926_133750/20260926_140211_wrist.mp4"
+      },
+      "episode_id": "20260926_140211",
+      "language_instruction": "pick the yellow fruit and put it in the red box",
+      "operator": "jose-cuaran",
+      "annotators": [
+        "Francisco-Affonso",
+        "jose-cuaran"
+      ],
+      "robot_name": "ufactory_lite6",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:33:49.825519+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-061",
+      "dataset_repo": "OopsieData-Submissions/UIUC_Reid",
+      "lab_id": "UIUC_Reid",
+      "repo_path": "20260926_193908/20260926_210024.h5",
+      "bundle_path": "episodes/UIUC_Reid/20260926_193908/20260926_210024.h5",
+      "video_files": {
+        "front_cam": "episodes/UIUC_Reid/20260926_193908/20260926_210024_front_cam.mp4",
+        "overhead_cam": "episodes/UIUC_Reid/20260926_193908/20260926_210024_overhead_cam.mp4",
+        "wrist_cam": "episodes/UIUC_Reid/20260926_193908/20260926_210024_wrist_cam.mp4"
+      },
+      "episode_id": "20260926_210024",
+      "language_instruction": "put the red block in the bowl",
+      "operator": "Gokul Puthumanaillam",
+      "annotators": [
+        "Vardhan Dongre"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:58:25.459290+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-062",
+      "dataset_repo": "OopsieData-Submissions/UIUC_Reid",
+      "lab_id": "UIUC_Reid",
+      "repo_path": "20260929_154938/20260929_160145.h5",
+      "bundle_path": "episodes/UIUC_Reid/20260929_154938/20260929_160145.h5",
+      "video_files": {
+        "front_cam": "episodes/UIUC_Reid/20260929_154938/20260929_160145_front_cam.mp4",
+        "overhead_cam": "episodes/UIUC_Reid/20260929_154938/20260929_160145_overhead_cam.mp4",
+        "wrist_cam": "episodes/UIUC_Reid/20260929_154938/20260929_160145_wrist_cam.mp4"
+      },
+      "episode_id": "20260929_160145",
+      "language_instruction": "put all the blocks in the bowl",
+      "operator": "Gokul Puthumanaillam",
+      "annotators": [
+        "Rohan Balchandani"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:00:48.466005+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-063",
+      "dataset_repo": "OopsieData-Submissions/UIUC_Reid",
+      "lab_id": "UIUC_Reid",
+      "repo_path": "20260927_132120/20260927_140220.h5",
+      "bundle_path": "episodes/UIUC_Reid/20260927_132120/20260927_140220.h5",
+      "video_files": {
+        "front_cam": "episodes/UIUC_Reid/20260927_132120/20260927_140220_front_cam.mp4",
+        "overhead_cam": "episodes/UIUC_Reid/20260927_132120/20260927_140220_overhead_cam.mp4",
+        "wrist_cam": "episodes/UIUC_Reid/20260927_132120/20260927_140220_wrist_cam.mp4"
+      },
+      "episode_id": "20260927_140220",
+      "language_instruction": "stack the blue block on the red block",
+      "operator": "Gokul Puthumanaillam",
+      "annotators": [
+        "Chirag Chandnani"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:59:27.374483+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-064",
+      "dataset_repo": "OopsieData-Submissions/UIUC_Reid",
+      "lab_id": "UIUC_Reid",
+      "repo_path": "20260930_181817/20260930_181944.h5",
+      "bundle_path": "episodes/UIUC_Reid/20260930_181817/20260930_181944.h5",
+      "video_files": {
+        "front_cam": "episodes/UIUC_Reid/20260930_181817/20260930_181944_front_cam.mp4",
+        "overhead_cam": "episodes/UIUC_Reid/20260930_181817/20260930_181944_overhead_cam.mp4",
+        "wrist_cam": "episodes/UIUC_Reid/20260930_181817/20260930_181944_wrist_cam.mp4"
+      },
+      "episode_id": "20260930_181944",
+      "language_instruction": "wipe the table with the cloth",
+      "operator": "Gokul Puthumanaillam",
+      "annotators": [
+        "Pranav Popuri"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "Very subjective. I would have called it a success. It didn't wipe consecutively but that wasn't in the instruction.",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:03:15.604551+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-065",
+      "dataset_repo": "OopsieData-Submissions/UIUC_Reid",
+      "lab_id": "UIUC_Reid",
+      "repo_path": "20260924_221256/20260924_223402.h5",
+      "bundle_path": "episodes/UIUC_Reid/20260924_221256/20260924_223402.h5",
+      "video_files": {
+        "front_cam": "episodes/UIUC_Reid/20260924_221256/20260924_223402_front_cam.mp4",
+        "overhead_cam": "episodes/UIUC_Reid/20260924_221256/20260924_223402_overhead_cam.mp4",
+        "wrist_cam": "episodes/UIUC_Reid/20260924_221256/20260924_223402_wrist_cam.mp4"
+      },
+      "episode_id": "20260924_223402",
+      "language_instruction": "put all the blocks in the bowl",
+      "operator": "Gokul Puthumanaillam",
+      "annotators": [
+        "Gokul Puthumanaillam"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:56:45.133817+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-066",
+      "dataset_repo": "OopsieData-Submissions/UIUC_Reid",
+      "lab_id": "UIUC_Reid",
+      "repo_path": "20260929_192645/20260929_211917.h5",
+      "bundle_path": "episodes/UIUC_Reid/20260929_192645/20260929_211917.h5",
+      "video_files": {
+        "front_cam": "episodes/UIUC_Reid/20260929_192645/20260929_211917_front_cam.mp4",
+        "overhead_cam": "episodes/UIUC_Reid/20260929_192645/20260929_211917_overhead_cam.mp4",
+        "wrist_cam": "episodes/UIUC_Reid/20260929_192645/20260929_211917_wrist_cam.mp4"
+      },
+      "episode_id": "20260929_211917",
+      "language_instruction": "put the marker on the plate",
+      "operator": "Gokul Puthumanaillam",
+      "annotators": [
+        "Pranav Popuri"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:02:01.092595+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-067",
+      "dataset_repo": "OopsieData-Submissions/UIUC_Reid",
+      "lab_id": "UIUC_Reid",
+      "repo_path": "20260927_165633/20260927_182514.h5",
+      "bundle_path": "episodes/UIUC_Reid/20260927_165633/20260927_182514.h5",
+      "video_files": {
+        "front_cam": "episodes/UIUC_Reid/20260927_165633/20260927_182514_front_cam.mp4",
+        "overhead_cam": "episodes/UIUC_Reid/20260927_165633/20260927_182514_overhead_cam.mp4",
+        "wrist_cam": "episodes/UIUC_Reid/20260927_165633/20260927_182514_wrist_cam.mp4"
+      },
+      "episode_id": "20260927_182514",
+      "language_instruction": "stack the blue block on the red block",
+      "operator": "Gokul Puthumanaillam",
+      "annotators": [
+        "Qinzhi Li"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:59:57.651967+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-068",
+      "dataset_repo": "OopsieData-Submissions/UIUC_Reid",
+      "lab_id": "UIUC_Reid",
+      "repo_path": "20260926_193908/20260926_204226.h5",
+      "bundle_path": "episodes/UIUC_Reid/20260926_193908/20260926_204226.h5",
+      "video_files": {
+        "front_cam": "episodes/UIUC_Reid/20260926_193908/20260926_204226_front_cam.mp4",
+        "overhead_cam": "episodes/UIUC_Reid/20260926_193908/20260926_204226_overhead_cam.mp4",
+        "wrist_cam": "episodes/UIUC_Reid/20260926_193908/20260926_204226_wrist_cam.mp4"
+      },
+      "episode_id": "20260926_204226",
+      "language_instruction": "put the red block in the bowl",
+      "operator": "Gokul Puthumanaillam",
+      "annotators": [
+        "Vardhan Dongre"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:58:06.670115+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-069",
+      "dataset_repo": "OopsieData-Submissions/UIUC_Reid",
+      "lab_id": "UIUC_Reid",
+      "repo_path": "20261001_145553/20261001_151207.h5",
+      "bundle_path": "episodes/UIUC_Reid/20261001_145553/20261001_151207.h5",
+      "video_files": {
+        "front_cam": "episodes/UIUC_Reid/20261001_145553/20261001_151207_front_cam.mp4",
+        "overhead_cam": "episodes/UIUC_Reid/20261001_145553/20261001_151207_overhead_cam.mp4",
+        "wrist_cam": "episodes/UIUC_Reid/20261001_145553/20261001_151207_wrist_cam.mp4"
+      },
+      "episode_id": "20261001_151207",
+      "language_instruction": "wipe the table with the cloth",
+      "operator": "Gokul Puthumanaillam",
+      "annotators": [
+        "Chirag Chandnani"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:03:51.578486+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-070",
+      "dataset_repo": "OopsieData-Submissions/UIUC_Reid",
+      "lab_id": "UIUC_Reid",
+      "repo_path": "20260929_165616/20260929_170751.h5",
+      "bundle_path": "episodes/UIUC_Reid/20260929_165616/20260929_170751.h5",
+      "video_files": {
+        "front_cam": "episodes/UIUC_Reid/20260929_165616/20260929_170751_front_cam.mp4",
+        "overhead_cam": "episodes/UIUC_Reid/20260929_165616/20260929_170751_overhead_cam.mp4",
+        "wrist_cam": "episodes/UIUC_Reid/20260929_165616/20260929_170751_wrist_cam.mp4"
+      },
+      "episode_id": "20260929_170751",
+      "language_instruction": "put the marker on the plate",
+      "operator": "Gokul Puthumanaillam",
+      "annotators": [
+        "Rohan Balchandani"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:01:02.465645+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-071",
+      "dataset_repo": "OopsieData-Submissions/UIUC_Reid",
+      "lab_id": "UIUC_Reid",
+      "repo_path": "20260926_174940/20260926_183225.h5",
+      "bundle_path": "episodes/UIUC_Reid/20260926_174940/20260926_183225.h5",
+      "video_files": {
+        "front_cam": "episodes/UIUC_Reid/20260926_174940/20260926_183225_front_cam.mp4",
+        "overhead_cam": "episodes/UIUC_Reid/20260926_174940/20260926_183225_overhead_cam.mp4",
+        "wrist_cam": "episodes/UIUC_Reid/20260926_174940/20260926_183225_wrist_cam.mp4"
+      },
+      "episode_id": "20260926_183225",
+      "language_instruction": "put the red block in the bowl",
+      "operator": "Gokul Puthumanaillam",
+      "annotators": [
+        "Gokul Puthumanaillam"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:57:37.985522+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-072",
+      "dataset_repo": "OopsieData-Submissions/UIUC_Reid",
+      "lab_id": "UIUC_Reid",
+      "repo_path": "20260927_184737/20260927_195036.h5",
+      "bundle_path": "episodes/UIUC_Reid/20260927_184737/20260927_195036.h5",
+      "video_files": {
+        "front_cam": "episodes/UIUC_Reid/20260927_184737/20260927_195036_front_cam.mp4",
+        "overhead_cam": "episodes/UIUC_Reid/20260927_184737/20260927_195036_overhead_cam.mp4",
+        "wrist_cam": "episodes/UIUC_Reid/20260927_184737/20260927_195036_wrist_cam.mp4"
+      },
+      "episode_id": "20260927_195036",
+      "language_instruction": "put all the blocks in the bowl",
+      "operator": "Gokul Puthumanaillam",
+      "annotators": [
+        "Qinzhi Li"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:00:29.425373+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-073",
+      "dataset_repo": "OopsieData-Submissions/UIUC_Reid",
+      "lab_id": "UIUC_Reid",
+      "repo_path": "20260930_181817/20260930_192903.h5",
+      "bundle_path": "episodes/UIUC_Reid/20260930_181817/20260930_192903.h5",
+      "video_files": {
+        "front_cam": "episodes/UIUC_Reid/20260930_181817/20260930_192903_front_cam.mp4",
+        "overhead_cam": "episodes/UIUC_Reid/20260930_181817/20260930_192903_overhead_cam.mp4",
+        "wrist_cam": "episodes/UIUC_Reid/20260930_181817/20260930_192903_wrist_cam.mp4"
+      },
+      "episode_id": "20260930_192903",
+      "language_instruction": "wipe the table with the cloth",
+      "operator": "Gokul Puthumanaillam",
+      "annotators": [
+        "Pranav Popuri"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:03:28.829153+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-074",
+      "dataset_repo": "OopsieData-Submissions/UIUC_Reid",
+      "lab_id": "UIUC_Reid",
+      "repo_path": "20260927_132120/20260927_163003.h5",
+      "bundle_path": "episodes/UIUC_Reid/20260927_132120/20260927_163003.h5",
+      "video_files": {
+        "front_cam": "episodes/UIUC_Reid/20260927_132120/20260927_163003_front_cam.mp4",
+        "overhead_cam": "episodes/UIUC_Reid/20260927_132120/20260927_163003_overhead_cam.mp4",
+        "wrist_cam": "episodes/UIUC_Reid/20260927_132120/20260927_163003_wrist_cam.mp4"
+      },
+      "episode_id": "20260927_163003",
+      "language_instruction": "stack the blue block on the red block",
+      "operator": "Gokul Puthumanaillam",
+      "annotators": [
+        "Chirag Chandnani"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:59:43.733027+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-075",
+      "dataset_repo": "OopsieData-Submissions/UIUC_Reid",
+      "lab_id": "UIUC_Reid",
+      "repo_path": "20260929_165616/20260929_172615.h5",
+      "bundle_path": "episodes/UIUC_Reid/20260929_165616/20260929_172615.h5",
+      "video_files": {
+        "front_cam": "episodes/UIUC_Reid/20260929_165616/20260929_172615_front_cam.mp4",
+        "overhead_cam": "episodes/UIUC_Reid/20260929_165616/20260929_172615_overhead_cam.mp4",
+        "wrist_cam": "episodes/UIUC_Reid/20260929_165616/20260929_172615_wrist_cam.mp4"
+      },
+      "episode_id": "20260929_172615",
+      "language_instruction": "put the marker on the plate",
+      "operator": "Gokul Puthumanaillam",
+      "annotators": [
+        "Rohan Balchandani"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:01:15.517805+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-076",
+      "dataset_repo": "OopsieData-Submissions/UIUC_Reid",
+      "lab_id": "UIUC_Reid",
+      "repo_path": "20260926_193908/20260926_223738.h5",
+      "bundle_path": "episodes/UIUC_Reid/20260926_193908/20260926_223738.h5",
+      "video_files": {
+        "front_cam": "episodes/UIUC_Reid/20260926_193908/20260926_223738_front_cam.mp4",
+        "overhead_cam": "episodes/UIUC_Reid/20260926_193908/20260926_223738_overhead_cam.mp4",
+        "wrist_cam": "episodes/UIUC_Reid/20260926_193908/20260926_223738_wrist_cam.mp4"
+      },
+      "episode_id": "20260926_223738",
+      "language_instruction": "put the red block in the bowl",
+      "operator": "Gokul Puthumanaillam",
+      "annotators": [
+        "Vardhan Dongre"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:58:55.009167+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-077",
+      "dataset_repo": "OopsieData-Submissions/UIUC_Reid",
+      "lab_id": "UIUC_Reid",
+      "repo_path": "20260927_165633/20260927_182741.h5",
+      "bundle_path": "episodes/UIUC_Reid/20260927_165633/20260927_182741.h5",
+      "video_files": {
+        "front_cam": "episodes/UIUC_Reid/20260927_165633/20260927_182741_front_cam.mp4",
+        "overhead_cam": "episodes/UIUC_Reid/20260927_165633/20260927_182741_overhead_cam.mp4",
+        "wrist_cam": "episodes/UIUC_Reid/20260927_165633/20260927_182741_wrist_cam.mp4"
+      },
+      "episode_id": "20260927_182741",
+      "language_instruction": "stack the blue block on the red block",
+      "operator": "Gokul Puthumanaillam",
+      "annotators": [
+        "Qinzhi Li"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:00:14.246660+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-078",
+      "dataset_repo": "OopsieData-Submissions/UIUC_Reid",
+      "lab_id": "UIUC_Reid",
+      "repo_path": "20260924_233402/20260925_001602.h5",
+      "bundle_path": "episodes/UIUC_Reid/20260924_233402/20260925_001602.h5",
+      "video_files": {
+        "front_cam": "episodes/UIUC_Reid/20260924_233402/20260925_001602_front_cam.mp4",
+        "overhead_cam": "episodes/UIUC_Reid/20260924_233402/20260925_001602_overhead_cam.mp4",
+        "wrist_cam": "episodes/UIUC_Reid/20260924_233402/20260925_001602_wrist_cam.mp4"
+      },
+      "episode_id": "20260925_001602",
+      "language_instruction": "put all the blocks in the bowl",
+      "operator": "Gokul Puthumanaillam",
+      "annotators": [
+        "Gokul Puthumanaillam"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T20:57:10.580247+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-079",
+      "dataset_repo": "OopsieData-Submissions/UIUC_Reid",
+      "lab_id": "UIUC_Reid",
+      "repo_path": "20260929_192645/20260929_210444.h5",
+      "bundle_path": "episodes/UIUC_Reid/20260929_192645/20260929_210444.h5",
+      "video_files": {
+        "front_cam": "episodes/UIUC_Reid/20260929_192645/20260929_210444_front_cam.mp4",
+        "overhead_cam": "episodes/UIUC_Reid/20260929_192645/20260929_210444_overhead_cam.mp4",
+        "wrist_cam": "episodes/UIUC_Reid/20260929_192645/20260929_210444_wrist_cam.mp4"
+      },
+      "episode_id": "20260929_210444",
+      "language_instruction": "put the marker on the plate",
+      "operator": "Gokul Puthumanaillam",
+      "annotators": [
+        "Pranav Popuri"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:01:34.691689+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-080",
+      "dataset_repo": "OopsieData-Submissions/UIUC_Reid",
+      "lab_id": "UIUC_Reid",
+      "repo_path": "20261001_153025/20261001_153037.h5",
+      "bundle_path": "episodes/UIUC_Reid/20261001_153025/20261001_153037.h5",
+      "video_files": {
+        "front_cam": "episodes/UIUC_Reid/20261001_153025/20261001_153037_front_cam.mp4",
+        "overhead_cam": "episodes/UIUC_Reid/20261001_153025/20261001_153037_overhead_cam.mp4",
+        "wrist_cam": "episodes/UIUC_Reid/20261001_153025/20261001_153037_wrist_cam.mp4"
+      },
+      "episode_id": "20261001_153037",
+      "language_instruction": "wipe the table with the cloth",
+      "operator": "Gokul Puthumanaillam",
+      "annotators": [
+        "Vardhan Dongre"
+      ],
+      "robot_name": "trossen_widowx_ai",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:04:23.640550+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-081",
+      "dataset_repo": "OopsieData-Submissions/UNC_MD",
+      "lab_id": "UNC_IDEAL",
+      "repo_path": "unc_ideal_0069.h5",
+      "bundle_path": "episodes/UNC_MD/unc_ideal_0069.h5",
+      "video_files": {
+        "exterior": "episodes/UNC_MD/unc_ideal_0069_exterior.mp4",
+        "wrist": "episodes/UNC_MD/unc_ideal_0069_wrist.mp4"
+      },
+      "episode_id": "unc_ideal_0069",
+      "language_instruction": "pick up yellow mustard",
+      "operator": "Yu Fang",
+      "annotators": [
+        "Yu Fang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:04:49.022469+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-082",
+      "dataset_repo": "OopsieData-Submissions/UNC_MD",
+      "lab_id": "UNC_IDEAL",
+      "repo_path": "unc_ideal_0886.h5",
+      "bundle_path": "episodes/UNC_MD/unc_ideal_0886.h5",
+      "video_files": {
+        "exterior": "episodes/UNC_MD/unc_ideal_0886_exterior.mp4",
+        "wrist": "episodes/UNC_MD/unc_ideal_0886_wrist.mp4"
+      },
+      "episode_id": "unc_ideal_0886",
+      "language_instruction": "pick up the cup in the middle",
+      "operator": "Yu Fang",
+      "annotators": [
+        "Yu Fang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:06:55.323983+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-083",
+      "dataset_repo": "OopsieData-Submissions/UNC_MD",
+      "lab_id": "UNC_IDEAL",
+      "repo_path": "unc_ideal_0602.h5",
+      "bundle_path": "episodes/UNC_MD/unc_ideal_0602.h5",
+      "video_files": {
+        "exterior": "episodes/UNC_MD/unc_ideal_0602_exterior.mp4",
+        "wrist": "episodes/UNC_MD/unc_ideal_0602_wrist.mp4"
+      },
+      "episode_id": "unc_ideal_0602",
+      "language_instruction": "move the tide to the right side of the book",
+      "operator": "Yu Fang",
+      "annotators": [
+        "Yu Fang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:05:56.580042+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-084",
+      "dataset_repo": "OopsieData-Submissions/UNC_MD",
+      "lab_id": "UNC_IDEAL",
+      "repo_path": "unc_ideal_0203.h5",
+      "bundle_path": "episodes/UNC_MD/unc_ideal_0203.h5",
+      "video_files": {
+        "exterior": "episodes/UNC_MD/unc_ideal_0203_exterior.mp4",
+        "wrist": "episodes/UNC_MD/unc_ideal_0203_wrist.mp4"
+      },
+      "episode_id": "unc_ideal_0203",
+      "language_instruction": "place the parmesan cheese into the basket",
+      "operator": "Yu Fang",
+      "annotators": [
+        "Yu Fang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:05:01.461430+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-085",
+      "dataset_repo": "OopsieData-Submissions/UNC_MD",
+      "lab_id": "UNC_IDEAL",
+      "repo_path": "unc_ideal_1023.h5",
+      "bundle_path": "episodes/UNC_MD/unc_ideal_1023.h5",
+      "video_files": {
+        "exterior": "episodes/UNC_MD/unc_ideal_1023_exterior.mp4",
+        "wrist": "episodes/UNC_MD/unc_ideal_1023_wrist.mp4"
+      },
+      "episode_id": "unc_ideal_1023",
+      "language_instruction": "pick up the cup on the right",
+      "operator": "Yu Fang",
+      "annotators": [
+        "Yu Fang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:07:29.007382+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-086",
+      "dataset_repo": "OopsieData-Submissions/UNC_MD",
+      "lab_id": "UNC_IDEAL",
+      "repo_path": "unc_ideal_1246.h5",
+      "bundle_path": "episodes/UNC_MD/unc_ideal_1246.h5",
+      "video_files": {
+        "exterior": "episodes/UNC_MD/unc_ideal_1246_exterior.mp4",
+        "wrist": "episodes/UNC_MD/unc_ideal_1246_wrist.mp4"
+      },
+      "episode_id": "unc_ideal_1246",
+      "language_instruction": "put the apple in the basket",
+      "operator": "Yu Fang",
+      "annotators": [
+        "Yu Fang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:08:14.431445+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-087",
+      "dataset_repo": "OopsieData-Submissions/UNC_MD",
+      "lab_id": "UNC_IDEAL",
+      "repo_path": "unc_ideal_0812.h5",
+      "bundle_path": "episodes/UNC_MD/unc_ideal_0812.h5",
+      "video_files": {
+        "exterior": "episodes/UNC_MD/unc_ideal_0812_exterior.mp4",
+        "wrist": "episodes/UNC_MD/unc_ideal_0812_wrist.mp4"
+      },
+      "episode_id": "unc_ideal_0812",
+      "language_instruction": "move the tide to the front of the book",
+      "operator": "Yu Fang",
+      "annotators": [
+        "Yu Fang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:06:37.003346+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-088",
+      "dataset_repo": "OopsieData-Submissions/UNC_MD",
+      "lab_id": "UNC_IDEAL",
+      "repo_path": "unc_ideal_1180.h5",
+      "bundle_path": "episodes/UNC_MD/unc_ideal_1180.h5",
+      "video_files": {
+        "exterior": "episodes/UNC_MD/unc_ideal_1180_exterior.mp4",
+        "wrist": "episodes/UNC_MD/unc_ideal_1180_wrist.mp4"
+      },
+      "episode_id": "unc_ideal_1180",
+      "language_instruction": "put the pringles on the plate",
+      "operator": "Yu Fang",
+      "annotators": [
+        "Yu Fang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:07:39.520428+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-089",
+      "dataset_repo": "OopsieData-Submissions/UNC_MD",
+      "lab_id": "UNC_IDEAL",
+      "repo_path": "unc_ideal_0371.h5",
+      "bundle_path": "episodes/UNC_MD/unc_ideal_0371.h5",
+      "video_files": {
+        "exterior": "episodes/UNC_MD/unc_ideal_0371_exterior.mp4",
+        "wrist": "episodes/UNC_MD/unc_ideal_0371_wrist.mp4"
+      },
+      "episode_id": "unc_ideal_0371",
+      "language_instruction": "pick up the corn on the table",
+      "operator": "Yu Fang",
+      "annotators": [
+        "Yu Fang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:05:12.168550+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-090",
+      "dataset_repo": "OopsieData-Submissions/UNC_MD",
+      "lab_id": "UNC_IDEAL",
+      "repo_path": "unc_ideal_0496.h5",
+      "bundle_path": "episodes/UNC_MD/unc_ideal_0496.h5",
+      "video_files": {
+        "exterior": "episodes/UNC_MD/unc_ideal_0496_exterior.mp4",
+        "wrist": "episodes/UNC_MD/unc_ideal_0496_wrist.mp4"
+      },
+      "episode_id": "unc_ideal_0496",
+      "language_instruction": "stack the white cup onto the red cup",
+      "operator": "Yu Fang",
+      "annotators": [
+        "Yu Fang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:05:38.384012+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-091",
+      "dataset_repo": "OopsieData-Submissions/UNC_MD",
+      "lab_id": "UNC_IDEAL",
+      "repo_path": "unc_ideal_0029.h5",
+      "bundle_path": "episodes/UNC_MD/unc_ideal_0029.h5",
+      "video_files": {
+        "exterior": "episodes/UNC_MD/unc_ideal_0029_exterior.mp4",
+        "wrist": "episodes/UNC_MD/unc_ideal_0029_wrist.mp4"
+      },
+      "episode_id": "unc_ideal_0029",
+      "language_instruction": "put the red cup on the plate",
+      "operator": "Yu Fang",
+      "annotators": [
+        "Yu Fang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:04:41.335446+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-092",
+      "dataset_repo": "OopsieData-Submissions/UNC_MD",
+      "lab_id": "UNC_IDEAL",
+      "repo_path": "unc_ideal_0697.h5",
+      "bundle_path": "episodes/UNC_MD/unc_ideal_0697.h5",
+      "video_files": {
+        "exterior": "episodes/UNC_MD/unc_ideal_0697_exterior.mp4",
+        "wrist": "episodes/UNC_MD/unc_ideal_0697_wrist.mp4"
+      },
+      "episode_id": "unc_ideal_0697",
+      "language_instruction": "put the apple on the tray and then put the banana on the tray",
+      "operator": "Yu Fang",
+      "annotators": [
+        "Yu Fang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:06:27.554104+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-093",
+      "dataset_repo": "OopsieData-Submissions/UNC_MD",
+      "lab_id": "UNC_IDEAL",
+      "repo_path": "unc_ideal_1218.h5",
+      "bundle_path": "episodes/UNC_MD/unc_ideal_1218.h5",
+      "video_files": {
+        "exterior": "episodes/UNC_MD/unc_ideal_1218_exterior.mp4",
+        "wrist": "episodes/UNC_MD/unc_ideal_1218_wrist.mp4"
+      },
+      "episode_id": "unc_ideal_1218",
+      "language_instruction": "put Rubik’s Cube on the book",
+      "operator": "Yu Fang",
+      "annotators": [
+        "Yu Fang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:07:58.435227+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-094",
+      "dataset_repo": "OopsieData-Submissions/UNC_MD",
+      "lab_id": "UNC_IDEAL",
+      "repo_path": "unc_ideal_0965.h5",
+      "bundle_path": "episodes/UNC_MD/unc_ideal_0965.h5",
+      "video_files": {
+        "exterior": "episodes/UNC_MD/unc_ideal_0965_exterior.mp4",
+        "wrist": "episodes/UNC_MD/unc_ideal_0965_wrist.mp4"
+      },
+      "episode_id": "unc_ideal_0965",
+      "language_instruction": "grasp the coke",
+      "operator": "Yu Fang",
+      "annotators": [
+        "Yu Fang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:07:18.500907+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-095",
+      "dataset_repo": "OopsieData-Submissions/UNC_MD",
+      "lab_id": "UNC_IDEAL",
+      "repo_path": "unc_ideal_0915.h5",
+      "bundle_path": "episodes/UNC_MD/unc_ideal_0915.h5",
+      "video_files": {
+        "exterior": "episodes/UNC_MD/unc_ideal_0915_exterior.mp4",
+        "wrist": "episodes/UNC_MD/unc_ideal_0915_wrist.mp4"
+      },
+      "episode_id": "unc_ideal_0915",
+      "language_instruction": "stack the cups",
+      "operator": "Yu Fang",
+      "annotators": [
+        "Yu Fang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:07:09.665424+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-096",
+      "dataset_repo": "OopsieData-Submissions/UNC_MD",
+      "lab_id": "UNC_IDEAL",
+      "repo_path": "unc_ideal_0091.h5",
+      "bundle_path": "episodes/UNC_MD/unc_ideal_0091.h5",
+      "video_files": {
+        "exterior": "episodes/UNC_MD/unc_ideal_0091_exterior.mp4",
+        "wrist": "episodes/UNC_MD/unc_ideal_0091_wrist.mp4"
+      },
+      "episode_id": "unc_ideal_0091",
+      "language_instruction": "pick the red cup",
+      "operator": "Yu Fang",
+      "annotators": [
+        "Yu Fang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:04:55.061888+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-097",
+      "dataset_repo": "OopsieData-Submissions/UNC_MD",
+      "lab_id": "UNC_IDEAL",
+      "repo_path": "unc_ideal_0487.h5",
+      "bundle_path": "episodes/UNC_MD/unc_ideal_0487.h5",
+      "video_files": {
+        "exterior": "episodes/UNC_MD/unc_ideal_0487_exterior.mp4",
+        "wrist": "episodes/UNC_MD/unc_ideal_0487_wrist.mp4"
+      },
+      "episode_id": "unc_ideal_0487",
+      "language_instruction": "hang the tape on the holder tree",
+      "operator": "Yu Fang",
+      "annotators": [
+        "Yu Fang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:05:29.276107+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-098",
+      "dataset_repo": "OopsieData-Submissions/UNC_MD",
+      "lab_id": "UNC_IDEAL",
+      "repo_path": "unc_ideal_0630.h5",
+      "bundle_path": "episodes/UNC_MD/unc_ideal_0630.h5",
+      "video_files": {
+        "exterior": "episodes/UNC_MD/unc_ideal_0630_exterior.mp4",
+        "wrist": "episodes/UNC_MD/unc_ideal_0630_wrist.mp4"
+      },
+      "episode_id": "unc_ideal_0630",
+      "language_instruction": "move the cup to the right and pour the coke into the cup",
+      "operator": "Yu Fang",
+      "annotators": [
+        "Yu Fang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:06:11.216904+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-099",
+      "dataset_repo": "OopsieData-Submissions/UNC_MD",
+      "lab_id": "UNC_IDEAL",
+      "repo_path": "unc_ideal_0557.h5",
+      "bundle_path": "episodes/UNC_MD/unc_ideal_0557.h5",
+      "video_files": {
+        "exterior": "episodes/UNC_MD/unc_ideal_0557_exterior.mp4",
+        "wrist": "episodes/UNC_MD/unc_ideal_0557_wrist.mp4"
+      },
+      "episode_id": "unc_ideal_0557",
+      "language_instruction": "put the red cup on the bowl",
+      "operator": "Yu Fang",
+      "annotators": [
+        "Yu Fang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:05:46.333262+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_09-100",
+      "dataset_repo": "OopsieData-Submissions/UNC_MD",
+      "lab_id": "UNC_IDEAL",
+      "repo_path": "unc_ideal_1186.h5",
+      "bundle_path": "episodes/UNC_MD/unc_ideal_1186.h5",
+      "video_files": {
+        "exterior": "episodes/UNC_MD/unc_ideal_1186_exterior.mp4",
+        "wrist": "episodes/UNC_MD/unc_ideal_1186_wrist.mp4"
+      },
+      "episode_id": "unc_ideal_1186",
+      "language_instruction": "put the toothpaste on the table",
+      "operator": "Yu Fang",
+      "annotators": [
+        "Yu Fang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Maria",
+      "qa_updated_at": "2026-10-08T21:07:49.969711+00:00"
+    }
+  ]
+}

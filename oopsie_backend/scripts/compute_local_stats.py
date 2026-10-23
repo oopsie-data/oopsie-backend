@@ -22,6 +22,7 @@ from oopsie_backend.utils.episode_stats import (
     DEFAULT_INTERNAL_STATS_JSON,
     DEFAULT_PUBLIC_STATS_HTML,
     DEFAULT_PUBLIC_STATS_JSON,
+    HF_ORG,
     STATS_EXCLUDED_DATASETS,
     aggregate,
     extract_record,
@@ -34,14 +35,63 @@ from oopsie_backend.utils.episode_stats import (
 DEFAULT_DATA_DIR = Path("/scratch/09666/abahety/oopsiedata")
 
 
+def discover_all_dataset_dirs(data_dir: Path) -> list[str]:
+    """Return every dataset repo id present on disk, including ones with zero .h5
+    files (e.g. a lab registered but hasn't submitted episodes yet)."""
+    data_dir = data_dir.resolve()
+    root = data_dir if data_dir.name == HF_ORG else data_dir / HF_ORG
+    if not root.is_dir():
+        return []
+    return sorted(f"{HF_ORG}/{p.name}" for p in root.iterdir() if p.is_dir())
+
+
+def fetch_dataset_created_dates(org: str) -> dict[str, str | None]:
+    """Best-effort fetch of true HF repo creation dates for the org's dataset repos.
+
+    Returns ``{}`` (not an error) when there's no usable token or the Hub can't be
+    reached; the internal report then falls back to episode-timestamp heuristics.
+    """
+    try:
+        from huggingface_hub import get_token
+
+        from oopsie_backend.utils.hf import list_dataset_created_dates_for_org
+
+        token = get_token()
+        if not token:
+            print(
+                "  (no cached HF token; dataset 'created' dates will fall back to "
+                "episode timestamps)",
+                file=sys.stderr,
+            )
+            return {}
+        dates = list_dataset_created_dates_for_org(org, token)
+        print(
+            f"  Fetched creation dates for {len(dates)} dataset repo(s) from the Hub",
+            file=sys.stderr,
+        )
+        return dates
+    except Exception as exc:
+        print(
+            f"  (could not fetch dataset creation dates from the Hub: {exc})",
+            file=sys.stderr,
+        )
+        return {}
+
+
+# Folders under the data dir that never hold lab submissions: the HF download cache, and
+# qa_out, where QA review bundles are unpacked (copies of other labs' episodes, so counting
+# them would add a phantom dataset and double-count that lab's episodes).
+IGNORED_DIR_NAMES = frozenset({".cache", "qa_out"})
+
+
 def discover_episodes(data_dir: Path) -> list[tuple[str, str, Path]]:
     """Return ``(dataset_repo, repo_relative_path, absolute_path)`` for each .h5."""
     data_dir = data_dir.resolve()
     episodes: list[tuple[str, str, Path]] = []
     for path in sorted(data_dir.rglob("*.h5")):
-        if ".cache" in path.parts:
-            continue
         rel = path.relative_to(data_dir)
+        if IGNORED_DIR_NAMES.intersection(rel.parts):
+            continue
         resolved = resolve_local_episode_path(data_dir, rel)
         if resolved is None:
             continue
@@ -174,11 +224,17 @@ def main(argv: list[str] | None = None) -> int:
         write_html=not args.no_public_report,
     )
     if not args.no_internal_output:
+        all_dataset_repos = discover_all_dataset_dirs(data_dir)
+        dataset_created_at = fetch_dataset_created_dates(HF_ORG)
+        # The Hub may know about repos not yet synced to local disk; include those too.
+        all_dataset_repos = sorted(set(all_dataset_repos) | set(dataset_created_at))
         write_internal_artifacts(
             records,
             aggregate_label,
             args.internal_output,
             write_html=not args.no_internal_report,
+            all_dataset_repos=all_dataset_repos,
+            dataset_created_at=dataset_created_at,
         )
 
     t = stats["totals"]

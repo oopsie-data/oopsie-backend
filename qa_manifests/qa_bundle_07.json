@@ -1,0 +1,2213 @@
+{
+  "bundle_id": "qa_bundle_07",
+  "created_at": "2026-10-07T19:21:12Z",
+  "seed": 0,
+  "reviewer": "Carl",
+  "labs": [
+    "OopsieData-Submissions/Princeton_IRoM",
+    "OopsieData-Submissions/Princeton_PRISM",
+    "OopsieData-Submissions/Princeton_PRPL",
+    "OopsieData-Submissions/RIKEN_AIP",
+    "OopsieData-Submissions/SE3Labs"
+  ],
+  "episodes": [
+    {
+      "qa_id": "qa_bundle_07-001",
+      "dataset_repo": "OopsieData-Submissions/Princeton_IRoM",
+      "lab_id": "Princeton_IRoM",
+      "repo_path": "irom_fruit_playdata/irom_fruit_playdata_109.h5",
+      "bundle_path": "episodes/Princeton_IRoM/irom_fruit_playdata/irom_fruit_playdata_109.h5",
+      "video_files": {
+        "left_base_cam": "episodes/Princeton_IRoM/irom_fruit_playdata/irom_fruit_playdata_109_left_base_cam.mp4",
+        "right_base_cam": "episodes/Princeton_IRoM/irom_fruit_playdata/irom_fruit_playdata_109_right_base_cam.mp4",
+        "wrist_cam": "episodes/Princeton_IRoM/irom_fruit_playdata/irom_fruit_playdata_109_wrist_cam.mp4"
+      },
+      "episode_id": "irom_fruit_playdata_109",
+      "language_instruction": "Put the yellow fruit into the container",
+      "operator": "Tenny Yin",
+      "annotators": [
+        "Tenny Yin"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:24:36.159475+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-002",
+      "dataset_repo": "OopsieData-Submissions/Princeton_IRoM",
+      "lab_id": "Princeton_IRoM",
+      "repo_path": "irom_block_playdata_v1/irom_block_playdata_v1_012.h5",
+      "bundle_path": "episodes/Princeton_IRoM/irom_block_playdata_v1/irom_block_playdata_v1_012.h5",
+      "video_files": {
+        "left_base_cam": "episodes/Princeton_IRoM/irom_block_playdata_v1/irom_block_playdata_v1_012_left_base_cam.mp4",
+        "right_base_cam": "episodes/Princeton_IRoM/irom_block_playdata_v1/irom_block_playdata_v1_012_right_base_cam.mp4",
+        "wrist_cam": "episodes/Princeton_IRoM/irom_block_playdata_v1/irom_block_playdata_v1_012_wrist_cam.mp4"
+      },
+      "episode_id": "irom_block_playdata_v1_012",
+      "language_instruction": "Place the orange block on the yellow cube",
+      "operator": "Tenny Yin",
+      "annotators": [
+        "Tenny Yin"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:22:57.874753+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-003",
+      "dataset_repo": "OopsieData-Submissions/Princeton_IRoM",
+      "lab_id": "Princeton_IRoM",
+      "repo_path": "irom_carrot_playdata_v0/irom_carrot_playdata_v0_153.h5",
+      "bundle_path": "episodes/Princeton_IRoM/irom_carrot_playdata_v0/irom_carrot_playdata_v0_153.h5",
+      "video_files": {
+        "left_base_cam": "episodes/Princeton_IRoM/irom_carrot_playdata_v0/irom_carrot_playdata_v0_153_left_base_cam.mp4",
+        "right_base_cam": "episodes/Princeton_IRoM/irom_carrot_playdata_v0/irom_carrot_playdata_v0_153_right_base_cam.mp4",
+        "wrist_cam": "episodes/Princeton_IRoM/irom_carrot_playdata_v0/irom_carrot_playdata_v0_153_wrist_cam.mp4"
+      },
+      "episode_id": "irom_carrot_playdata_v0_153",
+      "language_instruction": "Pick up the orange carrot and put it in the container",
+      "operator": "Tenny Yin",
+      "annotators": [
+        "Tenny Yin"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:24:02.836654+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-004",
+      "dataset_repo": "OopsieData-Submissions/Princeton_IRoM",
+      "lab_id": "Princeton_IRoM",
+      "repo_path": "irom_carrot_playdata_v0/irom_carrot_playdata_v0_155.h5",
+      "bundle_path": "episodes/Princeton_IRoM/irom_carrot_playdata_v0/irom_carrot_playdata_v0_155.h5",
+      "video_files": {
+        "left_base_cam": "episodes/Princeton_IRoM/irom_carrot_playdata_v0/irom_carrot_playdata_v0_155_left_base_cam.mp4",
+        "right_base_cam": "episodes/Princeton_IRoM/irom_carrot_playdata_v0/irom_carrot_playdata_v0_155_right_base_cam.mp4",
+        "wrist_cam": "episodes/Princeton_IRoM/irom_carrot_playdata_v0/irom_carrot_playdata_v0_155_wrist_cam.mp4"
+      },
+      "episode_id": "irom_carrot_playdata_v0_155",
+      "language_instruction": "Pick up the plush polar bear and put it on the right side of the table",
+      "operator": "Tenny Yin",
+      "annotators": [
+        "Tenny Yin"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:24:16.466724+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-005",
+      "dataset_repo": "OopsieData-Submissions/Princeton_IRoM",
+      "lab_id": "Princeton_IRoM",
+      "repo_path": "irom_carrot_playdata_v0/irom_carrot_playdata_v0_083.h5",
+      "bundle_path": "episodes/Princeton_IRoM/irom_carrot_playdata_v0/irom_carrot_playdata_v0_083.h5",
+      "video_files": {
+        "left_base_cam": "episodes/Princeton_IRoM/irom_carrot_playdata_v0/irom_carrot_playdata_v0_083_left_base_cam.mp4",
+        "right_base_cam": "episodes/Princeton_IRoM/irom_carrot_playdata_v0/irom_carrot_playdata_v0_083_right_base_cam.mp4",
+        "wrist_cam": "episodes/Princeton_IRoM/irom_carrot_playdata_v0/irom_carrot_playdata_v0_083_wrist_cam.mp4"
+      },
+      "episode_id": "irom_carrot_playdata_v0_083",
+      "language_instruction": "Pick up the toy carrot from the ceramic bowl and put it on the table",
+      "operator": "Tenny Yin",
+      "annotators": [
+        "Tenny Yin"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:23:51.395006+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-006",
+      "dataset_repo": "OopsieData-Submissions/Princeton_IRoM",
+      "lab_id": "Princeton_IRoM",
+      "repo_path": "irom_fruit_playdata/irom_fruit_playdata_130.h5",
+      "bundle_path": "episodes/Princeton_IRoM/irom_fruit_playdata/irom_fruit_playdata_130.h5",
+      "video_files": {
+        "left_base_cam": "episodes/Princeton_IRoM/irom_fruit_playdata/irom_fruit_playdata_130_left_base_cam.mp4",
+        "right_base_cam": "episodes/Princeton_IRoM/irom_fruit_playdata/irom_fruit_playdata_130_right_base_cam.mp4",
+        "wrist_cam": "episodes/Princeton_IRoM/irom_fruit_playdata/irom_fruit_playdata_130_wrist_cam.mp4"
+      },
+      "episode_id": "irom_fruit_playdata_130",
+      "language_instruction": "Put the plastic toys in the center of the table",
+      "operator": "Tenny Yin",
+      "annotators": [
+        "Tenny Yin"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:25:10.448251+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-007",
+      "dataset_repo": "OopsieData-Submissions/Princeton_IRoM",
+      "lab_id": "Princeton_IRoM",
+      "repo_path": "irom_carrot_playdata_v0/irom_carrot_playdata_v0_156.h5",
+      "bundle_path": "episodes/Princeton_IRoM/irom_carrot_playdata_v0/irom_carrot_playdata_v0_156.h5",
+      "video_files": {
+        "left_base_cam": "episodes/Princeton_IRoM/irom_carrot_playdata_v0/irom_carrot_playdata_v0_156_left_base_cam.mp4",
+        "right_base_cam": "episodes/Princeton_IRoM/irom_carrot_playdata_v0/irom_carrot_playdata_v0_156_right_base_cam.mp4",
+        "wrist_cam": "episodes/Princeton_IRoM/irom_carrot_playdata_v0/irom_carrot_playdata_v0_156_wrist_cam.mp4"
+      },
+      "episode_id": "irom_carrot_playdata_v0_156",
+      "language_instruction": "Pick up the plush polar bear and put it on the center of the table",
+      "operator": "Tenny Yin",
+      "annotators": [
+        "Tenny Yin"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:24:25.440884+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-008",
+      "dataset_repo": "OopsieData-Submissions/Princeton_IRoM",
+      "lab_id": "Princeton_IRoM",
+      "repo_path": "irom_block_playdata_v1/irom_block_playdata_v1_047.h5",
+      "bundle_path": "episodes/Princeton_IRoM/irom_block_playdata_v1/irom_block_playdata_v1_047.h5",
+      "video_files": {
+        "left_base_cam": "episodes/Princeton_IRoM/irom_block_playdata_v1/irom_block_playdata_v1_047_left_base_cam.mp4",
+        "right_base_cam": "episodes/Princeton_IRoM/irom_block_playdata_v1/irom_block_playdata_v1_047_right_base_cam.mp4",
+        "wrist_cam": "episodes/Princeton_IRoM/irom_block_playdata_v1/irom_block_playdata_v1_047_wrist_cam.mp4"
+      },
+      "episode_id": "irom_block_playdata_v1_047",
+      "language_instruction": "Place the long orange block on top of the yellow square block",
+      "operator": "Tenny Yin",
+      "annotators": [
+        "Tenny Yin"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:23:10.305827+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-009",
+      "dataset_repo": "OopsieData-Submissions/Princeton_IRoM",
+      "lab_id": "Princeton_IRoM",
+      "repo_path": "irom_carrot_playdata_v0/irom_carrot_playdata_v0_023.h5",
+      "bundle_path": "episodes/Princeton_IRoM/irom_carrot_playdata_v0/irom_carrot_playdata_v0_023.h5",
+      "video_files": {
+        "left_base_cam": "episodes/Princeton_IRoM/irom_carrot_playdata_v0/irom_carrot_playdata_v0_023_left_base_cam.mp4",
+        "right_base_cam": "episodes/Princeton_IRoM/irom_carrot_playdata_v0/irom_carrot_playdata_v0_023_right_base_cam.mp4",
+        "wrist_cam": "episodes/Princeton_IRoM/irom_carrot_playdata_v0/irom_carrot_playdata_v0_023_wrist_cam.mp4"
+      },
+      "episode_id": "irom_carrot_playdata_v0_023",
+      "language_instruction": "Put the orange carrot inside the ceramic bowl",
+      "operator": "Tenny Yin",
+      "annotators": [
+        "Tenny Yin"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:23:34.441566+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-010",
+      "dataset_repo": "OopsieData-Submissions/Princeton_IRoM",
+      "lab_id": "Princeton_IRoM",
+      "repo_path": "irom_carrot_playdata_v0/irom_carrot_playdata_v0_004.h5",
+      "bundle_path": "episodes/Princeton_IRoM/irom_carrot_playdata_v0/irom_carrot_playdata_v0_004.h5",
+      "video_files": {
+        "left_base_cam": "episodes/Princeton_IRoM/irom_carrot_playdata_v0/irom_carrot_playdata_v0_004_left_base_cam.mp4",
+        "right_base_cam": "episodes/Princeton_IRoM/irom_carrot_playdata_v0/irom_carrot_playdata_v0_004_right_base_cam.mp4",
+        "wrist_cam": "episodes/Princeton_IRoM/irom_carrot_playdata_v0/irom_carrot_playdata_v0_004_wrist_cam.mp4"
+      },
+      "episode_id": "irom_carrot_playdata_v0_004",
+      "language_instruction": "Take the orange carrot out of the white dish and put it on the table",
+      "operator": "Tenny Yin",
+      "annotators": [
+        "Tenny Yin"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:23:22.931451+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-011",
+      "dataset_repo": "OopsieData-Submissions/Princeton_IRoM",
+      "lab_id": "Princeton_IRoM",
+      "repo_path": "irom_fruit_playdata/irom_fruit_playdata_197.h5",
+      "bundle_path": "episodes/Princeton_IRoM/irom_fruit_playdata/irom_fruit_playdata_197.h5",
+      "video_files": {
+        "left_base_cam": "episodes/Princeton_IRoM/irom_fruit_playdata/irom_fruit_playdata_197_left_base_cam.mp4",
+        "right_base_cam": "episodes/Princeton_IRoM/irom_fruit_playdata/irom_fruit_playdata_197_right_base_cam.mp4",
+        "wrist_cam": "episodes/Princeton_IRoM/irom_fruit_playdata/irom_fruit_playdata_197_wrist_cam.mp4"
+      },
+      "episode_id": "irom_fruit_playdata_197",
+      "language_instruction": "Pick up the pink plastic bowl and move it towards the center of the table",
+      "operator": "Tenny Yin",
+      "annotators": [
+        "Tenny Yin"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:26:08.843006+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-012",
+      "dataset_repo": "OopsieData-Submissions/Princeton_IRoM",
+      "lab_id": "Princeton_IRoM",
+      "repo_path": "irom_fruit_playdata/irom_fruit_playdata_146.h5",
+      "bundle_path": "episodes/Princeton_IRoM/irom_fruit_playdata/irom_fruit_playdata_146.h5",
+      "video_files": {
+        "left_base_cam": "episodes/Princeton_IRoM/irom_fruit_playdata/irom_fruit_playdata_146_left_base_cam.mp4",
+        "right_base_cam": "episodes/Princeton_IRoM/irom_fruit_playdata/irom_fruit_playdata_146_right_base_cam.mp4",
+        "wrist_cam": "episodes/Princeton_IRoM/irom_fruit_playdata/irom_fruit_playdata_146_wrist_cam.mp4"
+      },
+      "episode_id": "irom_fruit_playdata_146",
+      "language_instruction": "Place the yellow object next to the purple eggplant",
+      "operator": "Tenny Yin",
+      "annotators": [
+        "Tenny Yin"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:25:20.035759+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-013",
+      "dataset_repo": "OopsieData-Submissions/Princeton_IRoM",
+      "lab_id": "Princeton_IRoM",
+      "repo_path": "irom_block_playdata/irom_block_playdata_006.h5",
+      "bundle_path": "episodes/Princeton_IRoM/irom_block_playdata/irom_block_playdata_006.h5",
+      "video_files": {
+        "left_base_cam": "episodes/Princeton_IRoM/irom_block_playdata/irom_block_playdata_006_left_base_cam.mp4",
+        "right_base_cam": "episodes/Princeton_IRoM/irom_block_playdata/irom_block_playdata_006_right_base_cam.mp4",
+        "wrist_cam": "episodes/Princeton_IRoM/irom_block_playdata/irom_block_playdata_006_wrist_cam.mp4"
+      },
+      "episode_id": "irom_block_playdata_006",
+      "language_instruction": "Remove the purple block from the top of the stack",
+      "operator": "Tenny Yin",
+      "annotators": [
+        "Tenny Yin"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:21:44.056962+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-014",
+      "dataset_repo": "OopsieData-Submissions/Princeton_IRoM",
+      "lab_id": "Princeton_IRoM",
+      "repo_path": "irom_towel_playdata_v2/irom_towel_playdata_v2_042.h5",
+      "bundle_path": "episodes/Princeton_IRoM/irom_towel_playdata_v2/irom_towel_playdata_v2_042.h5",
+      "video_files": {
+        "left_base_cam": "episodes/Princeton_IRoM/irom_towel_playdata_v2/irom_towel_playdata_v2_042_left_base_cam.mp4",
+        "right_base_cam": "episodes/Princeton_IRoM/irom_towel_playdata_v2/irom_towel_playdata_v2_042_right_base_cam.mp4",
+        "wrist_cam": "episodes/Princeton_IRoM/irom_towel_playdata_v2/irom_towel_playdata_v2_042_wrist_cam.mp4"
+      },
+      "episode_id": "irom_towel_playdata_v2_042",
+      "language_instruction": "Unfold the cloth",
+      "operator": "Tenny Yin",
+      "annotators": [
+        "Tenny Yin"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:26:42.859693+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-015",
+      "dataset_repo": "OopsieData-Submissions/Princeton_IRoM",
+      "lab_id": "Princeton_IRoM",
+      "repo_path": "irom_fruit_playdata/irom_fruit_playdata_296.h5",
+      "bundle_path": "episodes/Princeton_IRoM/irom_fruit_playdata/irom_fruit_playdata_296.h5",
+      "video_files": {
+        "left_base_cam": "episodes/Princeton_IRoM/irom_fruit_playdata/irom_fruit_playdata_296_left_base_cam.mp4",
+        "right_base_cam": "episodes/Princeton_IRoM/irom_fruit_playdata/irom_fruit_playdata_296_right_base_cam.mp4",
+        "wrist_cam": "episodes/Princeton_IRoM/irom_fruit_playdata/irom_fruit_playdata_296_wrist_cam.mp4"
+      },
+      "episode_id": "irom_fruit_playdata_296",
+      "language_instruction": "Put the plastic toy ice-cream into the bowl",
+      "operator": "Tenny Yin",
+      "annotators": [
+        "Tenny Yin"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:26:24.961564+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-016",
+      "dataset_repo": "OopsieData-Submissions/Princeton_IRoM",
+      "lab_id": "Princeton_IRoM",
+      "repo_path": "irom_carrot_playdata_v0/irom_carrot_playdata_v0_047.h5",
+      "bundle_path": "episodes/Princeton_IRoM/irom_carrot_playdata_v0/irom_carrot_playdata_v0_047.h5",
+      "video_files": {
+        "left_base_cam": "episodes/Princeton_IRoM/irom_carrot_playdata_v0/irom_carrot_playdata_v0_047_left_base_cam.mp4",
+        "right_base_cam": "episodes/Princeton_IRoM/irom_carrot_playdata_v0/irom_carrot_playdata_v0_047_right_base_cam.mp4",
+        "wrist_cam": "episodes/Princeton_IRoM/irom_carrot_playdata_v0/irom_carrot_playdata_v0_047_wrist_cam.mp4"
+      },
+      "episode_id": "irom_carrot_playdata_v0_047",
+      "language_instruction": "Place the carrot toy in the round white bowl",
+      "operator": "Tenny Yin",
+      "annotators": [
+        "Tenny Yin"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:23:43.983981+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-017",
+      "dataset_repo": "OopsieData-Submissions/Princeton_IRoM",
+      "lab_id": "Princeton_IRoM",
+      "repo_path": "irom_block_playdata/irom_block_playdata_119.h5",
+      "bundle_path": "episodes/Princeton_IRoM/irom_block_playdata/irom_block_playdata_119.h5",
+      "video_files": {
+        "left_base_cam": "episodes/Princeton_IRoM/irom_block_playdata/irom_block_playdata_119_left_base_cam.mp4",
+        "right_base_cam": "episodes/Princeton_IRoM/irom_block_playdata/irom_block_playdata_119_right_base_cam.mp4",
+        "wrist_cam": "episodes/Princeton_IRoM/irom_block_playdata/irom_block_playdata_119_wrist_cam.mp4"
+      },
+      "episode_id": "irom_block_playdata_119",
+      "language_instruction": "Stack the red cube on top of the yellow block",
+      "operator": "Tenny Yin",
+      "annotators": [
+        "Tenny Yin"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "Looks like a success. The robot moved the red cube on top of the yellowblock without releasing the gripper.",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:22:48.739168+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-018",
+      "dataset_repo": "OopsieData-Submissions/Princeton_IRoM",
+      "lab_id": "Princeton_IRoM",
+      "repo_path": "irom_fruit_playdata/irom_fruit_playdata_245.h5",
+      "bundle_path": "episodes/Princeton_IRoM/irom_fruit_playdata/irom_fruit_playdata_245.h5",
+      "video_files": {
+        "left_base_cam": "episodes/Princeton_IRoM/irom_fruit_playdata/irom_fruit_playdata_245_left_base_cam.mp4",
+        "right_base_cam": "episodes/Princeton_IRoM/irom_fruit_playdata/irom_fruit_playdata_245_right_base_cam.mp4",
+        "wrist_cam": "episodes/Princeton_IRoM/irom_fruit_playdata/irom_fruit_playdata_245_wrist_cam.mp4"
+      },
+      "episode_id": "irom_fruit_playdata_245",
+      "language_instruction": "Put the plastic corn on the table",
+      "operator": "Tenny Yin",
+      "annotators": [
+        "Tenny Yin"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:26:18.138510+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-019",
+      "dataset_repo": "OopsieData-Submissions/Princeton_IRoM",
+      "lab_id": "Princeton_IRoM",
+      "repo_path": "irom_block_playdata/irom_block_playdata_058.h5",
+      "bundle_path": "episodes/Princeton_IRoM/irom_block_playdata/irom_block_playdata_058.h5",
+      "video_files": {
+        "left_base_cam": "episodes/Princeton_IRoM/irom_block_playdata/irom_block_playdata_058_left_base_cam.mp4",
+        "right_base_cam": "episodes/Princeton_IRoM/irom_block_playdata/irom_block_playdata_058_right_base_cam.mp4",
+        "wrist_cam": "episodes/Princeton_IRoM/irom_block_playdata/irom_block_playdata_058_wrist_cam.mp4"
+      },
+      "episode_id": "irom_block_playdata_058",
+      "language_instruction": "Pick up the green block and put it on top of the blue rectangle",
+      "operator": "Tenny Yin",
+      "annotators": [
+        "Tenny Yin"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:22:06.515410+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-020",
+      "dataset_repo": "OopsieData-Submissions/Princeton_IRoM",
+      "lab_id": "Princeton_IRoM",
+      "repo_path": "irom_towel_playdata_v2/irom_towel_playdata_v2_016.h5",
+      "bundle_path": "episodes/Princeton_IRoM/irom_towel_playdata_v2/irom_towel_playdata_v2_016.h5",
+      "video_files": {
+        "left_base_cam": "episodes/Princeton_IRoM/irom_towel_playdata_v2/irom_towel_playdata_v2_016_left_base_cam.mp4",
+        "right_base_cam": "episodes/Princeton_IRoM/irom_towel_playdata_v2/irom_towel_playdata_v2_016_right_base_cam.mp4",
+        "wrist_cam": "episodes/Princeton_IRoM/irom_towel_playdata_v2/irom_towel_playdata_v2_016_wrist_cam.mp4"
+      },
+      "episode_id": "irom_towel_playdata_v2_016",
+      "language_instruction": "Unfold the blue rectangular cloth",
+      "operator": "Tenny Yin",
+      "annotators": [
+        "Tenny Yin"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:26:36.806074+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-021",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRISM",
+      "lab_id": "Princeton_PRISM",
+      "repo_path": "episode_000270.h5",
+      "bundle_path": "episodes/Princeton_PRISM/episode_000270.h5",
+      "video_files": {
+        "left": "episodes/Princeton_PRISM/videos/episode_000270_left.mp4",
+        "right": "episodes/Princeton_PRISM/videos/episode_000270_right.mp4",
+        "top": "episodes/Princeton_PRISM/videos/episode_000270_top.mp4"
+      },
+      "episode_id": "episode_000270",
+      "language_instruction": "measure the radius of the bowl using the tape measure",
+      "operator": "arya and mingtong",
+      "annotators": [
+        "mingtong"
+      ],
+      "robot_name": "bi_yam_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:31:48.481140+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-022",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRISM",
+      "lab_id": "Princeton_PRISM",
+      "repo_path": "episode_000134.h5",
+      "bundle_path": "episodes/Princeton_PRISM/episode_000134.h5",
+      "video_files": {
+        "left": "episodes/Princeton_PRISM/videos/episode_000134_left.mp4",
+        "right": "episodes/Princeton_PRISM/videos/episode_000134_right.mp4",
+        "top": "episodes/Princeton_PRISM/videos/episode_000134_top.mp4"
+      },
+      "episode_id": "episode_000134",
+      "language_instruction": "open the ketchup bottle",
+      "operator": "arya and mingtong",
+      "annotators": [
+        "mingtong"
+      ],
+      "robot_name": "bi_yam_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:29:45.626550+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-023",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRISM",
+      "lab_id": "Princeton_PRISM",
+      "repo_path": "episode_000173.h5",
+      "bundle_path": "episodes/Princeton_PRISM/episode_000173.h5",
+      "video_files": {
+        "left": "episodes/Princeton_PRISM/videos/episode_000173_left.mp4",
+        "right": "episodes/Princeton_PRISM/videos/episode_000173_right.mp4",
+        "top": "episodes/Princeton_PRISM/videos/episode_000173_top.mp4"
+      },
+      "episode_id": "episode_000173",
+      "language_instruction": "take the soda from the bowl and put in pink box",
+      "operator": "arya and mingtong",
+      "annotators": [
+        "mingtong"
+      ],
+      "robot_name": "bi_yam_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:31:12.087937+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-024",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRISM",
+      "lab_id": "Princeton_PRISM",
+      "repo_path": "episode_000163.h5",
+      "bundle_path": "episodes/Princeton_PRISM/episode_000163.h5",
+      "video_files": {
+        "left": "episodes/Princeton_PRISM/videos/episode_000163_left.mp4",
+        "right": "episodes/Princeton_PRISM/videos/episode_000163_right.mp4",
+        "top": "episodes/Princeton_PRISM/videos/episode_000163_top.mp4"
+      },
+      "episode_id": "episode_000163",
+      "language_instruction": "untangle the black and red wires",
+      "operator": "arya and mingtong",
+      "annotators": [
+        "mingtong"
+      ],
+      "robot_name": "bi_yam_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:31:07.685688+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-025",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRISM",
+      "lab_id": "Princeton_PRISM",
+      "repo_path": "episode_000276.h5",
+      "bundle_path": "episodes/Princeton_PRISM/episode_000276.h5",
+      "video_files": {
+        "left": "episodes/Princeton_PRISM/videos/episode_000276_left.mp4",
+        "right": "episodes/Princeton_PRISM/videos/episode_000276_right.mp4",
+        "top": "episodes/Princeton_PRISM/videos/episode_000276_top.mp4"
+      },
+      "episode_id": "episode_000276",
+      "language_instruction": "tie the banana plug around the two screw drivers",
+      "operator": "arya and mingtong",
+      "annotators": [
+        "mingtong"
+      ],
+      "robot_name": "bi_yam_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:31:51.866991+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-026",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRISM",
+      "lab_id": "Princeton_PRISM",
+      "repo_path": "episode_000284.h5",
+      "bundle_path": "episodes/Princeton_PRISM/episode_000284.h5",
+      "video_files": {
+        "left": "episodes/Princeton_PRISM/videos/episode_000284_left.mp4",
+        "right": "episodes/Princeton_PRISM/videos/episode_000284_right.mp4",
+        "top": "episodes/Princeton_PRISM/videos/episode_000284_top.mp4"
+      },
+      "episode_id": "episode_000284",
+      "language_instruction": "cover one box with the tissue",
+      "operator": "arya and mingtong",
+      "annotators": [
+        "mingtong"
+      ],
+      "robot_name": "bi_yam_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:31:55.180034+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-027",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRISM",
+      "lab_id": "Princeton_PRISM",
+      "repo_path": "episode_000053.h5",
+      "bundle_path": "episodes/Princeton_PRISM/episode_000053.h5",
+      "video_files": {
+        "left": "episodes/Princeton_PRISM/videos/episode_000053_left.mp4",
+        "right": "episodes/Princeton_PRISM/videos/episode_000053_right.mp4",
+        "top": "episodes/Princeton_PRISM/videos/episode_000053_top.mp4"
+      },
+      "episode_id": "episode_000053",
+      "language_instruction": "cover the cube with the closest box",
+      "operator": "arya and mingtong",
+      "annotators": [
+        "mingtong"
+      ],
+      "robot_name": "bi_yam_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:28:27.170355+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-028",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRISM",
+      "lab_id": "Princeton_PRISM",
+      "repo_path": "episode_000151.h5",
+      "bundle_path": "episodes/Princeton_PRISM/episode_000151.h5",
+      "video_files": {
+        "left": "episodes/Princeton_PRISM/videos/episode_000151_left.mp4",
+        "right": "episodes/Princeton_PRISM/videos/episode_000151_right.mp4",
+        "top": "episodes/Princeton_PRISM/videos/episode_000151_top.mp4"
+      },
+      "episode_id": "episode_000151",
+      "language_instruction": "take all the veggies out of the bowl onto the towel",
+      "operator": "arya and mingtong",
+      "annotators": [
+        "mingtong"
+      ],
+      "robot_name": "bi_yam_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:30:48.761897+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-029",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRISM",
+      "lab_id": "Princeton_PRISM",
+      "repo_path": "episode_000067.h5",
+      "bundle_path": "episodes/Princeton_PRISM/episode_000067.h5",
+      "video_files": {
+        "left": "episodes/Princeton_PRISM/videos/episode_000067_left.mp4",
+        "right": "episodes/Princeton_PRISM/videos/episode_000067_right.mp4",
+        "top": "episodes/Princeton_PRISM/videos/episode_000067_top.mp4"
+      },
+      "episode_id": "episode_000067",
+      "language_instruction": "rotate box 90 degrees",
+      "operator": "arya and mingtong",
+      "annotators": [
+        "mingtong"
+      ],
+      "robot_name": "bi_yam_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:29:00.676340+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-030",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRISM",
+      "lab_id": "Princeton_PRISM",
+      "repo_path": "episode_000007.h5",
+      "bundle_path": "episodes/Princeton_PRISM/episode_000007.h5",
+      "video_files": {
+        "left": "episodes/Princeton_PRISM/videos/episode_000007_left.mp4",
+        "right": "episodes/Princeton_PRISM/videos/episode_000007_right.mp4",
+        "top": "episodes/Princeton_PRISM/videos/episode_000007_top.mp4"
+      },
+      "episode_id": "episode_000007",
+      "language_instruction": "place the yellow toy into the small container",
+      "operator": "arya and mingtong",
+      "annotators": [
+        "mingtong"
+      ],
+      "robot_name": "bi_yam_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:27:28.171853+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-031",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRISM",
+      "lab_id": "Princeton_PRISM",
+      "repo_path": "episode_000076.h5",
+      "bundle_path": "episodes/Princeton_PRISM/episode_000076.h5",
+      "video_files": {
+        "left": "episodes/Princeton_PRISM/videos/episode_000076_left.mp4",
+        "right": "episodes/Princeton_PRISM/videos/episode_000076_right.mp4",
+        "top": "episodes/Princeton_PRISM/videos/episode_000076_top.mp4"
+      },
+      "episode_id": "episode_000076",
+      "language_instruction": "untie the knot off the towel",
+      "operator": "arya and mingtong",
+      "annotators": [
+        "mingtong"
+      ],
+      "robot_name": "bi_yam_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:29:08.779701+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-032",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRISM",
+      "lab_id": "Princeton_PRISM",
+      "repo_path": "episode_000219.h5",
+      "bundle_path": "episodes/Princeton_PRISM/episode_000219.h5",
+      "video_files": {
+        "left": "episodes/Princeton_PRISM/videos/episode_000219_left.mp4",
+        "right": "episodes/Princeton_PRISM/videos/episode_000219_right.mp4",
+        "top": "episodes/Princeton_PRISM/videos/episode_000219_top.mp4"
+      },
+      "episode_id": "episode_000219",
+      "language_instruction": "Cover the pink box with the towel",
+      "operator": "arya and mingtong",
+      "annotators": [
+        "mingtong"
+      ],
+      "robot_name": "bi_yam_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:31:15.770514+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-033",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRISM",
+      "lab_id": "Princeton_PRISM",
+      "repo_path": "episode_000128.h5",
+      "bundle_path": "episodes/Princeton_PRISM/episode_000128.h5",
+      "video_files": {
+        "left": "episodes/Princeton_PRISM/videos/episode_000128_left.mp4",
+        "right": "episodes/Princeton_PRISM/videos/episode_000128_right.mp4",
+        "top": "episodes/Princeton_PRISM/videos/episode_000128_top.mp4"
+      },
+      "episode_id": "episode_000128",
+      "language_instruction": "find the tweezer and place it on the towel",
+      "operator": "arya and mingtong",
+      "annotators": [
+        "mingtong"
+      ],
+      "robot_name": "bi_yam_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:29:20.504008+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-034",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRISM",
+      "lab_id": "Princeton_PRISM",
+      "repo_path": "episode_000332.h5",
+      "bundle_path": "episodes/Princeton_PRISM/episode_000332.h5",
+      "video_files": {
+        "left": "episodes/Princeton_PRISM/videos/episode_000332_left.mp4",
+        "right": "episodes/Princeton_PRISM/videos/episode_000332_right.mp4",
+        "top": "episodes/Princeton_PRISM/videos/episode_000332_top.mp4"
+      },
+      "episode_id": "episode_000332",
+      "language_instruction": "fold the towel",
+      "operator": "arya and mingtong",
+      "annotators": [
+        "mingtong"
+      ],
+      "robot_name": "bi_yam_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:32:10.632434+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-035",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRISM",
+      "lab_id": "Princeton_PRISM",
+      "repo_path": "episode_000245.h5",
+      "bundle_path": "episodes/Princeton_PRISM/episode_000245.h5",
+      "video_files": {
+        "left": "episodes/Princeton_PRISM/videos/episode_000245_left.mp4",
+        "right": "episodes/Princeton_PRISM/videos/episode_000245_right.mp4",
+        "top": "episodes/Princeton_PRISM/videos/episode_000245_top.mp4"
+      },
+      "episode_id": "episode_000245",
+      "language_instruction": "take the folded towel from the cup and spread it on the table",
+      "operator": "arya and mingtong",
+      "annotators": [
+        "mingtong"
+      ],
+      "robot_name": "bi_yam_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:31:36.755820+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-036",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRISM",
+      "lab_id": "Princeton_PRISM",
+      "repo_path": "episode_000048.h5",
+      "bundle_path": "episodes/Princeton_PRISM/episode_000048.h5",
+      "video_files": {
+        "left": "episodes/Princeton_PRISM/videos/episode_000048_left.mp4",
+        "right": "episodes/Princeton_PRISM/videos/episode_000048_right.mp4",
+        "top": "episodes/Princeton_PRISM/videos/episode_000048_top.mp4"
+      },
+      "episode_id": "episode_000048",
+      "language_instruction": "take the red object and put it inside the box",
+      "operator": "arya and mingtong",
+      "annotators": [
+        "mingtong"
+      ],
+      "robot_name": "bi_yam_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:28:15.566184+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-037",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRISM",
+      "lab_id": "Princeton_PRISM",
+      "repo_path": "episode_000225.h5",
+      "bundle_path": "episodes/Princeton_PRISM/episode_000225.h5",
+      "video_files": {
+        "left": "episodes/Princeton_PRISM/videos/episode_000225_left.mp4",
+        "right": "episodes/Princeton_PRISM/videos/episode_000225_right.mp4",
+        "top": "episodes/Princeton_PRISM/videos/episode_000225_top.mp4"
+      },
+      "episode_id": "episode_000225",
+      "language_instruction": "find the cube under the green bowl",
+      "operator": "arya and mingtong",
+      "annotators": [
+        "mingtong"
+      ],
+      "robot_name": "bi_yam_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:31:23.963116+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-038",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRISM",
+      "lab_id": "Princeton_PRISM",
+      "repo_path": "episode_000322.h5",
+      "bundle_path": "episodes/Princeton_PRISM/episode_000322.h5",
+      "video_files": {
+        "left": "episodes/Princeton_PRISM/videos/episode_000322_left.mp4",
+        "right": "episodes/Princeton_PRISM/videos/episode_000322_right.mp4",
+        "top": "episodes/Princeton_PRISM/videos/episode_000322_top.mp4"
+      },
+      "episode_id": "episode_000322",
+      "language_instruction": "Align each cube to the corner of the box",
+      "operator": "arya and mingtong",
+      "annotators": [
+        "mingtong"
+      ],
+      "robot_name": "bi_yam_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:31:58.685161+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-039",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRISM",
+      "lab_id": "Princeton_PRISM",
+      "repo_path": "episode_000153.h5",
+      "bundle_path": "episodes/Princeton_PRISM/episode_000153.h5",
+      "video_files": {
+        "left": "episodes/Princeton_PRISM/videos/episode_000153_left.mp4",
+        "right": "episodes/Princeton_PRISM/videos/episode_000153_right.mp4",
+        "top": "episodes/Princeton_PRISM/videos/episode_000153_top.mp4"
+      },
+      "episode_id": "episode_000153",
+      "language_instruction": "put the towel in the bowl",
+      "operator": "arya and mingtong",
+      "annotators": [
+        "mingtong"
+      ],
+      "robot_name": "bi_yam_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:31:01.470350+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-040",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRISM",
+      "lab_id": "Princeton_PRISM",
+      "repo_path": "episode_000268.h5",
+      "bundle_path": "episodes/Princeton_PRISM/episode_000268.h5",
+      "video_files": {
+        "left": "episodes/Princeton_PRISM/videos/episode_000268_left.mp4",
+        "right": "episodes/Princeton_PRISM/videos/episode_000268_right.mp4",
+        "top": "episodes/Princeton_PRISM/videos/episode_000268_top.mp4"
+      },
+      "episode_id": "episode_000268",
+      "language_instruction": "take tape measure out of bowl and put it in bowl again",
+      "operator": "arya and mingtong",
+      "annotators": [
+        "mingtong"
+      ],
+      "robot_name": "bi_yam_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:31:40.970275+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-041",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRPL",
+      "lab_id": "Princeton_PRPL",
+      "repo_path": "Princeton_PRPL_prpl_tamp_2026-08-19/prpl-tamp-10a_pp_lid_cup-2026-08-19_18-59-24.h5",
+      "bundle_path": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-19/prpl-tamp-10a_pp_lid_cup-2026-08-19_18-59-24.h5",
+      "video_files": {
+        "overhead_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-19/videos/prpl-tamp-10a_pp_lid_cup-2026-08-19_18-59-24_overhead_cam.mp4",
+        "wrist_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-19/videos/prpl-tamp-10a_pp_lid_cup-2026-08-19_18-59-24_wrist_cam.mp4"
+      },
+      "episode_id": "prpl-tamp-10a_pp_lid_cup-2026-08-19_18-59-24",
+      "language_instruction": "pick the lid by its handle and place the lid on wooden plate, and then hold the cup and pour water to plant.",
+      "operator": "Liang Ji",
+      "annotators": [
+        "Liang Ji"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:35:18.467164+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-042",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRPL",
+      "lab_id": "Princeton_PRPL",
+      "repo_path": "Princeton_PRPL_prpl_eval_2026-08-22/prpl-eval-1_pp_toys_plate_vae_apex_prpl-1_pp_toys_plate-2026-08-22_00-26-44.h5",
+      "bundle_path": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_eval_2026-08-22/prpl-eval-1_pp_toys_plate_vae_apex_prpl-1_pp_toys_plate-2026-08-22_00-26-44.h5",
+      "video_files": {
+        "overhead_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_eval_2026-08-22/videos/prpl-eval-1_pp_toys_plate_vae_apex_prpl-1_pp_toys_plate-2026-08-22_00-26-44_overhead_cam.mp4",
+        "wrist_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_eval_2026-08-22/videos/prpl-eval-1_pp_toys_plate_vae_apex_prpl-1_pp_toys_plate-2026-08-22_00-26-44_wrist_cam.mp4"
+      },
+      "episode_id": "prpl-eval-1_pp_toys_plate_vae_apex_prpl-1_pp_toys_plate-2026-08-22_00-26-44",
+      "language_instruction": "Place the toys on the plate with no collisions",
+      "operator": "Samrat Sahoo",
+      "annotators": [
+        "Samrat Sahoo"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:33:19.785108+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-043",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRPL",
+      "lab_id": "Princeton_PRPL",
+      "repo_path": "Princeton_PRPL_prpl_tamp_2026-08-22/prpl-tamp-12_pp_bread_fruit_bowl_cloth-2026-08-22_19-14-33.h5",
+      "bundle_path": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-22/prpl-tamp-12_pp_bread_fruit_bowl_cloth-2026-08-22_19-14-33.h5",
+      "video_files": {
+        "overhead_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-22/videos/prpl-tamp-12_pp_bread_fruit_bowl_cloth-2026-08-22_19-14-33_overhead_cam.mp4",
+        "wrist_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-22/videos/prpl-tamp-12_pp_bread_fruit_bowl_cloth-2026-08-22_19-14-33_wrist_cam.mp4"
+      },
+      "episode_id": "prpl-tamp-12_pp_bread_fruit_bowl_cloth-2026-08-22_19-14-33",
+      "language_instruction": "firstly, place the bread to the blue bowl and secondly place the fruit to the green bowl and then cover the blue bowl with cloth",
+      "operator": "Yixuan Huang",
+      "annotators": [
+        "Yixuan Huang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:35:38.012868+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-044",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRPL",
+      "lab_id": "Princeton_PRPL",
+      "repo_path": "Princeton_PRPL_prpl_tamp_2026-08-20/prpl-tamp-8a_pp_1bread_cloth-2026-08-20_11-56-16.h5",
+      "bundle_path": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-20/prpl-tamp-8a_pp_1bread_cloth-2026-08-20_11-56-16.h5",
+      "video_files": {
+        "overhead_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-20/videos/prpl-tamp-8a_pp_1bread_cloth-2026-08-20_11-56-16_overhead_cam.mp4",
+        "wrist_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-20/videos/prpl-tamp-8a_pp_1bread_cloth-2026-08-20_11-56-16_wrist_cam.mp4"
+      },
+      "episode_id": "prpl-tamp-8a_pp_1bread_cloth-2026-08-20_11-56-16",
+      "language_instruction": "place the breads on the plate and then cover the plate with the cloth",
+      "operator": "LiangJi",
+      "annotators": [
+        "LiangJi"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:35:26.630871+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-045",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRPL",
+      "lab_id": "Princeton_PRPL",
+      "repo_path": "Princeton_PRPL_prpl_tamp_2026-08-14/prpl-tamp-7_pp_toy_puzzle-2026-08-13_23-16-03.h5",
+      "bundle_path": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-14/prpl-tamp-7_pp_toy_puzzle-2026-08-13_23-16-03.h5",
+      "video_files": {
+        "overhead_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-14/videos/prpl-tamp-7_pp_toy_puzzle-2026-08-13_23-16-03_overhead_cam.mp4",
+        "wrist_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-14/videos/prpl-tamp-7_pp_toy_puzzle-2026-08-13_23-16-03_wrist_cam.mp4"
+      },
+      "episode_id": "prpl-tamp-7_pp_toy_puzzle-2026-08-13_23-16-03",
+      "language_instruction": "place the toy on the cloth and solve the puzzle",
+      "operator": "Liang Ji",
+      "annotators": [
+        "Liang Ji"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:34:31.948543+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-046",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRPL",
+      "lab_id": "Princeton_PRPL",
+      "repo_path": "Princeton_PRPL_prpl_eval_2026-09-02/prpl-eval-1_pp_toys_plate_vae_style_timing_apex_learned_posture_v2_prpl-fold_cloth_v2-2026-09-02_15-03-55.h5",
+      "bundle_path": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_eval_2026-09-02/prpl-eval-1_pp_toys_plate_vae_style_timing_apex_learned_posture_v2_prpl-fold_cloth_v2-2026-09-02_15-03-55.h5",
+      "video_files": {
+        "overhead_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_eval_2026-09-02/videos/prpl-eval-1_pp_toys_plate_vae_style_timing_apex_learned_posture_v2_prpl-fold_cloth_v2-2026-09-02_15-03-55_overhead_cam.mp4",
+        "wrist_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_eval_2026-09-02/videos/prpl-eval-1_pp_toys_plate_vae_style_timing_apex_learned_posture_v2_prpl-fold_cloth_v2-2026-09-02_15-03-55_wrist_cam.mp4"
+      },
+      "episode_id": "prpl-eval-1_pp_toys_plate_vae_style_timing_apex_learned_posture_v2_prpl-fold_cloth_v2-2026-09-02_15-03-55",
+      "language_instruction": "Fold the yellow cloth",
+      "operator": "Yixuan Huang",
+      "annotators": [
+        "Yixuan Huang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:33:43.562126+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-047",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRPL",
+      "lab_id": "Princeton_PRPL",
+      "repo_path": "Princeton_PRPL_prpl_eval_2026-08-18/prpl-eval-pi05-droid-3_pp_sort_food_toys-2026-08-18_03-18-23.h5",
+      "bundle_path": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_eval_2026-08-18/prpl-eval-pi05-droid-3_pp_sort_food_toys-2026-08-18_03-18-23.h5",
+      "video_files": {
+        "overhead_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_eval_2026-08-18/videos/prpl-eval-pi05-droid-3_pp_sort_food_toys-2026-08-18_03-18-23_overhead_cam.mp4",
+        "wrist_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_eval_2026-08-18/videos/prpl-eval-pi05-droid-3_pp_sort_food_toys-2026-08-18_03-18-23_wrist_cam.mp4"
+      },
+      "episode_id": "prpl-eval-pi05-droid-3_pp_sort_food_toys-2026-08-18_03-18-23",
+      "language_instruction": "Seperate the food and the toys into the two bowls.",
+      "operator": "Samrat Sahoo",
+      "annotators": [
+        "Samrat Sahoo"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:33:13.772830+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-048",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRPL",
+      "lab_id": "Princeton_PRPL",
+      "repo_path": "Princeton_PRPL_prpl_tamp_2026-08-20/prpl-tamp-8c_pp_3bread_cloth-2026-08-20_14-02-43.h5",
+      "bundle_path": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-20/prpl-tamp-8c_pp_3bread_cloth-2026-08-20_14-02-43.h5",
+      "video_files": {
+        "overhead_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-20/videos/prpl-tamp-8c_pp_3bread_cloth-2026-08-20_14-02-43_overhead_cam.mp4",
+        "wrist_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-20/videos/prpl-tamp-8c_pp_3bread_cloth-2026-08-20_14-02-43_wrist_cam.mp4"
+      },
+      "episode_id": "prpl-tamp-8c_pp_3bread_cloth-2026-08-20_14-02-43",
+      "language_instruction": "place the 3 breads on the plate and then cover the plate with the cloth",
+      "operator": "LiangJi",
+      "annotators": [
+        "LiangJi"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:35:31.624124+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-049",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRPL",
+      "lab_id": "Princeton_PRPL",
+      "repo_path": "Princeton_PRPL_prpl_tamp_2026-08-06/prpl-tamp-cloth_box_toy-2026-08-06_15-53-13.h5",
+      "bundle_path": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-06/prpl-tamp-cloth_box_toy-2026-08-06_15-53-13.h5",
+      "video_files": {
+        "overhead_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-06/videos/prpl-tamp-cloth_box_toy-2026-08-06_15-53-13_overhead_cam.mp4",
+        "wrist_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-06/videos/prpl-tamp-cloth_box_toy-2026-08-06_15-53-13_wrist_cam.mp4"
+      },
+      "episode_id": "prpl-tamp-cloth_box_toy-2026-08-06_15-53-13",
+      "language_instruction": "place the toy in the box",
+      "operator": "Liang Ji",
+      "annotators": [
+        "Liang Ji"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:34:01.651917+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-050",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRPL",
+      "lab_id": "Princeton_PRPL",
+      "repo_path": "Princeton_PRPL_prpl_tamp_2026-09-15/prpl-tamp-3_pen_open_book_v3-2026-09-15_15-55-21.h5",
+      "bundle_path": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-09-15/prpl-tamp-3_pen_open_book_v3-2026-09-15_15-55-21.h5",
+      "video_files": {
+        "overhead_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-09-15/videos/prpl-tamp-3_pen_open_book_v3-2026-09-15_15-55-21_overhead_cam.mp4",
+        "wrist_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-09-15/videos/prpl-tamp-3_pen_open_book_v3-2026-09-15_15-55-21_wrist_cam.mp4"
+      },
+      "episode_id": "prpl-tamp-3_pen_open_book_v3-2026-09-15_15-55-21",
+      "language_instruction": "take the marker off of the book and place it on the wooden tray, then open the book",
+      "operator": "Yixuan Huang",
+      "annotators": [
+        "Yixuan Huang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:36:00.440878+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-051",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRPL",
+      "lab_id": "Princeton_PRPL",
+      "repo_path": "Princeton_PRPL_prpl_teleop_2026-08-18/prpl-teleop-4_pack_toys_teleop-2026-08-17_23-41-20.h5",
+      "bundle_path": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_teleop_2026-08-18/prpl-teleop-4_pack_toys_teleop-2026-08-17_23-41-20.h5",
+      "video_files": {
+        "overhead_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_teleop_2026-08-18/videos/prpl-teleop-4_pack_toys_teleop-2026-08-17_23-41-20_overhead_cam.mp4",
+        "wrist_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_teleop_2026-08-18/videos/prpl-teleop-4_pack_toys_teleop-2026-08-17_23-41-20_wrist_cam.mp4"
+      },
+      "episode_id": "prpl-teleop-4_pack_toys_teleop-2026-08-17_23-41-20",
+      "language_instruction": "Pack the toys onto the wooden tray",
+      "operator": "Samrat Sahoo",
+      "annotators": [
+        "Samrat Sahoo"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:36:11.769521+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-052",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRPL",
+      "lab_id": "Princeton_PRPL",
+      "repo_path": "Princeton_PRPL_prpl_eval_2026-08-08/prpl-eval-pi05-droid-cloth-2026-08-08_16-20-25.h5",
+      "bundle_path": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_eval_2026-08-08/prpl-eval-pi05-droid-cloth-2026-08-08_16-20-25.h5",
+      "video_files": {
+        "overhead_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_eval_2026-08-08/videos/prpl-eval-pi05-droid-cloth-2026-08-08_16-20-25_overhead_cam.mp4",
+        "wrist_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_eval_2026-08-08/videos/prpl-eval-pi05-droid-cloth-2026-08-08_16-20-25_wrist_cam.mp4"
+      },
+      "episode_id": "prpl-eval-pi05-droid-cloth-2026-08-08_16-20-25",
+      "language_instruction": "place the toy on the cloth and fold it",
+      "operator": "Liang Ji",
+      "annotators": [
+        "Liang Ji"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:32:27.043389+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-053",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRPL",
+      "lab_id": "Princeton_PRPL",
+      "repo_path": "Princeton_PRPL_prpl_tamp_2026-08-24/prpl-tamp-5c_pp_pen_open_book_08232026-2026-08-24_15-44-25.h5",
+      "bundle_path": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-24/prpl-tamp-5c_pp_pen_open_book_08232026-2026-08-24_15-44-25.h5",
+      "video_files": {
+        "overhead_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-24/videos/prpl-tamp-5c_pp_pen_open_book_08232026-2026-08-24_15-44-25_overhead_cam.mp4",
+        "wrist_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-24/videos/prpl-tamp-5c_pp_pen_open_book_08232026-2026-08-24_15-44-25_wrist_cam.mp4"
+      },
+      "episode_id": "prpl-tamp-5c_pp_pen_open_book_08232026-2026-08-24_15-44-25",
+      "language_instruction": "take the pen off the book and place it on the wooden tray, then open the book",
+      "operator": "Yixuan Huang",
+      "annotators": [
+        "Yixuan Huang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:35:48.822444+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-054",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRPL",
+      "lab_id": "Princeton_PRPL",
+      "repo_path": "Princeton_PRPL_prpl_eval_2026-08-25/prpl-eval-3_pp_sort_fruits_toys_teleop_prpl-3_pp_sort_food_toys_v2-2026-08-25_10-50-35.h5",
+      "bundle_path": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_eval_2026-08-25/prpl-eval-3_pp_sort_fruits_toys_teleop_prpl-3_pp_sort_food_toys_v2-2026-08-25_10-50-35.h5",
+      "video_files": {
+        "overhead_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_eval_2026-08-25/videos/prpl-eval-3_pp_sort_fruits_toys_teleop_prpl-3_pp_sort_food_toys_v2-2026-08-25_10-50-35_overhead_cam.mp4",
+        "wrist_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_eval_2026-08-25/videos/prpl-eval-3_pp_sort_fruits_toys_teleop_prpl-3_pp_sort_food_toys_v2-2026-08-25_10-50-35_wrist_cam.mp4"
+      },
+      "episode_id": "prpl-eval-3_pp_sort_fruits_toys_teleop_prpl-3_pp_sort_food_toys_v2-2026-08-25_10-50-35",
+      "language_instruction": "Sort the fruits into the green bowl and toys into the blue bowl",
+      "operator": "Samrat Sahoo",
+      "annotators": [
+        "Samrat Sahoo"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:33:30.913827+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-055",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRPL",
+      "lab_id": "Princeton_PRPL",
+      "repo_path": "Princeton_PRPL_prpl_eval_2026-08-12/prpl-eval-4_pp_plate_cover_cloth_prpl-4a_pp_plate_cover_cloth-2026-08-12_14-16-14.h5",
+      "bundle_path": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_eval_2026-08-12/prpl-eval-4_pp_plate_cover_cloth_prpl-4a_pp_plate_cover_cloth-2026-08-12_14-16-14.h5",
+      "video_files": {
+        "overhead_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_eval_2026-08-12/videos/prpl-eval-4_pp_plate_cover_cloth_prpl-4a_pp_plate_cover_cloth-2026-08-12_14-16-14_overhead_cam.mp4",
+        "wrist_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_eval_2026-08-12/videos/prpl-eval-4_pp_plate_cover_cloth_prpl-4a_pp_plate_cover_cloth-2026-08-12_14-16-14_wrist_cam.mp4"
+      },
+      "episode_id": "prpl-eval-4_pp_plate_cover_cloth_prpl-4a_pp_plate_cover_cloth-2026-08-12_14-16-14",
+      "language_instruction": "place the toys on the plate, then cover the plate with the cloth",
+      "operator": "Liang Ji",
+      "annotators": [
+        "Liang Ji"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:32:39.442637+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-056",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRPL",
+      "lab_id": "Princeton_PRPL",
+      "repo_path": "Princeton_PRPL_prpl_eval_2026-08-25/prpl-eval-pi05-droid-4_pack_toys-2026-08-25_01-42-18.h5",
+      "bundle_path": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_eval_2026-08-25/prpl-eval-pi05-droid-4_pack_toys-2026-08-25_01-42-18.h5",
+      "video_files": {
+        "overhead_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_eval_2026-08-25/videos/prpl-eval-pi05-droid-4_pack_toys-2026-08-25_01-42-18_overhead_cam.mp4",
+        "wrist_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_eval_2026-08-25/videos/prpl-eval-pi05-droid-4_pack_toys-2026-08-25_01-42-18_wrist_cam.mp4"
+      },
+      "episode_id": "prpl-eval-pi05-droid-4_pack_toys-2026-08-25_01-42-18",
+      "language_instruction": "Pack the toys onto the wooden tray.",
+      "operator": "Yixuan Huang",
+      "annotators": [
+        "Yixuan Huang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:33:36.625520+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-057",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRPL",
+      "lab_id": "Princeton_PRPL",
+      "repo_path": "Princeton_PRPL_prpl_tamp_2026-08-17/prpl-tamp-4_pack_bottles_vae_stroke-2026-08-17_02-38-43.h5",
+      "bundle_path": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-17/prpl-tamp-4_pack_bottles_vae_stroke-2026-08-17_02-38-43.h5",
+      "video_files": {
+        "overhead_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-17/videos/prpl-tamp-4_pack_bottles_vae_stroke-2026-08-17_02-38-43_overhead_cam.mp4",
+        "wrist_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-17/videos/prpl-tamp-4_pack_bottles_vae_stroke-2026-08-17_02-38-43_wrist_cam.mp4"
+      },
+      "episode_id": "prpl-tamp-4_pack_bottles_vae_stroke-2026-08-17_02-38-43",
+      "language_instruction": "Pack the bottles onto the wooden tray.",
+      "operator": "Samrat Sahoo",
+      "annotators": [
+        "Samrat Sahoo"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "I would call this manipulation failure instead of collision.",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:34:58.732789+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-058",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRPL",
+      "lab_id": "Princeton_PRPL",
+      "repo_path": "Princeton_PRPL_prpl_tamp_2026-08-19/prpl-tamp-10_pp_lid_cup-2026-08-18_20-40-54.h5",
+      "bundle_path": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-19/prpl-tamp-10_pp_lid_cup-2026-08-18_20-40-54.h5",
+      "video_files": {
+        "overhead_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-19/videos/prpl-tamp-10_pp_lid_cup-2026-08-18_20-40-54_overhead_cam.mp4",
+        "wrist_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-19/videos/prpl-tamp-10_pp_lid_cup-2026-08-18_20-40-54_wrist_cam.mp4"
+      },
+      "episode_id": "prpl-tamp-10_pp_lid_cup-2026-08-18_20-40-54",
+      "language_instruction": "First, pick the lid by its handle and place it on the table, and then hold the cup and pour water to flower.",
+      "operator": "Liang Ji",
+      "annotators": [
+        "Liang Ji"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:35:07.719224+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-059",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRPL",
+      "lab_id": "Princeton_PRPL",
+      "repo_path": "Princeton_PRPL_prpl_tamp_2026-09-11/prpl-tamp-4_bread_box_v2-2026-09-11_17-56-09.h5",
+      "bundle_path": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-09-11/prpl-tamp-4_bread_box_v2-2026-09-11_17-56-09.h5",
+      "video_files": {
+        "overhead_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-09-11/videos/prpl-tamp-4_bread_box_v2-2026-09-11_17-56-09_overhead_cam.mp4",
+        "wrist_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-09-11/videos/prpl-tamp-4_bread_box_v2-2026-09-11_17-56-09_wrist_cam.mp4"
+      },
+      "episode_id": "prpl-tamp-4_bread_box_v2-2026-09-11_17-56-09",
+      "language_instruction": "place the bread on the plate, and then open the box and place the bread in the box",
+      "operator": "Yixuan Huang",
+      "annotators": [
+        "Yixuan Huang"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:35:53.705020+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-060",
+      "dataset_repo": "OopsieData-Submissions/Princeton_PRPL",
+      "lab_id": "Princeton_PRPL",
+      "repo_path": "Princeton_PRPL_prpl_tamp_2026-08-13/prpl-tamp-2_pp_puzzle_tray_vae_stroke-2026-08-13_00-42-12.h5",
+      "bundle_path": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-13/prpl-tamp-2_pp_puzzle_tray_vae_stroke-2026-08-13_00-42-12.h5",
+      "video_files": {
+        "overhead_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-13/videos/prpl-tamp-2_pp_puzzle_tray_vae_stroke-2026-08-13_00-42-12_overhead_cam.mp4",
+        "wrist_cam": "episodes/Princeton_PRPL/Princeton_PRPL_prpl_tamp_2026-08-13/videos/prpl-tamp-2_pp_puzzle_tray_vae_stroke-2026-08-13_00-42-12_wrist_cam.mp4"
+      },
+      "episode_id": "prpl-tamp-2_pp_puzzle_tray_vae_stroke-2026-08-13_00-42-12",
+      "language_instruction": "Place the puzzles on the black tray",
+      "operator": "Samrat Sahoo",
+      "annotators": [
+        "Samrat Sahoo"
+      ],
+      "robot_name": "franka_research_3",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:34:15.854424+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-061",
+      "dataset_repo": "OopsieData-Submissions/RIKEN_AIP",
+      "lab_id": "RIKEN_AIP",
+      "repo_path": "cube_stack/20260929_114931/20260929_114942.h5",
+      "bundle_path": "episodes/RIKEN_AIP/cube_stack/20260929_114931/20260929_114942.h5",
+      "video_files": {
+        "left_wrist": "episodes/RIKEN_AIP/cube_stack/20260929_114931/20260929_114942_left_wrist.mp4",
+        "right_wrist": "episodes/RIKEN_AIP/cube_stack/20260929_114931/20260929_114942_right_wrist.mp4",
+        "top": "episodes/RIKEN_AIP/cube_stack/20260929_114931/20260929_114942_top.mp4"
+      },
+      "episode_id": "20260929_114942",
+      "language_instruction": "stack three cubes together",
+      "operator": "takehiro_hara",
+      "annotators": [
+        "jenyen_chang"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:36:27.879136+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-062",
+      "dataset_repo": "OopsieData-Submissions/RIKEN_AIP",
+      "lab_id": "RIKEN_AIP",
+      "repo_path": "put_pen_in_drawer/20260918_105119/20260918_111035.h5",
+      "bundle_path": "episodes/RIKEN_AIP/put_pen_in_drawer/20260918_105119/20260918_111035.h5",
+      "video_files": {
+        "left_wrist": "episodes/RIKEN_AIP/put_pen_in_drawer/20260918_105119/20260918_111035_left_wrist.mp4",
+        "right_wrist": "episodes/RIKEN_AIP/put_pen_in_drawer/20260918_105119/20260918_111035_right_wrist.mp4",
+        "top": "episodes/RIKEN_AIP/put_pen_in_drawer/20260918_105119/20260918_111035_top.mp4"
+      },
+      "episode_id": "20260918_111035",
+      "language_instruction": "Pick up the pen with the left hand, open the drawer with the right hand, place the pen inside the drawer, and close the drawer with the right hand",
+      "operator": "anakewat_tanachai",
+      "annotators": [
+        "haruki_abe"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:39:52.593946+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-063",
+      "dataset_repo": "OopsieData-Submissions/RIKEN_AIP",
+      "lab_id": "RIKEN_AIP",
+      "repo_path": "cup_stack/20260917_134842/20260917_142116.h5",
+      "bundle_path": "episodes/RIKEN_AIP/cup_stack/20260917_134842/20260917_142116.h5",
+      "video_files": {
+        "left_wrist": "episodes/RIKEN_AIP/cup_stack/20260917_134842/20260917_142116_left_wrist.mp4",
+        "right_wrist": "episodes/RIKEN_AIP/cup_stack/20260917_134842/20260917_142116_right_wrist.mp4",
+        "top": "episodes/RIKEN_AIP/cup_stack/20260917_134842/20260917_142116_top.mp4"
+      },
+      "episode_id": "20260917_142116",
+      "language_instruction": "stack three paper cups together",
+      "operator": "shota_nomura",
+      "annotators": [
+        "kazuki_ota"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:37:06.041512+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-064",
+      "dataset_repo": "OopsieData-Submissions/RIKEN_AIP",
+      "lab_id": "RIKEN_AIP",
+      "repo_path": "pill_bottle_drawer/demo/episode_000035.h5",
+      "bundle_path": "episodes/RIKEN_AIP/pill_bottle_drawer/demo/episode_000035.h5",
+      "video_files": {
+        "left_wrist": "episodes/RIKEN_AIP/pill_bottle_drawer/demo/videos/episode_000035_left_wrist.mp4",
+        "right_wrist": "episodes/RIKEN_AIP/pill_bottle_drawer/demo/videos/episode_000035_right_wrist.mp4",
+        "top": "episodes/RIKEN_AIP/pill_bottle_drawer/demo/videos/episode_000035_top.mp4"
+      },
+      "episode_id": "episode_000035",
+      "language_instruction": "Open the drawer, place the pill bottle inside, and close the drawer.",
+      "operator": "takayuki_osa",
+      "annotators": [
+        "takayuki_osa"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:39:45.022723+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-065",
+      "dataset_repo": "OopsieData-Submissions/RIKEN_AIP",
+      "lab_id": "RIKEN_AIP",
+      "repo_path": "pen_handover/20260915_113954/20260915_122645.h5",
+      "bundle_path": "episodes/RIKEN_AIP/pen_handover/20260915_113954/20260915_122645.h5",
+      "video_files": {
+        "left_wrist": "episodes/RIKEN_AIP/pen_handover/20260915_113954/20260915_122645_left_wrist.mp4",
+        "right_wrist": "episodes/RIKEN_AIP/pen_handover/20260915_113954/20260915_122645_right_wrist.mp4",
+        "top": "episodes/RIKEN_AIP/pen_handover/20260915_113954/20260915_122645_top.mp4"
+      },
+      "episode_id": "20260915_122645",
+      "language_instruction": "pick up a pen and pass it to the left hand",
+      "operator": "haruki_abe",
+      "annotators": [
+        "takehiro_hara"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:37:40.623771+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-066",
+      "dataset_repo": "OopsieData-Submissions/RIKEN_AIP",
+      "lab_id": "RIKEN_AIP",
+      "repo_path": "cup_stack/20260917_143036/20260917_150028.h5",
+      "bundle_path": "episodes/RIKEN_AIP/cup_stack/20260917_143036/20260917_150028.h5",
+      "video_files": {
+        "left_wrist": "episodes/RIKEN_AIP/cup_stack/20260917_143036/20260917_150028_left_wrist.mp4",
+        "right_wrist": "episodes/RIKEN_AIP/cup_stack/20260917_143036/20260917_150028_right_wrist.mp4",
+        "top": "episodes/RIKEN_AIP/cup_stack/20260917_143036/20260917_150028_top.mp4"
+      },
+      "episode_id": "20260917_150028",
+      "language_instruction": "stack three paper cups together",
+      "operator": "kazuki_ota",
+      "annotators": [
+        "shota_nomura"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:37:20.643715+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-067",
+      "dataset_repo": "OopsieData-Submissions/RIKEN_AIP",
+      "lab_id": "RIKEN_AIP",
+      "repo_path": "pen_handover/20260915_144209/20260915_163246.h5",
+      "bundle_path": "episodes/RIKEN_AIP/pen_handover/20260915_144209/20260915_163246.h5",
+      "video_files": {
+        "left_wrist": "episodes/RIKEN_AIP/pen_handover/20260915_144209/20260915_163246_left_wrist.mp4",
+        "right_wrist": "episodes/RIKEN_AIP/pen_handover/20260915_144209/20260915_163246_right_wrist.mp4",
+        "top": "episodes/RIKEN_AIP/pen_handover/20260915_144209/20260915_163246_top.mp4"
+      },
+      "episode_id": "20260915_163246",
+      "language_instruction": "pick up a pen and pass it to the left hand",
+      "operator": "jen-yen_chang",
+      "annotators": [
+        "kazuki_ota"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:38:25.525384+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-068",
+      "dataset_repo": "OopsieData-Submissions/RIKEN_AIP",
+      "lab_id": "RIKEN_AIP",
+      "repo_path": "put_pen_in_drawer/20260918_125540/20260918_140621.h5",
+      "bundle_path": "episodes/RIKEN_AIP/put_pen_in_drawer/20260918_125540/20260918_140621.h5",
+      "video_files": {
+        "left_wrist": "episodes/RIKEN_AIP/put_pen_in_drawer/20260918_125540/20260918_140621_left_wrist.mp4",
+        "right_wrist": "episodes/RIKEN_AIP/put_pen_in_drawer/20260918_125540/20260918_140621_right_wrist.mp4",
+        "top": "episodes/RIKEN_AIP/put_pen_in_drawer/20260918_125540/20260918_140621_top.mp4"
+      },
+      "episode_id": "20260918_140621",
+      "language_instruction": "Pick up the pen with the left hand, open the drawer with the right hand, place the pen inside the drawer, and close the drawer with the right hand",
+      "operator": "takehiro_hara",
+      "annotators": [
+        "anakewat_tanachai"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:40:07.946108+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-069",
+      "dataset_repo": "OopsieData-Submissions/RIKEN_AIP",
+      "lab_id": "RIKEN_AIP",
+      "repo_path": "pill_bottle_drawer/20261006_144811/20261006_153642.h5",
+      "bundle_path": "episodes/RIKEN_AIP/pill_bottle_drawer/20261006_144811/20261006_153642.h5",
+      "video_files": {
+        "left_wrist": "episodes/RIKEN_AIP/pill_bottle_drawer/20261006_144811/20261006_153642_left_wrist.mp4",
+        "right_wrist": "episodes/RIKEN_AIP/pill_bottle_drawer/20261006_144811/20261006_153642_right_wrist.mp4",
+        "top": "episodes/RIKEN_AIP/pill_bottle_drawer/20261006_144811/20261006_153642_top.mp4"
+      },
+      "episode_id": "20261006_153642",
+      "language_instruction": "Open the drawer, place the pill bottle inside, and close the drawer.",
+      "operator": "shota_nomura",
+      "annotators": [
+        "naoki_shitanda"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "It seems like the robot finished the task instruction. The only caveat is that the pill fell over inside the drawer.",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:39:38.082973+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-070",
+      "dataset_repo": "OopsieData-Submissions/RIKEN_AIP",
+      "lab_id": "RIKEN_AIP",
+      "repo_path": "cube_stack/20260929_142700/20260929_143730.h5",
+      "bundle_path": "episodes/RIKEN_AIP/cube_stack/20260929_142700/20260929_143730.h5",
+      "video_files": {
+        "left_wrist": "episodes/RIKEN_AIP/cube_stack/20260929_142700/20260929_143730_left_wrist.mp4",
+        "right_wrist": "episodes/RIKEN_AIP/cube_stack/20260929_142700/20260929_143730_right_wrist.mp4",
+        "top": "episodes/RIKEN_AIP/cube_stack/20260929_142700/20260929_143730_top.mp4"
+      },
+      "episode_id": "20260929_143730",
+      "language_instruction": "stack three cubes together",
+      "operator": "jenyen_chang",
+      "annotators": [
+        "takehiro_hara"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:36:35.277408+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-071",
+      "dataset_repo": "OopsieData-Submissions/RIKEN_AIP",
+      "lab_id": "RIKEN_AIP",
+      "repo_path": "cup_stack/20260917_132111/20260917_132434.h5",
+      "bundle_path": "episodes/RIKEN_AIP/cup_stack/20260917_132111/20260917_132434.h5",
+      "video_files": {
+        "left_wrist": "episodes/RIKEN_AIP/cup_stack/20260917_132111/20260917_132434_left_wrist.mp4",
+        "right_wrist": "episodes/RIKEN_AIP/cup_stack/20260917_132111/20260917_132434_right_wrist.mp4",
+        "top": "episodes/RIKEN_AIP/cup_stack/20260917_132111/20260917_132434_top.mp4"
+      },
+      "episode_id": "20260917_132434",
+      "language_instruction": "stack three paper cups together",
+      "operator": "kazuki_ota",
+      "annotators": [
+        "tomohiro_hashimoto"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:37:00.037713+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-072",
+      "dataset_repo": "OopsieData-Submissions/RIKEN_AIP",
+      "lab_id": "RIKEN_AIP",
+      "repo_path": "pen_handover/20260911_155937/20260911_162414.h5",
+      "bundle_path": "episodes/RIKEN_AIP/pen_handover/20260911_155937/20260911_162414.h5",
+      "video_files": {
+        "left_wrist": "episodes/RIKEN_AIP/pen_handover/20260911_155937/20260911_162414_left_wrist.mp4",
+        "right_wrist": "episodes/RIKEN_AIP/pen_handover/20260911_155937/20260911_162414_right_wrist.mp4",
+        "top": "episodes/RIKEN_AIP/pen_handover/20260911_155937/20260911_162414_top.mp4"
+      },
+      "episode_id": "20260911_162414",
+      "language_instruction": "pick up a pen and pass it to the left hand",
+      "operator": "tomohiro_hashimoto",
+      "annotators": [
+        "haruki_abe"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:37:28.356487+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-073",
+      "dataset_repo": "OopsieData-Submissions/RIKEN_AIP",
+      "lab_id": "RIKEN_AIP",
+      "repo_path": "pill_bottle_drawer/20261006_133440/20261006_142024.h5",
+      "bundle_path": "episodes/RIKEN_AIP/pill_bottle_drawer/20261006_133440/20261006_142024.h5",
+      "video_files": {
+        "left_wrist": "episodes/RIKEN_AIP/pill_bottle_drawer/20261006_133440/20261006_142024_left_wrist.mp4",
+        "right_wrist": "episodes/RIKEN_AIP/pill_bottle_drawer/20261006_133440/20261006_142024_right_wrist.mp4",
+        "top": "episodes/RIKEN_AIP/pill_bottle_drawer/20261006_133440/20261006_142024_top.mp4"
+      },
+      "episode_id": "20261006_142024",
+      "language_instruction": "Open the drawer, place the pill bottle inside, and close the drawer.",
+      "operator": "naoki_shitanda",
+      "annotators": [
+        "shota_nomura"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:38:31.828703+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-074",
+      "dataset_repo": "OopsieData-Submissions/RIKEN_AIP",
+      "lab_id": "RIKEN_AIP",
+      "repo_path": "cube_stack/demo/episode_000061.h5",
+      "bundle_path": "episodes/RIKEN_AIP/cube_stack/demo/episode_000061.h5",
+      "video_files": {
+        "left_wrist": "episodes/RIKEN_AIP/cube_stack/demo/videos/episode_000061_left_wrist.mp4",
+        "right_wrist": "episodes/RIKEN_AIP/cube_stack/demo/videos/episode_000061_right_wrist.mp4",
+        "top": "episodes/RIKEN_AIP/cube_stack/demo/videos/episode_000061_top.mp4"
+      },
+      "episode_id": "episode_000061",
+      "language_instruction": "stack three cubes together",
+      "operator": "takayuki_osa",
+      "annotators": [
+        "takayuki_osa"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:36:46.081214+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-075",
+      "dataset_repo": "OopsieData-Submissions/RIKEN_AIP",
+      "lab_id": "RIKEN_AIP",
+      "repo_path": "pen_handover/20260911_171057/20260911_174041.h5",
+      "bundle_path": "episodes/RIKEN_AIP/pen_handover/20260911_171057/20260911_174041.h5",
+      "video_files": {
+        "left_wrist": "episodes/RIKEN_AIP/pen_handover/20260911_171057/20260911_174041_left_wrist.mp4",
+        "right_wrist": "episodes/RIKEN_AIP/pen_handover/20260911_171057/20260911_174041_right_wrist.mp4",
+        "top": "episodes/RIKEN_AIP/pen_handover/20260911_171057/20260911_174041_top.mp4"
+      },
+      "episode_id": "20260911_174041",
+      "language_instruction": "pick up a pen and pass it to the left hand",
+      "operator": "haruki_abe",
+      "annotators": [
+        "tomohiro_hashimoto"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:37:33.490818+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-076",
+      "dataset_repo": "OopsieData-Submissions/RIKEN_AIP",
+      "lab_id": "RIKEN_AIP",
+      "repo_path": "put_pen_in_drawer/20260918_125540/20260918_130049.h5",
+      "bundle_path": "episodes/RIKEN_AIP/put_pen_in_drawer/20260918_125540/20260918_130049.h5",
+      "video_files": {
+        "left_wrist": "episodes/RIKEN_AIP/put_pen_in_drawer/20260918_125540/20260918_130049_left_wrist.mp4",
+        "right_wrist": "episodes/RIKEN_AIP/put_pen_in_drawer/20260918_125540/20260918_130049_right_wrist.mp4",
+        "top": "episodes/RIKEN_AIP/put_pen_in_drawer/20260918_125540/20260918_130049_top.mp4"
+      },
+      "episode_id": "20260918_130049",
+      "language_instruction": "Pick up the pen with the left hand, open the drawer with the right hand, place the pen inside the drawer, and close the drawer with the right hand",
+      "operator": "takehiro_hara",
+      "annotators": [
+        "anakewat_tanachai"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:40:02.289347+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-077",
+      "dataset_repo": "OopsieData-Submissions/RIKEN_AIP",
+      "lab_id": "RIKEN_AIP",
+      "repo_path": "cube_stack/20260929_153720/20260929_160018.h5",
+      "bundle_path": "episodes/RIKEN_AIP/cube_stack/20260929_153720/20260929_160018.h5",
+      "video_files": {
+        "left_wrist": "episodes/RIKEN_AIP/cube_stack/20260929_153720/20260929_160018_left_wrist.mp4",
+        "right_wrist": "episodes/RIKEN_AIP/cube_stack/20260929_153720/20260929_160018_right_wrist.mp4",
+        "top": "episodes/RIKEN_AIP/cube_stack/20260929_153720/20260929_160018_top.mp4"
+      },
+      "episode_id": "20260929_160018",
+      "language_instruction": "stack three cubes together",
+      "operator": "tomohiro_hashimoto",
+      "annotators": [
+        "kazuki_ota"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:36:41.491447+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-078",
+      "dataset_repo": "OopsieData-Submissions/RIKEN_AIP",
+      "lab_id": "RIKEN_AIP",
+      "repo_path": "pill_bottle_drawer/20261006_144811/20261006_144852.h5",
+      "bundle_path": "episodes/RIKEN_AIP/pill_bottle_drawer/20261006_144811/20261006_144852.h5",
+      "video_files": {
+        "left_wrist": "episodes/RIKEN_AIP/pill_bottle_drawer/20261006_144811/20261006_144852_left_wrist.mp4",
+        "right_wrist": "episodes/RIKEN_AIP/pill_bottle_drawer/20261006_144811/20261006_144852_right_wrist.mp4",
+        "top": "episodes/RIKEN_AIP/pill_bottle_drawer/20261006_144811/20261006_144852_top.mp4"
+      },
+      "episode_id": "20261006_144852",
+      "language_instruction": "Open the drawer, place the pill bottle inside, and close the drawer.",
+      "operator": "shota_nomura",
+      "annotators": [
+        "naoki_shitanda"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "It seems like the robot finished the task instruction. The only caveat is that the pill fell over inside the drawer.",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:39:26.028434+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-079",
+      "dataset_repo": "OopsieData-Submissions/RIKEN_AIP",
+      "lab_id": "RIKEN_AIP",
+      "repo_path": "put_pen_in_drawer/20260918_105119/20260918_112608.h5",
+      "bundle_path": "episodes/RIKEN_AIP/put_pen_in_drawer/20260918_105119/20260918_112608.h5",
+      "video_files": {
+        "left_wrist": "episodes/RIKEN_AIP/put_pen_in_drawer/20260918_105119/20260918_112608_left_wrist.mp4",
+        "right_wrist": "episodes/RIKEN_AIP/put_pen_in_drawer/20260918_105119/20260918_112608_right_wrist.mp4",
+        "top": "episodes/RIKEN_AIP/put_pen_in_drawer/20260918_105119/20260918_112608_top.mp4"
+      },
+      "episode_id": "20260918_112608",
+      "language_instruction": "Pick up the pen with the left hand, open the drawer with the right hand, place the pen inside the drawer, and close the drawer with the right hand",
+      "operator": "anakewat_tanachai",
+      "annotators": [
+        "haruki_abe"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:39:56.955704+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-080",
+      "dataset_repo": "OopsieData-Submissions/RIKEN_AIP",
+      "lab_id": "RIKEN_AIP",
+      "repo_path": "pill_bottle_drawer/20261006_133440/20261006_142802.h5",
+      "bundle_path": "episodes/RIKEN_AIP/pill_bottle_drawer/20261006_133440/20261006_142802.h5",
+      "video_files": {
+        "left_wrist": "episodes/RIKEN_AIP/pill_bottle_drawer/20261006_133440/20261006_142802_left_wrist.mp4",
+        "right_wrist": "episodes/RIKEN_AIP/pill_bottle_drawer/20261006_133440/20261006_142802_right_wrist.mp4",
+        "top": "episodes/RIKEN_AIP/pill_bottle_drawer/20261006_133440/20261006_142802_top.mp4"
+      },
+      "episode_id": "20261006_142802",
+      "language_instruction": "Open the drawer, place the pill bottle inside, and close the drawer.",
+      "operator": "naoki_shitanda",
+      "annotators": [
+        "shota_nomura"
+      ],
+      "robot_name": "viperx_300",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:38:36.053630+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-081",
+      "dataset_repo": "OopsieData-Submissions/SE3Labs",
+      "lab_id": "SE3Labs",
+      "repo_path": "teleop_TELEOP-5-4_20261003-012102/teleop_TELEOP-5-4_20261003-012102.h5",
+      "bundle_path": "episodes/SE3Labs/teleop_TELEOP-5-4_20261003-012102/teleop_TELEOP-5-4_20261003-012102.h5",
+      "video_files": {
+        "cam_chest": "episodes/SE3Labs/teleop_TELEOP-5-4_20261003-012102/cam_chest.mp4",
+        "cam_chest_ir": "episodes/SE3Labs/teleop_TELEOP-5-4_20261003-012102/cam_chest_ir.mp4",
+        "cam_wrist_l": "episodes/SE3Labs/teleop_TELEOP-5-4_20261003-012102/cam_wrist_l.mp4",
+        "cam_wrist_l_ir": "episodes/SE3Labs/teleop_TELEOP-5-4_20261003-012102/cam_wrist_l_ir.mp4",
+        "cam_wrist_r": "episodes/SE3Labs/teleop_TELEOP-5-4_20261003-012102/cam_wrist_r.mp4",
+        "cam_wrist_r_ir": "episodes/SE3Labs/teleop_TELEOP-5-4_20261003-012102/cam_wrist_r_ir.mp4"
+      },
+      "episode_id": "teleop_TELEOP-5-4_20261003-012102",
+      "language_instruction": "Pick up the light-blue-bulb dropper, align it with the open transparent tube in the fourth rack slot, and gently place it inside the tube.",
+      "operator": "Operator-2",
+      "annotators": [
+        "Operator-2"
+      ],
+      "robot_name": "YAM",
+      "qa_notes": "Seems like a success.",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:45:30.376904+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-082",
+      "dataset_repo": "OopsieData-Submissions/SE3Labs",
+      "lab_id": "SE3Labs",
+      "repo_path": "recording_2026-08-30_05-04-02/recording_2026-08-30_05-04-02.h5",
+      "bundle_path": "episodes/SE3Labs/recording_2026-08-30_05-04-02/recording_2026-08-30_05-04-02.h5",
+      "video_files": {
+        "cam_chest": "episodes/SE3Labs/recording_2026-08-30_05-04-02/cam_chest.mp4",
+        "cam_wrist_l": "episodes/SE3Labs/recording_2026-08-30_05-04-02/cam_wrist_l.mp4",
+        "cam_wrist_r": "episodes/SE3Labs/recording_2026-08-30_05-04-02/cam_wrist_r.mp4"
+      },
+      "episode_id": "recording_2026-08-30_05-04-02",
+      "language_instruction": "Use both arms to place the red square, yellow rectangular, and blue square blocks in their matching target zones, then return the arms home.",
+      "operator": "Operator-1",
+      "annotators": [
+        "Operator-1"
+      ],
+      "robot_name": "YAM",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:40:42.428795+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-083",
+      "dataset_repo": "OopsieData-Submissions/SE3Labs",
+      "lab_id": "SE3Labs",
+      "repo_path": "recording_2026-09-29_01-02-12/recording_2026-09-29_01-02-12.h5",
+      "bundle_path": "episodes/SE3Labs/recording_2026-09-29_01-02-12/recording_2026-09-29_01-02-12.h5",
+      "video_files": {
+        "cam_chest": "episodes/SE3Labs/recording_2026-09-29_01-02-12/cam_chest.mp4",
+        "cam_wrist_l": "episodes/SE3Labs/recording_2026-09-29_01-02-12/cam_wrist_l.mp4",
+        "cam_wrist_r": "episodes/SE3Labs/recording_2026-09-29_01-02-12/cam_wrist_r.mp4"
+      },
+      "episode_id": "recording_2026-09-29_01-02-12",
+      "language_instruction": "Select two square LEGO bricks of the same color from the mixed-color group and stack one directly on top of the other.",
+      "operator": "Operator-2",
+      "annotators": [
+        "Operator-2"
+      ],
+      "robot_name": "YAM",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:43:38.539572+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-084",
+      "dataset_repo": "OopsieData-Submissions/SE3Labs",
+      "lab_id": "SE3Labs",
+      "repo_path": "recording_2026-08-31_07-29-16/recording_2026-08-31_07-29-16.h5",
+      "bundle_path": "episodes/SE3Labs/recording_2026-08-31_07-29-16/recording_2026-08-31_07-29-16.h5",
+      "video_files": {
+        "cam_chest": "episodes/SE3Labs/recording_2026-08-31_07-29-16/cam_chest.mp4",
+        "cam_wrist_l": "episodes/SE3Labs/recording_2026-08-31_07-29-16/cam_wrist_l.mp4",
+        "cam_wrist_r": "episodes/SE3Labs/recording_2026-08-31_07-29-16/cam_wrist_r.mp4"
+      },
+      "episode_id": "recording_2026-08-31_07-29-16",
+      "language_instruction": "Arrange the red, blue and green square blocks to match the displayed template, including their positions, relative order, and orientations.",
+      "operator": "Operator-1",
+      "annotators": [
+        "Operator-1"
+      ],
+      "robot_name": "YAM",
+      "qa_notes": "not sure what \"displayed template is\"",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:42:03.015423+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-085",
+      "dataset_repo": "OopsieData-Submissions/SE3Labs",
+      "lab_id": "SE3Labs",
+      "repo_path": "se3_labs_yam_2_teleop_TELEOP-4-2_20261005-081143/se3_labs_yam_2_teleop_TELEOP-4-2_20261005-081143.h5",
+      "bundle_path": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-4-2_20261005-081143/se3_labs_yam_2_teleop_TELEOP-4-2_20261005-081143.h5",
+      "video_files": {
+        "cam_chest": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-4-2_20261005-081143/cam_chest.mp4",
+        "cam_chest_ir": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-4-2_20261005-081143/cam_chest_ir.mp4",
+        "cam_wrist_l": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-4-2_20261005-081143/cam_wrist_l.mp4",
+        "cam_wrist_l_ir": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-4-2_20261005-081143/cam_wrist_l_ir.mp4",
+        "cam_wrist_r": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-4-2_20261005-081143/cam_wrist_r.mp4",
+        "cam_wrist_r_ir": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-4-2_20261005-081143/cam_wrist_r_ir.mp4"
+      },
+      "episode_id": "se3_labs_yam_2_teleop_TELEOP-4-2_20261005-081143",
+      "language_instruction": "Pick up the orange-capped transparent tube from the table and place it upright in the second usable circular tube slot from the left in the orange rack.",
+      "operator": "Operator-2",
+      "annotators": [
+        "Operator-2"
+      ],
+      "robot_name": "YAM",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:44:10.893309+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-086",
+      "dataset_repo": "OopsieData-Submissions/SE3Labs",
+      "lab_id": "SE3Labs",
+      "repo_path": "recording_2026-08-30_04-37-06/recording_2026-08-30_04-37-06.h5",
+      "bundle_path": "episodes/SE3Labs/recording_2026-08-30_04-37-06/recording_2026-08-30_04-37-06.h5",
+      "video_files": {
+        "cam_chest": "episodes/SE3Labs/recording_2026-08-30_04-37-06/cam_chest.mp4",
+        "cam_wrist_l": "episodes/SE3Labs/recording_2026-08-30_04-37-06/cam_wrist_l.mp4",
+        "cam_wrist_r": "episodes/SE3Labs/recording_2026-08-30_04-37-06/cam_wrist_r.mp4"
+      },
+      "episode_id": "recording_2026-08-30_04-37-06",
+      "language_instruction": "Use both arms to pick up the red and purple square blocks and place each fully inside its corresponding target zone.",
+      "operator": "Operator-1",
+      "annotators": [
+        "Operator-1"
+      ],
+      "robot_name": "YAM",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:40:22.935767+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-087",
+      "dataset_repo": "OopsieData-Submissions/SE3Labs",
+      "lab_id": "SE3Labs",
+      "repo_path": "recording_2026-09-25_20-53-29/recording_2026-09-25_20-53-29.h5",
+      "bundle_path": "episodes/SE3Labs/recording_2026-09-25_20-53-29/recording_2026-09-25_20-53-29.h5",
+      "video_files": {
+        "cam_chest": "episodes/SE3Labs/recording_2026-09-25_20-53-29/cam_chest.mp4",
+        "cam_wrist_l": "episodes/SE3Labs/recording_2026-09-25_20-53-29/cam_wrist_l.mp4",
+        "cam_wrist_r": "episodes/SE3Labs/recording_2026-09-25_20-53-29/cam_wrist_r.mp4"
+      },
+      "episode_id": "recording_2026-09-25_20-53-29",
+      "language_instruction": "Use both arms to build a four-block LEGO tower ordered red, blue, red, blue from bottom to top, then release it to stand unsupported.",
+      "operator": "Operator-2",
+      "annotators": [
+        "Operator-2"
+      ],
+      "robot_name": "YAM",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:43:24.422257+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-088",
+      "dataset_repo": "OopsieData-Submissions/SE3Labs",
+      "lab_id": "SE3Labs",
+      "repo_path": "recording_2026-08-31_23-35-51/recording_2026-08-31_23-35-51.h5",
+      "bundle_path": "episodes/SE3Labs/recording_2026-08-31_23-35-51/recording_2026-08-31_23-35-51.h5",
+      "video_files": {
+        "cam_chest": "episodes/SE3Labs/recording_2026-08-31_23-35-51/cam_chest.mp4",
+        "cam_wrist_l": "episodes/SE3Labs/recording_2026-08-31_23-35-51/cam_wrist_l.mp4",
+        "cam_wrist_r": "episodes/SE3Labs/recording_2026-08-31_23-35-51/cam_wrist_r.mp4"
+      },
+      "episode_id": "recording_2026-08-31_23-35-51",
+      "language_instruction": "Use both arms to arrange the red, purple and blue square blocks in the fixed goal configuration, matching their target positions and orientations.",
+      "operator": "Operator-1",
+      "annotators": [
+        "Operator-1"
+      ],
+      "robot_name": "YAM",
+      "qa_notes": "not sure what the \"fixed goal configuration\" mean in the task instruction",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:42:25.449175+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-089",
+      "dataset_repo": "OopsieData-Submissions/SE3Labs",
+      "lab_id": "SE3Labs",
+      "repo_path": "se3_labs_yam_2_teleop_TELEOP-6-6_20261005-104805/se3_labs_yam_2_teleop_TELEOP-6-6_20261005-104805.h5",
+      "bundle_path": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-6-6_20261005-104805/se3_labs_yam_2_teleop_TELEOP-6-6_20261005-104805.h5",
+      "video_files": {
+        "cam_chest": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-6-6_20261005-104805/cam_chest.mp4",
+        "cam_chest_ir": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-6-6_20261005-104805/cam_chest_ir.mp4",
+        "cam_wrist_l": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-6-6_20261005-104805/cam_wrist_l.mp4",
+        "cam_wrist_l_ir": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-6-6_20261005-104805/cam_wrist_l_ir.mp4",
+        "cam_wrist_r": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-6-6_20261005-104805/cam_wrist_r.mp4",
+        "cam_wrist_r_ir": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-6-6_20261005-104805/cam_wrist_r_ir.mp4"
+      },
+      "episode_id": "se3_labs_yam_2_teleop_TELEOP-6-6_20261005-104805",
+      "language_instruction": "Remove the light-blue-bulb dropper from the open transparent tube in the first rack slot and gently place it into the designated dropper holder in the orange rack, without touching the other tubes in the rack.",
+      "operator": "Operator-2",
+      "annotators": [
+        "Operator-2"
+      ],
+      "robot_name": "YAM",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:44:55.292470+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-090",
+      "dataset_repo": "OopsieData-Submissions/SE3Labs",
+      "lab_id": "SE3Labs",
+      "repo_path": "recording_2026-08-30_05-57-44/recording_2026-08-30_05-57-44.h5",
+      "bundle_path": "episodes/SE3Labs/recording_2026-08-30_05-57-44/recording_2026-08-30_05-57-44.h5",
+      "video_files": {
+        "cam_chest": "episodes/SE3Labs/recording_2026-08-30_05-57-44/cam_chest.mp4",
+        "cam_wrist_l": "episodes/SE3Labs/recording_2026-08-30_05-57-44/cam_wrist_l.mp4",
+        "cam_wrist_r": "episodes/SE3Labs/recording_2026-08-30_05-57-44/cam_wrist_r.mp4"
+      },
+      "episode_id": "recording_2026-08-30_05-57-44",
+      "language_instruction": "Pick up the green sloped block, rotate it to the indicated target orientation, and place it fully inside the target outline.",
+      "operator": "Operator-1",
+      "annotators": [
+        "Operator-1"
+      ],
+      "robot_name": "YAM",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:40:55.421336+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-091",
+      "dataset_repo": "OopsieData-Submissions/SE3Labs",
+      "lab_id": "SE3Labs",
+      "repo_path": "se3_labs_yam_2_teleop_TELEOP-4-5_20261003-220444/se3_labs_yam_2_teleop_TELEOP-4-5_20261003-220444.h5",
+      "bundle_path": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-4-5_20261003-220444/se3_labs_yam_2_teleop_TELEOP-4-5_20261003-220444.h5",
+      "video_files": {
+        "cam_chest": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-4-5_20261003-220444/cam_chest.mp4",
+        "cam_chest_ir": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-4-5_20261003-220444/cam_chest_ir.mp4",
+        "cam_wrist_l": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-4-5_20261003-220444/cam_wrist_l.mp4",
+        "cam_wrist_l_ir": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-4-5_20261003-220444/cam_wrist_l_ir.mp4",
+        "cam_wrist_r": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-4-5_20261003-220444/cam_wrist_r.mp4",
+        "cam_wrist_r_ir": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-4-5_20261003-220444/cam_wrist_r_ir.mp4"
+      },
+      "episode_id": "se3_labs_yam_2_teleop_TELEOP-4-5_20261003-220444",
+      "language_instruction": "Pick up the orange-capped transparent tube from the table and place it upright in the fifth usable circular tube slot from the left in the orange rack.",
+      "operator": "Operator-2",
+      "annotators": [
+        "Operator-2"
+      ],
+      "robot_name": "YAM",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:44:16.546470+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-092",
+      "dataset_repo": "OopsieData-Submissions/SE3Labs",
+      "lab_id": "SE3Labs",
+      "repo_path": "recording_2026-08-30_03-56-49/recording_2026-08-30_03-56-49.h5",
+      "bundle_path": "episodes/SE3Labs/recording_2026-08-30_03-56-49/recording_2026-08-30_03-56-49.h5",
+      "video_files": {
+        "cam_chest": "episodes/SE3Labs/recording_2026-08-30_03-56-49/cam_chest.mp4",
+        "cam_wrist_l": "episodes/SE3Labs/recording_2026-08-30_03-56-49/cam_wrist_l.mp4",
+        "cam_wrist_r": "episodes/SE3Labs/recording_2026-08-30_03-56-49/cam_wrist_r.mp4"
+      },
+      "episode_id": "recording_2026-08-30_03-56-49",
+      "language_instruction": "Pick up the red square block with the assigned arm and place it fully inside the designated target zone, then return the arms home.",
+      "operator": "Operator-1",
+      "annotators": [
+        "Operator-1"
+      ],
+      "robot_name": "YAM",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:40:16.944379+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-093",
+      "dataset_repo": "OopsieData-Submissions/SE3Labs",
+      "lab_id": "SE3Labs",
+      "repo_path": "recording_2026-09-30_22-31-01/recording_2026-09-30_22-31-01.h5",
+      "bundle_path": "episodes/SE3Labs/recording_2026-09-30_22-31-01/recording_2026-09-30_22-31-01.h5",
+      "video_files": {
+        "cam_chest": "episodes/SE3Labs/recording_2026-09-30_22-31-01/cam_chest.mp4",
+        "cam_wrist_l": "episodes/SE3Labs/recording_2026-09-30_22-31-01/cam_wrist_l.mp4",
+        "cam_wrist_r": "episodes/SE3Labs/recording_2026-09-30_22-31-01/cam_wrist_r.mp4"
+      },
+      "episode_id": "recording_2026-09-30_22-31-01",
+      "language_instruction": "Copy the reference shape using LEGO bricks.",
+      "operator": "Operator-2",
+      "annotators": [
+        "Operator-2"
+      ],
+      "robot_name": "YAM",
+      "qa_notes": "not sure what the reference shape is for this task.",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:43:55.279437+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-094",
+      "dataset_repo": "OopsieData-Submissions/SE3Labs",
+      "lab_id": "SE3Labs",
+      "repo_path": "recording_2026-08-31_23-57-46/recording_2026-08-31_23-57-46.h5",
+      "bundle_path": "episodes/SE3Labs/recording_2026-08-31_23-57-46/recording_2026-08-31_23-57-46.h5",
+      "video_files": {
+        "cam_chest": "episodes/SE3Labs/recording_2026-08-31_23-57-46/cam_chest.mp4",
+        "cam_wrist_l": "episodes/SE3Labs/recording_2026-08-31_23-57-46/cam_wrist_l.mp4",
+        "cam_wrist_r": "episodes/SE3Labs/recording_2026-08-31_23-57-46/cam_wrist_r.mp4"
+      },
+      "episode_id": "recording_2026-08-31_23-57-46",
+      "language_instruction": "Regrasp or reposition the green sloped piece as needed to complete its assigned pick-and-place goal without manual intervention.",
+      "operator": "Operator-1",
+      "annotators": [
+        "Operator-1"
+      ],
+      "robot_name": "YAM",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:43:01.681433+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-095",
+      "dataset_repo": "OopsieData-Submissions/SE3Labs",
+      "lab_id": "SE3Labs",
+      "repo_path": "recording_2026-10-01_23-36-28/recording_2026-10-01_23-36-28.h5",
+      "bundle_path": "episodes/SE3Labs/recording_2026-10-01_23-36-28/recording_2026-10-01_23-36-28.h5",
+      "video_files": {
+        "cam_chest": "episodes/SE3Labs/recording_2026-10-01_23-36-28/cam_chest.mp4",
+        "cam_wrist_l": "episodes/SE3Labs/recording_2026-10-01_23-36-28/cam_wrist_l.mp4",
+        "cam_wrist_r": "episodes/SE3Labs/recording_2026-10-01_23-36-28/cam_wrist_r.mp4"
+      },
+      "episode_id": "recording_2026-10-01_23-36-28",
+      "language_instruction": "Add a third LEGO brick to the existing assembly.",
+      "operator": "Operator-2",
+      "annotators": [
+        "Operator-2"
+      ],
+      "robot_name": "YAM",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:44:04.094575+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-096",
+      "dataset_repo": "OopsieData-Submissions/SE3Labs",
+      "lab_id": "SE3Labs",
+      "repo_path": "recording_2026-08-30_06-56-54/recording_2026-08-30_06-56-54.h5",
+      "bundle_path": "episodes/SE3Labs/recording_2026-08-30_06-56-54/recording_2026-08-30_06-56-54.h5",
+      "video_files": {
+        "cam_chest": "episodes/SE3Labs/recording_2026-08-30_06-56-54/cam_chest.mp4",
+        "cam_wrist_l": "episodes/SE3Labs/recording_2026-08-30_06-56-54/cam_wrist_l.mp4",
+        "cam_wrist_r": "episodes/SE3Labs/recording_2026-08-30_06-56-54/cam_wrist_r.mp4"
+      },
+      "episode_id": "recording_2026-08-30_06-56-54",
+      "language_instruction": "Use both arms to swap the green and purple square blocks into opposite-side target zones without contact, passing one piece above the other.",
+      "operator": "Operator-1",
+      "annotators": [
+        "Operator-1"
+      ],
+      "robot_name": "YAM",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:41:08.632493+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-097",
+      "dataset_repo": "OopsieData-Submissions/SE3Labs",
+      "lab_id": "SE3Labs",
+      "repo_path": "se3_labs_yam_2_teleop_TELEOP-5-9_20261005-094351/se3_labs_yam_2_teleop_TELEOP-5-9_20261005-094351.h5",
+      "bundle_path": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-5-9_20261005-094351/se3_labs_yam_2_teleop_TELEOP-5-9_20261005-094351.h5",
+      "video_files": {
+        "cam_chest": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-5-9_20261005-094351/cam_chest.mp4",
+        "cam_chest_ir": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-5-9_20261005-094351/cam_chest_ir.mp4",
+        "cam_wrist_l": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-5-9_20261005-094351/cam_wrist_l.mp4",
+        "cam_wrist_l_ir": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-5-9_20261005-094351/cam_wrist_l_ir.mp4",
+        "cam_wrist_r": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-5-9_20261005-094351/cam_wrist_r.mp4",
+        "cam_wrist_r_ir": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-5-9_20261005-094351/cam_wrist_r_ir.mp4"
+      },
+      "episode_id": "se3_labs_yam_2_teleop_TELEOP-5-9_20261005-094351",
+      "language_instruction": "Pick up the light-blue-bulb dropper, align it with the open transparent tube in the fourth rack slot, and gently place it inside the tube, without touching the other tubes in the rack.",
+      "operator": "Operator-2",
+      "annotators": [
+        "Operator-2"
+      ],
+      "robot_name": "YAM",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:44:26.445755+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-098",
+      "dataset_repo": "OopsieData-Submissions/SE3Labs",
+      "lab_id": "SE3Labs",
+      "repo_path": "recording_2026-09-09_05-11-27/recording_2026-09-09_05-11-27.h5",
+      "bundle_path": "episodes/SE3Labs/recording_2026-09-09_05-11-27/recording_2026-09-09_05-11-27.h5",
+      "video_files": {
+        "cam_chest": "episodes/SE3Labs/recording_2026-09-09_05-11-27/cam_chest.mp4",
+        "cam_wrist_l": "episodes/SE3Labs/recording_2026-09-09_05-11-27/cam_wrist_l.mp4",
+        "cam_wrist_r": "episodes/SE3Labs/recording_2026-09-09_05-11-27/cam_wrist_r.mp4"
+      },
+      "episode_id": "recording_2026-09-09_05-11-27",
+      "language_instruction": "Sort the red and blue square LEGO bricks into separate trays by color.",
+      "operator": "Operator-1",
+      "annotators": [
+        "Operator-1"
+      ],
+      "robot_name": "YAM",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:43:13.436901+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-099",
+      "dataset_repo": "OopsieData-Submissions/SE3Labs",
+      "lab_id": "SE3Labs",
+      "repo_path": "se3_labs_yam_2_teleop_TELEOP-7-4_20261003-234156/se3_labs_yam_2_teleop_TELEOP-7-4_20261003-234156.h5",
+      "bundle_path": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-7-4_20261003-234156/se3_labs_yam_2_teleop_TELEOP-7-4_20261003-234156.h5",
+      "video_files": {
+        "cam_chest": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-7-4_20261003-234156/cam_chest.mp4",
+        "cam_chest_ir": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-7-4_20261003-234156/cam_chest_ir.mp4",
+        "cam_wrist_l": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-7-4_20261003-234156/cam_wrist_l.mp4",
+        "cam_wrist_l_ir": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-7-4_20261003-234156/cam_wrist_l_ir.mp4",
+        "cam_wrist_r": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-7-4_20261003-234156/cam_wrist_r.mp4",
+        "cam_wrist_r_ir": "episodes/SE3Labs/se3_labs_yam_2_teleop_TELEOP-7-4_20261003-234156/cam_wrist_r_ir.mp4"
+      },
+      "episode_id": "se3_labs_yam_2_teleop_TELEOP-7-4_20261003-234156",
+      "language_instruction": "Place B and D in the red box and A and C in the blue box.",
+      "operator": "Operator-2",
+      "annotators": [
+        "Operator-2"
+      ],
+      "robot_name": "YAM",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:45:02.772143+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_07-100",
+      "dataset_repo": "OopsieData-Submissions/SE3Labs",
+      "lab_id": "SE3Labs",
+      "repo_path": "recording_2026-08-30_07-04-37/recording_2026-08-30_07-04-37.h5",
+      "bundle_path": "episodes/SE3Labs/recording_2026-08-30_07-04-37/recording_2026-08-30_07-04-37.h5",
+      "video_files": {
+        "cam_chest": "episodes/SE3Labs/recording_2026-08-30_07-04-37/cam_chest.mp4",
+        "cam_wrist_l": "episodes/SE3Labs/recording_2026-08-30_07-04-37/cam_wrist_l.mp4",
+        "cam_wrist_r": "episodes/SE3Labs/recording_2026-08-30_07-04-37/cam_wrist_r.mp4"
+      },
+      "episode_id": "recording_2026-08-30_07-04-37",
+      "language_instruction": "Build a stable two-piece stack from the green and purple square blocks, hold it for two seconds, then separate the pieces into their destination zones.",
+      "operator": "Operator-1",
+      "annotators": [
+        "Operator-1"
+      ],
+      "robot_name": "YAM",
+      "qa_notes": "ok",
+      "qa_reviewer": "Carl",
+      "qa_updated_at": "2026-10-09T00:41:16.921549+00:00"
+    }
+  ]
+}

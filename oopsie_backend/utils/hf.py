@@ -98,6 +98,20 @@ def list_dataset_repos_for_org(author: str, token: str | None) -> list[str]:
     return sorted(set(out))
 
 
+def list_dataset_created_dates_for_org(author: str, token: str | None) -> dict[str, str | None]:
+    """Return ``{repo_id: created_at}`` (ISO 8601 UTC, or ``None``) for every dataset
+    repo owned by ``author``, straight from the Hub's repo metadata."""
+    api = HfApi(token=token)
+    out: dict[str, str | None] = {}
+    for info in api.list_datasets(author=author, token=token):
+        rid = getattr(info, "id", None) or getattr(info, "dataset_id", None)
+        if not rid:
+            continue
+        created = getattr(info, "created_at", None)
+        out[str(rid)] = created.isoformat().replace("+00:00", "Z") if created else None
+    return out
+
+
 def list_repo_files(repo: str, token: str | None, repo_type: str) -> list[str]:
     """Return every repo-relative file path."""
     api = HfApi(token=token)
@@ -121,3 +135,12 @@ def list_repo_files(repo: str, token: str | None, repo_type: str) -> list[str]:
 def list_h5_files(repo: str, token: str | None, repo_type: str) -> list[str]:
     """Return every ``.h5`` repo-relative path."""
     return [p for p in list_repo_files(repo, token, repo_type) if p.lower().endswith(".h5")]
+
+
+def dataset_repo_size(repo_id: str, token: str | None) -> tuple[int, int]:
+    """Return ``(total_bytes, n_h5_files)`` for a dataset repo."""
+    info = HfApi(token=token).dataset_info(repo_id, files_metadata=True)
+    siblings = info.siblings or []
+    total = sum(s.size or 0 for s in siblings)
+    n_h5 = sum(1 for s in siblings if s.rfilename.lower().endswith(".h5"))
+    return total, n_h5

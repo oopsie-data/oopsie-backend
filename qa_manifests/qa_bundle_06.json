@@ -1,0 +1,2181 @@
+{
+  "bundle_id": "qa_bundle_06",
+  "created_at": "2026-10-07T19:21:12Z",
+  "seed": 0,
+  "reviewer": "maxrudolph",
+  "labs": [
+    "OopsieData-Submissions/NUS_CLeAR",
+    "OopsieData-Submissions/NYU_AI4CE",
+    "OopsieData-Submissions/NYU_Clark",
+    "OopsieData-Submissions/Northstar",
+    "OopsieData-Submissions/PSU_FMC"
+  ],
+  "episodes": [
+    {
+      "qa_id": "qa_bundle_06-001",
+      "dataset_repo": "OopsieData-Submissions/NUS_CLeAR",
+      "lab_id": "NUS_CLeAR",
+      "repo_path": "20260519-144837_real_i03.h5",
+      "bundle_path": "episodes/NUS_CLeAR/20260519-144837_real_i03.h5",
+      "video_files": {
+        "top": "episodes/NUS_CLeAR/videos/20260519-144837_real_i03_top.mp4"
+      },
+      "episode_id": "20260519-144837_real_i03",
+      "language_instruction": "Push the drink bottle to the goal pose on the table",
+      "operator": "yuxuehui",
+      "annotators": [
+        "yuxuehui"
+      ],
+      "robot_name": "franka_fr3_left_panda_right",
+      "qa_notes": "\"Description: Push 4 of 7 in an object-centric push-planner run (left arm): object ended 2.6 cm from the push subgoal.\" is not clear. Unsure what \"goal pose\" in the description is.",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:12:18.623870+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-002",
+      "dataset_repo": "OopsieData-Submissions/NUS_CLeAR",
+      "lab_id": "NUS_CLeAR",
+      "repo_path": "put_banana_into_yellow_box/20261004_172325/episode.h5",
+      "bundle_path": "episodes/NUS_CLeAR/put_banana_into_yellow_box/20261004_172325/episode.h5",
+      "video_files": {
+        "front_view": "episodes/NUS_CLeAR/put_banana_into_yellow_box/20261004_172325/front_view.mp4",
+        "side_view": "episodes/NUS_CLeAR/put_banana_into_yellow_box/20261004_172325/side_view.mp4",
+        "wrist_view": "episodes/NUS_CLeAR/put_banana_into_yellow_box/20261004_172325/wrist_view.mp4"
+      },
+      "episode_id": "9bd1c891-fc1a-44ca-908a-ccf15bd2c0ab",
+      "language_instruction": "put the banana into the yellow box.",
+      "operator": "haozhedu",
+      "annotators": [
+        "haozhedu"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "it is a cardboard box, not a yellow box. Seems like the video cuts off short.",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:03:09.795463+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-003",
+      "dataset_repo": "OopsieData-Submissions/NUS_CLeAR",
+      "lab_id": "NUS_CLeAR",
+      "repo_path": "put_orange_into_yellow_box/session_017/episode.h5",
+      "bundle_path": "episodes/NUS_CLeAR/put_orange_into_yellow_box/session_017/episode.h5",
+      "video_files": {
+        "front_view": "episodes/NUS_CLeAR/put_orange_into_yellow_box/session_017/front_view.mp4",
+        "side_view": "episodes/NUS_CLeAR/put_orange_into_yellow_box/session_017/side_view.mp4",
+        "wrist_view": "episodes/NUS_CLeAR/put_orange_into_yellow_box/session_017/wrist_view.mp4"
+      },
+      "episode_id": "5541d271-8a49-4daa-9c72-969fae4ef7cc",
+      "language_instruction": "put the orange into the yellow box.",
+      "operator": "haozhedu",
+      "annotators": [
+        "haozhedu"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "box is not yellow, it is cardboard. Otherwise ok.",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:03:38.278262+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-004",
+      "dataset_repo": "OopsieData-Submissions/NUS_CLeAR",
+      "lab_id": "NUS_CLeAR",
+      "repo_path": "20260522-104055_real_i02.h5",
+      "bundle_path": "episodes/NUS_CLeAR/20260522-104055_real_i02.h5",
+      "video_files": {
+        "top": "episodes/NUS_CLeAR/videos/20260522-104055_real_i02_top.mp4"
+      },
+      "episode_id": "20260522-104055_real_i02",
+      "language_instruction": "Push the white chair to the goal pose on the table",
+      "operator": "yuxuehui",
+      "annotators": [
+        "yuxuehui"
+      ],
+      "robot_name": "franka_fr3_left_panda_right",
+      "qa_notes": "Unsure what the goal pose is -> unsure of failure.",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:15:19.600093+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-005",
+      "dataset_repo": "OopsieData-Submissions/NUS_CLeAR",
+      "lab_id": "NUS_CLeAR",
+      "repo_path": "20260521-160557_real_i09.h5",
+      "bundle_path": "episodes/NUS_CLeAR/20260521-160557_real_i09.h5",
+      "video_files": {
+        "top": "episodes/NUS_CLeAR/videos/20260521-160557_real_i09_top.mp4"
+      },
+      "episode_id": "20260521-160557_real_i09",
+      "language_instruction": "Push the roll of masking tape to the goal pose on the table",
+      "operator": "yuxuehui",
+      "annotators": [
+        "yuxuehui"
+      ],
+      "robot_name": "franka_fr3_left_panda_right",
+      "qa_notes": "Task description says \"goal pose\" but unclear what that pose is. ",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:14:16.087509+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-006",
+      "dataset_repo": "OopsieData-Submissions/NUS_CLeAR",
+      "lab_id": "NUS_CLeAR",
+      "repo_path": "repick_cube/session_N=4_036/episode.h5",
+      "bundle_path": "episodes/NUS_CLeAR/repick_cube/session_N=4_036/episode.h5",
+      "video_files": {
+        "front_view": "episodes/NUS_CLeAR/repick_cube/session_N=4_036/front_view.mp4",
+        "wrist_view": "episodes/NUS_CLeAR/repick_cube/session_N=4_036/wrist_view.mp4"
+      },
+      "episode_id": "284bf445-e520-4ac0-ada4-a0f064c53989",
+      "language_instruction": "watch the video carefully, then pick up all the cubes that have been picked up before.",
+      "operator": "haozhedu",
+      "annotators": [
+        "haozhedu"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "\"watch the video carefully\" is in the task description. Unsure what the video is.",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:08:59.890081+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-007",
+      "dataset_repo": "OopsieData-Submissions/NUS_CLeAR",
+      "lab_id": "NUS_CLeAR",
+      "repo_path": "put_tomato_into_blue_bowl/session_095/episode.h5",
+      "bundle_path": "episodes/NUS_CLeAR/put_tomato_into_blue_bowl/session_095/episode.h5",
+      "video_files": {
+        "front_view": "episodes/NUS_CLeAR/put_tomato_into_blue_bowl/session_095/front_view.mp4",
+        "side_view": "episodes/NUS_CLeAR/put_tomato_into_blue_bowl/session_095/side_view.mp4",
+        "wrist_view": "episodes/NUS_CLeAR/put_tomato_into_blue_bowl/session_095/wrist_view.mp4"
+      },
+      "episode_id": "96387f91-fbb2-4ddb-a0ee-c433ab054f23",
+      "language_instruction": "put the tomato into the blue bowl.",
+      "operator": "haozhedu",
+      "annotators": [
+        "haozhedu"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "partial failure, or the video cuts off too soon.",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:07:53.172599+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-008",
+      "dataset_repo": "OopsieData-Submissions/NUS_CLeAR",
+      "lab_id": "NUS_CLeAR",
+      "repo_path": "20260522-214402_real_i00.h5",
+      "bundle_path": "episodes/NUS_CLeAR/20260522-214402_real_i00.h5",
+      "video_files": {
+        "top": "episodes/NUS_CLeAR/videos/20260522-214402_real_i00_top.mp4"
+      },
+      "episode_id": "20260522-214402_real_i00",
+      "language_instruction": "Push the toy hammer to the goal pose on the table",
+      "operator": "yuxuehui",
+      "annotators": [
+        "yuxuehui"
+      ],
+      "robot_name": "franka_fr3_left_panda_right",
+      "qa_notes": "unsure what goal pose actually is.",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:17:54.990963+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-009",
+      "dataset_repo": "OopsieData-Submissions/NUS_CLeAR",
+      "lab_id": "NUS_CLeAR",
+      "repo_path": "track_cube/session_N=3_002/episode.h5",
+      "bundle_path": "episodes/NUS_CLeAR/track_cube/session_N=3_002/episode.h5",
+      "video_files": {
+        "front_view": "episodes/NUS_CLeAR/track_cube/session_N=3_002/front_view.mp4",
+        "wrist_view": "episodes/NUS_CLeAR/track_cube/session_N=3_002/wrist_view.mp4"
+      },
+      "episode_id": "8bd934e0-86f9-4df6-b5e0-d067fae2eba9",
+      "language_instruction": "watch the video carefully, then pick up the cup that hides the yellow cube.",
+      "operator": "haozhedu",
+      "annotators": [
+        "haozhedu"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "\"watch the video carefully\" is in the task description. Otherwise ok.",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:11:05.906338+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-010",
+      "dataset_repo": "OopsieData-Submissions/NUS_CLeAR",
+      "lab_id": "NUS_CLeAR",
+      "repo_path": "draw_pattern/session_N=3_012/episode.h5",
+      "bundle_path": "episodes/NUS_CLeAR/draw_pattern/session_N=3_012/episode.h5",
+      "video_files": {
+        "front_view": "episodes/NUS_CLeAR/draw_pattern/session_N=3_012/front_view.mp4",
+        "wrist_view": "episodes/NUS_CLeAR/draw_pattern/session_N=3_012/wrist_view.mp4"
+      },
+      "episode_id": "b8998123-769d-4c18-b72d-62705072c1e7",
+      "language_instruction": "watch the video carefully, then replicate the same path.",
+      "operator": "haozhedu",
+      "annotators": [
+        "haozhedu"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "task description is kind of weird \"watch the video carefully, then replicate the same path.\"",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T21:59:40.425249+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-011",
+      "dataset_repo": "OopsieData-Submissions/NUS_CLeAR",
+      "lab_id": "NUS_CLeAR",
+      "repo_path": "stack_cube_on_cube/session_006/episode.h5",
+      "bundle_path": "episodes/NUS_CLeAR/stack_cube_on_cube/session_006/episode.h5",
+      "video_files": {
+        "front_view": "episodes/NUS_CLeAR/stack_cube_on_cube/session_006/front_view.mp4",
+        "side_view": "episodes/NUS_CLeAR/stack_cube_on_cube/session_006/side_view.mp4",
+        "wrist_view": "episodes/NUS_CLeAR/stack_cube_on_cube/session_006/wrist_view.mp4"
+      },
+      "episode_id": "e040c1c7-9c20-40d1-84fe-36d9080df100",
+      "language_instruction": "pick up one cube and stack it on top of the other cube.",
+      "operator": "haozhedu",
+      "annotators": [
+        "haozhedu"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:09:24.196188+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-012",
+      "dataset_repo": "OopsieData-Submissions/NUS_CLeAR",
+      "lab_id": "NUS_CLeAR",
+      "repo_path": "track_cube/session_N=3_018/episode.h5",
+      "bundle_path": "episodes/NUS_CLeAR/track_cube/session_N=3_018/episode.h5",
+      "video_files": {
+        "front_view": "episodes/NUS_CLeAR/track_cube/session_N=3_018/front_view.mp4",
+        "wrist_view": "episodes/NUS_CLeAR/track_cube/session_N=3_018/wrist_view.mp4"
+      },
+      "episode_id": "66c8d705-1086-4ae4-bfd6-0d581aa89080",
+      "language_instruction": "watch the video carefully, then pick up the cup that hides the red cube.",
+      "operator": "haozhedu",
+      "annotators": [
+        "haozhedu"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "Failure is correct. \"watch the video carefully\" is in the task description.",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:11:27.393608+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-013",
+      "dataset_repo": "OopsieData-Submissions/NUS_CLeAR",
+      "lab_id": "NUS_CLeAR",
+      "repo_path": "pick_and_place_cube/20260927_214526/episode.h5",
+      "bundle_path": "episodes/NUS_CLeAR/pick_and_place_cube/20260927_214526/episode.h5",
+      "video_files": {
+        "front_view": "episodes/NUS_CLeAR/pick_and_place_cube/20260927_214526/front_view.mp4",
+        "side_view": "episodes/NUS_CLeAR/pick_and_place_cube/20260927_214526/side_view.mp4",
+        "wrist_view": "episodes/NUS_CLeAR/pick_and_place_cube/20260927_214526/wrist_view.mp4"
+      },
+      "episode_id": "569f45e6-6848-4cf2-aa24-c7f285ce2707",
+      "language_instruction": "pick up the cube on the table and place it down.",
+      "operator": "haozhedu",
+      "annotators": [
+        "haozhedu"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:02:45.543980+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-014",
+      "dataset_repo": "OopsieData-Submissions/NUS_CLeAR",
+      "lab_id": "NUS_CLeAR",
+      "repo_path": "pick_and_place_bottle_once/20260927_170337/episode.h5",
+      "bundle_path": "episodes/NUS_CLeAR/pick_and_place_bottle_once/20260927_170337/episode.h5",
+      "video_files": {
+        "front_view": "episodes/NUS_CLeAR/pick_and_place_bottle_once/20260927_170337/front_view.mp4",
+        "side_view": "episodes/NUS_CLeAR/pick_and_place_bottle_once/20260927_170337/side_view.mp4",
+        "wrist_view": "episodes/NUS_CLeAR/pick_and_place_bottle_once/20260927_170337/wrist_view.mp4"
+      },
+      "episode_id": "f3d69b70-8e31-4a18-b388-9018ebac746d",
+      "language_instruction": "pick up exactly one bottle from the yellow box and place it into the gray basket.",
+      "operator": "haozhedu",
+      "annotators": [
+        "haozhedu"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "Success is slow and looks jerky. it is suboptimal.",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:01:07.554487+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-015",
+      "dataset_repo": "OopsieData-Submissions/NUS_CLeAR",
+      "lab_id": "NUS_CLeAR",
+      "repo_path": "track_cube/session_N=1_005/episode.h5",
+      "bundle_path": "episodes/NUS_CLeAR/track_cube/session_N=1_005/episode.h5",
+      "video_files": {
+        "front_view": "episodes/NUS_CLeAR/track_cube/session_N=1_005/front_view.mp4",
+        "wrist_view": "episodes/NUS_CLeAR/track_cube/session_N=1_005/wrist_view.mp4"
+      },
+      "episode_id": "48810845-2743-4a9a-b34e-e8ece6f0873a",
+      "language_instruction": "watch the video carefully, then pick up the cup that hides the blue cube.",
+      "operator": "haozhedu",
+      "annotators": [
+        "haozhedu"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "\"watch the video carefully\" is in task description, Unsure what video is. Also the term \"cup\" is in the description which doesn't accurately describe the object that's picked up, kind of.",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:10:27.121267+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-016",
+      "dataset_repo": "OopsieData-Submissions/NUS_CLeAR",
+      "lab_id": "NUS_CLeAR",
+      "repo_path": "pick_and_place_bottle_twice/session_N=2_029/episode.h5",
+      "bundle_path": "episodes/NUS_CLeAR/pick_and_place_bottle_twice/session_N=2_029/episode.h5",
+      "video_files": {
+        "front_view": "episodes/NUS_CLeAR/pick_and_place_bottle_twice/session_N=2_029/front_view.mp4",
+        "wrist_view": "episodes/NUS_CLeAR/pick_and_place_bottle_twice/session_N=2_029/wrist_view.mp4"
+      },
+      "episode_id": "5a8f496d-ac5b-49cb-8a89-78974b6f5e90",
+      "language_instruction": "pick two bottles from the basket and place them into the bin.",
+      "operator": "haozhedu",
+      "annotators": [
+        "haozhedu"
+      ],
+      "robot_name": "franka_panda",
+      "qa_notes": "description of the objects seems incorrect. \n\"pick two bottles\" -> only one bottle in scene\n\"from basket\" -> it is from a cardboard box\n\"into bin\" -> I suppose the white thing is a bin..",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:02:12.810841+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-017",
+      "dataset_repo": "OopsieData-Submissions/NUS_CLeAR",
+      "lab_id": "NUS_CLeAR",
+      "repo_path": "20260522-125234_real_i11.h5",
+      "bundle_path": "episodes/NUS_CLeAR/20260522-125234_real_i11.h5",
+      "video_files": {
+        "top": "episodes/NUS_CLeAR/videos/20260522-125234_real_i11_top.mp4"
+      },
+      "episode_id": "20260522-125234_real_i11",
+      "language_instruction": "Push the drink bottle to the goal pose on the table",
+      "operator": "yuxuehui",
+      "annotators": [
+        "yuxuehui"
+      ],
+      "robot_name": "franka_fr3_left_panda_right",
+      "qa_notes": "unsure what goal pose, but robot does not enter scene regardless. ",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:15:55.147014+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-018",
+      "dataset_repo": "OopsieData-Submissions/NUS_CLeAR",
+      "lab_id": "NUS_CLeAR",
+      "repo_path": "20260522-104055_real_i12.h5",
+      "bundle_path": "episodes/NUS_CLeAR/20260522-104055_real_i12.h5",
+      "video_files": {
+        "top": "episodes/NUS_CLeAR/videos/20260522-104055_real_i12_top.mp4"
+      },
+      "episode_id": "20260522-104055_real_i12",
+      "language_instruction": "Push the white chair to the goal pose on the table",
+      "operator": "yuxuehui",
+      "annotators": [
+        "yuxuehui"
+      ],
+      "robot_name": "franka_fr3_left_panda_right",
+      "qa_notes": "Unsure of goal pose, so failure is ambiguous.",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:15:32.486554+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-019",
+      "dataset_repo": "OopsieData-Submissions/NUS_CLeAR",
+      "lab_id": "NUS_CLeAR",
+      "repo_path": "20260522-183927_real_i03.h5",
+      "bundle_path": "episodes/NUS_CLeAR/20260522-183927_real_i03.h5",
+      "video_files": {
+        "top": "episodes/NUS_CLeAR/videos/20260522-183927_real_i03_top.mp4"
+      },
+      "episode_id": "20260522-183927_real_i03",
+      "language_instruction": "Push the roll of masking tape to the goal pose on the table",
+      "operator": "yuxuehui",
+      "annotators": [
+        "yuxuehui"
+      ],
+      "robot_name": "franka_fr3_left_panda_right",
+      "qa_notes": "Unsure what goal pose actually is",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:17:38.349904+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-020",
+      "dataset_repo": "OopsieData-Submissions/NUS_CLeAR",
+      "lab_id": "NUS_CLeAR",
+      "repo_path": "20260521-164432_real_i00.h5",
+      "bundle_path": "episodes/NUS_CLeAR/20260521-164432_real_i00.h5",
+      "video_files": {
+        "top": "episodes/NUS_CLeAR/videos/20260521-164432_real_i00_top.mp4"
+      },
+      "episode_id": "20260521-164432_real_i00",
+      "language_instruction": "Push the toy hammer to the goal pose on the table",
+      "operator": "yuxuehui",
+      "annotators": [
+        "yuxuehui"
+      ],
+      "robot_name": "franka_fr3_left_panda_right",
+      "qa_notes": "Unsure what the goal pose is -> unsure if it is actually failure.",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:14:45.758698+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-021",
+      "dataset_repo": "OopsieData-Submissions/NYU_AI4CE",
+      "lab_id": "NYU_AI4CE",
+      "repo_path": "yor_2729bc903246418382c0e25aa78565d2.h5",
+      "bundle_path": "episodes/NYU_AI4CE/yor_2729bc903246418382c0e25aa78565d2.h5",
+      "video_files": {
+        "head": "episodes/NYU_AI4CE/videos/yor_2729bc903246418382c0e25aa78565d2_head.mp4",
+        "left_wrist": "episodes/NYU_AI4CE/videos/yor_2729bc903246418382c0e25aa78565d2_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_AI4CE/videos/yor_2729bc903246418382c0e25aa78565d2_right_wrist.mp4"
+      },
+      "episode_id": "yor_2729bc903246418382c0e25aa78565d2",
+      "language_instruction": "stack the three cubes into a tower",
+      "operator": "Aditya",
+      "annotators": [
+        "Aditya"
+      ],
+      "robot_name": "yor_agilex_nero",
+      "qa_notes": "human is in video. robot never does anything. ",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:20:11.715493+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-022",
+      "dataset_repo": "OopsieData-Submissions/NYU_AI4CE",
+      "lab_id": "NYU_AI4CE",
+      "repo_path": "yor_480ce80a569e4d52950da86943b0bb47.h5",
+      "bundle_path": "episodes/NYU_AI4CE/yor_480ce80a569e4d52950da86943b0bb47.h5",
+      "video_files": {
+        "head": "episodes/NYU_AI4CE/videos/yor_480ce80a569e4d52950da86943b0bb47_head.mp4",
+        "left_wrist": "episodes/NYU_AI4CE/videos/yor_480ce80a569e4d52950da86943b0bb47_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_AI4CE/videos/yor_480ce80a569e4d52950da86943b0bb47_right_wrist.mp4"
+      },
+      "episode_id": "yor_480ce80a569e4d52950da86943b0bb47",
+      "language_instruction": "pass the red chilli from the left arm to the right arm",
+      "operator": "Aditya",
+      "annotators": [
+        "Aditya"
+      ],
+      "robot_name": "yor_agilex_nero",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:21:00.641770+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-023",
+      "dataset_repo": "OopsieData-Submissions/NYU_AI4CE",
+      "lab_id": "NYU_AI4CE",
+      "repo_path": "yor_1c518576f3b74e52a2142034add0b3ce.h5",
+      "bundle_path": "episodes/NYU_AI4CE/yor_1c518576f3b74e52a2142034add0b3ce.h5",
+      "video_files": {
+        "head": "episodes/NYU_AI4CE/videos/yor_1c518576f3b74e52a2142034add0b3ce_head.mp4",
+        "left_wrist": "episodes/NYU_AI4CE/videos/yor_1c518576f3b74e52a2142034add0b3ce_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_AI4CE/videos/yor_1c518576f3b74e52a2142034add0b3ce_right_wrist.mp4"
+      },
+      "episode_id": "yor_1c518576f3b74e52a2142034add0b3ce",
+      "language_instruction": "clean the plate",
+      "operator": "Aditya",
+      "annotators": [
+        "Aditya"
+      ],
+      "robot_name": "yor_agilex_nero",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:19:41.849996+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-024",
+      "dataset_repo": "OopsieData-Submissions/NYU_AI4CE",
+      "lab_id": "NYU_AI4CE",
+      "repo_path": "yor_61c9570682964a76b5a8c44b8f53f6ed.h5",
+      "bundle_path": "episodes/NYU_AI4CE/yor_61c9570682964a76b5a8c44b8f53f6ed.h5",
+      "video_files": {
+        "head": "episodes/NYU_AI4CE/videos/yor_61c9570682964a76b5a8c44b8f53f6ed_head.mp4",
+        "left_wrist": "episodes/NYU_AI4CE/videos/yor_61c9570682964a76b5a8c44b8f53f6ed_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_AI4CE/videos/yor_61c9570682964a76b5a8c44b8f53f6ed_right_wrist.mp4"
+      },
+      "episode_id": "yor_61c9570682964a76b5a8c44b8f53f6ed",
+      "language_instruction": "sort the items into their containers",
+      "operator": "Aditya",
+      "annotators": [
+        "Aditya"
+      ],
+      "robot_name": "yor_agilex_nero",
+      "qa_notes": "a lot of stationary video in the beginning. ",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:21:54.021663+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-025",
+      "dataset_repo": "OopsieData-Submissions/NYU_AI4CE",
+      "lab_id": "NYU_AI4CE",
+      "repo_path": "yor_a7d148eb56e84fefa59ef4226f8a7adc.h5",
+      "bundle_path": "episodes/NYU_AI4CE/yor_a7d148eb56e84fefa59ef4226f8a7adc.h5",
+      "video_files": {
+        "head": "episodes/NYU_AI4CE/videos/yor_a7d148eb56e84fefa59ef4226f8a7adc_head.mp4",
+        "left_wrist": "episodes/NYU_AI4CE/videos/yor_a7d148eb56e84fefa59ef4226f8a7adc_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_AI4CE/videos/yor_a7d148eb56e84fefa59ef4226f8a7adc_right_wrist.mp4"
+      },
+      "episode_id": "yor_a7d148eb56e84fefa59ef4226f8a7adc",
+      "language_instruction": "place the red chilli in the cup with the right arm",
+      "operator": "Aditya",
+      "annotators": [
+        "Aditya"
+      ],
+      "robot_name": "yor_agilex_nero",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:22:46.127480+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-026",
+      "dataset_repo": "OopsieData-Submissions/NYU_AI4CE",
+      "lab_id": "NYU_AI4CE",
+      "repo_path": "yor_2b4123fcbb68458eaf9bb1cd0df4386e.h5",
+      "bundle_path": "episodes/NYU_AI4CE/yor_2b4123fcbb68458eaf9bb1cd0df4386e.h5",
+      "video_files": {
+        "head": "episodes/NYU_AI4CE/videos/yor_2b4123fcbb68458eaf9bb1cd0df4386e_head.mp4",
+        "left_wrist": "episodes/NYU_AI4CE/videos/yor_2b4123fcbb68458eaf9bb1cd0df4386e_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_AI4CE/videos/yor_2b4123fcbb68458eaf9bb1cd0df4386e_right_wrist.mp4"
+      },
+      "episode_id": "yor_2b4123fcbb68458eaf9bb1cd0df4386e",
+      "language_instruction": "place the red chilli in the cup",
+      "operator": "Aditya",
+      "annotators": [
+        "Aditya"
+      ],
+      "robot_name": "yor_agilex_nero",
+      "qa_notes": "human is present at beginning of video",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:20:35.981501+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-027",
+      "dataset_repo": "OopsieData-Submissions/NYU_AI4CE",
+      "lab_id": "NYU_AI4CE",
+      "repo_path": "yor_993e2140c23b4fe8b0530ed5cb3a597d.h5",
+      "bundle_path": "episodes/NYU_AI4CE/yor_993e2140c23b4fe8b0530ed5cb3a597d.h5",
+      "video_files": {
+        "head": "episodes/NYU_AI4CE/videos/yor_993e2140c23b4fe8b0530ed5cb3a597d_head.mp4",
+        "left_wrist": "episodes/NYU_AI4CE/videos/yor_993e2140c23b4fe8b0530ed5cb3a597d_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_AI4CE/videos/yor_993e2140c23b4fe8b0530ed5cb3a597d_right_wrist.mp4"
+      },
+      "episode_id": "yor_993e2140c23b4fe8b0530ed5cb3a597d",
+      "language_instruction": "uncap the black marker",
+      "operator": "Aditya",
+      "annotators": [
+        "Aditya"
+      ],
+      "robot_name": "yor_agilex_nero",
+      "qa_notes": "video seems to cut early",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:22:36.953453+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-028",
+      "dataset_repo": "OopsieData-Submissions/NYU_AI4CE",
+      "lab_id": "NYU_AI4CE",
+      "repo_path": "yor_19a8c98d09a84485ac761076cfc21d08.h5",
+      "bundle_path": "episodes/NYU_AI4CE/yor_19a8c98d09a84485ac761076cfc21d08.h5",
+      "video_files": {
+        "head": "episodes/NYU_AI4CE/videos/yor_19a8c98d09a84485ac761076cfc21d08_head.mp4",
+        "left_wrist": "episodes/NYU_AI4CE/videos/yor_19a8c98d09a84485ac761076cfc21d08_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_AI4CE/videos/yor_19a8c98d09a84485ac761076cfc21d08_right_wrist.mp4"
+      },
+      "episode_id": "yor_19a8c98d09a84485ac761076cfc21d08",
+      "language_instruction": "hit the yellow cube with the mallet using the left arm",
+      "operator": "Aditya",
+      "annotators": [
+        "Aditya"
+      ],
+      "robot_name": "yor_agilex_nero",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:18:57.170570+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-029",
+      "dataset_repo": "OopsieData-Submissions/NYU_AI4CE",
+      "lab_id": "NYU_AI4CE",
+      "repo_path": "yor_4c94add4a8a245598378ac34745e7961.h5",
+      "bundle_path": "episodes/NYU_AI4CE/yor_4c94add4a8a245598378ac34745e7961.h5",
+      "video_files": {
+        "head": "episodes/NYU_AI4CE/videos/yor_4c94add4a8a245598378ac34745e7961_head.mp4",
+        "left_wrist": "episodes/NYU_AI4CE/videos/yor_4c94add4a8a245598378ac34745e7961_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_AI4CE/videos/yor_4c94add4a8a245598378ac34745e7961_right_wrist.mp4"
+      },
+      "episode_id": "yor_4c94add4a8a245598378ac34745e7961",
+      "language_instruction": "stack the cubes and hit them with the mallet",
+      "operator": "Aditya",
+      "annotators": [
+        "Aditya"
+      ],
+      "robot_name": "yor_agilex_nero",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:21:17.869206+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-030",
+      "dataset_repo": "OopsieData-Submissions/NYU_AI4CE",
+      "lab_id": "NYU_AI4CE",
+      "repo_path": "yor_36829e26041c49bb903c344e8b059469.h5",
+      "bundle_path": "episodes/NYU_AI4CE/yor_36829e26041c49bb903c344e8b059469.h5",
+      "video_files": {
+        "head": "episodes/NYU_AI4CE/videos/yor_36829e26041c49bb903c344e8b059469_head.mp4",
+        "left_wrist": "episodes/NYU_AI4CE/videos/yor_36829e26041c49bb903c344e8b059469_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_AI4CE/videos/yor_36829e26041c49bb903c344e8b059469_right_wrist.mp4"
+      },
+      "episode_id": "yor_36829e26041c49bb903c344e8b059469",
+      "language_instruction": "put the circle on the peg",
+      "operator": "Aditya",
+      "annotators": [
+        "Aditya"
+      ],
+      "robot_name": "yor_agilex_nero",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:20:49.406008+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-031",
+      "dataset_repo": "OopsieData-Submissions/NYU_AI4CE",
+      "lab_id": "NYU_AI4CE",
+      "repo_path": "yor_8cebe8f300d64c2b834de6ef9be34811.h5",
+      "bundle_path": "episodes/NYU_AI4CE/yor_8cebe8f300d64c2b834de6ef9be34811.h5",
+      "video_files": {
+        "head": "episodes/NYU_AI4CE/videos/yor_8cebe8f300d64c2b834de6ef9be34811_head.mp4",
+        "left_wrist": "episodes/NYU_AI4CE/videos/yor_8cebe8f300d64c2b834de6ef9be34811_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_AI4CE/videos/yor_8cebe8f300d64c2b834de6ef9be34811_right_wrist.mp4"
+      },
+      "episode_id": "yor_8cebe8f300d64c2b834de6ef9be34811",
+      "language_instruction": "pick up the mustard and place it on the plate with the right arm",
+      "operator": "Aditya",
+      "annotators": [
+        "Aditya"
+      ],
+      "robot_name": "yor_agilex_nero",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:22:21.829668+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-032",
+      "dataset_repo": "OopsieData-Submissions/NYU_AI4CE",
+      "lab_id": "NYU_AI4CE",
+      "repo_path": "yor_c9bc1abaeee64db6af1b585c18fe1c22.h5",
+      "bundle_path": "episodes/NYU_AI4CE/yor_c9bc1abaeee64db6af1b585c18fe1c22.h5",
+      "video_files": {
+        "head": "episodes/NYU_AI4CE/videos/yor_c9bc1abaeee64db6af1b585c18fe1c22_head.mp4",
+        "left_wrist": "episodes/NYU_AI4CE/videos/yor_c9bc1abaeee64db6af1b585c18fe1c22_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_AI4CE/videos/yor_c9bc1abaeee64db6af1b585c18fe1c22_right_wrist.mp4"
+      },
+      "episode_id": "yor_c9bc1abaeee64db6af1b585c18fe1c22",
+      "language_instruction": "hit the eggplant with the mallet",
+      "operator": "Aditya",
+      "annotators": [
+        "Aditya"
+      ],
+      "robot_name": "yor_agilex_nero",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:23:07.287114+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-033",
+      "dataset_repo": "OopsieData-Submissions/NYU_AI4CE",
+      "lab_id": "NYU_AI4CE",
+      "repo_path": "yor_159ab19cd42543629929cd02017dcf70.h5",
+      "bundle_path": "episodes/NYU_AI4CE/yor_159ab19cd42543629929cd02017dcf70.h5",
+      "video_files": {
+        "head": "episodes/NYU_AI4CE/videos/yor_159ab19cd42543629929cd02017dcf70_head.mp4",
+        "left_wrist": "episodes/NYU_AI4CE/videos/yor_159ab19cd42543629929cd02017dcf70_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_AI4CE/videos/yor_159ab19cd42543629929cd02017dcf70_right_wrist.mp4"
+      },
+      "episode_id": "yor_159ab19cd42543629929cd02017dcf70",
+      "language_instruction": "put the square on the peg",
+      "operator": "Aditya",
+      "annotators": [
+        "Aditya"
+      ],
+      "robot_name": "yor_agilex_nero",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:18:22.806999+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-034",
+      "dataset_repo": "OopsieData-Submissions/NYU_AI4CE",
+      "lab_id": "NYU_AI4CE",
+      "repo_path": "yor_cc4f73361be64efba0ca9ad524a3a907.h5",
+      "bundle_path": "episodes/NYU_AI4CE/yor_cc4f73361be64efba0ca9ad524a3a907.h5",
+      "video_files": {
+        "head": "episodes/NYU_AI4CE/videos/yor_cc4f73361be64efba0ca9ad524a3a907_head.mp4",
+        "left_wrist": "episodes/NYU_AI4CE/videos/yor_cc4f73361be64efba0ca9ad524a3a907_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_AI4CE/videos/yor_cc4f73361be64efba0ca9ad524a3a907_right_wrist.mp4"
+      },
+      "episode_id": "yor_cc4f73361be64efba0ca9ad524a3a907",
+      "language_instruction": "put the mustard into the box",
+      "operator": "Aditya",
+      "annotators": [
+        "Aditya"
+      ],
+      "robot_name": "yor_agilex_nero",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:23:19.865733+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-035",
+      "dataset_repo": "OopsieData-Submissions/NYU_AI4CE",
+      "lab_id": "NYU_AI4CE",
+      "repo_path": "yor_eb75df6ca0d141d283a7b0aa6886aa5b.h5",
+      "bundle_path": "episodes/NYU_AI4CE/yor_eb75df6ca0d141d283a7b0aa6886aa5b.h5",
+      "video_files": {
+        "head": "episodes/NYU_AI4CE/videos/yor_eb75df6ca0d141d283a7b0aa6886aa5b_head.mp4",
+        "left_wrist": "episodes/NYU_AI4CE/videos/yor_eb75df6ca0d141d283a7b0aa6886aa5b_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_AI4CE/videos/yor_eb75df6ca0d141d283a7b0aa6886aa5b_right_wrist.mp4"
+      },
+      "episode_id": "yor_eb75df6ca0d141d283a7b0aa6886aa5b",
+      "language_instruction": "put the eggplant into the box with the left arm",
+      "operator": "Aditya",
+      "annotators": [
+        "Aditya"
+      ],
+      "robot_name": "yor_agilex_nero",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:27:35.506397+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-036",
+      "dataset_repo": "OopsieData-Submissions/NYU_AI4CE",
+      "lab_id": "NYU_AI4CE",
+      "repo_path": "yor_b3594d9fdc7a483cb86d6e359c115cf3.h5",
+      "bundle_path": "episodes/NYU_AI4CE/yor_b3594d9fdc7a483cb86d6e359c115cf3.h5",
+      "video_files": {
+        "head": "episodes/NYU_AI4CE/videos/yor_b3594d9fdc7a483cb86d6e359c115cf3_head.mp4",
+        "left_wrist": "episodes/NYU_AI4CE/videos/yor_b3594d9fdc7a483cb86d6e359c115cf3_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_AI4CE/videos/yor_b3594d9fdc7a483cb86d6e359c115cf3_right_wrist.mp4"
+      },
+      "episode_id": "yor_b3594d9fdc7a483cb86d6e359c115cf3",
+      "language_instruction": "hit the yellow cube with the mallet using the right arm",
+      "operator": "Aditya",
+      "annotators": [
+        "Aditya"
+      ],
+      "robot_name": "yor_agilex_nero",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:22:56.423101+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-037",
+      "dataset_repo": "OopsieData-Submissions/NYU_AI4CE",
+      "lab_id": "NYU_AI4CE",
+      "repo_path": "yor_d3a0ba3f3aa9438cbde06cd9097c3879.h5",
+      "bundle_path": "episodes/NYU_AI4CE/yor_d3a0ba3f3aa9438cbde06cd9097c3879.h5",
+      "video_files": {
+        "head": "episodes/NYU_AI4CE/videos/yor_d3a0ba3f3aa9438cbde06cd9097c3879_head.mp4",
+        "left_wrist": "episodes/NYU_AI4CE/videos/yor_d3a0ba3f3aa9438cbde06cd9097c3879_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_AI4CE/videos/yor_d3a0ba3f3aa9438cbde06cd9097c3879_right_wrist.mp4"
+      },
+      "episode_id": "yor_d3a0ba3f3aa9438cbde06cd9097c3879",
+      "language_instruction": "pick up the eggplant and place it on the plate with the left arm",
+      "operator": "Aditya",
+      "annotators": [
+        "Aditya"
+      ],
+      "robot_name": "yor_agilex_nero",
+      "qa_notes": "quite short.",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:23:27.896255+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-038",
+      "dataset_repo": "OopsieData-Submissions/NYU_AI4CE",
+      "lab_id": "NYU_AI4CE",
+      "repo_path": "yor_87966b60268d4bb3b65ca8cf303458c8.h5",
+      "bundle_path": "episodes/NYU_AI4CE/yor_87966b60268d4bb3b65ca8cf303458c8.h5",
+      "video_files": {
+        "head": "episodes/NYU_AI4CE/videos/yor_87966b60268d4bb3b65ca8cf303458c8_head.mp4",
+        "left_wrist": "episodes/NYU_AI4CE/videos/yor_87966b60268d4bb3b65ca8cf303458c8_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_AI4CE/videos/yor_87966b60268d4bb3b65ca8cf303458c8_right_wrist.mp4"
+      },
+      "episode_id": "yor_87966b60268d4bb3b65ca8cf303458c8",
+      "language_instruction": "uncap the blue marker",
+      "operator": "Aditya",
+      "annotators": [
+        "Aditya"
+      ],
+      "robot_name": "yor_agilex_nero",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:22:12.508464+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-039",
+      "dataset_repo": "OopsieData-Submissions/NYU_AI4CE",
+      "lab_id": "NYU_AI4CE",
+      "repo_path": "yor_f21a5a8cc0f5492ab9ec91a6267e2321.h5",
+      "bundle_path": "episodes/NYU_AI4CE/yor_f21a5a8cc0f5492ab9ec91a6267e2321.h5",
+      "video_files": {
+        "head": "episodes/NYU_AI4CE/videos/yor_f21a5a8cc0f5492ab9ec91a6267e2321_head.mp4",
+        "left_wrist": "episodes/NYU_AI4CE/videos/yor_f21a5a8cc0f5492ab9ec91a6267e2321_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_AI4CE/videos/yor_f21a5a8cc0f5492ab9ec91a6267e2321_right_wrist.mp4"
+      },
+      "episode_id": "yor_f21a5a8cc0f5492ab9ec91a6267e2321",
+      "language_instruction": "stack one cube in the box and hit it with the mallet with the left arm",
+      "operator": "Aditya",
+      "annotators": [
+        "Aditya"
+      ],
+      "robot_name": "yor_agilex_nero",
+      "qa_notes": "the beginning of the video seems cut off. no attempt at the green cube.",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:28:19.762984+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-040",
+      "dataset_repo": "OopsieData-Submissions/NYU_AI4CE",
+      "lab_id": "NYU_AI4CE",
+      "repo_path": "yor_f1218f9f64db4cabbb726a6d244d0953.h5",
+      "bundle_path": "episodes/NYU_AI4CE/yor_f1218f9f64db4cabbb726a6d244d0953.h5",
+      "video_files": {
+        "head": "episodes/NYU_AI4CE/videos/yor_f1218f9f64db4cabbb726a6d244d0953_head.mp4",
+        "left_wrist": "episodes/NYU_AI4CE/videos/yor_f1218f9f64db4cabbb726a6d244d0953_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_AI4CE/videos/yor_f1218f9f64db4cabbb726a6d244d0953_right_wrist.mp4"
+      },
+      "episode_id": "yor_f1218f9f64db4cabbb726a6d244d0953",
+      "language_instruction": "stack the 3 cubes",
+      "operator": "Aditya",
+      "annotators": [
+        "Aditya"
+      ],
+      "robot_name": "yor_agilex_nero",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:27:53.467214+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-041",
+      "dataset_repo": "OopsieData-Submissions/NYU_Clark",
+      "lab_id": "NYU_Clark",
+      "repo_path": "GEN2-015-1786398858739338719_ep00.h5",
+      "bundle_path": "episodes/NYU_Clark/GEN2-015-1786398858739338719_ep00.h5",
+      "video_files": {
+        "head": "episodes/NYU_Clark/videos/GEN2-015-1786398858739338719_ep00_head.mp4",
+        "left_wrist": "episodes/NYU_Clark/videos/GEN2-015-1786398858739338719_ep00_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_Clark/videos/GEN2-015-1786398858739338719_ep00_right_wrist.mp4"
+      },
+      "episode_id": "GEN2-015-1786398858739338719_ep00",
+      "language_instruction": "place the orange cube in the box",
+      "operator": "Kevin Angers",
+      "annotators": [
+        "Greta Perez-Haiek",
+        "Kevin Angers"
+      ],
+      "robot_name": "ultra_gen2",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:29:11.934351+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-042",
+      "dataset_repo": "OopsieData-Submissions/NYU_Clark",
+      "lab_id": "NYU_Clark",
+      "repo_path": "GEN2-015-1790964473019314287_ep00.h5",
+      "bundle_path": "episodes/NYU_Clark/GEN2-015-1790964473019314287_ep00.h5",
+      "video_files": {
+        "head": "episodes/NYU_Clark/videos/GEN2-015-1790964473019314287_ep00_head.mp4",
+        "left_wrist": "episodes/NYU_Clark/videos/GEN2-015-1790964473019314287_ep00_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_Clark/videos/GEN2-015-1790964473019314287_ep00_right_wrist.mp4"
+      },
+      "episode_id": "GEN2-015-1790964473019314287_ep00",
+      "language_instruction": "stack rings",
+      "operator": "LAIR",
+      "annotators": [
+        "Kevin Angers"
+      ],
+      "robot_name": "ultra_gen2",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:33:22.789779+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-043",
+      "dataset_repo": "OopsieData-Submissions/NYU_Clark",
+      "lab_id": "NYU_Clark",
+      "repo_path": "GEN2-015-1786657863738974964_ep00.h5",
+      "bundle_path": "episodes/NYU_Clark/GEN2-015-1786657863738974964_ep00.h5",
+      "video_files": {
+        "head": "episodes/NYU_Clark/videos/GEN2-015-1786657863738974964_ep00_head.mp4",
+        "left_wrist": "episodes/NYU_Clark/videos/GEN2-015-1786657863738974964_ep00_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_Clark/videos/GEN2-015-1786657863738974964_ep00_right_wrist.mp4"
+      },
+      "episode_id": "GEN2-015-1786657863738974964_ep00",
+      "language_instruction": "place the orange cube in the cup",
+      "operator": "Kevin Angers",
+      "annotators": [
+        "Greta Perez-Haiek",
+        "Kevin Angers"
+      ],
+      "robot_name": "ultra_gen2",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:29:19.586603+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-044",
+      "dataset_repo": "OopsieData-Submissions/NYU_Clark",
+      "lab_id": "NYU_Clark",
+      "repo_path": "GEN2-015-1786045180050719813_ep00.h5",
+      "bundle_path": "episodes/NYU_Clark/GEN2-015-1786045180050719813_ep00.h5",
+      "video_files": {
+        "head": "episodes/NYU_Clark/videos/GEN2-015-1786045180050719813_ep00_head.mp4",
+        "left_wrist": "episodes/NYU_Clark/videos/GEN2-015-1786045180050719813_ep00_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_Clark/videos/GEN2-015-1786045180050719813_ep00_right_wrist.mp4"
+      },
+      "episode_id": "GEN2-015-1786045180050719813_ep00",
+      "language_instruction": "place the orange cube in the box",
+      "operator": "Chetan Parthiban",
+      "annotators": [
+        "Greta Perez-Haiek",
+        "Kevin Angers"
+      ],
+      "robot_name": "ultra_gen2",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:28:37.103904+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-045",
+      "dataset_repo": "OopsieData-Submissions/NYU_Clark",
+      "lab_id": "NYU_Clark",
+      "repo_path": "GEN2-015-1790706396479387630_ep00_s01.h5",
+      "bundle_path": "episodes/NYU_Clark/GEN2-015-1790706396479387630_ep00_s01.h5",
+      "video_files": {
+        "head": "episodes/NYU_Clark/videos/GEN2-015-1790706396479387630_ep00_s01_head.mp4",
+        "left_wrist": "episodes/NYU_Clark/videos/GEN2-015-1790706396479387630_ep00_s01_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_Clark/videos/GEN2-015-1790706396479387630_ep00_s01_right_wrist.mp4"
+      },
+      "episode_id": "GEN2-015-1790706396479387630_ep00_s01",
+      "language_instruction": "unstack rings",
+      "operator": "LAIR",
+      "annotators": [
+        "Kevin Angers"
+      ],
+      "robot_name": "ultra_gen2",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:32:30.596906+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-046",
+      "dataset_repo": "OopsieData-Submissions/NYU_Clark",
+      "lab_id": "NYU_Clark",
+      "repo_path": "GEN2-015-1790118215382990352_ep00.h5",
+      "bundle_path": "episodes/NYU_Clark/GEN2-015-1790118215382990352_ep00.h5",
+      "video_files": {
+        "head": "episodes/NYU_Clark/videos/GEN2-015-1790118215382990352_ep00_head.mp4",
+        "left_wrist": "episodes/NYU_Clark/videos/GEN2-015-1790118215382990352_ep00_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_Clark/videos/GEN2-015-1790118215382990352_ep00_right_wrist.mp4"
+      },
+      "episode_id": "GEN2-015-1790118215382990352_ep00",
+      "language_instruction": "stack cubes",
+      "operator": "Kevin Angers",
+      "annotators": [
+        "Kevin Angers"
+      ],
+      "robot_name": "ultra_gen2",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:31:51.370269+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-047",
+      "dataset_repo": "OopsieData-Submissions/NYU_Clark",
+      "lab_id": "NYU_Clark",
+      "repo_path": "GEN2-015-1788730844158341489_ep14ba.h5",
+      "bundle_path": "episodes/NYU_Clark/GEN2-015-1788730844158341489_ep14ba.h5",
+      "video_files": {
+        "head": "episodes/NYU_Clark/videos/GEN2-015-1788730844158341489_ep14ba_head.mp4",
+        "left_wrist": "episodes/NYU_Clark/videos/GEN2-015-1788730844158341489_ep14ba_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_Clark/videos/GEN2-015-1788730844158341489_ep14ba_right_wrist.mp4"
+      },
+      "episode_id": "GEN2-015-1788730844158341489_ep14ba",
+      "language_instruction": "unstack cubes",
+      "operator": "LAIR",
+      "annotators": [
+        "Kevin Angers"
+      ],
+      "robot_name": "ultra_gen2",
+      "qa_notes": "\"unstack\" should really be \"topple over\"",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:30:09.916099+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-048",
+      "dataset_repo": "OopsieData-Submissions/NYU_Clark",
+      "lab_id": "NYU_Clark",
+      "repo_path": "GEN2-015-1786047685013349911_ep00.h5",
+      "bundle_path": "episodes/NYU_Clark/GEN2-015-1786047685013349911_ep00.h5",
+      "video_files": {
+        "head": "episodes/NYU_Clark/videos/GEN2-015-1786047685013349911_ep00_head.mp4",
+        "left_wrist": "episodes/NYU_Clark/videos/GEN2-015-1786047685013349911_ep00_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_Clark/videos/GEN2-015-1786047685013349911_ep00_right_wrist.mp4"
+      },
+      "episode_id": "GEN2-015-1786047685013349911_ep00",
+      "language_instruction": "place the orange cube in the box",
+      "operator": "Chetan Parthiban",
+      "annotators": [
+        "Greta Perez-Haiek",
+        "Kevin Angers"
+      ],
+      "robot_name": "ultra_gen2",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:29:05.104168+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-049",
+      "dataset_repo": "OopsieData-Submissions/NYU_Clark",
+      "lab_id": "NYU_Clark",
+      "repo_path": "GEN2-015-1786658052482930034_ep00.h5",
+      "bundle_path": "episodes/NYU_Clark/GEN2-015-1786658052482930034_ep00.h5",
+      "video_files": {
+        "head": "episodes/NYU_Clark/videos/GEN2-015-1786658052482930034_ep00_head.mp4",
+        "left_wrist": "episodes/NYU_Clark/videos/GEN2-015-1786658052482930034_ep00_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_Clark/videos/GEN2-015-1786658052482930034_ep00_right_wrist.mp4"
+      },
+      "episode_id": "GEN2-015-1786658052482930034_ep00",
+      "language_instruction": "place the orange cube in the cup",
+      "operator": "Kevin Angers",
+      "annotators": [
+        "Greta Perez-Haiek",
+        "Kevin Angers"
+      ],
+      "robot_name": "ultra_gen2",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:29:27.808894+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-050",
+      "dataset_repo": "OopsieData-Submissions/NYU_Clark",
+      "lab_id": "NYU_Clark",
+      "repo_path": "GEN2-015-1790964947585403937_ep00_s01.h5",
+      "bundle_path": "episodes/NYU_Clark/GEN2-015-1790964947585403937_ep00_s01.h5",
+      "video_files": {
+        "head": "episodes/NYU_Clark/videos/GEN2-015-1790964947585403937_ep00_s01_head.mp4",
+        "left_wrist": "episodes/NYU_Clark/videos/GEN2-015-1790964947585403937_ep00_s01_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_Clark/videos/GEN2-015-1790964947585403937_ep00_s01_right_wrist.mp4"
+      },
+      "episode_id": "GEN2-015-1790964947585403937_ep00_s01",
+      "language_instruction": "unstack rings",
+      "operator": "LAIR",
+      "annotators": [
+        "Kevin Angers"
+      ],
+      "robot_name": "ultra_gen2",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:33:30.807704+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-051",
+      "dataset_repo": "OopsieData-Submissions/NYU_Clark",
+      "lab_id": "NYU_Clark",
+      "repo_path": "GEN2-015-1788820370762471683_ep00.h5",
+      "bundle_path": "episodes/NYU_Clark/GEN2-015-1788820370762471683_ep00.h5",
+      "video_files": {
+        "head": "episodes/NYU_Clark/videos/GEN2-015-1788820370762471683_ep00_head.mp4",
+        "left_wrist": "episodes/NYU_Clark/videos/GEN2-015-1788820370762471683_ep00_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_Clark/videos/GEN2-015-1788820370762471683_ep00_right_wrist.mp4"
+      },
+      "episode_id": "GEN2-015-1788820370762471683_ep00",
+      "language_instruction": "stack cubes",
+      "operator": "Kevin Angers",
+      "annotators": [
+        "Kevin Angers"
+      ],
+      "robot_name": "ultra_gen2",
+      "qa_notes": "human in the video. momentary failure.",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:30:36.527644+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-052",
+      "dataset_repo": "OopsieData-Submissions/NYU_Clark",
+      "lab_id": "NYU_Clark",
+      "repo_path": "GEN2-015-1790962823261667347_ep00_s00.h5",
+      "bundle_path": "episodes/NYU_Clark/GEN2-015-1790962823261667347_ep00_s00.h5",
+      "video_files": {
+        "head": "episodes/NYU_Clark/videos/GEN2-015-1790962823261667347_ep00_s00_head.mp4",
+        "left_wrist": "episodes/NYU_Clark/videos/GEN2-015-1790962823261667347_ep00_s00_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_Clark/videos/GEN2-015-1790962823261667347_ep00_s00_right_wrist.mp4"
+      },
+      "episode_id": "GEN2-015-1790962823261667347_ep00_s00",
+      "language_instruction": "stack rings",
+      "operator": "LAIR",
+      "annotators": [
+        "Kevin Angers"
+      ],
+      "robot_name": "ultra_gen2",
+      "qa_notes": "human walks by in video",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:32:56.649764+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-053",
+      "dataset_repo": "OopsieData-Submissions/NYU_Clark",
+      "lab_id": "NYU_Clark",
+      "repo_path": "GEN2-015-1786047570408506753_ep00.h5",
+      "bundle_path": "episodes/NYU_Clark/GEN2-015-1786047570408506753_ep00.h5",
+      "video_files": {
+        "head": "episodes/NYU_Clark/videos/GEN2-015-1786047570408506753_ep00_head.mp4",
+        "left_wrist": "episodes/NYU_Clark/videos/GEN2-015-1786047570408506753_ep00_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_Clark/videos/GEN2-015-1786047570408506753_ep00_right_wrist.mp4"
+      },
+      "episode_id": "GEN2-015-1786047570408506753_ep00",
+      "language_instruction": "place the orange cube in the box",
+      "operator": "Chetan Parthiban",
+      "annotators": [
+        "Greta Perez-Haiek",
+        "Kevin Angers"
+      ],
+      "robot_name": "ultra_gen2",
+      "qa_notes": "human appears at end of video ",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:28:56.424290+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-054",
+      "dataset_repo": "OopsieData-Submissions/NYU_Clark",
+      "lab_id": "NYU_Clark",
+      "repo_path": "GEN2-015-1790367574495873043_ep00_s03.h5",
+      "bundle_path": "episodes/NYU_Clark/GEN2-015-1790367574495873043_ep00_s03.h5",
+      "video_files": {
+        "head": "episodes/NYU_Clark/videos/GEN2-015-1790367574495873043_ep00_s03_head.mp4",
+        "left_wrist": "episodes/NYU_Clark/videos/GEN2-015-1790367574495873043_ep00_s03_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_Clark/videos/GEN2-015-1790367574495873043_ep00_s03_right_wrist.mp4"
+      },
+      "episode_id": "GEN2-015-1790367574495873043_ep00_s03",
+      "language_instruction": "unstack cubes",
+      "operator": "Kevin Angers",
+      "annotators": [
+        "Kevin Angers"
+      ],
+      "robot_name": "ultra_gen2",
+      "qa_notes": "unstack should be topple",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:32:20.331969+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-055",
+      "dataset_repo": "OopsieData-Submissions/NYU_Clark",
+      "lab_id": "NYU_Clark",
+      "repo_path": "GEN2-015-1786658278139338713_ep00.h5",
+      "bundle_path": "episodes/NYU_Clark/GEN2-015-1786658278139338713_ep00.h5",
+      "video_files": {
+        "head": "episodes/NYU_Clark/videos/GEN2-015-1786658278139338713_ep00_head.mp4",
+        "left_wrist": "episodes/NYU_Clark/videos/GEN2-015-1786658278139338713_ep00_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_Clark/videos/GEN2-015-1786658278139338713_ep00_right_wrist.mp4"
+      },
+      "episode_id": "GEN2-015-1786658278139338713_ep00",
+      "language_instruction": "place the orange cube in the cup",
+      "operator": "Kevin Angers",
+      "annotators": [
+        "Greta Perez-Haiek",
+        "Kevin Angers"
+      ],
+      "robot_name": "ultra_gen2",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:29:34.513926+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-056",
+      "dataset_repo": "OopsieData-Submissions/NYU_Clark",
+      "lab_id": "NYU_Clark",
+      "repo_path": "GEN2-015-1786047550790992515_ep00.h5",
+      "bundle_path": "episodes/NYU_Clark/GEN2-015-1786047550790992515_ep00.h5",
+      "video_files": {
+        "head": "episodes/NYU_Clark/videos/GEN2-015-1786047550790992515_ep00_head.mp4",
+        "left_wrist": "episodes/NYU_Clark/videos/GEN2-015-1786047550790992515_ep00_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_Clark/videos/GEN2-015-1786047550790992515_ep00_right_wrist.mp4"
+      },
+      "episode_id": "GEN2-015-1786047550790992515_ep00",
+      "language_instruction": "place the orange cube in the box",
+      "operator": "Chetan Parthiban",
+      "annotators": [
+        "Greta Perez-Haiek",
+        "Kevin Angers"
+      ],
+      "robot_name": "ultra_gen2",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:28:43.641602+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-057",
+      "dataset_repo": "OopsieData-Submissions/NYU_Clark",
+      "lab_id": "NYU_Clark",
+      "repo_path": "GEN2-015-1790967668875902106_ep00_s01.h5",
+      "bundle_path": "episodes/NYU_Clark/GEN2-015-1790967668875902106_ep00_s01.h5",
+      "video_files": {
+        "head": "episodes/NYU_Clark/videos/GEN2-015-1790967668875902106_ep00_s01_head.mp4",
+        "left_wrist": "episodes/NYU_Clark/videos/GEN2-015-1790967668875902106_ep00_s01_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_Clark/videos/GEN2-015-1790967668875902106_ep00_s01_right_wrist.mp4"
+      },
+      "episode_id": "GEN2-015-1790967668875902106_ep00_s01",
+      "language_instruction": "stack rings",
+      "operator": "LAIR",
+      "annotators": [
+        "Kevin Angers"
+      ],
+      "robot_name": "ultra_gen2",
+      "qa_notes": "partial failure.",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:33:51.954476+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-058",
+      "dataset_repo": "OopsieData-Submissions/NYU_Clark",
+      "lab_id": "NYU_Clark",
+      "repo_path": "GEN2-015-1790963617859711222_ep00_s05.h5",
+      "bundle_path": "episodes/NYU_Clark/GEN2-015-1790963617859711222_ep00_s05.h5",
+      "video_files": {
+        "head": "episodes/NYU_Clark/videos/GEN2-015-1790963617859711222_ep00_s05_head.mp4",
+        "left_wrist": "episodes/NYU_Clark/videos/GEN2-015-1790963617859711222_ep00_s05_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_Clark/videos/GEN2-015-1790963617859711222_ep00_s05_right_wrist.mp4"
+      },
+      "episode_id": "GEN2-015-1790963617859711222_ep00_s05",
+      "language_instruction": "unstack rings",
+      "operator": "LAIR",
+      "annotators": [
+        "Kevin Angers"
+      ],
+      "robot_name": "ultra_gen2",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:33:04.628092+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-059",
+      "dataset_repo": "OopsieData-Submissions/NYU_Clark",
+      "lab_id": "NYU_Clark",
+      "repo_path": "GEN2-015-1788823023994068355_ep00.h5",
+      "bundle_path": "episodes/NYU_Clark/GEN2-015-1788823023994068355_ep00.h5",
+      "video_files": {
+        "head": "episodes/NYU_Clark/videos/GEN2-015-1788823023994068355_ep00_head.mp4",
+        "left_wrist": "episodes/NYU_Clark/videos/GEN2-015-1788823023994068355_ep00_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_Clark/videos/GEN2-015-1788823023994068355_ep00_right_wrist.mp4"
+      },
+      "episode_id": "GEN2-015-1788823023994068355_ep00",
+      "language_instruction": "stack cubes",
+      "operator": "Kevin Angers",
+      "annotators": [
+        "Kevin Angers"
+      ],
+      "robot_name": "ultra_gen2",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:31:09.673354+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-060",
+      "dataset_repo": "OopsieData-Submissions/NYU_Clark",
+      "lab_id": "NYU_Clark",
+      "repo_path": "GEN2-015-1788728416669871197_ep17ba.h5",
+      "bundle_path": "episodes/NYU_Clark/GEN2-015-1788728416669871197_ep17ba.h5",
+      "video_files": {
+        "head": "episodes/NYU_Clark/videos/GEN2-015-1788728416669871197_ep17ba_head.mp4",
+        "left_wrist": "episodes/NYU_Clark/videos/GEN2-015-1788728416669871197_ep17ba_left_wrist.mp4",
+        "right_wrist": "episodes/NYU_Clark/videos/GEN2-015-1788728416669871197_ep17ba_right_wrist.mp4"
+      },
+      "episode_id": "GEN2-015-1788728416669871197_ep17ba",
+      "language_instruction": "unstack cubes",
+      "operator": "LAIR",
+      "annotators": [
+        "Kevin Angers"
+      ],
+      "robot_name": "ultra_gen2",
+      "qa_notes": "\"unstack\" is doing a lot of work ",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:29:58.567494+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-061",
+      "dataset_repo": "OopsieData-Submissions/Northstar",
+      "lab_id": "Northstar",
+      "repo_path": "place-the-rolled-gloves-into-the-cardboard-box__20261006_001929/yam001_place_the_rolled_gloves_into_the_cardboard_box_20261006_001929.h5",
+      "bundle_path": "episodes/Northstar/place-the-rolled-gloves-into-the-cardboard-box__20261006_001929/yam001_place_the_rolled_gloves_into_the_cardboard_box_20261006_001929.h5",
+      "video_files": {
+        "exo_cam": "episodes/Northstar/place-the-rolled-gloves-into-the-cardboard-box__20261006_001929/videos/yam001_place_the_rolled_gloves_into_the_cardboard_box_20261006_001929_exo_cam.mp4",
+        "left_wrist_cam": "episodes/Northstar/place-the-rolled-gloves-into-the-cardboard-box__20261006_001929/videos/yam001_place_the_rolled_gloves_into_the_cardboard_box_20261006_001929_left_wrist_cam.mp4",
+        "right_wrist_cam": "episodes/Northstar/place-the-rolled-gloves-into-the-cardboard-box__20261006_001929/videos/yam001_place_the_rolled_gloves_into_the_cardboard_box_20261006_001929_right_wrist_cam.mp4"
+      },
+      "episode_id": "yam001_place_the_rolled_gloves_into_the_cardboard_box_20261006_001929",
+      "language_instruction": "Place the rolled gloves into the cardboard box",
+      "operator": "Miki",
+      "annotators": [
+        "Grace"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T21:53:09.227647+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-062",
+      "dataset_repo": "OopsieData-Submissions/Northstar",
+      "lab_id": "Northstar",
+      "repo_path": "put-supplies-into-white-container__20260910_045402/yam001_put_supplies_into_white_container_20260910_045402.h5",
+      "bundle_path": "episodes/Northstar/put-supplies-into-white-container__20260910_045402/yam001_put_supplies_into_white_container_20260910_045402.h5",
+      "video_files": {
+        "exo_cam": "episodes/Northstar/put-supplies-into-white-container__20260910_045402/videos/yam001_put_supplies_into_white_container_20260910_045402_exo_cam.mp4",
+        "left_wrist_cam": "episodes/Northstar/put-supplies-into-white-container__20260910_045402/videos/yam001_put_supplies_into_white_container_20260910_045402_left_wrist_cam.mp4",
+        "right_wrist_cam": "episodes/Northstar/put-supplies-into-white-container__20260910_045402/videos/yam001_put_supplies_into_white_container_20260910_045402_right_wrist_cam.mp4"
+      },
+      "episode_id": "yam001_put_supplies_into_white_container_20260910_045402",
+      "language_instruction": "put supplies into white container",
+      "operator": "unknown_operator",
+      "annotators": [
+        "headset_grade"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "robot does not move. Also description of task is incorrect.",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T21:54:53.886958+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-063",
+      "dataset_repo": "OopsieData-Submissions/Northstar",
+      "lab_id": "Northstar",
+      "repo_path": "place-marker-into-cup__20260909_051447/20260909_051447.h5",
+      "bundle_path": "episodes/Northstar/place-marker-into-cup__20260909_051447/20260909_051447.h5",
+      "video_files": {
+        "exo": "episodes/Northstar/place-marker-into-cup__20260909_051447/videos/20260909_051447_exo.mp4",
+        "wristL": "episodes/Northstar/place-marker-into-cup__20260909_051447/videos/20260909_051447_wristL.mp4",
+        "wristR": "episodes/Northstar/place-marker-into-cup__20260909_051447/videos/20260909_051447_wristR.mp4"
+      },
+      "episode_id": "20260909_051447",
+      "language_instruction": "place marker into cup",
+      "operator": "pratham",
+      "annotators": [
+        "pratham"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "description says \"throws forward\" implying that this is active. It seems like a passive failure, more like \"dropped\"",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T21:39:57.880180+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-064",
+      "dataset_repo": "OopsieData-Submissions/Northstar",
+      "lab_id": "Northstar",
+      "repo_path": "place-the-purple-items-into-the-cardboard-box__20261006_040325/yam001_place_the_purple_items_into_the_cardboard_box_20261006_040325.h5",
+      "bundle_path": "episodes/Northstar/place-the-purple-items-into-the-cardboard-box__20261006_040325/yam001_place_the_purple_items_into_the_cardboard_box_20261006_040325.h5",
+      "video_files": {
+        "exo_cam": "episodes/Northstar/place-the-purple-items-into-the-cardboard-box__20261006_040325/videos/yam001_place_the_purple_items_into_the_cardboard_box_20261006_040325_exo_cam.mp4",
+        "left_wrist_cam": "episodes/Northstar/place-the-purple-items-into-the-cardboard-box__20261006_040325/videos/yam001_place_the_purple_items_into_the_cardboard_box_20261006_040325_left_wrist_cam.mp4",
+        "right_wrist_cam": "episodes/Northstar/place-the-purple-items-into-the-cardboard-box__20261006_040325/videos/yam001_place_the_purple_items_into_the_cardboard_box_20261006_040325_right_wrist_cam.mp4"
+      },
+      "episode_id": "yam001_place_the_purple_items_into_the_cardboard_box_20261006_040325",
+      "language_instruction": "Place the purple items into the cardboard box",
+      "operator": "unknown_operator",
+      "annotators": [
+        "headset_grade"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "task description says \"place purple objects\" but it seems the objects are actually blue.",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T21:46:59.246959+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-065",
+      "dataset_repo": "OopsieData-Submissions/Northstar",
+      "lab_id": "Northstar",
+      "repo_path": "place-gray-tape-on-white-tape__20261004_183953/yam001_place_gray_tape_on_white_tape_20261004_183953.h5",
+      "bundle_path": "episodes/Northstar/place-gray-tape-on-white-tape__20261004_183953/yam001_place_gray_tape_on_white_tape_20261004_183953.h5",
+      "video_files": {
+        "exo_cam": "episodes/Northstar/place-gray-tape-on-white-tape__20261004_183953/videos/yam001_place_gray_tape_on_white_tape_20261004_183953_exo_cam.mp4",
+        "left_wrist_cam": "episodes/Northstar/place-gray-tape-on-white-tape__20261004_183953/videos/yam001_place_gray_tape_on_white_tape_20261004_183953_left_wrist_cam.mp4",
+        "right_wrist_cam": "episodes/Northstar/place-gray-tape-on-white-tape__20261004_183953/videos/yam001_place_gray_tape_on_white_tape_20261004_183953_right_wrist_cam.mp4"
+      },
+      "episode_id": "yam001_place_gray_tape_on_white_tape_20261004_183953",
+      "language_instruction": "place gray tape on white tape",
+      "operator": "Miki",
+      "annotators": [
+        "Grace"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "Gray tape is placed on white tape, but not cleanly.",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T21:38:59.635669+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-066",
+      "dataset_repo": "OopsieData-Submissions/Northstar",
+      "lab_id": "Northstar",
+      "repo_path": "place-orange-cube-in-box__20260907_031654/20260907_031654.h5",
+      "bundle_path": "episodes/Northstar/place-orange-cube-in-box__20260907_031654/20260907_031654.h5",
+      "video_files": {
+        "exo": "episodes/Northstar/place-orange-cube-in-box__20260907_031654/videos/20260907_031654_exo.mp4",
+        "wristL": "episodes/Northstar/place-orange-cube-in-box__20260907_031654/videos/20260907_031654_wristL.mp4",
+        "wristR": "episodes/Northstar/place-orange-cube-in-box__20260907_031654/videos/20260907_031654_wristR.mp4"
+      },
+      "episode_id": "20260907_031654",
+      "language_instruction": "place orange cube in box",
+      "operator": "pratham",
+      "annotators": [
+        "pratham"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:40:18.096016+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-067",
+      "dataset_repo": "OopsieData-Submissions/Northstar",
+      "lab_id": "Northstar",
+      "repo_path": "place-the-cubes-into-the-purple-crate__20261006_051804/yam002_place_the_cubes_into_the_purple_crate_20261006_051804.h5",
+      "bundle_path": "episodes/Northstar/place-the-cubes-into-the-purple-crate__20261006_051804/yam002_place_the_cubes_into_the_purple_crate_20261006_051804.h5",
+      "video_files": {
+        "exo_cam": "episodes/Northstar/place-the-cubes-into-the-purple-crate__20261006_051804/videos/yam002_place_the_cubes_into_the_purple_crate_20261006_051804_exo_cam.mp4",
+        "left_wrist_cam": "episodes/Northstar/place-the-cubes-into-the-purple-crate__20261006_051804/videos/yam002_place_the_cubes_into_the_purple_crate_20261006_051804_left_wrist_cam.mp4",
+        "right_wrist_cam": "episodes/Northstar/place-the-cubes-into-the-purple-crate__20261006_051804/videos/yam002_place_the_cubes_into_the_purple_crate_20261006_051804_right_wrist_cam.mp4"
+      },
+      "episode_id": "yam002_place_the_cubes_into_the_purple_crate_20261006_051804",
+      "language_instruction": "Place the cubes into the purple crate",
+      "operator": "unknown_operator",
+      "annotators": [
+        "headset_grade"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T21:46:00.759043+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-068",
+      "dataset_repo": "OopsieData-Submissions/Northstar",
+      "lab_id": "Northstar",
+      "repo_path": "put-pens-into-cardboard-box__20261004_013416/yam001_put_pens_into_cardboard_box_20261004_013416.h5",
+      "bundle_path": "episodes/Northstar/put-pens-into-cardboard-box__20261004_013416/yam001_put_pens_into_cardboard_box_20261004_013416.h5",
+      "video_files": {
+        "exo_cam": "episodes/Northstar/put-pens-into-cardboard-box__20261004_013416/videos/yam001_put_pens_into_cardboard_box_20261004_013416_exo_cam.mp4",
+        "left_wrist_cam": "episodes/Northstar/put-pens-into-cardboard-box__20261004_013416/videos/yam001_put_pens_into_cardboard_box_20261004_013416_left_wrist_cam.mp4",
+        "right_wrist_cam": "episodes/Northstar/put-pens-into-cardboard-box__20261004_013416/videos/yam001_put_pens_into_cardboard_box_20261004_013416_right_wrist_cam.mp4"
+      },
+      "episode_id": "yam001_put_pens_into_cardboard_box_20261004_013416",
+      "language_instruction": "Put pens into cardboard box",
+      "operator": "Miki",
+      "annotators": [
+        "Grace"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T21:54:19.878355+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-069",
+      "dataset_repo": "OopsieData-Submissions/Northstar",
+      "lab_id": "Northstar",
+      "repo_path": "towel-folding__20260909_045849/20260909_045849.h5",
+      "bundle_path": "episodes/Northstar/towel-folding__20260909_045849/20260909_045849.h5",
+      "video_files": {
+        "exo": "episodes/Northstar/towel-folding__20260909_045849/videos/20260909_045849_exo.mp4",
+        "wristL": "episodes/Northstar/towel-folding__20260909_045849/videos/20260909_045849_wristL.mp4",
+        "wristR": "episodes/Northstar/towel-folding__20260909_045849/videos/20260909_045849_wristR.mp4"
+      },
+      "episode_id": "20260909_045849",
+      "language_instruction": "towel folding",
+      "operator": "pratham",
+      "annotators": [
+        "pratham"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T21:59:05.695771+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-070",
+      "dataset_repo": "OopsieData-Submissions/Northstar",
+      "lab_id": "Northstar",
+      "repo_path": "red-cube-pick-and-place__20260901_011600/yam001_red_cube_pick_and_place_20260901_011600.h5",
+      "bundle_path": "episodes/Northstar/red-cube-pick-and-place__20260901_011600/yam001_red_cube_pick_and_place_20260901_011600.h5",
+      "video_files": {
+        "exo_cam": "episodes/Northstar/red-cube-pick-and-place__20260901_011600/videos/yam001_red_cube_pick_and_place_20260901_011600_exo_cam.mp4",
+        "left_wrist_cam": "episodes/Northstar/red-cube-pick-and-place__20260901_011600/videos/yam001_red_cube_pick_and_place_20260901_011600_left_wrist_cam.mp4",
+        "right_wrist_cam": "episodes/Northstar/red-cube-pick-and-place__20260901_011600/videos/yam001_red_cube_pick_and_place_20260901_011600_right_wrist_cam.mp4"
+      },
+      "episode_id": "yam001_red_cube_pick_and_place_20260901_011600",
+      "language_instruction": "red cube pick and place",
+      "operator": "unknown_operator",
+      "annotators": [
+        "headset_grade"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "task description is not specific enough. The red cube was placed in the cardboard box. ",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T21:55:56.968883+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-071",
+      "dataset_repo": "OopsieData-Submissions/Northstar",
+      "lab_id": "Northstar",
+      "repo_path": "stacking-cubes-ontop-of-each-other__20261001_022531/yam001_stacking_cubes_ontop_of_each_other_20261001_022531.h5",
+      "bundle_path": "episodes/Northstar/stacking-cubes-ontop-of-each-other__20261001_022531/yam001_stacking_cubes_ontop_of_each_other_20261001_022531.h5",
+      "video_files": {
+        "exo_cam": "episodes/Northstar/stacking-cubes-ontop-of-each-other__20261001_022531/videos/yam001_stacking_cubes_ontop_of_each_other_20261001_022531_exo_cam.mp4",
+        "left_wrist_cam": "episodes/Northstar/stacking-cubes-ontop-of-each-other__20261001_022531/videos/yam001_stacking_cubes_ontop_of_each_other_20261001_022531_left_wrist_cam.mp4",
+        "right_wrist_cam": "episodes/Northstar/stacking-cubes-ontop-of-each-other__20261001_022531/videos/yam001_stacking_cubes_ontop_of_each_other_20261001_022531_right_wrist_cam.mp4"
+      },
+      "episode_id": "yam001_stacking_cubes_ontop_of_each_other_20261001_022531",
+      "language_instruction": "stacking cubes ontop of each other",
+      "operator": "Miki",
+      "annotators": [
+        "Grace"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T21:58:35.032296+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-072",
+      "dataset_repo": "OopsieData-Submissions/Northstar",
+      "lab_id": "Northstar",
+      "repo_path": "red-cube-demo__20260820_025356/yam001_red_cube_demo_20260820_025356.h5",
+      "bundle_path": "episodes/Northstar/red-cube-demo__20260820_025356/yam001_red_cube_demo_20260820_025356.h5",
+      "video_files": {
+        "exo_cam": "episodes/Northstar/red-cube-demo__20260820_025356/videos/yam001_red_cube_demo_20260820_025356_exo_cam.mp4",
+        "left_wrist_cam": "episodes/Northstar/red-cube-demo__20260820_025356/videos/yam001_red_cube_demo_20260820_025356_left_wrist_cam.mp4",
+        "right_wrist_cam": "episodes/Northstar/red-cube-demo__20260820_025356/videos/yam001_red_cube_demo_20260820_025356_right_wrist_cam.mp4"
+      },
+      "episode_id": "yam001_red_cube_demo_20260820_025356",
+      "language_instruction": "red cube demo",
+      "operator": "unknown_operator",
+      "annotators": [
+        "headset_grade"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "task description is not specific enough \"red cube demo\"",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T21:55:21.675471+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-073",
+      "dataset_repo": "OopsieData-Submissions/Northstar",
+      "lab_id": "Northstar",
+      "repo_path": "stack-three-orange-cubes-ontop-of-each-other__20261002_235804/yam001_stack_three_orange_cubes_ontop_of_each_other_20261002_235804.h5",
+      "bundle_path": "episodes/Northstar/stack-three-orange-cubes-ontop-of-each-other__20261002_235804/yam001_stack_three_orange_cubes_ontop_of_each_other_20261002_235804.h5",
+      "video_files": {
+        "exo_cam": "episodes/Northstar/stack-three-orange-cubes-ontop-of-each-other__20261002_235804/videos/yam001_stack_three_orange_cubes_ontop_of_each_other_20261002_235804_exo_cam.mp4",
+        "left_wrist_cam": "episodes/Northstar/stack-three-orange-cubes-ontop-of-each-other__20261002_235804/videos/yam001_stack_three_orange_cubes_ontop_of_each_other_20261002_235804_left_wrist_cam.mp4",
+        "right_wrist_cam": "episodes/Northstar/stack-three-orange-cubes-ontop-of-each-other__20261002_235804/videos/yam001_stack_three_orange_cubes_ontop_of_each_other_20261002_235804_right_wrist_cam.mp4"
+      },
+      "episode_id": "yam001_stack_three_orange_cubes_ontop_of_each_other_20261002_235804",
+      "language_instruction": "stack three orange cubes ontop of each other",
+      "operator": "Miki",
+      "annotators": [
+        "Grace"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T21:57:01.810305+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-074",
+      "dataset_repo": "OopsieData-Submissions/Northstar",
+      "lab_id": "Northstar",
+      "repo_path": "place-the-cubes-into-the-paper-bowl__20261006_103620/yam002_place_the_cubes_into_the_paper_bowl_20261006_103620.h5",
+      "bundle_path": "episodes/Northstar/place-the-cubes-into-the-paper-bowl__20261006_103620/yam002_place_the_cubes_into_the_paper_bowl_20261006_103620.h5",
+      "video_files": {
+        "exo_cam": "episodes/Northstar/place-the-cubes-into-the-paper-bowl__20261006_103620/videos/yam002_place_the_cubes_into_the_paper_bowl_20261006_103620_exo_cam.mp4",
+        "left_wrist_cam": "episodes/Northstar/place-the-cubes-into-the-paper-bowl__20261006_103620/videos/yam002_place_the_cubes_into_the_paper_bowl_20261006_103620_left_wrist_cam.mp4",
+        "right_wrist_cam": "episodes/Northstar/place-the-cubes-into-the-paper-bowl__20261006_103620/videos/yam002_place_the_cubes_into_the_paper_bowl_20261006_103620_right_wrist_cam.mp4"
+      },
+      "episode_id": "yam002_place_the_cubes_into_the_paper_bowl_20261006_103620",
+      "language_instruction": "Place the cubes into the paper bowl",
+      "operator": "unknown_operator",
+      "annotators": [
+        "headset_grade"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "no description or annotation of failure",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T21:45:11.916579+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-075",
+      "dataset_repo": "OopsieData-Submissions/Northstar",
+      "lab_id": "Northstar",
+      "repo_path": "place-all-of-the-colored-blocks-into-the-purple-crate__20261001_015255/yam001_place_all_of_the_colored_blocks_into_the_purple_crate_20261001_015255.h5",
+      "bundle_path": "episodes/Northstar/place-all-of-the-colored-blocks-into-the-purple-crate__20261001_015255/yam001_place_all_of_the_colored_blocks_into_the_purple_crate_20261001_015255.h5",
+      "video_files": {
+        "exo_cam": "episodes/Northstar/place-all-of-the-colored-blocks-into-the-purple-crate__20261001_015255/videos/yam001_place_all_of_the_colored_blocks_into_the_purple_crate_20261001_015255_exo_cam.mp4",
+        "left_wrist_cam": "episodes/Northstar/place-all-of-the-colored-blocks-into-the-purple-crate__20261001_015255/videos/yam001_place_all_of_the_colored_blocks_into_the_purple_crate_20261001_015255_left_wrist_cam.mp4",
+        "right_wrist_cam": "episodes/Northstar/place-all-of-the-colored-blocks-into-the-purple-crate__20261001_015255/videos/yam001_place_all_of_the_colored_blocks_into_the_purple_crate_20261001_015255_right_wrist_cam.mp4"
+      },
+      "episode_id": "yam001_place_all_of_the_colored_blocks_into_the_purple_crate_20261001_015255",
+      "language_instruction": "Place all of the colored blocks into the purple crate",
+      "operator": "Miki",
+      "annotators": [
+        "Grace"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "Task says \"purple crate\" but no purple crate is present ",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T21:38:02.496410+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-076",
+      "dataset_repo": "OopsieData-Submissions/Northstar",
+      "lab_id": "Northstar",
+      "repo_path": "cube-purple-to-white-v1__20260825_221243/yam001_cube_purple_to_white_v1_20260825_221243.h5",
+      "bundle_path": "episodes/Northstar/cube-purple-to-white-v1__20260825_221243/yam001_cube_purple_to_white_v1_20260825_221243.h5",
+      "video_files": {
+        "exo_cam": "episodes/Northstar/cube-purple-to-white-v1__20260825_221243/videos/yam001_cube_purple_to_white_v1_20260825_221243_exo_cam.mp4",
+        "left_wrist_cam": "episodes/Northstar/cube-purple-to-white-v1__20260825_221243/videos/yam001_cube_purple_to_white_v1_20260825_221243_left_wrist_cam.mp4",
+        "right_wrist_cam": "episodes/Northstar/cube-purple-to-white-v1__20260825_221243/videos/yam001_cube_purple_to_white_v1_20260825_221243_right_wrist_cam.mp4"
+      },
+      "episode_id": "yam001_cube_purple_to_white_v1_20260825_221243",
+      "language_instruction": "cube-purple-to-white-v1",
+      "operator": "unknown_operator",
+      "annotators": [
+        "headset_grade"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T21:34:58.857574+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-077",
+      "dataset_repo": "OopsieData-Submissions/Northstar",
+      "lab_id": "Northstar",
+      "repo_path": "pick-up-and-stack-3-dice__20261003_005740/yam001_pick_up_and_stack_3_dice_20261003_005740.h5",
+      "bundle_path": "episodes/Northstar/pick-up-and-stack-3-dice__20261003_005740/yam001_pick_up_and_stack_3_dice_20261003_005740.h5",
+      "video_files": {
+        "exo_cam": "episodes/Northstar/pick-up-and-stack-3-dice__20261003_005740/videos/yam001_pick_up_and_stack_3_dice_20261003_005740_exo_cam.mp4",
+        "left_wrist_cam": "episodes/Northstar/pick-up-and-stack-3-dice__20261003_005740/videos/yam001_pick_up_and_stack_3_dice_20261003_005740_left_wrist_cam.mp4",
+        "right_wrist_cam": "episodes/Northstar/pick-up-and-stack-3-dice__20261003_005740/videos/yam001_pick_up_and_stack_3_dice_20261003_005740_right_wrist_cam.mp4"
+      },
+      "episode_id": "yam001_pick_up_and_stack_3_dice_20261003_005740",
+      "language_instruction": "pick up and stack 3 dice",
+      "operator": "Miki",
+      "annotators": [
+        "Grace"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "task is stack 3 cubes, this did not even stack 2.",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T21:36:53.664339+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-078",
+      "dataset_repo": "OopsieData-Submissions/Northstar",
+      "lab_id": "Northstar",
+      "repo_path": "place-pens-into-cardboard-box__20261001_210326/yam001_place_pens_into_cardboard_box_20261001_210326.h5",
+      "bundle_path": "episodes/Northstar/place-pens-into-cardboard-box__20261001_210326/yam001_place_pens_into_cardboard_box_20261001_210326.h5",
+      "video_files": {
+        "exo_cam": "episodes/Northstar/place-pens-into-cardboard-box__20261001_210326/videos/yam001_place_pens_into_cardboard_box_20261001_210326_exo_cam.mp4",
+        "left_wrist_cam": "episodes/Northstar/place-pens-into-cardboard-box__20261001_210326/videos/yam001_place_pens_into_cardboard_box_20261001_210326_left_wrist_cam.mp4",
+        "right_wrist_cam": "episodes/Northstar/place-pens-into-cardboard-box__20261001_210326/videos/yam001_place_pens_into_cardboard_box_20261001_210326_right_wrist_cam.mp4"
+      },
+      "episode_id": "yam001_place_pens_into_cardboard_box_20261001_210326",
+      "language_instruction": "Place pens into cardboard box",
+      "operator": "unknown_operator",
+      "annotators": [
+        "headset_grade"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T21:43:32.782089+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-079",
+      "dataset_repo": "OopsieData-Submissions/Northstar",
+      "lab_id": "Northstar",
+      "repo_path": "put-orange-cubes-in-cardboard-box__20261003_194105/yam001_put_orange_cubes_in_cardboard_box_20261003_194105.h5",
+      "bundle_path": "episodes/Northstar/put-orange-cubes-in-cardboard-box__20261003_194105/yam001_put_orange_cubes_in_cardboard_box_20261003_194105.h5",
+      "video_files": {
+        "exo_cam": "episodes/Northstar/put-orange-cubes-in-cardboard-box__20261003_194105/videos/yam001_put_orange_cubes_in_cardboard_box_20261003_194105_exo_cam.mp4",
+        "left_wrist_cam": "episodes/Northstar/put-orange-cubes-in-cardboard-box__20261003_194105/videos/yam001_put_orange_cubes_in_cardboard_box_20261003_194105_left_wrist_cam.mp4",
+        "right_wrist_cam": "episodes/Northstar/put-orange-cubes-in-cardboard-box__20261003_194105/videos/yam001_put_orange_cubes_in_cardboard_box_20261003_194105_right_wrist_cam.mp4"
+      },
+      "episode_id": "yam001_put_orange_cubes_in_cardboard_box_20261003_194105",
+      "language_instruction": "Put orange cubes in cardboard box",
+      "operator": "Miki",
+      "annotators": [
+        "Grace"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T21:53:54.688636+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-080",
+      "dataset_repo": "OopsieData-Submissions/Northstar",
+      "lab_id": "Northstar",
+      "repo_path": "place-the-cubes-into-the-cardboard-box__20260930_220220/yam002_place_the_cubes_into_the_cardboard_box_20260930_220220.h5",
+      "bundle_path": "episodes/Northstar/place-the-cubes-into-the-cardboard-box__20260930_220220/yam002_place_the_cubes_into_the_cardboard_box_20260930_220220.h5",
+      "video_files": {
+        "exo_cam": "episodes/Northstar/place-the-cubes-into-the-cardboard-box__20260930_220220/videos/yam002_place_the_cubes_into_the_cardboard_box_20260930_220220_exo_cam.mp4",
+        "left_wrist_cam": "episodes/Northstar/place-the-cubes-into-the-cardboard-box__20260930_220220/videos/yam002_place_the_cubes_into_the_cardboard_box_20260930_220220_left_wrist_cam.mp4",
+        "right_wrist_cam": "episodes/Northstar/place-the-cubes-into-the-cardboard-box__20260930_220220/videos/yam002_place_the_cubes_into_the_cardboard_box_20260930_220220_right_wrist_cam.mp4"
+      },
+      "episode_id": "yam002_place_the_cubes_into_the_cardboard_box_20260930_220220",
+      "language_instruction": "place the cubes into the cardboard box",
+      "operator": "unknown_operator",
+      "annotators": [
+        "headset_grade"
+      ],
+      "robot_name": "yam",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T21:44:11.021625+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-081",
+      "dataset_repo": "OopsieData-Submissions/PSU_FMC",
+      "lab_id": "PSU_FMC",
+      "repo_path": "ur10e_sort_fruits_and_lego_2/000069.h5",
+      "bundle_path": "episodes/PSU_FMC/ur10e_sort_fruits_and_lego_2/000069.h5",
+      "video_files": {
+        "global": "episodes/PSU_FMC/ur10e_sort_fruits_and_lego_2/000069_global.mp4",
+        "wrist": "episodes/PSU_FMC/ur10e_sort_fruits_and_lego_2/000069_wrist.mp4"
+      },
+      "episode_id": "000069",
+      "language_instruction": "grab the fruit and put it in the yellow box then grab the lego and put it in the white box.",
+      "operator": "quentin",
+      "annotators": [
+        "quentinR"
+      ],
+      "robot_name": "ur10e",
+      "qa_notes": "video seems to be cut off early.",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:40:00.574520+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-082",
+      "dataset_repo": "OopsieData-Submissions/PSU_FMC",
+      "lab_id": "PSU_FMC",
+      "repo_path": "teleop_so100_TicTacToe/v3_000021.h5",
+      "bundle_path": "episodes/PSU_FMC/teleop_so100_TicTacToe/v3_000021.h5",
+      "video_files": {
+        "front": "episodes/PSU_FMC/teleop_so100_TicTacToe/v3_000021_front.mp4",
+        "top": "episodes/PSU_FMC/teleop_so100_TicTacToe/v3_000021_top.mp4"
+      },
+      "episode_id": "v3_000021",
+      "language_instruction": "Pick up the three black sticks and arrange them in a line between the blue marks",
+      "operator": "quentin",
+      "annotators": [
+        "quentin"
+      ],
+      "robot_name": "so100_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:39:47.627530+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-083",
+      "dataset_repo": "OopsieData-Submissions/PSU_FMC",
+      "lab_id": "PSU_FMC",
+      "repo_path": "domotic_groceriesSorting/expert_000010.h5",
+      "bundle_path": "episodes/PSU_FMC/domotic_groceriesSorting/expert_000010.h5",
+      "video_files": {
+        "logitech_1": "episodes/PSU_FMC/domotic_groceriesSorting/expert_000010_logitech_1.mp4",
+        "logitech_2": "episodes/PSU_FMC/domotic_groceriesSorting/expert_000010_logitech_2.mp4"
+      },
+      "episode_id": "expert_000010",
+      "language_instruction": "sorting groceries, vegetables in the box with a pink sign and sweets in the box with the yellow sign",
+      "operator": "quentin",
+      "annotators": [
+        "quentin"
+      ],
+      "robot_name": "so100",
+      "qa_notes": "description says \"vegetables\" but no vegetables are actually present.",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:36:30.240157+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-084",
+      "dataset_repo": "OopsieData-Submissions/PSU_FMC",
+      "lab_id": "PSU_FMC",
+      "repo_path": "20260821_151723/20260821_160624.h5",
+      "bundle_path": "episodes/PSU_FMC/20260821_151723/20260821_160624.h5",
+      "video_files": {
+        "front": "episodes/PSU_FMC/20260821_151723/20260821_160624_front.mp4",
+        "top": "episodes/PSU_FMC/20260821_151723/20260821_160624_top.mp4"
+      },
+      "episode_id": "20260821_160624",
+      "language_instruction": "stack the kapla tower",
+      "operator": "quentin",
+      "annotators": [
+        "quentinR"
+      ],
+      "robot_name": "so100_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:34:10.382114+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-085",
+      "dataset_repo": "OopsieData-Submissions/PSU_FMC",
+      "lab_id": "PSU_FMC",
+      "repo_path": "domotic_dishTidyUp/anomaly_000007.h5",
+      "bundle_path": "episodes/PSU_FMC/domotic_dishTidyUp/anomaly_000007.h5",
+      "video_files": {
+        "logitech_1": "episodes/PSU_FMC/domotic_dishTidyUp/anomaly_000007_logitech_1.mp4",
+        "logitech_2": "episodes/PSU_FMC/domotic_dishTidyUp/anomaly_000007_logitech_2.mp4"
+      },
+      "episode_id": "anomaly_000007",
+      "language_instruction": "store dishes in a dish rack",
+      "operator": "quentin",
+      "annotators": [
+        "quentin"
+      ],
+      "robot_name": "so100",
+      "qa_notes": "partial failure. mostly success",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:35:24.250953+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-086",
+      "dataset_repo": "OopsieData-Submissions/PSU_FMC",
+      "lab_id": "PSU_FMC",
+      "repo_path": "eval_so100_act_TicTacToe/20260902_141917.h5",
+      "bundle_path": "episodes/PSU_FMC/eval_so100_act_TicTacToe/20260902_141917.h5",
+      "video_files": {
+        "front": "episodes/PSU_FMC/eval_so100_act_TicTacToe/20260902_141917_front.mp4",
+        "top": "episodes/PSU_FMC/eval_so100_act_TicTacToe/20260902_141917_top.mp4"
+      },
+      "episode_id": "20260902_141917",
+      "language_instruction": "Pick up the three black sticks and arrange them in a line between the blue marks.",
+      "operator": "quentin",
+      "annotators": [
+        "quentinR"
+      ],
+      "robot_name": "so100_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:38:06.796659+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-087",
+      "dataset_repo": "OopsieData-Submissions/PSU_FMC",
+      "lab_id": "PSU_FMC",
+      "repo_path": "domotic_pouringCoffee/expert_000008.h5",
+      "bundle_path": "episodes/PSU_FMC/domotic_pouringCoffee/expert_000008.h5",
+      "video_files": {
+        "logitech_1": "episodes/PSU_FMC/domotic_pouringCoffee/expert_000008_logitech_1.mp4",
+        "logitech_2": "episodes/PSU_FMC/domotic_pouringCoffee/expert_000008_logitech_2.mp4"
+      },
+      "episode_id": "expert_000008",
+      "language_instruction": "pouring coffe in a cup",
+      "operator": "quentin",
+      "annotators": [
+        "quentin"
+      ],
+      "robot_name": "so100",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:36:54.081806+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-088",
+      "dataset_repo": "OopsieData-Submissions/PSU_FMC",
+      "lab_id": "PSU_FMC",
+      "repo_path": "teleop_so100_kaplaTower/000105.h5",
+      "bundle_path": "episodes/PSU_FMC/teleop_so100_kaplaTower/000105.h5",
+      "video_files": {
+        "front": "episodes/PSU_FMC/teleop_so100_kaplaTower/000105_front.mp4",
+        "top": "episodes/PSU_FMC/teleop_so100_kaplaTower/000105_top.mp4"
+      },
+      "episode_id": "000105",
+      "language_instruction": "Grab the wooden pieces and build a 2 levels tower",
+      "operator": "quentin",
+      "annotators": [
+        "quentin"
+      ],
+      "robot_name": "so100_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:39:06.775953+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-089",
+      "dataset_repo": "OopsieData-Submissions/PSU_FMC",
+      "lab_id": "PSU_FMC",
+      "repo_path": "teleop_so100_stacking_cups/000057.h5",
+      "bundle_path": "episodes/PSU_FMC/teleop_so100_stacking_cups/000057.h5",
+      "video_files": {
+        "logitech_1": "episodes/PSU_FMC/teleop_so100_stacking_cups/000057_logitech_1.mp4",
+        "logitech_2": "episodes/PSU_FMC/teleop_so100_stacking_cups/000057_logitech_2.mp4"
+      },
+      "episode_id": "000057",
+      "language_instruction": "Grasp the orange cup and stack it in the blue cup",
+      "operator": "quentin",
+      "annotators": [
+        "quentin"
+      ],
+      "robot_name": "so100",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:39:16.829258+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-090",
+      "dataset_repo": "OopsieData-Submissions/PSU_FMC",
+      "lab_id": "PSU_FMC",
+      "repo_path": "teleop_so100_TicTacToe/v1_000003.h5",
+      "bundle_path": "episodes/PSU_FMC/teleop_so100_TicTacToe/v1_000003.h5",
+      "video_files": {
+        "front": "episodes/PSU_FMC/teleop_so100_TicTacToe/v1_000003_front.mp4",
+        "top": "episodes/PSU_FMC/teleop_so100_TicTacToe/v1_000003_top.mp4"
+      },
+      "episode_id": "v1_000003",
+      "language_instruction": "Pick up the three black sticks and arrange them in a line in the centre of the square",
+      "operator": "quentin",
+      "annotators": [
+        "quentin"
+      ],
+      "robot_name": "so100_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:39:28.990227+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-091",
+      "dataset_repo": "OopsieData-Submissions/PSU_FMC",
+      "lab_id": "PSU_FMC",
+      "repo_path": "domotic_makingCoffee/expert_000019.h5",
+      "bundle_path": "episodes/PSU_FMC/domotic_makingCoffee/expert_000019.h5",
+      "video_files": {
+        "logitech_1": "episodes/PSU_FMC/domotic_makingCoffee/expert_000019_logitech_1.mp4",
+        "logitech_2": "episodes/PSU_FMC/domotic_makingCoffee/expert_000019_logitech_2.mp4"
+      },
+      "episode_id": "expert_000019",
+      "language_instruction": "making coffee: take some coffee powder with the spoon and pour it into the filter of the coffee machine",
+      "operator": "quentin",
+      "annotators": [
+        "quentin"
+      ],
+      "robot_name": "so100",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:36:44.459324+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-092",
+      "dataset_repo": "OopsieData-Submissions/PSU_FMC",
+      "lab_id": "PSU_FMC",
+      "repo_path": "domotic_vegetablesAndFruitsSorting/expert_000001.h5",
+      "bundle_path": "episodes/PSU_FMC/domotic_vegetablesAndFruitsSorting/expert_000001.h5",
+      "video_files": {
+        "logitech_1": "episodes/PSU_FMC/domotic_vegetablesAndFruitsSorting/expert_000001_logitech_1.mp4",
+        "logitech_2": "episodes/PSU_FMC/domotic_vegetablesAndFruitsSorting/expert_000001_logitech_2.mp4"
+      },
+      "episode_id": "expert_000001",
+      "language_instruction": "sorting fruits and vegetables, put vegetables in the box with a yellow mark and fruits in the box with a pink mark",
+      "operator": "quentin",
+      "annotators": [
+        "quentin"
+      ],
+      "robot_name": "so100",
+      "qa_notes": "ok. now the fruit vs vegetable is correct.",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:37:46.247291+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-093",
+      "dataset_repo": "OopsieData-Submissions/PSU_FMC",
+      "lab_id": "PSU_FMC",
+      "repo_path": "eval_ur10e_act_sort_fruits_and_lego_3/000079.h5",
+      "bundle_path": "episodes/PSU_FMC/eval_ur10e_act_sort_fruits_and_lego_3/000079.h5",
+      "video_files": {
+        "global": "episodes/PSU_FMC/eval_ur10e_act_sort_fruits_and_lego_3/000079_global.mp4",
+        "wrist": "episodes/PSU_FMC/eval_ur10e_act_sort_fruits_and_lego_3/000079_wrist.mp4"
+      },
+      "episode_id": "000079",
+      "language_instruction": "grab the fruit and put it in the yellow box then grab the lego and put it in the white box.",
+      "operator": "quentin",
+      "annotators": [
+        "quentinR"
+      ],
+      "robot_name": "ur10e",
+      "qa_notes": "video seems cut off. ",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:38:37.790854+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-094",
+      "dataset_repo": "OopsieData-Submissions/PSU_FMC",
+      "lab_id": "PSU_FMC",
+      "repo_path": "domotic_setTheTable/anomaly_000002.h5",
+      "bundle_path": "episodes/PSU_FMC/domotic_setTheTable/anomaly_000002.h5",
+      "video_files": {
+        "logitech_1": "episodes/PSU_FMC/domotic_setTheTable/anomaly_000002_logitech_1.mp4",
+        "logitech_2": "episodes/PSU_FMC/domotic_setTheTable/anomaly_000002_logitech_2.mp4"
+      },
+      "episode_id": "anomaly_000002",
+      "language_instruction": "Set the table: one glass, one plate, one fork and one knife. Fork on the left of the plate and knife on the right",
+      "operator": "quentin",
+      "annotators": [
+        "quentin"
+      ],
+      "robot_name": "so100",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:37:15.556468+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-095",
+      "dataset_repo": "OopsieData-Submissions/PSU_FMC",
+      "lab_id": "PSU_FMC",
+      "repo_path": "20260824_142019/20260824_142302.h5",
+      "bundle_path": "episodes/PSU_FMC/20260824_142019/20260824_142302.h5",
+      "video_files": {
+        "front": "episodes/PSU_FMC/20260824_142019/20260824_142302_front.mp4",
+        "top": "episodes/PSU_FMC/20260824_142019/20260824_142302_top.mp4"
+      },
+      "episode_id": "20260824_142302",
+      "language_instruction": "stack the kapla tower",
+      "operator": "quentin",
+      "annotators": [
+        "quentinR"
+      ],
+      "robot_name": "so100_follower",
+      "qa_notes": "ok, partial failure.",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:34:37.422057+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-096",
+      "dataset_repo": "OopsieData-Submissions/PSU_FMC",
+      "lab_id": "PSU_FMC",
+      "repo_path": "eval_ur10e_act_sort_fruits_and_lego_2/000087.h5",
+      "bundle_path": "episodes/PSU_FMC/eval_ur10e_act_sort_fruits_and_lego_2/000087.h5",
+      "video_files": {
+        "global": "episodes/PSU_FMC/eval_ur10e_act_sort_fruits_and_lego_2/000087_global.mp4",
+        "wrist": "episodes/PSU_FMC/eval_ur10e_act_sort_fruits_and_lego_2/000087_wrist.mp4"
+      },
+      "episode_id": "000087",
+      "language_instruction": "grab the fruit and put it in the yellow box then grab the lego and put it in the white box.",
+      "operator": "quentin",
+      "annotators": [
+        "quentinR"
+      ],
+      "robot_name": "ur10e",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:38:20.476996+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-097",
+      "dataset_repo": "OopsieData-Submissions/PSU_FMC",
+      "lab_id": "PSU_FMC",
+      "repo_path": "20260901_134240/20260901_134329.h5",
+      "bundle_path": "episodes/PSU_FMC/20260901_134240/20260901_134329.h5",
+      "video_files": {
+        "front": "episodes/PSU_FMC/20260901_134240/20260901_134329_front.mp4",
+        "top": "episodes/PSU_FMC/20260901_134240/20260901_134329_top.mp4"
+      },
+      "episode_id": "20260901_134329",
+      "language_instruction": "Pick up the three black sticks and arrange them in a line between the blue marks.",
+      "operator": "quentin",
+      "annotators": [
+        "quentinR"
+      ],
+      "robot_name": "so100_follower",
+      "qa_notes": "partial failure.",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:34:55.211039+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-098",
+      "dataset_repo": "OopsieData-Submissions/PSU_FMC",
+      "lab_id": "PSU_FMC",
+      "repo_path": "domotic_groceriesSorting/anomaly_000006.h5",
+      "bundle_path": "episodes/PSU_FMC/domotic_groceriesSorting/anomaly_000006.h5",
+      "video_files": {
+        "logitech_1": "episodes/PSU_FMC/domotic_groceriesSorting/anomaly_000006_logitech_1.mp4",
+        "logitech_2": "episodes/PSU_FMC/domotic_groceriesSorting/anomaly_000006_logitech_2.mp4"
+      },
+      "episode_id": "anomaly_000006",
+      "language_instruction": "sorting groceries, vegetables in the box with a pink sign and sweets in the box with the yellow sign",
+      "operator": "quentin",
+      "annotators": [
+        "quentin"
+      ],
+      "robot_name": "so100",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:35:50.437246+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-099",
+      "dataset_repo": "OopsieData-Submissions/PSU_FMC",
+      "lab_id": "PSU_FMC",
+      "repo_path": "teleop_so100_TicTacToe/v1_000110.h5",
+      "bundle_path": "episodes/PSU_FMC/teleop_so100_TicTacToe/v1_000110.h5",
+      "video_files": {
+        "front": "episodes/PSU_FMC/teleop_so100_TicTacToe/v1_000110_front.mp4",
+        "top": "episodes/PSU_FMC/teleop_so100_TicTacToe/v1_000110_top.mp4"
+      },
+      "episode_id": "v1_000110",
+      "language_instruction": "Pick up the three black sticks and arrange them in a line between the blue marks",
+      "operator": "quentin",
+      "annotators": [
+        "quentin"
+      ],
+      "robot_name": "so100_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:39:37.946321+00:00"
+    },
+    {
+      "qa_id": "qa_bundle_06-100",
+      "dataset_repo": "OopsieData-Submissions/PSU_FMC",
+      "lab_id": "PSU_FMC",
+      "repo_path": "teleop_so100_kaplaTower/000083.h5",
+      "bundle_path": "episodes/PSU_FMC/teleop_so100_kaplaTower/000083.h5",
+      "video_files": {
+        "front": "episodes/PSU_FMC/teleop_so100_kaplaTower/000083_front.mp4",
+        "top": "episodes/PSU_FMC/teleop_so100_kaplaTower/000083_top.mp4"
+      },
+      "episode_id": "000083",
+      "language_instruction": "Grab the wooden pieces and build a 2 levels tower",
+      "operator": "quentin",
+      "annotators": [
+        "quentin"
+      ],
+      "robot_name": "so100_follower",
+      "qa_notes": "ok",
+      "qa_reviewer": "maxrudolph",
+      "qa_updated_at": "2026-10-08T22:38:53.845757+00:00"
+    }
+  ]
+}

@@ -28,8 +28,13 @@ from huggingface_hub.errors import RepositoryNotFoundError
 from huggingface_hub.file_download import DryRunFileInfo
 from huggingface_hub.utils import disable_progress_bars, enable_progress_bars
 
-from oopsie_backend.utils.episode_stats import now_timestamps
+from oopsie_backend.utils.episode_stats import (
+    PUBLIC_EXCLUDED_DATASETS,
+    STATS_EXCLUDED_DATASETS,
+    now_timestamps,
+)
 from oopsie_backend.utils.hf import (
+    dataset_repo_size,
     list_dataset_repos_for_org,
     parse_org_arg,
     split_repo_id,
@@ -168,9 +173,11 @@ def sync_dataset(
             local_dir=dest,
             token=token,
             dry_run=dry_run,
-            # max_workers=2,
-            # resume_download=True,
-            # local_dir_use_symlinks=False,
+            # Default is 8; large video files sharing one connection at that
+            # concurrency easily exceed the 10s per-chunk read timeout, which
+            # aborts the whole sync after retries are exhausted. Lower contention
+            # instead of just raising the timeout.
+            max_workers=3,
         )
 
     if dry_run:
@@ -225,6 +232,25 @@ def sync_dataset_with_retries(
     raise AssertionError("unreachable")
 
 
+def smallest_datasets(dataset_ids: list[str], n: int, token: str | None) -> list[str]:
+    """Return the ``n`` smallest non-excluded repos that contain ``.h5`` files."""
+    excluded = STATS_EXCLUDED_DATASETS | PUBLIC_EXCLUDED_DATASETS
+    sized: list[tuple[int, str]] = []
+    for repo_id in dataset_ids:
+        if repo_id in excluded:
+            continue
+        try:
+            total, n_h5 = dataset_repo_size(repo_id, token)
+        except RepositoryNotFoundError:
+            continue
+        if n_h5:
+            sized.append((total, repo_id))
+    sized.sort()
+    for total, repo_id in sized[:n]:
+        _log(f"selected {repo_id} ({total / 1e6:.1f} MB)")
+    return [repo_id for _, repo_id in sized[:n]]
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -272,6 +298,13 @@ def main(argv: list[str] | None = None) -> int:
         help="Base seconds between retries; attempt N waits N times this (default: 30).",
     )
     parser.add_argument(
+        "--smallest",
+        type=int,
+        default=None,
+        help="Sync only the N smallest datasets that contain .h5 files and are "
+        "not excluded from public stats (for local testing).",
+    )
+    parser.add_argument(
         "--verbose",
         action="store_true",
         help="Log per-dataset and per-file actions.",
@@ -293,6 +326,8 @@ def main(argv: list[str] | None = None) -> int:
     dataset_ids = list_dataset_repos_for_org(org_slug, args.token)
     if args.limit_datasets is not None:
         dataset_ids = dataset_ids[: args.limit_datasets]
+    if args.smallest is not None:
+        dataset_ids = smallest_datasets(dataset_ids, args.smallest, args.token)
 
     if not dataset_ids:
         print(

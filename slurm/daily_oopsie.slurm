@@ -54,6 +54,7 @@ sync_rc=0
 run_step sync_hf_org "$UV" run python -m oopsie_backend.scripts.sync_hf_org \
   --org OopsieData-Submissions \
   --local-dir "$DATA_DIR" \
+  --group G-829069 \
   --verbose || sync_rc=$?
 
 # Note: This step is kept as a safety net, but is not needed anymore.
