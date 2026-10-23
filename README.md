@@ -10,3 +10,4 @@ All oopsiedata processing code lives here
 | QA spot checks | [docs/qa-spot-checks.md](docs/qa-spot-checks.md) |
 | Action checks | [docs/action-checks.md](docs/action-checks.md) |
 | Video checks | [docs/video-checks.md](docs/video-checks.md) |
+| Eval split proposals | [docs/eval-split.md](docs/eval-split.md) |
