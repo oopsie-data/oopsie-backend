@@ -1,7 +1,11 @@
 """Propose eval splits (ID, OD-task/ID-scene, OD-task/OD-scene) from an episode index.
 
-A scene is approximated by ``(lab_id, robot_name, cameras)``; a task by the
-normalized language instruction. Every proposal is checked against the
+Robots are compared by embodiment, the alias-resolved ``robot`` field set by
+``apply_robot_aliases``. A scene is approximated by ``(lab_id, robot, cameras)``; a task by the
+normalized language instruction. An annotation budget is split across the
+three groups; held-out labs and tasks are ranked by how close their size is to
+their share of the budget, and the part of a held-out unit beyond its share is
+excluded from both train and eval. Every proposal is checked against the
 remaining training pool so violations show up in the report instead of being
 silently accepted.
 """
@@ -12,6 +16,10 @@ import difflib
 import itertools
 import math
 import random
+import re
+from pathlib import Path
+
+import yaml
 from collections import Counter, defaultdict
 from dataclasses import asdict, dataclass, field
 
@@ -25,22 +33,92 @@ SPLITS = (ID_SPLIT, OD_TASK_SPLIT, OOD_LAB_SPLIT)
 
 @dataclass
 class SplitConfig:
-    id_frac: float = 0.05
+    eval_budget: int | None = 2000
+    budget_frac: float = 0.05
+    split_weights: tuple[float, float, float] = (0.2, 0.4, 0.4)
     id_alpha: float = 0.5
     id_max_group_frac: float = 0.25
     id_min_group: int = 8
     ood_lab_min: int = 40
-    ood_lab_max_frac: float = 0.03
-    od_task_lab_min_frac: float = 0.02
-    od_task_lab_max_frac: float = 0.15
+    ood_lab_max_quantile: float = 0.5
+    od_task_lab_quantiles: tuple[float, float] = (0.25, 0.75)
     od_task_min_tasks: int = 3
     od_task_min_episodes: int = 25
     od_task_max_share: float = 0.4
-    holdout_cap: int | None = None
+    cap_holdouts: bool = True
+    num_od_tasks: int = 3
+    num_ood_common: int = 1
+    num_ood_custom: int = 1
     candidates_per_split: int = 3
     common_robots: list[str] = field(default_factory=list)
     custom_robots: list[str] = field(default_factory=list)
     seed: int = 0
+
+
+def budget(cfg: SplitConfig, total: int) -> dict[str, int]:
+    """Episodes to label per split."""
+    n = cfg.eval_budget if cfg.eval_budget is not None else round(cfg.budget_frac * total)
+    norm = sum(cfg.split_weights)
+    return {s: round(n * w / norm) for s, w in zip(SPLITS, cfg.split_weights)}
+
+
+def unit_targets(cfg: SplitConfig, total: int) -> dict[str, int]:
+    """Target size of one held-out lab and of one held-out task."""
+    b = budget(cfg, total)
+    n_labs = max(1, cfg.num_ood_common + cfg.num_ood_custom)
+    return {
+        OOD_LAB_SPLIT: max(1, b[OOD_LAB_SPLIT] // n_labs),
+        OD_TASK_SPLIT: max(1, b[OD_TASK_SPLIT] // max(1, cfg.num_od_tasks)),
+    }
+
+
+def _size_score(n: int, target: int) -> float:
+    return abs(math.log(n / target))
+
+
+def _lab_size_quantiles(rows: list[dict]) -> dict[str, float]:
+    """Rank of each lab by episode count, scaled to [0, 1] (0 = smallest)."""
+    sizes = sorted(Counter(r["lab_id"] for r in rows).items(), key=lambda kv: (kv[1], kv[0]))
+    denom = max(1, len(sizes) - 1)
+    return {lab: i / denom for i, (lab, _) in enumerate(sizes)}
+
+
+DEFAULT_ROBOT_ALIASES = Path(__file__).resolve().parents[2] / "configs" / "robot_aliases.yaml"
+
+
+def canonical_robot(name: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "_", (name or "").lower()).strip("_")
+
+
+def load_robot_aliases(path: Path | None = DEFAULT_ROBOT_ALIASES) -> dict[str, str]:
+    """Map normalized raw robot name -> embodiment from a ``{embodiment: [raw names]}`` YAML file."""
+    if path is None or not path.is_file():
+        return {}
+    with path.open(encoding="utf-8") as fh:
+        raw = yaml.safe_load(fh) or {}
+    aliases: dict[str, str] = {}
+    for embodiment, names in raw.items():
+        for name in [embodiment, *(names or [])]:
+            norm = canonical_robot(str(name))
+            if aliases.get(norm, embodiment) != embodiment:
+                raise ValueError(f"{path}: {name!r} listed under {aliases[norm]!r} and {embodiment!r}")
+            aliases[norm] = str(embodiment)
+    return aliases
+
+
+def resolve_robot(name: str, aliases: dict[str, str]) -> str:
+    norm = canonical_robot(name)
+    return aliases.get(norm, norm)
+
+
+def apply_robot_aliases(rows: list[dict], aliases: dict[str, str]) -> list[str]:
+    """Set ``row["robot"]`` on every row; return raw names absent from ``aliases``."""
+    unmapped = set()
+    for r in rows:
+        r["robot"] = resolve_robot(r["robot_name"], aliases)
+        if canonical_robot(r["robot_name"]) not in aliases:
+            unmapped.add(r["robot_name"])
+    return sorted(unmapped)
 
 
 def key(row: dict) -> tuple[str, str]:
@@ -48,7 +126,7 @@ def key(row: dict) -> tuple[str, str]:
 
 
 def scene(row: dict) -> tuple[str, str, str]:
-    return row["lab_id"], row["robot_name"], row["cameras"]
+    return row["lab_id"], row["robot"], row["cameras"]
 
 
 def _hours(rows: list[dict]) -> float:
@@ -68,10 +146,10 @@ def _by(rows: list[dict], field_name: str) -> dict[str, list[dict]]:
 
 
 def robot_classes(rows: list[dict], cfg: SplitConfig) -> dict[str, str]:
-    """``common`` for robots used by at least two labs, ``custom`` otherwise; config overrides win."""
+    """``common`` for embodiments used by at least two labs, ``custom`` otherwise; config overrides win."""
     labs_per_robot: dict[str, set[str]] = defaultdict(set)
     for r in rows:
-        labs_per_robot[r["robot_name"]].add(r["lab_id"])
+        labs_per_robot[r["robot"]].add(r["lab_id"])
     classes = {
         robot: "common" if len(labs) >= 2 else "custom"
         for robot, labs in labs_per_robot.items()
@@ -86,7 +164,7 @@ def lab_summary(rows: list[dict], cfg: SplitConfig) -> list[dict]:
     total = len(rows)
     out = []
     for lab, rs in sorted(_by(rows, "lab_id").items(), key=lambda kv: -len(kv[1])):
-        robots = sorted({r["robot_name"] for r in rs})
+        robots = sorted({r["robot"] for r in rs})
         out.append(
             {
                 "lab_id": lab,
@@ -106,13 +184,19 @@ def lab_summary(rows: list[dict], cfg: SplitConfig) -> list[dict]:
 
 
 def ood_lab_candidates(rows: list[dict], cfg: SplitConfig) -> dict[str, list[dict]]:
-    """Small labs eligible for full holdout, smallest first, split by embodiment class."""
-    total = len(rows)
+    """Labs in the lower size quantiles, split by embodiment class, closest to the per-lab target first."""
+    target = unit_targets(cfg, len(rows))[OOD_LAB_SPLIT]
+    quantiles = _lab_size_quantiles(rows)
     tasks_by_lab = {lab: {r["task"] for r in rs} for lab, rs in _by(rows, "lab_id").items()}
     out: dict[str, list[dict]] = {"common": [], "custom": []}
-    for lab in sorted(lab_summary(rows, cfg), key=lambda s: s["episodes"]):
-        if lab["episodes"] < cfg.ood_lab_min or lab["frac"] > cfg.ood_lab_max_frac:
+    summary = lab_summary(rows, cfg)
+    for lab in sorted(summary, key=lambda s: _size_score(s["episodes"], target)):
+        if (
+            lab["episodes"] < cfg.ood_lab_min
+            or quantiles[lab["lab_id"]] > cfg.ood_lab_max_quantile
+        ):
             continue
+        lab["target"] = target
         other_tasks = set().union(
             *(t for other, t in tasks_by_lab.items() if other != lab["lab_id"])
         )
@@ -121,43 +205,57 @@ def ood_lab_candidates(rows: list[dict], cfg: SplitConfig) -> dict[str, list[dic
     return out
 
 
+def _jaccard(wa: set[str], wb: set[str]) -> float:
+    return len(wa & wb) / len(wa | wb) if wa | wb else 0.0
+
+
 def task_similarity(a: str, b: str) -> float:
     """Max of character-level ``difflib`` ratio and word-set Jaccard, so word swaps count as similar."""
-    wa, wb = set(a.split()), set(b.split())
-    jaccard = len(wa & wb) / len(wa | wb) if wa | wb else 0.0
-    return max(difflib.SequenceMatcher(None, a, b).ratio(), jaccard)
+    return max(difflib.SequenceMatcher(None, a, b).ratio(), _jaccard(set(a.split()), set(b.split())))
 
 
 def nearest_task(task: str, pool: set[str]) -> tuple[str, float]:
-    """Most similar task string in ``pool`` by ``task_similarity``."""
+    """Most similar task string in ``pool`` by ``task_similarity``.
+
+    The exact ``difflib`` ratio is computed only when its length and
+    character-count bounds can beat the best similarity so far.
+    """
+    words = set(task.split())
+    m = difflib.SequenceMatcher(None, b=task)
     best, best_sim = "", 0.0
-    for other in pool:
-        sim = task_similarity(task, other)
+    for other in sorted(pool):
+        sim = _jaccard(words, set(other.split()))
+        floor = max(best_sim, sim)
+        if 2 * min(len(task), len(other)) / (len(task) + len(other)) > floor:
+            m.set_seq1(other)
+            if m.quick_ratio() > floor:
+                sim = max(sim, m.ratio())
         if sim > best_sim:
             best, best_sim = other, sim
     return best, best_sim
 
 
-def od_task_candidates(
-    rows: list[dict], cfg: SplitConfig, excluded_labs: set[str]
-) -> list[dict]:
+def od_task_candidates(rows: list[dict], cfg: SplitConfig) -> list[dict]:
     """Tasks of medium multi-task labs that can be held out with their scenes kept in training.
 
-    A task qualifies when it is absent from every other lab, holds between
-    ``od_task_min_episodes`` episodes and ``od_task_max_share`` of its lab, and
-    each of its scenes still has training episodes on other tasks.
+    Medium labs lie within ``od_task_lab_quantiles`` of the lab size ranking.
+    A task qualifies when it is absent from every other lab, has no
+    near-duplicate task anywhere, holds between ``od_task_min_episodes``
+    episodes and ``od_task_max_share`` of its lab, and each of its scenes still
+    has training episodes on other tasks. Candidates are ordered by closeness
+    to the task target size, with each lab's best task first so that the top
+    of the list spans several labs.
     """
-    total = len(rows)
+    target = unit_targets(cfg, len(rows))[OD_TASK_SPLIT]
+    quantiles = _lab_size_quantiles(rows)
+    lo, hi = cfg.od_task_lab_quantiles
     all_tasks = {r["task"] for r in rows}
     labs_per_task: dict[str, set[str]] = defaultdict(set)
     for r in rows:
         labs_per_task[r["task"]].add(r["lab_id"])
     out = []
     for lab, rs in _by(rows, "lab_id").items():
-        frac = len(rs) / total
-        if lab in excluded_labs or not (
-            cfg.od_task_lab_min_frac <= frac <= cfg.od_task_lab_max_frac
-        ):
+        if not lo <= quantiles[lab] <= hi:
             continue
         tasks = Counter(r["task"] for r in rs)
         big_tasks = [t for t, n in tasks.items() if n >= cfg.od_task_min_episodes]
@@ -173,6 +271,8 @@ def od_task_candidates(
             if not {scene(r) for r in held} <= kept_scenes:
                 continue
             similar, similarity = nearest_task(task, all_tasks - {task})
+            if similarity >= NEAR_DUPLICATE_SIMILARITY:
+                continue
             out.append(
                 {
                     "lab_id": lab,
@@ -183,10 +283,15 @@ def od_task_candidates(
                     "lab_share": share,
                     "lab_tasks": len(tasks),
                     "success_rate": _success_rate(held),
+                    "target": target,
                 }
             )
-    # Prefer tasks near a quarter of their lab: large enough to evaluate, small enough to keep the lab.
-    out.sort(key=lambda c: (abs(c["lab_share"] - 0.25), -c["episodes"]))
+    out.sort(key=lambda c: _size_score(c["episodes"], c["target"]))
+    rank_in_lab: Counter = Counter()
+    for c in out:
+        c["rank_in_lab"] = rank_in_lab[c["lab_id"]]
+        rank_in_lab[c["lab_id"]] += 1
+    out.sort(key=lambda c: (c["rank_in_lab"], _size_score(c["episodes"], c["target"])))
     return out
 
 
@@ -262,7 +367,7 @@ def check_proposal(train: list[dict], splits: dict[str, list[dict]]) -> list[str
     train_tasks = {r["task"] for r in train}
     train_groups = {(*scene(r), r["task"]) for r in train}
     train_labs = {r["lab_id"] for r in train}
-    train_robots = {r["robot_name"] for r in train}
+    train_robots = {r["robot"] for r in train}
 
     missing = [r for r in splits[ID_SPLIT] if (*scene(r), r["task"]) not in train_groups]
     if missing:
@@ -277,7 +382,7 @@ def check_proposal(train: list[dict], splits: dict[str, list[dict]]) -> list[str
     leaked = {r["lab_id"] for r in splits[OOD_LAB_SPLIT]} & train_labs
     if leaked:
         problems.append(f"{OOD_LAB_SPLIT}: lab(s) also in train: {sorted(leaked)}")
-    gone = {r["robot_name"] for r in splits[OOD_LAB_SPLIT]} - train_robots
+    gone = {r["robot"] for r in splits[OOD_LAB_SPLIT]} - train_robots
     if gone:
         problems.append(f"note: robot(s) only in {OOD_LAB_SPLIT}, unseen in train: {sorted(gone)}")
     shared = {r["task"] for r in splits[OOD_LAB_SPLIT]} & train_tasks
@@ -292,12 +397,18 @@ def split_stats(rows: list[dict], total: int) -> dict:
         "frac": len(rows) / total if total else 0.0,
         "hours": _hours(rows),
         "labs": len({r["lab_id"] for r in rows}),
-        "robots": len({r["robot_name"] for r in rows}),
+        "robots": len({r["robot"] for r in rows}),
         "tasks": len({r["task"] for r in rows}),
         "success_rate": _success_rate(rows),
         "with_failure_description": sum(r["has_failure_description"] for r in rows),
         "multi_annotator": sum(len(r["annotators"]) >= 2 for r in rows),
     }
+
+
+def _per_lab_counts(parts: dict[str, list[dict]]) -> dict[str, dict[str, int]]:
+    counts = {name: Counter(r["lab_id"] for r in rs) for name, rs in parts.items()}
+    labs = sorted(set().union(*counts.values()))
+    return {lab: {name: c[lab] for name, c in counts.items()} for lab in labs}
 
 
 def make_proposal(
@@ -321,20 +432,22 @@ def make_proposal(
             pool.append(r)
     rng = random.Random(seed)
     excluded: list[dict] = []
-    if cfg.holdout_cap is not None:
+    if cfg.cap_holdouts:
         for name, field_fn in ((OOD_LAB_SPLIT, lambda r: r["lab_id"]), (OD_TASK_SPLIT, lambda r: (r["lab_id"], r["task"]))):
             capped = []
-            for unit in sorted({field_fn(r) for r in splits[name]}):
+            units = sorted({field_fn(r) for r in splits[name]})
+            cap = budget(cfg, len(rows))[name] // max(1, len(units))
+            for unit in units:
                 rs = [r for r in splits[name] if field_fn(r) == unit]
-                if len(rs) > cfg.holdout_cap:
-                    kept = _subsample(rs, cfg.holdout_cap, cfg.id_alpha, rng)
+                if len(rs) > cap:
+                    kept = _subsample(rs, cap, cfg.id_alpha, rng)
                     kept_keys = {key(r) for r in kept}
                     excluded.extend(r for r in rs if key(r) not in kept_keys)
                     rs = kept
                 capped.extend(rs)
             splits[name] = capped
-    n_id = round(cfg.id_frac * len(rows))
-    splits[ID_SPLIT], id_info = sample_id(pool, n_id, cfg, rng)
+    targets = budget(cfg, len(rows))
+    splits[ID_SPLIT], id_info = sample_id(pool, targets[ID_SPLIT], cfg, rng)
     id_keys = {key(r) for r in splits[ID_SPLIT]}
     train = [r for r in pool if key(r) not in id_keys]
 
@@ -355,6 +468,7 @@ def make_proposal(
         "ood_labs": ood_labs,
         "od_tasks": [{"lab_id": lab, "task": task} for lab, task in od_tasks],
         "nearest_train_task": {k: {"task": t, "similarity": round(r, 3)} for k, (t, r) in nearest.items()},
+        "budget": {"total": total, "eval_target": sum(targets.values()), **targets},
         "stats": {
             "train": split_stats(train, total),
             **{s: split_stats(rs, total) for s, rs in splits.items()},
@@ -363,10 +477,7 @@ def make_proposal(
         },
         "id_sampling": id_info,
         "problems": problems,
-        "per_lab": {
-            lab: {s: sum(r["lab_id"] == lab for r in rs) for s, rs in [("train", train), *splits.items()]}
-            for lab in sorted({r["lab_id"] for r in rows})
-        },
+        "per_lab": _per_lab_counts({"train": train, **splits, EXCLUDED: excluded}),
         "episodes": {
             s: [
                 {
@@ -374,6 +485,7 @@ def make_proposal(
                     "repo_path": r["repo_path"],
                     "lab_id": r["lab_id"],
                     "robot_name": r["robot_name"],
+                    "robot": r["robot"],
                     "task": r["task"],
                 }
                 for r in sorted(rs, key=key)
@@ -383,6 +495,18 @@ def make_proposal(
     }
 
 
+def _ranked_sets(cands: list[dict], n: int, k: int) -> list[list[dict]]:
+    """The ``k`` best ``n``-subsets of ``cands`` by summed size score; ``cands`` is sorted best first."""
+    if n <= 0:
+        return [[]]
+    pool = cands[: n + k - 1]
+    if len(pool) < n:
+        return [pool]
+    combos = itertools.combinations(pool, n)
+    ranked = sorted(combos, key=lambda c: sum(_size_score(x["episodes"], x["target"]) for x in c))
+    return [list(c) for c in ranked[:k]]
+
+
 def enumerate_proposals(
     rows: list[dict],
     cfg: SplitConfig,
@@ -390,32 +514,39 @@ def enumerate_proposals(
     ood_custom: list[str] | None = None,
     od_tasks: list[tuple[str, str]] | None = None,
 ) -> tuple[list[dict], dict]:
-    """Cross the top candidates of each holdout type; pinned choices replace the candidate lists."""
+    """Cross the top candidate sets of each holdout type.
+
+    Held-out labs are chosen as ``num_ood_common`` + ``num_ood_custom`` labs,
+    held-out tasks as ``num_od_tasks`` tasks from distinct labs outside the
+    held-out labs. A pinned list replaces the search for its holdout type.
+    """
     k = cfg.candidates_per_split
     lab_cands = ood_lab_candidates(rows, cfg)
-    common = [[lab] for lab in ood_common] if ood_common else [[c["lab_id"]] for c in lab_cands["common"][:k]]
-    custom = [[lab] for lab in ood_custom] if ood_custom else [[c["lab_id"]] for c in lab_cands["custom"][:k]]
-    common = common or [[]]
-    custom = custom or [[]]
+    task_cands = od_task_candidates(rows, cfg)
+    common = [ood_common] if ood_common else [
+        [c["lab_id"] for c in s] for s in _ranked_sets(lab_cands["common"], cfg.num_ood_common, k)
+    ]
+    custom = [ood_custom] if ood_custom else [
+        [c["lab_id"] for c in s] for s in _ranked_sets(lab_cands["custom"], cfg.num_ood_custom, k)
+    ]
 
     proposals = []
-    task_cands_by_ood: dict[tuple, list[dict]] = {}
     for c1, c2 in itertools.product(common, custom):
         ood = c1 + c2
         if od_tasks:
-            task_choices = [[t] for t in od_tasks]
+            task_sets = [od_tasks]
         else:
-            cands = od_task_candidates(rows, cfg, set(ood))
-            task_cands_by_ood[tuple(ood)] = cands
-            task_choices = [[(c["lab_id"], c["task"])] for c in cands[:k]] or [[]]
-        for tasks in task_choices:
+            per_lab_best = [
+                c for c in task_cands if c["rank_in_lab"] == 0 and c["lab_id"] not in ood
+            ]
+            task_sets = [
+                [(c["lab_id"], c["task"]) for c in s]
+                for s in _ranked_sets(per_lab_best, cfg.num_od_tasks, k)
+            ]
+        for tasks in task_sets:
             proposals.append(
                 make_proposal(rows, cfg, ood, tasks, cfg.seed + len(proposals))
             )
     for i, p in enumerate(proposals, 1):
         p["proposal_id"] = f"proposal_{i:02d}"
-    candidates = {
-        "ood_lab": lab_cands,
-        "od_task": next(iter(task_cands_by_ood.values()), []),
-    }
-    return proposals, candidates
+    return proposals, {"ood_lab": lab_cands, "od_task": task_cands}

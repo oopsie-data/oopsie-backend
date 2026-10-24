@@ -1,0 +1,93 @@
+# Canonical embodiment -> raw robot_name values from robot profiles.
+# Raw names are matched after lowercasing and replacing non-alphanumerics with "_".
+# Embodiments are coarse platforms: robots from one arm family are merged.
+# Arm count is kept separate except for YAM; mobile bases are not.
+# Robots not listed here are their own embodiment.
+
+franka_research_3:  # all single-arm Franka setups (FR3, Panda, DROID)
+  - franka_research_3
+  - Franka Research 3
+  - franka_fr3
+  - franka_panda
+  - franka_droid
+franka_bimanual:
+  - franka_fr3_left_panda_right
+franka_xhand:
+  - franka_xhand
+
+yam:  # single-arm, Pro and bimanual YAM setups
+  - yam
+  - YAM
+  - yam_pro
+  - bi_yam_follower
+  - Bimanual YAM
+  - YAM · two arm
+  - i2rt_yam_bimanual
+  - yam_bimanual_station_0
+
+so100:  # SO-100 and SO-101
+  - so100
+  - so100_follower
+  - so-101
+  - so101_follower
+so101_bimanual:
+  - bimanual-so101
+
+aloha:  # bimanual stations (ALOHA and Trossen AI)
+  - ALOHA
+  - aloha_2_stationary
+  - aloha_viperx_300s
+  - trossen_stationary
+  - trossen_ai_follower_bimanual
+trossen_widowx_ai:  # single-arm WidowX (WidowX AI and WidowX 250)
+  - trossen_widowx_ai
+  - widow_x
+  - widowx_250_s
+viperx_300:
+  - viperx_300
+
+ur5:  # UR5 and UR5e
+  - ur5
+  - ur5e
+ur5_bimanual:
+  - ur5e_bimanual
+ur10e:
+  - ur10e
+
+xarm7:
+  - ufactory_xarm7
+xarm7_bimanual:
+  - dual_ufactory_xarm7
+xarm6:
+  - xarm6
+lite6:
+  - ufactory_lite6
+
+arx5:  # single-arm ARX5, tabletop and mobile
+  - ARX X5 single-arm tabletop manipulator
+  - eva_arx5
+  - ARX X5 single-arm mobile manipulator
+arx5_bimanual:  # dual-arm ARX5, tabletop and mobile
+  - ARX X5 dual-arm tabletop manipulator
+  - ARX X5 dual-arm manipulator mounted on a mobile base
+
+openarm:
+  - OpenArm_2.0
+  - OpenArm_2.0_beta
+
+egoverse_bimanual:
+  - egoverse_bimanual
+flexiv_rizon_4s:
+  - flexiv_rizon_4s
+galaxea_r1_pro:
+  - Galaxea R1 Pro (real robot)
+gim_arm_xl_dual:
+  - gim_arm_xl_dual
+rainbow_rby1m:
+  - rainbow_rby1m
+ultra_gen2:
+  - ultra_gen2
+unitree_g1:
+  - unitree_g1
+yor_agilex_nero:
+  - yor_agilex_nero
