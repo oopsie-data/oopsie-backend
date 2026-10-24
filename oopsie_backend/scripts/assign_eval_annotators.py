@@ -23,13 +23,13 @@ import sys
 from pathlib import Path
 
 from oopsie_backend.utils.eval_assignment import assign, balance_report, eval_samples
-from oopsie_backend.utils.eval_split import SPLITS
+from oopsie_backend.utils.eval_split import SPLITS, TRAIN_ANNOTATED
 
 
 def _split_copies(spec: str) -> tuple[str, int]:
     split, sep, n = spec.partition("=")
-    if not sep or split not in SPLITS:
-        raise argparse.ArgumentTypeError(f"expected SPLIT=N with SPLIT in {SPLITS}, got {spec!r}")
+    if not sep or split not in (*SPLITS, TRAIN_ANNOTATED):
+        raise argparse.ArgumentTypeError(f"expected SPLIT=N with SPLIT in {(*SPLITS, TRAIN_ANNOTATED)}, got {spec!r}")
     return split, int(n)
 
 
@@ -63,9 +63,9 @@ def main(argv: list[str] | None = None) -> int:
     if not annotators or dupes or bad:
         print(f"error: need unique annotator names usable as file names (duplicates {dupes}, invalid {bad})", file=sys.stderr)
         return 1
-    copies = {s: args.copies for s in SPLITS} | dict(args.split_copies)
     proposal = json.loads(args.proposal.read_text())
     samples = eval_samples(proposal)
+    copies = {s["split"]: args.copies for s in samples} | dict(args.split_copies)
     try:
         assignment = assign(samples, annotators, copies, args.seed)
     except ValueError as exc:

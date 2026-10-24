@@ -29,6 +29,7 @@ ID_SPLIT = "id"
 OD_TASK_SPLIT = "od_task_id_scene"
 OOD_LAB_SPLIT = "od_task_od_scene"
 SPLITS = (ID_SPLIT, OD_TASK_SPLIT, OOD_LAB_SPLIT)
+TRAIN_ANNOTATED = "train_annotated"
 
 
 @dataclass
@@ -493,6 +494,57 @@ def make_proposal(
             for s, rs in [*splits.items(), (EXCLUDED, excluded)]
         },
     }
+
+
+def train_pool(rows: list[dict], proposal: dict) -> list[dict]:
+    """Rows a proposal leaves in train, minus anything from its held-out labs or tasks."""
+    taken = {(e["dataset_repo"], e["repo_path"]) for rs in proposal["episodes"].values() for e in rs}
+    ood_labs = set(proposal["ood_labs"])
+    od_tasks = {t["task"] for t in proposal["od_tasks"]}
+    return [
+        r for r in rows
+        if key(r) not in taken and r["lab_id"] not in ood_labs and r["task"] not in od_tasks
+    ]
+
+
+def _even_split(sizes: dict, n: int, rng: random.Random) -> dict:
+    """Split ``n`` equally across groups, capped at each group's size; leftovers go to random groups."""
+    alloc = {g: 0 for g in sizes}
+    order = sorted(sizes)
+    rng.shuffle(order)
+    while n > 0:
+        open_groups = [g for g in order if alloc[g] < sizes[g]]
+        if not open_groups:
+            break
+        share = max(1, n // len(open_groups))
+        for g in open_groups:
+            take = min(share, sizes[g] - alloc[g], n)
+            alloc[g] += take
+            n -= take
+            if not n:
+                break
+    return alloc
+
+
+def coverage_sample(rows: list[dict], n: int, levels: list, rng: random.Random) -> list[dict]:
+    """Pick ``n`` rows spread evenly over nested strata, ignoring stratum sizes.
+
+    ``levels`` are functions of a row. The budget is split equally over the
+    values of the first level, then recursively within each value; rows are
+    drawn at random once the levels run out.
+    """
+    if n >= len(rows):
+        return list(rows)
+    if not levels:
+        return rng.sample(sorted(rows, key=key), n)
+    groups: dict = defaultdict(list)
+    for r in rows:
+        groups[levels[0](r)].append(r)
+    alloc = _even_split({g: len(rs) for g, rs in groups.items()}, n, rng)
+    picked = []
+    for g in sorted(groups):
+        picked.extend(coverage_sample(groups[g], alloc[g], levels[1:], rng))
+    return picked
 
 
 def _ranked_sets(cands: list[dict], n: int, k: int) -> list[list[dict]]:

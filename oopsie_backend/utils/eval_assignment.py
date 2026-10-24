@@ -6,15 +6,16 @@ import random
 from collections import Counter, defaultdict
 from itertools import combinations
 
-from oopsie_backend.utils.eval_split import SPLITS
+from oopsie_backend.utils.eval_split import EXCLUDED
 
 
 def eval_samples(proposal: dict) -> list[dict]:
-    """Every eval episode of a proposal, tagged with its split."""
+    """Every episode to annotate in a proposal, tagged with its split."""
     return [
         {**e, "split": split}
-        for split in SPLITS
-        for e in proposal["episodes"].get(split, [])
+        for split, episodes in proposal["episodes"].items()
+        if split != EXCLUDED
+        for e in episodes
     ]
 
 

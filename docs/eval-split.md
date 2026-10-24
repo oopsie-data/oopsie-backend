@@ -73,6 +73,18 @@ Each proposal lists checks:
 
 Instructions are compared as strings, so paraphrases with low similarity still need a manual pass. Use the nearest-task column in the candidate table for this.
 
+## 3b. Sample train episodes for annotation (optional)
+
+```bash
+uv run python -m oopsie_backend.scripts.sample_train_annotations \
+  --index episode_index.jsonl --proposal eval_split_proposals/proposal_02.json \
+  --num-episodes 1000 --out train_annotation_sample.json
+```
+
+This samples extra episodes to annotate from the proposal's train set. The pool excludes the proposal's eval and excluded episodes and every episode of a held-out lab or held-out task. The budget is split equally over labs, then within each lab over scenes, tasks, policies and success labels, so the sample maximizes coverage rather than following dataset proportions. A lab with fewer episodes than its share gives the rest to the other labs.
+
+The output uses the proposal layout with a single `train_annotated` split. Run steps 4 to 6 on it with separate directories, e.g. `--copies 1 --out-dir train_assignment`, then `train_bundles`, `train_annotations.jsonl` and `train_release`.
+
 ## 4. Assign annotators
 
 ```bash
