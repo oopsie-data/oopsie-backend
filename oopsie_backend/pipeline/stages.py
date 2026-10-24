@@ -5,6 +5,7 @@ from __future__ import annotations
 import oopsie_backend.annotation.stages  # noqa: F401
 import oopsie_backend.conversion.stages  # noqa: F401
 import oopsie_backend.index.stages  # noqa: F401
+import oopsie_backend.ingest.stages  # noqa: F401
 import oopsie_backend.postqa.stages  # noqa: F401
 import oopsie_backend.preqa.stages  # noqa: F401
 import oopsie_backend.qa.stages  # noqa: F401
@@ -21,6 +22,7 @@ FINAL_STAGES = sorted(set(_AUTOMATIC) - {p for f in _AUTOMATIC.values() for p in
 
 # Named targets of ``oopsie pipeline run``, each a list of stages to compute.
 TARGETS: dict[str, list[str]] = {
+    "sync": ["hub_mirror"],
     "index": ["episode_index"],
     "preqa": ["duplicate_episodes", "duplicate_videos"],
     "qa": ["qa_results"],

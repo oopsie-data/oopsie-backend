@@ -144,3 +144,15 @@ def dataset_repo_size(repo_id: str, token: str | None) -> tuple[int, int]:
     total = sum(s.size or 0 for s in siblings)
     n_h5 = sum(1 for s in siblings if s.rfilename.lower().endswith(".h5"))
     return total, n_h5
+
+
+def hub_files(api: HfApi, dataset_repo: str, revision: str | None = None) -> dict[str, dict]:
+    """Repo path -> ``{size, sha256, git_oid}`` from the Hub listing; ``sha256`` is set for LFS files."""
+    out = {}
+    for entry in api.list_repo_tree(dataset_repo, repo_type="dataset", recursive=True, revision=revision):
+        if not hasattr(entry, "blob_id"):
+            continue
+        lfs = entry.lfs
+        sha = (lfs.get("sha256") if isinstance(lfs, dict) else getattr(lfs, "sha256", None)) if lfs else None
+        out[entry.path] = {"size": entry.size, "sha256": sha, "git_oid": entry.blob_id}
+    return out

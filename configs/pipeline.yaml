@@ -3,7 +3,7 @@ data_dir: /corral/utexas/IRI26024/oopsiedata
 index_path: /corral/utexas/IRI26024/episode_index/episode_index.parquet
 cache_dir: /corral/utexas/IRI26024/episode_index/pipeline_cache
 workers: 16
-use_hub: true
+use_hub: true  # sync the mirror with the Hub and list Hub hashes in the index; false works offline
 stats_docs_output: ../oopsie-docs/docs/assets/data/stats.json
 reports_dir: /corral/utexas/IRI26024/reports
 split_config_path: configs/eval_split.yaml

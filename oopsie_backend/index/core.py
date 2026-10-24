@@ -26,6 +26,7 @@ import polars as pl
 from oopsie_data_tools.annotation_tool.annotation_schema import read_annotation_attrs
 
 from oopsie_backend.common.h5 import _n_timesteps, _profile, _s, _str_list
+from oopsie_backend.common.hf import hub_files
 from oopsie_backend.common.repos import (
     CONTRIBUTOR,
     EPISODE_KINDS,
@@ -275,18 +276,6 @@ def read_h5(path: Path, repo_path: str) -> dict:
 def _read_job(job: tuple[str, Path]) -> dict:
     repo_path, path = job
     return read_h5(path, repo_path)
-
-
-def hub_files(api, dataset_repo: str) -> dict[str, dict]:
-    """Repo path -> ``{size, sha256, git_oid}`` from the Hub listing."""
-    out = {}
-    for entry in api.list_repo_tree(dataset_repo, repo_type="dataset", recursive=True):
-        if not hasattr(entry, "blob_id"):
-            continue
-        lfs = entry.lfs
-        sha = (lfs.get("sha256") if isinstance(lfs, dict) else getattr(lfs, "sha256", None)) if lfs else None
-        out[entry.path] = {"size": entry.size, "sha256": sha, "git_oid": entry.blob_id}
-    return out
 
 
 def build_core(

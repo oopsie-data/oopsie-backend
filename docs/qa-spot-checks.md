@@ -58,8 +58,7 @@ uv run python -m oopsie_backend.qa.merge_notes returned/*.json --out qa_notes.cs
 ## Local test run
 
 ```bash
-HF_TOKEN=hf_... uv run python -m oopsie_backend.ingest.sync \
-  --org OopsieData-Submissions --local-dir ./data --smallest 10
+HF_TOKEN=hf_... uv run oopsie ingest sync --data-dir ./data --smallest 10
 uv run python -m oopsie_backend.qa.select_spot_checks \
   --data-dir ./data --out-dir qa_out --min-episodes 0
 ```

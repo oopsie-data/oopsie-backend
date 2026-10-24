@@ -4,7 +4,8 @@ The backend is split into stages that read and extend the [episode index](episod
 
 ```mermaid
 flowchart LR
-  sync["ingest: sync"] --> mirror[("local mirror")]
+  hub_mirror --> mirror[("local mirror")]
+  hub_mirror --> mirror_state
   mirror --> mirror_state
   mirror_state --> episode_index
   episode_index --> duplicate_episodes
@@ -86,7 +87,7 @@ Flags:
 
 Every stage also exists as a command (`oopsie <stage> <command>`, see `oopsie` without arguments), so it can be run directly with its own options.
 
-The nightly Slurm job syncs the mirror and then runs `all`. A newly registered stage is part of `all` without further changes, unless it is registered with `@stage(manual=True)`. Manual stages run only when a target names them: `imports` converts datasets (see [imports](imports.md)), and `training` materializes training data (see [training data](training-data.md)). On LS6, `slurm/pipeline.slurm` runs them on a compute node.
+The nightly Slurm job runs `all`, whose first stage, `hub_mirror`, syncs the mirror with the Hub ([sync](sync-and-stats.md#1-sync)); `use_hub: false` skips the sync and the Hub listing of the index. A newly registered stage is part of `all` without further changes, unless it is registered with `@stage(manual=True)`. Manual stages run only when a target names them: `imports` converts datasets (see [imports](imports.md)), and `training` materializes training data (see [training data](training-data.md)). On LS6, `slurm/pipeline.slurm` runs them on a compute node.
 
 Downstream stages ignore duplicate copies and critical episodes. QA, the duplicate-video check and the critical flags skip copies. Split planning, the annotated train sample and the stats skip both copies and critical episodes, so the stats run after QA and the critical flags.
 

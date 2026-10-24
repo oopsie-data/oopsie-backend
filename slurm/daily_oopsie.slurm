@@ -40,29 +40,17 @@ fi
 # Pin numpy before 2.4's x86-v2 baseline requirement. Need this for running on vm-small.
 run_step setup_numpy bash -c "\"$UV\" add 'numpy<2.4' && \"$UV\" sync --reinstall-package numpy"
 
-# Datasets that still fail after retries are skipped, and the sync exits non-zero.
-# Keep going so stats cover everything that did sync; the job is marked failed at the end.
-sync_rc=0
-run_step sync_hf_org "$UV" run python -m oopsie_backend.ingest.sync \
-  --org OopsieData-Submissions \
-  --local-dir "$DATA_DIR" \
-  --group G-829069 \
-  --verbose || sync_rc=$?
-
-# Note: This step is kept as a safety net, but is not needed anymore.
-# run_step fix_data_permissions bash -c "
-#   find \"$DATA_DIR\" -user \"\$USER\" ! -group G-829069 -exec chgrp G-829069 {} +
-#   find \"$DATA_DIR\" -user \"\$USER\" -type d -exec chmod 2770 {} +
-#   find \"$DATA_DIR\" -user \"\$USER\" -type f -exec chmod 660 {} +
-#   echo \"Set group G-829069 and permissions (dirs 770, files 660) under $DATA_DIR\"
-# "
-
-# The full pipeline (configs/pipeline.yaml), recomputing only what changed. QA copies the
-# episodes it checks to $EPISODE_STAGE first. Manual stages (imports, training) never run here;
-# see pipeline.slurm.
+# The full pipeline (configs/pipeline.yaml), recomputing only what changed. Its first stage syncs
+# the Hub mirror; repos that fail to sync are listed in $DATA_DIR/.sync_report.json and do not stop
+# it. QA copies the episodes it checks to $EPISODE_STAGE first. Manual stages (imports, training)
+# never run here; see pipeline.slurm.
 pipeline_rc=0
 run_step pipeline "$UV" run oopsie pipeline run all "${PIPELINE_SETTINGS[@]}" --explain \
   --set stats_docs_output="$STATS_OUT" || pipeline_rc=$?
+
+sync_rc=0
+"$UV" run python -c "import json, sys; sys.exit(json.load(open(sys.argv[1]))['datasets_failed'] > 0)" \
+  "$DATA_DIR/.sync_report.json" || sync_rc=$?
 
 # Publish the website stats: commit stats.json to oopsie-docs when it changed.
 publish_stats() {
@@ -92,7 +80,7 @@ chgrp G-829069 "$LOG_DIR"/*.log
 chmod g+r "$LOG_DIR"/*.log
 
 if (( sync_rc != 0 )); then
-  echo "=== $(date -Is) FAILED: oopsie-daily finished in ${SECONDS}s, but sync_hf_org exited ${sync_rc}; see failed datasets above (job ${SLURM_JOB_ID}) ==="
+  echo "=== $(date -Is) FAILED: oopsie-daily finished in ${SECONDS}s, but repos failed to sync; see $DATA_DIR/.sync_report.json (job ${SLURM_JOB_ID}) ==="
   exit "$sync_rc"
 fi
 if (( pipeline_rc != 0 )); then

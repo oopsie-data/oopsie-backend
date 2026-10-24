@@ -13,8 +13,8 @@ from oopsie_backend.pipeline.registry import check_rc, files_fingerprint, stage
 
 
 @stage(always_run=True)
-def mirror_state(data_dir: str, index_path: str) -> str:
-    """Fingerprint of every indexed h5's path, size and modification time, the repo and import configs and the index's existence."""
+def mirror_state(hub_mirror: str, data_dir: str, index_path: str) -> str:
+    """Runs after the Hub sync. Fingerprint of every indexed h5's path, size and modification time, the repo and import configs and the index's existence."""
     h = hashlib.sha256(files_fingerprint([REPOSITORIES_CONFIG, IMPORTS_CONFIG]).encode())
     h.update(b"index" if Path(index_path).is_file() else b"no index")
     for dataset_repo, repo_path, path, _ in discover(Path(data_dir)):

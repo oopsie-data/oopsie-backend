@@ -1,243 +1,261 @@
-"""Sync every dataset under a HuggingFace org to a local directory.
+"""Mirror every dataset repo of the Hugging Face org into ``<data_dir>/<org>/<repo>/``.
 
-Downloads only missing or changed files (ETag-based). Local files removed from
-the Hub are kept on disk (local is a superset, not a strict mirror).
+A file is downloaded when it is new, when its Hub blob changed, or when the local
+copy no longer has the size and modification time recorded after its download.
+That record is one table for the whole mirror, ``<data_dir>/.sync_state.parquet``;
+nothing else is written next to the data. A file that is on disk but not in the
+record is checked once: against the ``.cache/huggingface`` metadata that
+``huggingface_hub`` downloads leave behind if it is current, else by hashing it.
+
+``.cache/huggingface`` holds two files per data file. It is deleted from each repo
+once every file of the repo is in the record (``--keep-hf-cache`` keeps it).
+
+Files the Hub no longer has are listed in the report; ``--delete-removed`` deletes
+them. ``--scan-local`` also walks the repo folders for files that are in neither
+the Hub listing nor the record, and for repo folders the Hub no longer has.
 
 Usage:
     export HF_TOKEN=hf_...
-    uv run python -m oopsie_backend.ingest.sync \\
-        --org OopsieData-Submissions \\
-        --local-dir /corral/utexas/IRI26024/oopsiedata
+    uv run oopsie ingest sync --data-dir /corral/utexas/IRI26024/oopsiedata
 """
 
 from __future__ import annotations
 
 import argparse
 import grp
+import hashlib
 import json
 import os
-import stat
+import shutil
 import sys
 import time
-from contextlib import contextmanager
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from huggingface_hub import snapshot_download
+import polars as pl
+from huggingface_hub import HfApi, hf_hub_url
 from huggingface_hub.errors import RepositoryNotFoundError
-from huggingface_hub.file_download import DryRunFileInfo
-from huggingface_hub.utils import disable_progress_bars, enable_progress_bars
+from huggingface_hub.file_download import http_get
+from huggingface_hub.utils import build_hf_headers, disable_progress_bars
 
-from oopsie_backend.common.hf import (
-    dataset_repo_size,
-    list_dataset_repos_for_org,
-    parse_org_arg,
-    split_repo_id,
-)
+from oopsie_backend.common.hf import dataset_repo_size, hub_files, list_dataset_repos_for_org, parse_org_arg
 from oopsie_backend.common.io import now_timestamps
 from oopsie_backend.common.repos import (
-    PUBLIC_EXCLUDED_DATASETS,
-    STATS_EXCLUDED_DATASETS,
+    ARCHIVE_DATASETS,
+    DEFAULT_DATA_DIR,
+    EXTERNAL_DATASETS,
+    HF_ORG,
+    IGNORED_DIR_NAMES,
+    data_root,
 )
 
-_INDENT = "  "
+STATE_NAME = ".sync_state.parquet"
+REPORT_NAME = ".sync_report.json"
+STATE_SCHEMA = {
+    "dataset_repo": pl.String,
+    "path": pl.String,
+    "git_oid": pl.String,
+    "sha256": pl.String,
+    "size": pl.Int64,
+    "mtime_ns": pl.Int64,
+}
+HF_CACHE = Path(".cache") / "huggingface"
 
 
-def _log(message: str, *, level: int = 0) -> None:
-    print(f"{_INDENT * level}{message}", file=sys.stderr)
+def _log(message: str, level: int = 0) -> None:
+    print("  " * level + message, file=sys.stderr)
 
 
-@contextmanager
-def _suppress_hf_progress():
-    """Hide huggingface_hub tqdm bars (snapshot_download uses these by default)."""
-    disable_progress_bars()
-    try:
-        yield
-    finally:
-        enable_progress_bars()
+def read_state(path: Path) -> dict[tuple[str, str], dict]:
+    if not path.is_file():
+        return {}
+    return {(r["dataset_repo"], r["path"]): r for r in pl.read_parquet(path).iter_rows(named=True)}
 
 
-def _format_duration(seconds: float) -> str:
-    if seconds < 60:
-        return f"{seconds:.1f}s"
-    minutes, secs = divmod(int(seconds), 60)
-    return f"{minutes}m {secs}s"
+def write_state(state: dict[tuple[str, str], dict], path: Path) -> None:
+    tmp = path.with_name(f"{path.name}.{os.getpid()}.tmp")
+    pl.DataFrame(list(state.values()), schema=STATE_SCHEMA).sort("dataset_repo", "path").write_parquet(tmp)
+    os.replace(tmp, path)
 
 
-def share_with_group(root: Path, gid: int | None = None) -> int:
-    """Grant group rw (and x/setgid on directories) under ``root``.
+def _hash(path: Path, algorithm: str, prefix: bytes = b"") -> str:
+    h = hashlib.new(algorithm, prefix)
+    with path.open("rb") as f:
+        while chunk := f.read(1 << 22):
+            h.update(chunk)
+    return h.hexdigest()
 
-    If ``gid`` is given, entries are also assigned to that group. Entries not
-    owned by the current user are skipped. Returns the number of entries whose
-    group or mode was changed.
+
+def matches_hub(path: Path, hub: dict) -> bool:
+    """Whether the local file has the Hub content: sha256 for LFS files, the git blob id otherwise."""
+    if path.stat().st_size != hub["size"]:
+        return False
+    if hub["sha256"]:
+        return _hash(path, "sha256") == hub["sha256"]
+    return _hash(path, "sha1", f"blob {hub['size']}\0".encode()) == hub["git_oid"]
+
+
+def hf_metadata_matches(repo_dir: Path, rel: str, hub: dict) -> bool:
+    """Whether ``huggingface_hub``'s download metadata vouches for the local file.
+
+    The metadata holds the commit, the etag (sha256 for LFS files, the git blob id
+    otherwise) and when it was written; it is current if the file was not modified since.
     """
-    uid = os.getuid()
-    changed = 0
-    paths = [root, *root.rglob("*")] if root.is_dir() else []
-    for path in paths:
-        try:
-            st = path.lstat()
-            if st.st_uid != uid:
-                continue
-            touched = False
-            if gid is not None and st.st_gid != gid:
-                os.chown(path, -1, gid, follow_symlinks=False)
-                st = path.lstat()
-                touched = True
-            if not stat.S_ISLNK(st.st_mode):
-                mode = stat.S_IMODE(st.st_mode)
-                if stat.S_ISDIR(st.st_mode):
-                    new_mode = mode | stat.S_IRWXG | stat.S_ISGID
-                else:
-                    new_mode = mode | stat.S_IRGRP | stat.S_IWGRP
-                    if mode & stat.S_IXUSR:
-                        new_mode |= stat.S_IXGRP
-                if new_mode != mode:
-                    path.chmod(new_mode)
-                    touched = True
-            changed += touched
-        except OSError as exc:
-            _log(f"warning: could not update permissions on {path}: {exc}")
-    return changed
+    meta = repo_dir / HF_CACHE / "download" / f"{rel}.metadata"
+    try:
+        _, etag, timestamp = meta.read_text().splitlines()[:3]
+        current = (repo_dir / rel).stat().st_mtime - 1 <= float(timestamp)
+    except (OSError, ValueError):
+        return False
+    return current and etag.strip() in {hub["sha256"], hub["git_oid"]}
 
 
 @dataclass
-class DatasetSyncResult:
+class RepoResult:
     repo_id: str
-    duration_seconds: float
-    files_downloaded: int = 0
-    files_skipped: int = 0
+    seconds: float = 0.0
+    downloaded: int = 0
+    adopted: int = 0
+    unchanged: int = 0
+    removed: list[str] = field(default_factory=list)
+    untracked: list[str] = field(default_factory=list)
+    failed: list[str] = field(default_factory=list)
     error: str | None = None
 
 
-@dataclass
-class SyncStats:
-    datasets_synced: int = 0
-    datasets_failed: int = 0
-    files_downloaded: int = 0
-    files_skipped: int = 0
-    errors: list[str] = field(default_factory=list)
-    dataset_results: list[DatasetSyncResult] = field(default_factory=list)
+class Mirror:
+    def __init__(self, root: Path, token: str | None, workers: int, gid: int | None):
+        self.root = root
+        self.token = token
+        self.api = HfApi(token=token)
+        self.workers = workers
+        self.gid = gid
 
+    def _make_dirs(self, path: Path) -> None:
+        missing = []
+        while not path.exists():
+            missing.append(path)
+            path = path.parent
+        for d in reversed(missing):
+            d.mkdir(exist_ok=True)
+            if self.gid is not None and d.stat().st_gid != self.gid:
+                os.chown(d, -1, self.gid)
+                d.chmod(d.stat().st_mode | 0o2070)
 
-def local_dataset_dir(local_dir: Path, repo_id: str) -> Path:
-    namespace, repo_name = split_repo_id(repo_id)
-    return local_dir / namespace / repo_name
-
-
-def local_file_state(dataset_dir: Path) -> dict[str, tuple[int, int]]:
-    """Return ``{repo_relative_path: (size_bytes, mtime_ns)}`` for synced files."""
-    if not dataset_dir.is_dir():
-        return {}
-    state: dict[str, tuple[int, int]] = {}
-    for path in dataset_dir.rglob("*"):
-        if not path.is_file() or ".cache" in path.parts:
-            continue
-        rel = path.relative_to(dataset_dir).as_posix()
-        stat = path.stat()
-        state[rel] = (stat.st_size, stat.st_mtime_ns)
-    return state
-
-
-def diff_file_state(
-    before: dict[str, tuple[int, int]],
-    after: dict[str, tuple[int, int]],
-) -> tuple[int, int]:
-    """Return ``(downloaded_or_updated, skipped_unchanged)``."""
-    downloaded = 0
-    skipped = 0
-    for rel, after_stat in after.items():
-        if before.get(rel) == after_stat:
-            skipped += 1
-        else:
-            downloaded += 1
-    return downloaded, skipped
-
-
-def sync_dataset(
-    repo_id: str,
-    local_dir: Path,
-    token: str | None,
-    *,
-    dry_run: bool,
-    verbose: bool,
-) -> tuple[int, int]:
-    """Sync one dataset repo. Returns ``(would_download_or_downloaded, skipped)``."""
-    dest = local_dataset_dir(local_dir, repo_id)
-    before = local_file_state(dest) if not dry_run else {}
-
-    with _suppress_hf_progress():
-        result = snapshot_download(
-            repo_id=repo_id,
-            repo_type="dataset",
-            local_dir=dest,
-            token=token,
-            dry_run=dry_run,
-            # Default is 8; large video files sharing one connection at that
-            # concurrency easily exceed the 10s per-chunk read timeout, which
-            # aborts the whole sync after retries are exhausted. Lower contention
-            # instead of just raising the timeout.
-            max_workers=3,
-        )
-
-    if dry_run:
-        infos: list[DryRunFileInfo] = result  # type: ignore[assignment]
-        downloaded = sum(1 for info in infos if info.will_download)
-        skipped = sum(1 for info in infos if not info.will_download)
-        if verbose:
-            for info in infos:
-                if info.will_download:
-                    _log(f"would download {info.filename}", level=2)
-        return downloaded, skipped
-
-    return diff_file_state(before, local_file_state(dest))
-
-
-def sync_dataset_with_retries(
-    repo_id: str,
-    local_dir: Path,
-    token: str | None,
-    *,
-    dry_run: bool,
-    verbose: bool,
-    retries: int,
-    retry_delay: float,
-) -> tuple[int, int]:
-    """Call :func:`sync_dataset`, retrying transient failures with linear backoff.
-
-    ``RepositoryNotFoundError`` is never retried. Already-downloaded files are
-    skipped on each retry, so a retry resumes rather than restarts the dataset.
-    """
-    for attempt in range(1, retries + 2):
+    def download(self, repo_id: str, revision: str, rel: str, hub: dict, dest: Path) -> None:
+        """Download one file to a temporary name next to ``dest`` and rename it into place."""
+        self._make_dirs(dest.parent)
+        tmp = dest.with_name(f".{dest.name}.{os.getpid()}.part")
+        url = hf_hub_url(repo_id, rel, repo_type="dataset", revision=revision)
         try:
-            return sync_dataset(
-                repo_id,
-                local_dir,
-                token,
-                dry_run=dry_run,
-                verbose=verbose,
-            )
-        except RepositoryNotFoundError:
-            raise
-        except Exception as exc:
-            if attempt > retries:
-                raise
-            delay = retry_delay * attempt
-            _log(
-                f"attempt {attempt}/{retries + 1} failed: {type(exc).__name__}: {exc}; "
-                f"retrying in {delay:.0f}s",
-                level=1,
-            )
-            time.sleep(delay)
-    raise AssertionError("unreachable")
+            with tmp.open("wb") as f:
+                http_get(url, f, headers=build_hf_headers(token=self.token), expected_size=hub["size"])
+            if self.gid is not None and tmp.stat().st_gid != self.gid:
+                os.chown(tmp, -1, self.gid)
+            os.replace(tmp, dest)
+        finally:
+            tmp.unlink(missing_ok=True)
+
+    def sync_repo(self, repo_id: str, state: dict, args: argparse.Namespace) -> RepoResult:
+        result = RepoResult(repo_id)
+        repo_dir = self.root / repo_id
+        if not args.keep_hf_cache and not args.dry_run:
+            prune_hf_locks(repo_dir)
+        revision = self.api.dataset_info(repo_id).sha
+        listing = hub_files(self.api, repo_id, revision=revision)
+
+        def record(rel: str, hub: dict) -> None:
+            st = (repo_dir / rel).stat()
+            state[(repo_id, rel)] = {
+                "dataset_repo": repo_id, "path": rel, "git_oid": hub["git_oid"],
+                "sha256": hub["sha256"], "size": st.st_size, "mtime_ns": st.st_mtime_ns,
+            }
+
+        def check(rel: str) -> str:
+            """``unchanged``, ``adopted`` or ``download``."""
+            hub, path, old = listing[rel], repo_dir / rel, state.get((repo_id, rel))
+            try:
+                st = path.stat()
+            except FileNotFoundError:
+                return "download"
+            if old and old["git_oid"] == hub["git_oid"] and (old["size"], old["mtime_ns"]) == (st.st_size, st.st_mtime_ns):
+                return "unchanged"
+            if old and old["git_oid"] != hub["git_oid"]:
+                return "download"
+            if hf_metadata_matches(repo_dir, rel, hub) or matches_hub(path, hub):
+                return "adopted"
+            return "download"
+
+        def fetch(rel: str) -> None:
+            self.download(repo_id, revision, rel, listing[rel], repo_dir / rel)
+
+        with ThreadPoolExecutor(self.workers) as pool:
+            decisions = dict(zip(listing, pool.map(check, listing)))
+            for rel, decision in decisions.items():
+                if decision == "unchanged":
+                    result.unchanged += 1
+                elif decision == "adopted":
+                    record(rel, listing[rel])
+                    result.adopted += 1
+            todo = [rel for rel, d in decisions.items() if d == "download"]
+            if args.dry_run:
+                result.downloaded = len(todo)
+            else:
+                futures = {rel: pool.submit(fetch, rel) for rel in todo}
+                for rel, future in futures.items():
+                    try:
+                        future.result()
+                    except Exception as exc:
+                        result.failed.append(f"{rel}: {type(exc).__name__}: {exc}")
+                        continue
+                    record(rel, listing[rel])
+                    result.downloaded += 1
+
+        for key in [k for k in state if k[0] == repo_id and k[1] not in listing]:
+            result.removed.append(key[1])
+            if args.delete_removed and not args.dry_run:
+                (repo_dir / key[1]).unlink(missing_ok=True)
+                del state[key]
+        if args.scan_local:
+            result.untracked = sorted(set(local_files(repo_dir)) - set(listing) - set(result.removed))
+            if args.delete_removed and not args.dry_run:
+                for rel in result.untracked:
+                    (repo_dir / rel).unlink(missing_ok=True)
+        if not args.keep_hf_cache and not args.dry_run and not result.failed:
+            shutil.rmtree(repo_dir / HF_CACHE, ignore_errors=True)
+            try:
+                (repo_dir / ".cache").rmdir()
+            except OSError:
+                pass
+        return result
 
 
-def smallest_datasets(dataset_ids: list[str], n: int, token: str | None) -> list[str]:
-    """Return the ``n`` smallest non-excluded repos that contain ``.h5`` files."""
-    excluded = STATS_EXCLUDED_DATASETS | PUBLIC_EXCLUDED_DATASETS
-    sized: list[tuple[int, str]] = []
-    for repo_id in dataset_ids:
-        if repo_id in excluded:
+def prune_hf_locks(repo_dir: Path) -> int:
+    """Delete the lock files and unfinished downloads of ``huggingface_hub``; returns how many."""
+    n = 0
+    for path in (repo_dir / HF_CACHE / "download").rglob("*"):
+        if path.suffix in {".lock", ".incomplete"} and path.is_file():
+            path.unlink(missing_ok=True)
+            n += 1
+    return n
+
+
+def local_files(repo_dir: Path) -> list[str]:
+    """Repo-relative paths of the files in a repo folder, without hidden and ignored folders and temporary downloads."""
+    out = []
+    for dirpath, dirnames, filenames in os.walk(repo_dir):
+        dirnames[:] = [d for d in dirnames if not d.startswith(".") and d not in IGNORED_DIR_NAMES]
+        rel = Path(dirpath).relative_to(repo_dir)
+        out += [(rel / f).as_posix() for f in filenames if not f.endswith(".part")]
+    return out
+
+
+def smallest_repos(repo_ids: list[str], n: int, token: str | None) -> list[str]:
+    """The ``n`` smallest contributor repos that hold ``.h5`` files; for local test mirrors."""
+    sized = []
+    for repo_id in repo_ids:
+        if repo_id in ARCHIVE_DATASETS | EXTERNAL_DATASETS:
             continue
         try:
             total, n_h5 = dataset_repo_size(repo_id, token)
@@ -245,232 +263,118 @@ def smallest_datasets(dataset_ids: list[str], n: int, token: str | None) -> list
             continue
         if n_h5:
             sized.append((total, repo_id))
-    sized.sort()
-    for total, repo_id in sized[:n]:
-        _log(f"selected {repo_id} ({total / 1e6:.1f} MB)")
-    return [repo_id for _, repo_id in sized[:n]]
+    return [repo_id for _, repo_id in sorted(sized)[:n]]
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
-        "--org",
-        required=True,
-        help="Hugging Face organization slug or profile URL.",
-    )
-    parser.add_argument(
-        "--local-dir",
-        type=Path,
-        required=True,
-        help="Root directory for synced local data.",
-    )
-    parser.add_argument(
-        "--token",
-        default=os.environ.get("HF_TOKEN"),
-        help="HF read token (defaults to $HF_TOKEN).",
-    )
-    parser.add_argument(
-        "--group",
-        default=None,
-        help="Group that should own all synced files (e.g. G-829069).",
-    )
-    parser.add_argument(
-        "--dry-run",
-        action="store_true",
-        help="Report what would be downloaded without writing files.",
-    )
-    parser.add_argument(
-        "--limit-datasets",
-        type=int,
-        default=None,
-        help="Max datasets to sync (for testing).",
-    )
-    parser.add_argument(
-        "--retries",
-        type=int,
-        default=3,
-        help="Retries per dataset after a failed download (default: 3).",
-    )
-    parser.add_argument(
-        "--retry-delay",
-        type=float,
-        default=30.0,
-        help="Base seconds between retries; attempt N waits N times this (default: 30).",
-    )
-    parser.add_argument(
-        "--smallest",
-        type=int,
-        default=None,
-        help="Sync only the N smallest datasets that contain .h5 files and are "
-        "not excluded from public stats (for local testing).",
-    )
-    parser.add_argument(
-        "--verbose",
-        action="store_true",
-        help="Log per-dataset and per-file actions.",
-    )
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--data-dir", "--local-dir", type=Path, default=DEFAULT_DATA_DIR, help="Mirror root")
+    parser.add_argument("--org", default=HF_ORG)
+    parser.add_argument("--only", nargs="+", default=None, help="Repo names to sync (default: every repo of the org)")
+    parser.add_argument("--smallest", type=int, default=None, help="Sync only the N smallest contributor repos with h5 files")
+    parser.add_argument("--token", default=os.environ.get("HF_TOKEN"), help="HF read token (default: $HF_TOKEN)")
+    parser.add_argument("--workers", type=int, default=4, help="Parallel downloads and checks per repo")
+    parser.add_argument("--group", default=None, help="Group of every created file and folder, e.g. G-829069")
+    parser.add_argument("--dry-run", action="store_true", help="Report what would be downloaded; writes nothing")
+    parser.add_argument("--keep-hf-cache", action="store_true", help="Keep the .cache/huggingface folders")
+    parser.add_argument("--scan-local", action="store_true", help="Also report local files and repo folders the Hub does not have")
+    parser.add_argument("--delete-removed", action="store_true", help="Delete local files the Hub no longer has")
     args = parser.parse_args(argv)
 
-    # Synced data is shared with the group; huggingface_hub derives file modes from the umask.
     os.umask(0o002)
-
-    gid: int | None = None
-    if args.group is not None:
+    disable_progress_bars()
+    gid = None
+    if args.group:
         try:
             gid = grp.getgrnam(args.group).gr_gid
         except KeyError:
-            print(f"error: unknown group {args.group!r}", file=sys.stderr)
+            _log(f"error: unknown group {args.group!r}")
             return 1
 
-    org_slug = parse_org_arg(args.org)
-    dataset_ids = list_dataset_repos_for_org(org_slug, args.token)
-    if args.limit_datasets is not None:
-        dataset_ids = dataset_ids[: args.limit_datasets]
+    org = parse_org_arg(args.org)
+    root = data_root(args.data_dir)
+    repo_ids = list_dataset_repos_for_org(org, args.token)
+    if args.only:
+        repo_ids = [r for r in repo_ids if r.split("/", 1)[1] in set(args.only)]
     if args.smallest is not None:
-        dataset_ids = smallest_datasets(dataset_ids, args.smallest, args.token)
-
-    if not dataset_ids:
-        print(
-            f"error: no datasets returned for author={org_slug!r}. "
-            "Check the org slug and HF_TOKEN read access.",
-            file=sys.stderr,
-        )
+        repo_ids = smallest_repos(repo_ids, args.smallest, args.token)
+    if not repo_ids:
+        _log(f"error: no datasets found for {org!r}; check the org and HF_TOKEN read access")
         return 1
 
-    _log(
-        f"{'Dry-run' if args.dry_run else 'Syncing'} {len(dataset_ids)} "
-        f"dataset(s) under {org_slug!r}",
-    )
-
-    stats = SyncStats()
-    total = len(dataset_ids)
-
-    for index, repo_id in enumerate(dataset_ids, 1):
-        label = f"[{index}/{total}] {repo_id}"
-        dest = local_dataset_dir(args.local_dir, repo_id)
-        if args.verbose:
-            _log(label)
-            _log(f"dest: {dest}", level=1)
-
+    state_path = root / STATE_NAME
+    state = read_state(state_path)
+    mirror = Mirror(root, args.token, args.workers, gid)
+    results: list[RepoResult] = []
+    _log(f"{'Dry run of' if args.dry_run else 'Syncing'} {len(repo_ids)} repo(s) of {org} into {root / org}")
+    for i, repo_id in enumerate(repo_ids, 1):
         started = time.perf_counter()
         try:
-            downloaded, skipped = sync_dataset_with_retries(
-                repo_id,
-                args.local_dir,
-                args.token,
-                dry_run=args.dry_run,
-                verbose=args.verbose,
-                retries=args.retries,
-                retry_delay=args.retry_delay,
-            )
+            result = mirror.sync_repo(repo_id, state, args)
         except RepositoryNotFoundError:
-            elapsed = time.perf_counter() - started
-            msg = f"skip (not found): {repo_id}"
-            stats.dataset_results.append(
-                DatasetSyncResult(repo_id=repo_id, duration_seconds=elapsed),
-            )
-            if args.verbose:
-                _log(f"not found ({_format_duration(elapsed)})", level=1)
-                _log("")
-            else:
-                _log(f"{label}  not found ({_format_duration(elapsed)})")
-            stats.errors.append(msg)
-            continue
+            result = RepoResult(repo_id, error="not found")
         except Exception as exc:
-            elapsed = time.perf_counter() - started
-            error = f"{type(exc).__name__}: {exc}"
-            stats.datasets_failed += 1
-            stats.dataset_results.append(
-                DatasetSyncResult(
-                    repo_id=repo_id,
-                    duration_seconds=elapsed,
-                    error=error,
-                ),
-            )
-            stats.errors.append(
-                f"failed after {args.retries + 1} attempt(s): {repo_id}: {error}",
-            )
-            failed = f"FAILED, continuing ({_format_duration(elapsed)}): {error}"
-            if args.verbose:
-                _log(failed, level=1)
-                _log("")
-            else:
-                _log(f"{label}  {failed}")
-            continue
-
-        elapsed = time.perf_counter() - started
-        stats.datasets_synced += 1
-        stats.files_downloaded += downloaded
-        stats.files_skipped += skipped
-        stats.dataset_results.append(
-            DatasetSyncResult(
-                repo_id=repo_id,
-                duration_seconds=elapsed,
-                files_downloaded=downloaded,
-                files_skipped=skipped,
-            ),
+            result = RepoResult(repo_id, error=f"{type(exc).__name__}: {exc}")
+        result.seconds = time.perf_counter() - started
+        results.append(result)
+        if not args.dry_run:
+            write_state(state, state_path)
+        summary = result.error or (
+            f"downloaded {result.downloaded}, adopted {result.adopted}, unchanged {result.unchanged}, "
+            f"removed on Hub {len(result.removed)}, failed {len(result.failed)}"
         )
+        _log(f"[{i}/{len(repo_ids)}] {repo_id}: {summary} ({result.seconds:.0f}s)")
+        for line in result.failed[:5]:
+            _log(line, level=1)
 
-        action = "would download" if args.dry_run else "downloaded"
-        summary = (
-            f"{action} {downloaded}, skipped {skipped}, "
-            f"took {_format_duration(elapsed)}"
-        )
-        if args.verbose:
-            _log(summary, level=1)
-            _log("")
-        else:
-            _log(f"{label}  {summary}")
+    gone = []
+    if args.scan_local and not (args.only or args.smallest) and (root / org).is_dir():
+        names = {r.split("/", 1)[1] for r in repo_ids}
+        gone = sorted(p.name for p in (root / org).iterdir() if p.is_dir() and not p.name.startswith(".") and p.name not in names)
 
+    failed = [r for r in results if r.error or r.failed]
     report = {
-        "org": org_slug,
-        "local_dir": str(args.local_dir.resolve()),
+        "org": org,
+        "data_dir": str(root),
         "dry_run": args.dry_run,
         "synced_at": now_timestamps(),
-        "datasets_synced": stats.datasets_synced,
-        "datasets_failed": stats.datasets_failed,
-        "files_downloaded": stats.files_downloaded,
-        "files_skipped": stats.files_skipped,
-        "errors": stats.errors,
+        "datasets_synced": len(results) - len(failed),
+        "datasets_failed": len(failed),
+        "files_downloaded": sum(r.downloaded for r in results),
+        "files_adopted": sum(r.adopted for r in results),
+        "files_unchanged": sum(r.unchanged for r in results),
+        "files_removed_on_hub": sum(len(r.removed) for r in results),
+        "repos_not_on_hub": gone,
         "datasets": [
             {
-                "repo_id": result.repo_id,
-                "duration_seconds": round(result.duration_seconds, 3),
-                "files_downloaded": result.files_downloaded,
-                "files_skipped": result.files_skipped,
-                **({"error": result.error} if result.error else {}),
+                "repo_id": r.repo_id,
+                "seconds": round(r.seconds, 1),
+                "downloaded": r.downloaded,
+                "adopted": r.adopted,
+                "unchanged": r.unchanged,
+                "removed_on_hub": r.removed,
+                **({"untracked": r.untracked} if args.scan_local else {}),
+                **({"failed": r.failed} if r.failed else {}),
+                **({"error": r.error} if r.error else {}),
             }
-            for result in stats.dataset_results
+            for r in results
         ],
     }
-
-    args.local_dir.mkdir(parents=True, exist_ok=True)
-    report_path = args.local_dir / ".sync_report.json"
-    with report_path.open("w", encoding="utf-8") as fh:
-        json.dump(report, fh, indent=2, ensure_ascii=False)
-        fh.write("\n")
-
     if not args.dry_run:
-        fixed = share_with_group(args.local_dir, gid)
-        if fixed:
-            _log(f"Updated group ownership/access on {fixed} path(s)")
-
-    _log("")
+        report_path = root / REPORT_NAME
+        tmp = report_path.with_name(f"{REPORT_NAME}.{os.getpid()}.tmp")
+        tmp.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n")
+        os.replace(tmp, report_path)
     _log(
-        f"{'Would download' if args.dry_run else 'Downloaded'}: "
-        f"{stats.files_downloaded} file(s), "
-        f"skipped (unchanged): {stats.files_skipped}, "
-        f"datasets: {stats.datasets_synced}, "
-        f"failed: {stats.datasets_failed}, "
-        f"errors: {len(stats.errors)}",
+        f"{'Would download' if args.dry_run else 'Downloaded'} {report['files_downloaded']} file(s), adopted "
+        f"{report['files_adopted']}, unchanged {report['files_unchanged']}, removed on Hub "
+        f"{report['files_removed_on_hub']}, repos failed {len(failed)}"
     )
-    _log(f"Report: {report_path}")
-    if stats.datasets_failed:
-        for result in stats.dataset_results:
-            if result.error:
-                _log(f"failed: {result.repo_id}: {result.error}", level=1)
-        return 1
-    return 0
+    if gone:
+        _log(f"repo folders the Hub no longer has: {', '.join(gone)}")
+    for r in failed:
+        _log(f"failed: {r.repo_id}: {r.error or f'{len(r.failed)} file(s)'}", level=1)
+    return 1 if failed else 0
 
 
 if __name__ == "__main__":
