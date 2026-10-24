@@ -111,6 +111,18 @@ def hf_metadata_matches(repo_dir: Path, rel: str, hub: dict) -> bool:
     return current and etag.strip() in {hub["sha256"], hub["git_oid"]}
 
 
+class Progress:
+    """Logs ``<what> n/total`` at most every ``interval`` seconds."""
+
+    def __init__(self, repo_id: str, interval: float = 30.0):
+        self.repo_id, self.interval, self.last = repo_id, interval, time.monotonic()
+
+    def tick(self, what: str, n: int, total: int) -> None:
+        if time.monotonic() - self.last >= self.interval:
+            self.last = time.monotonic()
+            _log(f"{self.repo_id}: {what} {n}/{total}", level=1)
+
+
 @dataclass
 class RepoResult:
     repo_id: str
@@ -161,7 +173,10 @@ class Mirror:
         result = RepoResult(repo_id)
         repo_dir = self.root / repo_id
         revision = self.api.dataset_info(repo_id).sha
+        _log(f"{repo_id}: listing the Hub", level=1)
         listing = hub_files(self.api, repo_id, revision=revision)
+        _log(f"{repo_id}: {len(listing)} file(s) on the Hub; checking local copies", level=1)
+        progress = Progress(repo_id)
 
         def record(rel: str, hub: dict) -> None:
             st = (repo_dir / rel).stat()
@@ -189,26 +204,35 @@ class Mirror:
             self.download(repo_id, revision, rel, listing[rel], repo_dir / rel)
 
         with ThreadPoolExecutor(self.workers) as pool:
-            decisions = dict(zip(listing, pool.map(check, listing)))
-            for rel, decision in decisions.items():
-                if decision == "unchanged":
-                    result.unchanged += 1
-                elif decision == "adopted":
-                    record(rel, listing[rel])
-                    result.adopted += 1
-            todo = [rel for rel, d in decisions.items() if d == "download"]
-            if args.dry_run:
-                result.downloaded = len(todo)
-            else:
-                futures = {rel: pool.submit(fetch, rel) for rel in todo}
-                for rel, future in futures.items():
-                    try:
-                        future.result()
-                    except Exception as exc:
-                        result.failed.append(f"{rel}: {type(exc).__name__}: {exc}")
-                        continue
-                    record(rel, listing[rel])
-                    result.downloaded += 1
+            try:
+                decisions = {}
+                for rel, decision in zip(listing, pool.map(check, listing)):
+                    decisions[rel] = decision
+                    progress.tick("checked", len(decisions), len(listing))
+                for rel, decision in decisions.items():
+                    if decision == "unchanged":
+                        result.unchanged += 1
+                    elif decision == "adopted":
+                        record(rel, listing[rel])
+                        result.adopted += 1
+                todo = [rel for rel, d in decisions.items() if d == "download"]
+                if args.dry_run:
+                    result.downloaded = len(todo)
+                else:
+                    futures = {rel: pool.submit(fetch, rel) for rel in todo}
+                    for done, (rel, future) in enumerate(futures.items(), 1):
+                        progress.tick("downloaded", done, len(todo))
+                        try:
+                            future.result()
+                        except Exception as exc:
+                            result.failed.append(f"{rel}: {type(exc).__name__}: {exc}")
+                            continue
+                        record(rel, listing[rel])
+                        result.downloaded += 1
+            except BaseException:
+                # Ctrl+C: drop the queued checks and downloads; running ones finish.
+                pool.shutdown(wait=False, cancel_futures=True)
+                raise
 
         for key in [k for k in state if k[0] == repo_id and k[1] not in listing]:
             result.removed.append(key[1])
