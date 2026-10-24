@@ -3,11 +3,41 @@
 The action checks read the full per-timestep `actions/*` and `observations/robot_states/*` arrays of each episode and flag values that are inconsistent with the oopsiedata format or with the robot's own state. They run in the same pass as the [video checks](video-checks.md):
 
 ```bash
-uv run python -m oopsie_backend.scripts.run_action_qa \
-  --data-dir /corral/utexas/IRI26024/oopsiedata --limit 50 --workers 16
+uv run oopsie qa run --data-dir /corral/utexas/IRI26024/oopsiedata --index episode_index.parquet --workers 16
 ```
 
-Results land in `reports/action_qa.json` / `.html`: one grid column per check, with a per-episode drilldown of the values that tripped it. Toggles and thresholds live in `configs/action_qa_config.yaml`, one section per category below; parameter names are given in the tables with their defaults in parentheses.
+Results are stored in the [episode index](episode-index.md) and summarized in `reports/action_qa.json` / `.html`: one grid column per check, with a per-episode drilldown of the values that tripped it. Toggles and thresholds live in `configs/action_qa_config.yaml`, one section per category below; parameter names are given in the tables with their defaults in parentheses.
+
+## Running and adding checks
+
+Each check is a function in its own file, `oopsie_backend/qa/checks/<category>/<test>.py`, registered with `@check(category, test, kind)`. `qa/checks/registry.py` imports every check file by name. The existing checks call their category's shared logic (`qa/action_qa.py`, `qa/video_checks.py`) with every other check disabled. A new check can instead implement its own logic: it receives the episode (actions, states, profile, root attributes, and videos decoded on first use) and returns its findings, skips and whether it applied.
+
+**Versions.** A check's version hashes:
+
+- its file;
+- the shared logic module;
+- its config section;
+- any sections it reads from other checks (`extra_sections`);
+- for video checks, `video_settings`.
+
+**What a run checks.** Each dataset contributes up to `sampling.default_episode_limit` episodes, of which the first `sampling.video_episode_limit` also get the video checks. Episodes are ranked by a hash of their key, so the sample stays stable as data arrives.
+
+**What runs.** A run reads each sampled episode once, in parallel across episodes, and runs only the checks whose stored result is missing or from an older version. So:
+
+- adding a check runs only that check;
+- editing a check or its config section reruns only that check;
+- deleting a check's import and file removes its results;
+- disabling a check in the config hides its results until it is enabled again.
+
+Options:
+
+- `--check CATEGORY/TEST` (repeatable) limits a run to some checks.
+- `--force` reruns them even when current.
+- `--retry-errors` reruns checks that errored.
+- `--max-episodes` caps the number of episodes checked in one run.
+- `--limit` and `--video-limit` override the sampling.
+
+`joint_position.step_jump` and `tracking` assume radians: they are skipped as `not_radians` when the action exceeds `radians.max_abs_rad`, whether or not the `radians` check itself is enabled.
 
 ## Conventions
 
@@ -43,9 +73,9 @@ Results land in `reports/action_qa.json` / `.html`: one grid column per check, w
 | `gripper_in_joints` | on | a joint name contains `gripper` (the gripper belongs in its own action key) |
 | `normalized_range` | on | non-gripper joint actions peak at exactly ±1 |
 | `radians` | on | any action or state joint value exceeds `max_abs_rad` (6.5). Reports a suspected unit: `degrees_or_normalized_100` up to 100.5 (SO-100/101 arms store either), `degrees` up to 400 |
-| `step_jump` | on | a joint moves more than `max_joint_speed_rad_s` (6.28) / `control_freq` between two steps. Skipped if `radians` flagged the action |
+| `step_jump` | on | a joint moves more than `max_joint_speed_rad_s` (6.28) / `control_freq` between two steps. Skipped if the action exceeds `radians.max_abs_rad` |
 | `delta_detection` | on | same test as `general.delta_detection`, over the paired joints |
-| `tracking` | on | the median \|action[t] - state[t+1]\| of any paired joint exceeds `max_median_error_rad` (0.2). Skipped if `radians` flagged the action |
+| `tracking` | on | the median \|action[t] - state[t+1]\| of any paired joint exceeds `max_median_error_rad` (0.2). Skipped if the action exceeds `radians.max_abs_rad` |
 
 ## `joint_velocity`
 

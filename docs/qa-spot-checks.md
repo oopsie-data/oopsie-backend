@@ -5,7 +5,7 @@ Run from the `oopsie-backend` repo root, on a machine with the synced data mirro
 ## 1. Preview the selection
 
 ```bash
-uv run python -m oopsie_backend.scripts.select_qa_episodes \
+uv run python -m oopsie_backend.qa.select_spot_checks \
   --data-dir /corral/utexas/IRI26024/oopsiedata --dry-run
 ```
 
@@ -14,13 +14,13 @@ This prints one row per selected lab, showing the selected/available episode cou
 ## 2. Write the bundles
 
 ```bash
-uv run python -m oopsie_backend.scripts.select_qa_episodes \
+uv run python -m oopsie_backend.qa.select_spot_checks \
   --data-dir /corral/utexas/IRI26024/oopsiedata --out-dir qa_out
 ```
 
 | Flag | Default | Meaning |
 |---|---|---|
-| `--data-dir` | `/scratch/09666/abahety/oopsiedata` | Root of the synced mirror (contains `OopsieData-Submissions/`) |
+| `--data-dir` | `/corral/utexas/IRI26024/oopsiedata` | Root of the synced mirror (contains `OopsieData-Submissions/`) |
 | `--out-dir` | `qa_out` | Output directory |
 | `--per-lab` | `20` | Episodes per lab |
 | `--min-episodes` | `200` | Skip labs with fewer eligible episodes (`0` for test data) |
@@ -50,7 +50,7 @@ Send each reviewer one zip and the reviewer instructions (`QA_REVIEW.md` in the 
 Reviewers return their `qa_manifest.json`. Save the files under distinct names, then:
 
 ```bash
-uv run python -m oopsie_backend.scripts.merge_qa_notes returned/*.json --out qa_notes.csv
+uv run python -m oopsie_backend.qa.merge_notes returned/*.json --out qa_notes.csv
 ```
 
 `--all` also includes episodes without notes. Each row identifies the episode by `dataset_repo` + `repo_path` (the h5 path inside that HF repo), together with the bundle, reviewer and note.
@@ -58,8 +58,8 @@ uv run python -m oopsie_backend.scripts.merge_qa_notes returned/*.json --out qa_
 ## Local test run
 
 ```bash
-HF_TOKEN=hf_... uv run python -m oopsie_backend.scripts.sync_hf_org \
+HF_TOKEN=hf_... uv run python -m oopsie_backend.ingest.sync \
   --org OopsieData-Submissions --local-dir ./data --smallest 10
-uv run python -m oopsie_backend.scripts.select_qa_episodes \
+uv run python -m oopsie_backend.qa.select_spot_checks \
   --data-dir ./data --out-dir qa_out --min-episodes 0
 ```

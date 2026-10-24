@@ -1,0 +1,20 @@
+# An episode is critical when any condition below holds. Read by oopsie_backend.postqa.critical,
+# which writes `critical` and `critical_reasons` to the episode index.
+
+# Conditions from the index itself.
+read_error: true        # the h5 could not be read
+duplicate_video: true   # a video file is identical to another episode's or camera's (preqa.duplicate_videos)
+qa_error: false         # a QA check failed with an error on the episode
+
+# QA checks (category/test) whose findings make an episode critical.
+qa_checks:
+  - general/length_mismatch        # actions and states have different lengths
+  - general/action_chunk_shape     # each step holds an action chunk, not one action
+  - general/duplicate_pairs        # two action types hold the same values
+  - general/required_state_keys    # a state the action space needs is missing
+  - joint_position/dof             # joint count disagrees with the joint names or state
+  - joint_velocity/dof
+  - cartesian_position/quaternion_shape
+  - cartesian_velocity/shape
+  - video/decoding                 # a video is missing or fails to decode
+  - video/frozen                   # a camera stalls for a stretch while the robot state moves

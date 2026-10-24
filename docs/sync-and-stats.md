@@ -1,36 +1,53 @@
 # Sync and stats
 
-The LS6 daily job syncs Hugging Face org datasets to local scratch, then regenerates the dashboard `stats.json` consumed by the sibling [`oopsie-docs`](../../oopsie-docs) Jekyll site.
+The LS6 daily job syncs Hugging Face org datasets to local scratch, then runs the [pipeline](pipeline.md): it regenerates the dashboard `stats.json` consumed by the sibling [`oopsie-docs`](../../oopsie-docs) Jekyll site, and refreshes the episode index, QA results and critical flags.
 
 Local storage is a **superset** of the Hub: new and changed files are downloaded, but files removed from the Hub are kept on disk (reported as orphans). This is sync, not a strict mirror.
 
 ```mermaid
 flowchart LR
-  HF["HuggingFace org"] -->|sync_hf_org| Local["Local copy\n/scratch/.../oopsiedata"]
-  Local -->|compute_local_stats| Stats["stats.json\noopsie-docs/docs/assets/data/"]
-  Local -->|compute_local_stats| Reports["reports/\npublic + internal JSON/HTML"]
+  HF["HuggingFace org"] -->|sync_hf_org| Local["Local copy\n/corral/.../oopsiedata"]
+  Local -->|pipeline| Index["episode index"]
+  Index -->|stats| Stats["stats.json\noopsie-docs/docs/assets/data/"]
+  Index -->|stats| Reports["reports/\npublic + internal JSON/HTML"]
   Stats --> Dashboard["oopsie-docs dashboard"]
 ```
 
 ## Prerequisites
 
-From the `oopsie-backend` directory:
+`/corral/utexas/IRI26024` holds data only: the mirror, the episode index, reports and logs. Code, tools and caches are staged into `$SCRATCH/oopsie` for every run, following [TACC's guidance](https://docs.tacc.utexas.edu/basics/userissues/) to keep job activity in `$SCRATCH`; their canonical copies are the git remotes.
+
+| Staged in `$SCRATCH/oopsie` | By |
+|---|---|
+| `oopsie-backend/` (latest `main`) | the scron entry, before the job starts |
+| `oopsie-docs/` (latest `main`) | the job; it commits and pushes `stats.json` when it changed |
+| `tools/bin/uv`, `tools/uv-python`, `uv-cache/`, `hf_home/` | the job installs uv if missing |
+
+A purge of `$SCRATCH` only means the next run downloads these again.
+
+One-time setup, by the member of group `G-829069` who runs the job:
+
+1. Make sure the SSH key the jobs use can read `oopsie-backend` and push to `oopsie-docs` on GitHub.
+2. Put the Hugging Face tokens next to the data (`master.hf_token` is the read token), readable by the group only:
+
+    ```bash
+    cp tokens.yaml /corral/utexas/IRI26024/oopsiedata/tokens.yaml
+    chgrp G-829069 /corral/utexas/IRI26024/oopsiedata/tokens.yaml
+    chmod 640 /corral/utexas/IRI26024/oopsiedata/tokens.yaml
+    ```
+
+3. Install the cron entry from any copy of [`slurm/daily.scron`](../slurm/daily.scron): `scrontab daily.scron`.
+
+`tokens.yaml` lives in the data directory, not in the repo (it is in `.gitignore`). The job takes `master.hf_token` from it unless `HF_TOKEN` is set. Every path can be overridden with an environment variable: `OOPSIE_ROOT`, `OOPSIE_DATA_DIR`, `OOPSIE_INDEX_DIR`, `OOPSIE_REPORTS_DIR`, `OOPSIE_LOG_DIR`, `OOPSIE_TOKENS`, `OOPSIE_STAGE`, `OOPSIE_BACKEND`, `OOPSIE_DOCS`, `OOPSIE_DOCS_REMOTE`, `OOPSIE_DOCS_BRANCH`, `OOPSIE_GIT_EMAIL` and `UV`. If `oopsie-docs` cannot be fetched, `stats.json` is written to the reports directory and not published.
+
+For manual runs, stage a checkout the same way and set the variables the job sets:
 
 ```bash
-cd /work/09666/abahety/ls6/oopsie-backend
-uv sync
-```
-
-Set a Hugging Face read token and correct file permissions:
-
-```bash
-export HF_TOKEN=hf_...
-# or
-echo hf_xxxxxxxxxxxxxxxx > ~/.hf_token
-chmod 600 ~/.hf_token
-
-# This is very inmportant!
-echo 'umask 007' >> ~/.bashrc
+B=$SCRATCH/oopsie/oopsie-backend
+git clone --depth 1 --branch main git@github.com:oopsie-data/oopsie-backend.git $B   # or: git -C $B pull
+export UV_PYTHON_INSTALL_DIR=$SCRATCH/oopsie/tools/uv-python UV_CACHE_DIR=$SCRATCH/oopsie/uv-cache HF_HOME=$SCRATCH/oopsie/hf_home
+export HF_TOKEN=<master.hf_token from /corral/utexas/IRI26024/oopsiedata/tokens.yaml>
+cd $B
 ```
 
 On LS6 `vm-small` nodes, numpy must stay below 2.4 (older CPUs lack x86-v2). The daily job handles this automatically; for manual runs:
@@ -43,13 +60,13 @@ uv add "numpy<2.4" && uv sync --reinstall-package numpy
 
 Batch scripts live in [`slurm/`](../slurm/):
 
-- [`daily_oopsie.slurm`](../slurm/daily_oopsie.slurm) — sync + stats
+- [`daily_oopsie.slurm`](../slurm/daily_oopsie.slurm) — sync, then the `nightly` pipeline target
 - [`daily.scron`](../slurm/daily.scron) — cron schedule (3:00 daily)
 
 Submit from anywhere:
 
 ```bash
-sbatch /work/09666/abahety/ls6/oopsie-backend/slurm/daily_oopsie.slurm
+sbatch $SCRATCH/oopsie/oopsie-backend/slurm/daily_oopsie.slurm
 ```
 
 if vm-small is taking too long, try:
@@ -59,10 +76,10 @@ if vm-small is taking too long, try:
 sinfo -S+P -o "%18P %10l %20F"
 
 # Use them
-sbatch -p normal /work/09666/abahety/ls6/oopsie-backend/slurm/daily_oopsie.slurm
+sbatch -p normal $SCRATCH/oopsie/oopsie-backend/slurm/daily_oopsie.slurm
 
 # Can also reduce time for node which gives you quicker access
-sbatch -p normal,vm-small -t 06:00:00 /work/09666/abahety/ls6/oopsie-backend/slurm/daily_oopsie.slurm
+sbatch -p normal,vm-small -t 06:00:00 $SCRATCH/oopsie/oopsie-backend/slurm/daily_oopsie.slurm
 ```
 
 Expected log structure (stdout and stderr merged into one file):
@@ -75,9 +92,9 @@ Expected log structure (stdout and stderr merged into one file):
   Syncing 18 dataset(s) under 'OopsieData-Submissions'
   ...
 === 2026-06-14T10:15:00-05:00 SUCCESS: sync_hf_org completed in 895s ===
-=== 2026-06-14T10:15:00-05:00 START: compute_local_stats ===
+=== 2026-06-14T10:15:00-05:00 START: pipeline ===
   ...
-=== 2026-06-14T10:20:00-05:00 SUCCESS: compute_local_stats completed in 300s ===
+=== 2026-06-14T10:20:00-05:00 SUCCESS: pipeline completed in 300s ===
 === 2026-06-14T10:20:00-05:00 SUCCESS: oopsie-daily completed in 1200s (job 12345) ===
 ```
 Two useful outputs:
@@ -89,12 +106,12 @@ Two useful outputs:
 ### 1. Sync
 
 ```bash
-cd /work/09666/abahety/ls6/oopsie-backend
+cd $SCRATCH/oopsie/oopsie-backend
 
-export HF_TOKEN=hf_...   # required for private org datasets
+export HF_TOKEN=<master.hf_token from /corral/utexas/IRI26024/oopsiedata/tokens.yaml>   # required for private org datasets
 export HF_HUB_DISABLE_XET=1   # this avoids reaching HUB API limits!
 
-uv run python -m oopsie_backend.scripts.sync_hf_org \
+uv run python -m oopsie_backend.ingest.sync \
   --org OopsieData-Submissions \
   --local-dir /corral/utexas/IRI26024/oopsiedata \
   --group G-829069 \
@@ -128,7 +145,7 @@ find "$DATA_DIR" -type d -exec chmod g+s {} +
   ...
 
   Downloaded: 12 file(s), skipped (unchanged): 37041, datasets: 18, orphans kept: 847, errors: 0
-  Report: /scratch/09666/abahety/oopsiedata/.sync_report.json
+  Report: /corral/utexas/IRI26024/oopsiedata/.sync_report.json
 ```
 
 When already fully synced, `downloaded` is 0 and `skipped` is high.
@@ -138,14 +155,14 @@ When already fully synced, `downloaded` is 0 and `skipped` is high.
 ```
   Syncing 18 dataset(s) under 'OopsieData-Submissions'
   [1/18] OopsieData-Submissions/SomeLab
-    dest: /scratch/09666/abahety/oopsiedata/OopsieData-Submissions/SomeLab
+    dest: /corral/utexas/IRI26024/oopsiedata/OopsieData-Submissions/SomeLab
     downloaded 12, skipped 450, took 2m 15s
 
   Checking orphans...
   OopsieData-Submissions/SomeLab: 3 orphan(s)
 
   Downloaded: 12 file(s), skipped (unchanged): 37041, datasets: 18, orphans kept: 847, errors: 0
-  Report: /scratch/09666/abahety/oopsiedata/.sync_report.json
+  Report: /corral/utexas/IRI26024/oopsiedata/.sync_report.json
 ```
 
 ##### Sync report (`.sync_report.json`)
@@ -157,7 +174,7 @@ Example (truncated):
 ```json
 {
   "org": "OopsieData-Submissions",
-  "local_dir": "/scratch/09666/abahety/oopsiedata",
+  "local_dir": "/corral/utexas/IRI26024/oopsiedata",
   "dry_run": false,
   "synced_at": {
     "utc": "2026-06-14T16:22:34Z",
@@ -179,11 +196,16 @@ Example (truncated):
 ```
 
 
-### 2. Update stats
+### 2. Update the index and stats
 
 ```bash
-uv run python -m oopsie_backend.scripts.compute_local_stats \
-  --data-dir /corral/utexas/IRI26024/oopsiedata
+uv run oopsie pipeline run nightly --config configs/pipeline.yaml --explain
+```
+
+This refreshes the [episode index](episode-index.md), the duplicate checks, QA and the critical flags, then computes the stats from the index. The stats leave out duplicate copies and critical episodes; the internal report lists the critical episodes per lab. To recompute only the stats from an existing index:
+
+```bash
+uv run oopsie stats compute-local --index episode_index.parquet --data-dir /corral/utexas/IRI26024/oopsiedata
 ```
 
 #### Flags
@@ -193,9 +215,9 @@ uv run python -m oopsie_backend.scripts.compute_local_stats \
 | `--no-public-report` | off | Skip `public_stats.html` |
 | `--no-internal-output` | off | Skip internal JSON/HTML entirely |
 | `--no-internal-report` | off | Skip `internal_stats.html` only |
-| `--limit` | none | Max `.h5` files per dataset (first N, for testing) |
+| `--index` | `episode_index.parquet` | Episode index to read |
 
-No `HF_TOKEN` required — reads files from disk.
+No `HF_TOKEN` required — reads the index and lists repo folders on disk.
 
 Internal stats additionally make a **best-effort** call to the Hub (using a cached
 `huggingface-cli login` token or `HF_TOKEN`, if either is set) to list every dataset
@@ -208,10 +230,10 @@ falls back to each dataset's earliest-episode timestamp instead.
 ### Config: `configs/stats_config.yaml`
 
 All of the following are edited there, not in code - changes take effect on the
-next `compute_local_stats` / `compute_hf_stats` run:
+next stats run:
 
-- The four dataset/lab exclusion lists (archives, bulk-import, non-lab infra repos,
-  placeholder lab ids) - these used to be hardcoded constants in `episode_stats.py`.
+- The placeholder lab ids omitted from public stats. Which repos are archives,
+  external datasets or infra is set in `configs/repositories.yaml`.
 - The list of placeholder operator names (e.g. `pending_operator`, `unknown`) that
   never count as a real individual.
 - The alpha/beta lab requirement thresholds and on/off toggles that drive the
@@ -222,10 +244,9 @@ next `compute_local_stats` / `compute_hf_stats` run:
   `per_task_cap` are placeholders - not implemented yet, always disabled.
 
 If the file is missing, the code falls back to built-in defaults matching the
-shipped YAML, so this never hard-fails - but you should expect to edit
-`configs/stats_config.yaml`, not `episode_stats.py`, going forward.
+shipped YAML.
 
-`compute_local_stats` writes two things: 
+The stats stage writes two things:
 1. public and internal stats to `reports/` 
 2. the public stats json to oopsie-docs.
 
@@ -236,9 +257,12 @@ shipped YAML, so this never hard-fails - but you should expect to edit
 |-----------------|---------|
 | `/corral/utexas/IRI26024/oopsiedata` | Root of synced local data |
 | `/corral/utexas/IRI26024/oopsiedata/.sync_report.json` | Last sync summary |
-| `/work/09666/abahety/ls6/oopsie-docs/docs/assets/data/stats.json` | Public dashboard stats (docs site) |
-| `/work/09666/abahety/ls6/oopsie-backend/reports/public_stats.json` | Public stats copy (backend) |
-| `/work/09666/abahety/ls6/oopsie-backend/reports/public_stats.html` | Self-contained public stats snapshot |
-| `/work/09666/abahety/ls6/oopsie-backend/reports/internal_stats.json` | Full internal stats (all repos; not published) |
-| `/work/09666/abahety/ls6/oopsie-backend/oopsie-backend/reports/internal_stats.html` | Self-contained internal report |
+| `oopsie-docs` `docs/assets/data/stats.json` | Public dashboard stats, committed by the job (in `reports/` if the docs repo could not be fetched) |
+| `/corral/utexas/IRI26024/reports/public_stats.json`, `.html` | Public stats copy and snapshot |
+| `/corral/utexas/IRI26024/reports/internal_stats.json`, `.html` | Full internal stats (all repos; not published) |
+| `/corral/utexas/IRI26024/reports/action_qa.json`, `.html` | QA summary |
+| `/corral/utexas/IRI26024/episode_index/` | Episode index and pipeline cache |
+| `/corral/utexas/IRI26024/oopsiedata/annotation/` | Annotation assignments, bundles, returns and stores |
+| `/corral/utexas/IRI26024/oopsiedata/tokens.yaml` | Hugging Face tokens (`master.hf_token` for the nightly job) |
+| `$SCRATCH/oopsie/` | Staged code, docs checkout, uv and caches |
 

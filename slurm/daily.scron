@@ -3,5 +3,7 @@
 #SCRON -t 08:00:00
 #SCRON -N 1
 #SCRON -n 1
-#SCRON -o /scratch/09666/abahety/logs/scron-%j.out
-0 3 * * * /work/09666/abahety/ls6/oopsie-backend/slurm/daily_oopsie.slurm
+#SCRON -o /corral/utexas/IRI26024/logs/scron-%j.out
+# Fetches main of oopsie-backend into $SCRATCH/oopsie/oopsie-backend with the runner's SSH key, then
+# runs the nightly job from there. A login shell sets $SCRATCH on LS6.
+0 3 * * * bash -lc 'B=$SCRATCH/oopsie/oopsie-backend; if [ -d "$B/.git" ]; then git -C "$B" fetch -q --depth 1 origin main && git -C "$B" reset -q --hard FETCH_HEAD; else mkdir -p "$(dirname "$B")" && git clone -q --depth 1 --branch main git@github.com:oopsie-data/oopsie-backend.git "$B"; fi && "$B"/slurm/daily_oopsie.slurm'

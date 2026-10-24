@@ -1,38 +1,9 @@
-# Stats computation config: dataset/lab exclusion lists, and lab requirement
+# Stats computation config: lab exclusion lists and lab requirement
 # toggles & thresholds, all in one editable place.
 #
 # Edited by hand - no code changes needed for anything in this file. Changes only
 # take effect on the next `compute_local_stats` / `compute_hf_stats` run; the
 # generated reports (public_stats.*, internal_stats.*) are static snapshots.
-
-
-# ===============================
-# ===== Dataset exclusions =====
-# ===============================
-
-datasets:
-  # Archives / frozen snapshots. Never included in public OR internal stats - their
-  # .h5 files are not even read.
-  stats_excluded:
-    - OopsieData-Submissions/oopsiedata-v0.1
-    - OopsieData-Submissions/oopsiedata-converted-v0.1
-    - OopsieData-Submissions/oopsie-face-raw-archive-2026-08-12
-
-  # Bulk-import / legacy HF repos. Excluded from public stats.json only; still
-  # shown in the internal report (flagged amber as "bulk_import") and excluded
-  # from the lab requirement checks below (see requirements.alpha/beta).
-  public_excluded:
-    - OopsieData-Submissions/SOAR_origin
-    - OopsieData-Submissions/AutoEval_origin
-    - OopsieData-Submissions/roboarena_upload
-    - OopsieData-Submissions/AI2_MOLMOACT2
-    - OopsieData-Submissions/Amazon-MobileManipulationTeam
-
-  # HF org repos holding site assets (preview images/video, metadata) rather than
-  # any lab's episode submissions. Excluded from the "All datasets" inventory.
-  non_lab_infra:
-    - OopsieData-Submissions/Visualizer_Previews
-    - OopsieData-Submissions/WebVisualizer
 
 
 # ===============================

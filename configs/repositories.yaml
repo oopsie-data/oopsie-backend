@@ -1,0 +1,23 @@
+# Repos in the OopsieData-Submissions org that are not Oopsie contributions.
+# Every repo not listed here is a contributor repo. Read by oopsie_backend.common.repos.
+
+# Imported datasets. Indexed and QA-checked, but never public and never counted
+# toward the lab requirements; flagged "bulk_import" in the internal report.
+external:
+  - OopsieData-Submissions/SOAR_origin
+  - OopsieData-Submissions/AutoEval_origin
+  - OopsieData-Submissions/roboarena_upload
+  - OopsieData-Submissions/AI2_MOLMOACT2
+
+# Frozen snapshots. Never indexed or counted; their h5 files are not read.
+archive:
+  - OopsieData-Submissions/oopsiedata-v0.1
+  - OopsieData-Submissions/oopsiedata-converted-v0.1
+  - OopsieData-Submissions/oopsie-face-raw-archive-2026-08-12
+
+# Site assets and the annotation repo. Never indexed, and left out of the
+# dataset inventory.
+infra:
+  - OopsieData-Submissions/Visualizer_Previews
+  - OopsieData-Submissions/WebVisualizer
+  - OopsieData-Submissions/oopsie-annotation

@@ -5,7 +5,7 @@ Use this skill whenever writing or debugging a converter that produces Oopsie HD
 You follow these steps:
 
 1. Create a new config robot profile. Double check with the user that this robot profile is correct and no unverified information has been entered. The profile should be placed in ./configs/
-2. Create the conversion script in ./oopsie_backend/external_conversion/. Follow DRY and make sure to reuse utilities from ./oopsie_backend/external_conversion/conversion_utils.py. Make sure to read all relevant information before attempting to write the conversion script.
+2. Create the conversion script in ./oopsie_backend/conversion/. Follow DRY and make sure to reuse utilities from ./oopsie_backend/conversion/conversion_utils.py. Make sure to read all relevant information before attempting to write the conversion script.
 3. Wait for the user to run the conversion script with the full correct input path.
 
 ## Validation entry points (`oopsie_data_tools`)
