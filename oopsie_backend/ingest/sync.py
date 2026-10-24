@@ -160,8 +160,6 @@ class Mirror:
     def sync_repo(self, repo_id: str, state: dict, args: argparse.Namespace) -> RepoResult:
         result = RepoResult(repo_id)
         repo_dir = self.root / repo_id
-        if not args.keep_hf_cache and not args.dry_run:
-            prune_hf_locks(repo_dir)
         revision = self.api.dataset_info(repo_id).sha
         listing = hub_files(self.api, repo_id, revision=revision)
 
@@ -222,12 +220,6 @@ class Mirror:
             if args.delete_removed and not args.dry_run:
                 for rel in result.untracked:
                     (repo_dir / rel).unlink(missing_ok=True)
-        if not args.keep_hf_cache and not args.dry_run and not result.failed:
-            shutil.rmtree(repo_dir / HF_CACHE, ignore_errors=True)
-            try:
-                (repo_dir / ".cache").rmdir()
-            except OSError:
-                pass
         return result
 
 
@@ -239,6 +231,15 @@ def prune_hf_locks(repo_dir: Path) -> int:
             path.unlink(missing_ok=True)
             n += 1
     return n
+
+
+def prune_hf_cache(repo_dir: Path) -> None:
+    """Delete the ``.cache/huggingface`` folder of a repo, and ``.cache`` if it is then empty."""
+    shutil.rmtree(repo_dir / HF_CACHE, ignore_errors=True)
+    try:
+        (repo_dir / ".cache").rmdir()
+    except OSError:
+        pass
 
 
 def local_files(repo_dir: Path) -> list[str]:
@@ -291,6 +292,8 @@ def main(argv: list[str] | None = None) -> int:
             _log(f"error: unknown group {args.group!r}")
             return 1
 
+    if not args.token:
+        _log("warning: no HF_TOKEN; the Hub lists only public repos")
     org = parse_org_arg(args.org)
     root = data_root(args.data_dir)
     repo_ids = list_dataset_repos_for_org(org, args.token)
@@ -301,6 +304,12 @@ def main(argv: list[str] | None = None) -> int:
     if not repo_ids:
         _log(f"error: no datasets found for {org!r}; check the org and HF_TOKEN read access")
         return 1
+
+    if not args.keep_hf_cache and not args.dry_run:
+        # Frees about one file per data file before the sync writes anything.
+        with ThreadPoolExecutor(16) as pool:
+            pruned = sum(pool.map(prune_hf_locks, [root / repo_id for repo_id in repo_ids]))
+        _log(f"deleted {pruned} huggingface_hub lock file(s) and unfinished download(s)")
 
     state_path = root / STATE_NAME
     state = read_state(state_path)
@@ -319,6 +328,8 @@ def main(argv: list[str] | None = None) -> int:
         results.append(result)
         if not args.dry_run:
             write_state(state, state_path)
+            if not args.keep_hf_cache and not (result.error or result.failed):
+                prune_hf_cache(root / repo_id)
         summary = result.error or (
             f"downloaded {result.downloaded}, adopted {result.adopted}, unchanged {result.unchanged}, "
             f"removed on Hub {len(result.removed)}, failed {len(result.failed)}"
