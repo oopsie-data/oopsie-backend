@@ -1,0 +1,194 @@
+"""Materialize the training data of a recipe (``configs/training/<recipe>.yaml``).
+
+Usage:
+    uv run oopsie training materialize --recipe configs/training/droid_joint_velocity.yaml \\
+        --data-dir /corral/utexas/IRI26024/oopsiedata --index episode_index.parquet \\
+        --out /corral/utexas/IRI26024/training --work-dir $SCRATCH/oopsie/training \\
+        --stage-dir $SCRATCH/oopsie/stage
+
+Steps:
+
+1. Select episodes from the index (``training/select.py``) and, with
+   ``--stage-dir``, copy them to fast storage (``common/staging.py``).
+2. Compute each robot's gripper range, used to normalize gripper positions.
+3. Unify every selected episode into ``episodes/`` (``training/unify.py``); unified
+   episodes that are still current are reused.
+4. Write ``manifest.parquet`` (every selected episode with its status, skip reason
+   and labels), ``layout.json`` and ``recipe.yaml``, then each format in ``formats``
+   (``training/writers/registry.py``) into ``<format>/``.
+5. Set the index's ``training_sets`` column: the recipes each episode is part of.
+
+Everything is built in ``<work-dir>/<recipe name>``. When ``--out`` differs, the
+finished dataset is then copied to ``<out>/<recipe name>``, replacing the previous
+copy; the unified episodes are copied only for the ``hdf5`` format. Keeping the
+work directory on fast scratch storage lets later runs reuse its unified episodes.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import shutil
+import subprocess
+import sys
+from collections import Counter
+from concurrent.futures import ProcessPoolExecutor
+from pathlib import Path
+
+import polars as pl
+import yaml
+
+from oopsie_backend.common.repos import DEFAULT_DATA_DIR, episode_path
+from oopsie_backend.common.staging import stage_episodes
+from oopsie_backend.index.store import DEFAULT_INDEX, KEY, read_index, update_columns
+from oopsie_backend.training.layout import build_layout
+from oopsie_backend.training.recipe import load_recipe, unify_hash
+from oopsie_backend.training.select import COLUMNS, OPTIONAL, select_episodes
+from oopsie_backend.training.unify import gripper_job, robot_id, unify_episode
+from oopsie_backend.training.writers.registry import writer
+
+TRAINING_COLUMN = "training_sets"
+TRAINING_SCHEMA = {KEY: pl.String, TRAINING_COLUMN: pl.List(pl.String)}
+LABELS = ["episode_id", "lab_id", "robot_name", "language_instruction", "task", "success", "failure_categories"]
+
+
+def _log(message: str) -> None:
+    print(message, file=sys.stderr)
+
+
+def gripper_ranges(selected: pl.DataFrame, data_dir: Path, workers: int) -> dict[str, tuple[float, float]]:
+    jobs = [(robot_id(r), episode_path(data_dir, r["dataset_repo"], r["repo_path"])) for r in selected.iter_rows(named=True)]
+    ranges: dict[str, tuple[float, float]] = {}
+    with ProcessPoolExecutor(max_workers=workers) as pool:
+        for robot, extent in pool.map(gripper_job, jobs, chunksize=16):
+            if extent is not None:
+                lo, hi = ranges.get(robot, extent)
+                ranges[robot] = (min(lo, extent[0]), max(hi, extent[1]))
+    return ranges
+
+
+def unify_all(selected: pl.DataFrame, recipe: dict, data_dir: Path, episodes_dir: Path, workers: int) -> pl.DataFrame:
+    episodes_dir.mkdir(parents=True, exist_ok=True)
+    ranges = gripper_ranges(selected, data_dir, workers)
+    uhash = unify_hash(recipe)
+    rows = list(selected.iter_rows(named=True))
+    jobs = [
+        (r[KEY], r["repo_path"], episode_path(data_dir, r["dataset_repo"], r["repo_path"]), episodes_dir, recipe, uhash, ranges.get(robot_id(r)))
+        for r in rows
+    ]
+    results = []
+    with ProcessPoolExecutor(max_workers=workers) as pool:
+        for i, result in enumerate(pool.map(unify_episode, jobs, chunksize=1), 1):
+            if result.get("traceback"):
+                _log(result.pop("traceback"))
+            results.append(result)
+            if i % 200 == 0 or i == len(jobs):
+                _log(f"  {i}/{len(jobs)} episode(s) unified")
+    manifest = pl.DataFrame(
+        [
+            {KEY: r[KEY], "dataset_repo": r["dataset_repo"], "repo_path": r["repo_path"], **{c: r[c] for c in LABELS}, **res}
+            for r, res in zip(rows, results)
+        ],
+        schema_overrides={"success": pl.Float64, "failure_categories": pl.List(pl.String)},
+        infer_schema_length=None,
+    )
+    for column in ("num_steps", "fps", "action_widths", "state_widths", "cameras", "reason"):
+        if column not in manifest.columns:
+            manifest = manifest.with_columns(pl.lit(None).alias(column))
+    keep = {f"{k}.h5" for k in manifest.filter(pl.col("status").is_in(["written", "reused"]))[KEY]}
+    for path in episodes_dir.glob("*.h5"):
+        if path.name not in keep:
+            path.unlink()
+            shutil.rmtree(episodes_dir / path.stem, ignore_errors=True)
+    return manifest
+
+
+def update_training_sets(index: Path, name: str, included: list[str]) -> None:
+    df = read_index(index, [TRAINING_COLUMN], optional={TRAINING_COLUMN: pl.List(pl.String)})
+    chosen = set(included)
+    rows = []
+    for key, sets in zip(df[KEY].to_list(), df[TRAINING_COLUMN].to_list()):
+        new = sorted((set(sets or []) - {name}) | ({name} if key in chosen else set()))
+        if new != sorted(sets or []):
+            rows.append({KEY: key, TRAINING_COLUMN: new or None})
+    if rows or TRAINING_COLUMN not in pl.read_parquet_schema(index):
+        update_columns(index, pl.DataFrame(rows, schema=TRAINING_SCHEMA), [TRAINING_COLUMN])
+
+
+def publish(work: Path, dest: Path, formats: list[str]) -> None:
+    """Copy the finished dataset from ``work`` to ``dest``, replacing an earlier copy.
+
+    ``rsync -aH`` keeps hard links, so videos the formats share are copied once.
+    """
+    partial = dest.with_name(f".{dest.name}.partial")
+    shutil.rmtree(partial, ignore_errors=True)
+    partial.mkdir(parents=True)
+    names = ["manifest.parquet", "layout.json", "recipe.yaml", *("episodes" if f == "hdf5" else f for f in formats)]
+    sources = [str(work / n) for n in names if (work / n).exists()]
+    subprocess.run(["rsync", "-aH", *sources, f"{partial}/"], check=True)
+    old = dest.with_name(f".{dest.name}.old")
+    shutil.rmtree(old, ignore_errors=True)
+    if dest.exists():
+        dest.rename(old)
+    partial.rename(dest)
+    shutil.rmtree(old, ignore_errors=True)
+
+
+def materialize(
+    recipe_path: Path, data_dir: Path, index: Path, out: Path, work_dir: Path, workers: int, stage_dir: Path | None = None
+) -> Path:
+    recipe = load_recipe(recipe_path)
+    name = recipe["name"]
+    work = work_dir / name
+    df = read_index(index, COLUMNS, optional=OPTIONAL)
+    selected = select_episodes(df, recipe)
+    _log(f"{name}: {selected.height} episode(s) selected from {df.height}")
+    if stage_dir is not None:
+        data_dir = stage_episodes(data_dir, stage_dir, list(zip(selected["dataset_repo"], selected["repo_path"])), workers)
+    manifest = unify_all(selected, recipe, data_dir, work / "episodes", workers)
+    included = manifest.filter(pl.col("status").is_in(["written", "reused"]))
+    counts = Counter(manifest["status"].to_list())
+    _log(f"{name}: " + ", ".join(f"{n} {s}" for s, n in sorted(counts.items())))
+    for reason, n in Counter(manifest.filter(pl.col("reason").is_not_null())["reason"].to_list()).most_common(10):
+        _log(f"  {n:>6}  {reason}")
+    if included.is_empty():
+        raise RuntimeError(f"{name}: no episode could be unified")
+
+    layout = build_layout(recipe, included)
+    manifest.write_parquet(work / "manifest.parquet")
+    (work / "layout.json").write_text(json.dumps(layout, indent=2))
+    (work / "recipe.yaml").write_text(yaml.safe_dump(recipe, sort_keys=False))
+    for fmt in recipe["formats"]:
+        write = writer(fmt)
+        if write is None:
+            continue
+        target = work / fmt
+        shutil.rmtree(target, ignore_errors=True)
+        _log(f"{name}: writing {fmt}")
+        write(work / "episodes", target, included, layout, recipe)
+
+    dest = out / name
+    if dest.resolve() != work.resolve():
+        _log(f"{name}: copying to {dest}")
+        publish(work, dest, recipe["formats"])
+    update_training_sets(index, name, included[KEY].to_list())
+    _log(f"{name}: {included.height} episode(s) in {dest}")
+    return dest
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--recipe", type=Path, required=True)
+    parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
+    parser.add_argument("--index", type=Path, default=DEFAULT_INDEX)
+    parser.add_argument("--out", type=Path, required=True, help="Where the finished dataset is kept")
+    parser.add_argument("--work-dir", type=Path, default=None, help="Where it is built; default: --out")
+    parser.add_argument("--stage-dir", type=Path, default=None, help="Copy the selected episodes here first and read them there")
+    parser.add_argument("--workers", type=int, default=8)
+    args = parser.parse_args(argv)
+    materialize(args.recipe, args.data_dir, args.index, args.out, args.work_dir or args.out, args.workers, args.stage_dir)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

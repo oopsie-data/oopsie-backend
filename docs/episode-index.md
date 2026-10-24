@@ -19,12 +19,12 @@ contributor = df.filter(pl.col("on_disk") & pl.col("public") & pl.col("duplicate
 
 ## Repos
 
-Episodes are discovered only under `<data_dir>/OopsieData-Submissions/<repo>/`. `configs/repositories.yaml` lists the repos that are not Oopsie contributions; every other repo is a contributor repo:
+Episodes are discovered under `<data_dir>/OopsieData-Submissions/<repo>/` and, for local imports, under `<data_dir>/imports/<name>/` with the dataset id `imports/<name>`. `configs/repositories.yaml` lists the archive and infra repos and `configs/imports.yaml` the imported datasets (see [imports](imports.md)); every other repo is a contributor repo:
 
 | `repo_kind` | Repos | Indexed |
 |---|---|---|
-| `contributor` | every repo not listed in `repositories.yaml` | yes, `public` unless the lab id is a placeholder |
-| `external` | `external` (SOAR, AutoEval, RoboArena, AI2 MolmoAct) | yes, never `public` |
+| `contributor` | every org repo not listed | yes, `public` unless the lab id is a placeholder |
+| `external` | every entry of `imports.yaml`: org repos (SOAR, AutoEval, RoboArena, AI2 MolmoAct) and local imports | yes, never `public`; local imports have no Hub hashes |
 | `archive` | `archive` | no |
 | `infra` | `infra`, including the annotation repo | no |
 
@@ -40,6 +40,9 @@ Episodes are discovered only under `<data_dir>/OopsieData-Submissions/<repo>/`. 
 | `schema`, `episode_id`, `lab_id`, `operator_name`, `language_instruction`, `timestamp` | root attributes of the h5; `timestamp` is null before 2000 |
 | `task` | `language_instruction` lowercased, whitespace collapsed, surrounding punctuation stripped |
 | `robot_name`, `gripper_name`, `policy_name`, `control_freq`, `is_biarm`, `uses_mobile_base`, `action_space`, `robot_state_keys` | from `robot_profile` |
+| `single_arm`, `biarm` | embodiment: one arm or two, from `is_biarm` |
+| `gripper_dof` | values per arm of the gripper action (`gripper_position`, else `gripper_velocity`, else `gripper_binary`) |
+| `binary_gripper`, `dexterous_hand` | embodiment: a `gripper_binary` action or one gripper value per arm; more than one gripper value per arm (a hand) |
 | `cameras` | keys of `observations/video_paths` |
 | `num_steps`, `duration_seconds` | length of the first non-empty action array, and that over `control_freq` |
 | `annotations` | the lab's `episode_annotations`, decoded with the annotation schema: name, timestamp, success, outcome, failure categories, severity, description, notes |
@@ -50,7 +53,7 @@ Episodes are discovered only under `<data_dir>/OopsieData-Submissions/<repo>/`. 
 | `read_error` | why the h5 could not be read; the h5 columns are then null |
 | `indexed_at` | when the h5 was last read |
 
-An h5 is re-read only when its size or modification time changed. When the Hub listing of a repo fails, the earlier hashes and `on_hub` values are kept. `--no-hub` skips the listing.
+An h5 is re-read only when its size or modification time changed, or when the index lacks one of the h5 columns, which happens once after a column is added. When the Hub listing of a repo fails, the earlier hashes and `on_hub` values are kept. `--no-hub` skips the listing.
 
 ### Duplicate episodes (`preqa.duplicate_episodes`)
 
@@ -87,6 +90,10 @@ See [action checks](action-checks.md#running-and-adding-checks).
 ### Annotation batches (`annotation.pipeline collect` or `index`)
 
 `annotation_batch`, `annotation_split` (the split it was assigned in, including `train_annotated`), `annotation_assigned`, `annotation_returned` and `annotation_records` (the current collected annotation per annotator).
+
+### Training data (`training.materialize`)
+
+`training_sets`: the recipes whose materialized dataset holds the episode (see [training data](training-data.md)). Materializing a recipe replaces that recipe's entries.
 
 ## Commands
 

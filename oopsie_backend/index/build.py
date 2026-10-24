@@ -4,7 +4,7 @@ Usage:
     uv run python -m oopsie_backend.index.build \\
         --data-dir /corral/utexas/IRI26024/oopsiedata --index episode_index.parquet
 
-Reads h5 metadata of new or changed files only, takes file hashes from the
+Reads h5 metadata of new or changed files only (all files when the index lacks a core column), takes file hashes from the
 Hub listing, and marks duplicate copies of the same episode data. Columns
 written by other pipeline steps are kept. Episodes whose file disappeared stay
 in the index with ``on_disk = false``.
@@ -17,6 +17,7 @@ import os
 import sys
 from pathlib import Path
 
+import polars as pl
 from huggingface_hub import HfApi
 
 from oopsie_backend.common.repos import DEFAULT_DATA_DIR
@@ -35,7 +36,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--no-hub", action="store_true", help="Skip the Hub listing; keep earlier hashes")
     args = parser.parse_args(argv)
 
-    previous = read_index(args.index, columns=list(CORE_SCHEMA)) if args.index.is_file() else None
+    previous = None
+    if args.index.is_file():
+        present = set(pl.read_parquet_schema(args.index))
+        previous = read_index(args.index, columns=[c for c in CORE_SCHEMA if c in present])
     api = None if args.no_hub else HfApi(token=args.token)
     core = build_core(args.data_dir, previous, api, args.workers)
     with locked(args.index):

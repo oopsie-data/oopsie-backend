@@ -35,8 +35,10 @@ COMMANDS: dict[str, dict[str, str]] = {
         "pipeline": "annotation.pipeline",
     },
     "pipeline": {"run": "pipeline.run"},
+    "training": {"materialize": "training.materialize"},
     "export": {"to-rlds": "export.to_rlds"},
     "convert": {
+        "imports": "conversion.imports",
         "ar-aloha": "conversion.convert_ar_aloha_data",
         "rlds": "conversion.convert_rlds_to_hdf5",
         "roboarena": "conversion.convert_roboarena_data",

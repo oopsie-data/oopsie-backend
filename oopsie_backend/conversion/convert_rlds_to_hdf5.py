@@ -321,7 +321,7 @@ def convert_rlds_to_hdf5(
     print(f"Done. Wrote {written} trajectory HDF5 files to: {output_dir}")
 
 
-def _parse_args() -> argparse.Namespace:
+def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Convert RLDS TFDS shards into trajectory-level HDF5 files."
     )
@@ -391,11 +391,11 @@ def _parse_args() -> argparse.Namespace:
         action="store_true",
         help="Overwrite output files if they already exist.",
     )
-    return parser.parse_args()
+    return parser.parse_args(argv)
 
 
-def main() -> None:
-    args = _parse_args()
+def main(argv: list[str] | None = None) -> None:
+    args = _parse_args(argv)
     if not (0 <= args.compression_level <= 9):
         raise ValueError("--compression-level must be in [0, 9].")
 

@@ -325,8 +325,8 @@ def _build_config(raw: dict) -> dict:
             "include_stats_excluded_datasets": bool(
                 scope_raw.get("include_stats_excluded_datasets", False)
             ),
-            "include_public_excluded_datasets": bool(
-                scope_raw.get("include_public_excluded_datasets", False)
+            "include_external_datasets": bool(
+                scope_raw.get("include_external_datasets", True)
             ),
         },
         "report": {"highlight_ignore": highlight_ignore},

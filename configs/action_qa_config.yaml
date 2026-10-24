@@ -340,7 +340,7 @@ sampling:
 
 scope:
   include_stats_excluded_datasets: false  # frozen archive snapshots (oopsiedata-v0.1, -converted-v0.1, ...)
-  include_public_excluded_datasets: false  # bulk-import repos (SOAR_origin, AutoEval_origin, roboarena_upload, ...)
+  include_external_datasets: true  # imported datasets (configs/imports.yaml)
 
 report:  # HTML page display only; doesn't change what the checks flag
   highlight_ignore: [general.placeholder_metadata, general.action_copies_state]  # checks (category.check) that don't turn a dataset's name red when they flag episodes

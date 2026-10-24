@@ -24,7 +24,14 @@ flowchart LR
   train_sample --> annotator_assignments
   annotator_assignments --> annotation_columns
   annotation_state --> annotation_columns
+  imported_datasets -. "imports/ folder" .-> mirror
+  critical_episodes --> training_data
+  eval_split --> training_data
+  annotation_columns --> training_data
+  training_recipe_state --> training_data
 ```
+
+The dashed edge is not a dependency: the manual `imported_datasets` stage writes into the mirror, and the index reads it from there.
 
 | Stage | Package | Writes |
 |---|---|---|
@@ -40,8 +47,10 @@ flowchart LR
 | `eval_split` | `splits` | `eval_split`, `eval_proposal` |
 | `annotator_assignments` | `annotation` | `annotation/eval_assignment/`, `train_assignment/` (write-once) |
 | `annotation_columns` | `annotation` | `annotation_*` columns |
+| `imported_datasets` (manual) | `conversion` | `<data root>/imports/<name>/` for the local imports of `configs/imports.yaml` |
+| `training_data` (manual) | `training` | `<training_dir>/<recipe>/`, `training_sets` |
 
-`mirror_state`, `qa_check_versions`, `critical_config`, `stats_config`, `split_config` and `annotation_state` run on every invocation. Each of them hashes outside state: the h5 files on disk and `configs/repositories.yaml`, the QA check versions, a config file, or the annotation stores. A downstream stage reruns only when one of those hashes changes. The sync itself runs outside the pipeline, because it is the job that changes the mirror.
+`mirror_state`, `qa_check_versions`, `critical_config`, `stats_config`, `split_config`, `annotation_state` and `training_recipe_state` run on every invocation. Each of them hashes outside state: the h5 files on disk with `configs/repositories.yaml` and `configs/imports.yaml`, the QA check versions, a config file, or the annotation stores. A downstream stage reruns only when one of those hashes changes. The sync itself runs outside the pipeline, because it is the job that changes the mirror.
 
 ## Running
 
@@ -62,9 +71,11 @@ uv run oopsie pipeline run postqa --graph dag.png
 | `proposals` | `eval_proposals` |
 | `splits` | `eval_split`, `train_sample` |
 | `annotation` | `annotation_columns` |
-| `all` | every stage that no other stage depends on, so the full pipeline |
+| `all` | every non-manual stage that no other non-manual stage depends on, so the full pipeline |
+| `imports` | `imported_datasets` (manual) |
+| `training` | `training_data` (manual); needs `--set training_recipe=configs/training/<recipe>.yaml` |
 
-`configs/pipeline.yaml` holds every input a stage may need: the mirror, the index, the cache directory, the worker count, whether to query the Hub, the reports directory, the website `stats.json`, the chosen proposal and the annotation config.
+`configs/pipeline.yaml` holds every input a stage may need: the mirror, the index, the cache directory, the worker count, whether to query the Hub, the reports directory, the website `stats.json`, the split and annotation configs, the training directories and recipe, and `stage_dir`. With `stage_dir` set, QA and training first copy the episodes they read to that directory (`common/staging.py`); on LS6 it is on `$SCRATCH`.
 
 Flags:
 
@@ -75,7 +86,7 @@ Flags:
 
 Every stage also exists as a command (`oopsie <stage> <command>`, see `oopsie` without arguments), so it can be run directly with its own options.
 
-The nightly Slurm job syncs the mirror and then runs `all`. A newly registered stage is part of `all` without further changes.
+The nightly Slurm job syncs the mirror and then runs `all`. A newly registered stage is part of `all` without further changes, unless it is registered with `@stage(manual=True)`. Manual stages run only when a target names them: `imports` converts datasets (see [imports](imports.md)), and `training` materializes training data (see [training data](training-data.md)). On LS6, `slurm/pipeline.slurm` runs them on a compute node.
 
 Downstream stages ignore duplicate copies and critical episodes. QA, the duplicate-video check and the critical flags skip copies. Split planning, the annotated train sample and the stats skip both copies and critical episodes, so the stats run after QA and the critical flags.
 
@@ -103,7 +114,7 @@ def duplicate_videos(episode_index: str, index_path: str) -> str:
     return columns_fingerprint(Path(index_path), dv.COLUMNS)
 ```
 
-Its parameters are the stages or config inputs it depends on. It writes its results to the index and returns a fingerprint of what it wrote; Hamilton caches that fingerprint and compares it with the last run. `@stage(always_run=True)` marks a stage that observes outside state.
+Its parameters are the stages or config inputs it depends on. It writes its results to the index and returns a fingerprint of what it wrote; Hamilton caches that fingerprint and compares it with the last run. `@stage(always_run=True)` marks a stage that observes outside state, and `@stage(manual=True)` marks a stage that `all` leaves out.
 
 `oopsie_backend/pipeline/stages.py` imports every stage module by name and defines the targets. To add a stage, write the function, import its module there, and add any new input to `configs/pipeline.yaml`.
 

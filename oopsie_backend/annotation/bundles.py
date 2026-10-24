@@ -24,7 +24,7 @@ import h5py
 
 from oopsie_backend.common.h5 import _profile, _s
 from oopsie_backend.common.io import now_timestamps
-from oopsie_backend.common.repos import HF_ORG
+from oopsie_backend.common.repos import episode_path
 from oopsie_backend.common.videos import episode_videos
 
 MANIFEST_NAME = "eval_manifest.json"
@@ -40,9 +40,7 @@ def sample_uid(dataset_repo: str, repo_path: str) -> str:
 
 def source_path(data_dir: Path, dataset_repo: str, repo_path: str) -> Path:
     """Local h5 of an episode; ``data_dir`` may be the mirror root or its ``HF_ORG`` folder."""
-    repo = dataset_repo.split("/", 1)[1]
-    base = data_dir if data_dir.name == HF_ORG else data_dir / HF_ORG
-    return base / repo / repo_path
+    return episode_path(data_dir, dataset_repo, repo_path)
 
 
 def _blind_copy(src: Path, dst: Path, uid: str, video_names: dict[str, str], blind: bool) -> None:

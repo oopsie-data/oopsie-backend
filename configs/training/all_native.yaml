@@ -1,0 +1,14 @@
+# Every usable episode with its own action and state keys, padded to common widths
+# with masks, at 10 Hz. Episodes without a wrist camera get a blank wrist video.
+name: all_native
+formats: [hdf5, lerobot]
+rate_hz: 10
+actions:
+  mode: native
+  orientation: quat
+cameras:
+  image_size: [180, 320]
+  roles:
+    wrist: ["*wrist*"]
+    exterior: ["*"]
+  missing: blank

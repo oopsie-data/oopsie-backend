@@ -8,3 +8,7 @@ stats_docs_output: ../oopsie-docs/docs/assets/data/stats.json
 reports_dir: /corral/utexas/IRI26024/reports
 split_config_path: configs/eval_split.yaml
 annotation_config_path: configs/annotation_pipeline.yaml
+training_dir: /corral/utexas/IRI26024/training
+training_recipe: null  # set with --set training_recipe=configs/training/<recipe>.yaml
+training_work_dir: null  # where training data is built; null builds in training_dir
+stage_dir: null  # fast storage that QA and training copy episodes to before reading them; null reads the mirror

@@ -8,8 +8,11 @@ Each dataset contributes up to ``sampling.default_episode_limit`` episodes, of
 which the first ``sampling.video_episode_limit`` also get the video checks
 (``configs/action_qa_config.yaml``). The sample is ranked by a hash of the
 episode key and ``sampling.random_seed``, so it stays the same as data arrives.
-Only on-disk, readable, non-duplicate contributor episodes are sampled; external
-datasets too with ``scope.include_public_excluded_datasets``.
+Only on-disk, readable, non-duplicate episodes of contributor repos are sampled,
+and of external datasets (``configs/imports.yaml``) with ``scope.include_external_datasets``.
+
+With ``--stage-dir``, the episodes to check and their videos are first copied to
+that directory (``common/staging.py``), so the checks read fast local storage.
 
 A check runs on an episode only when the index holds no result of its current
 version (``qa/checks/base.py``). Adding, editing or re-configuring a check
@@ -36,6 +39,7 @@ from oopsie_backend.common.repos import (
     EXTERNAL,
     episode_path,
 )
+from oopsie_backend.common.staging import stage_episodes
 from oopsie_backend.index.store import DEFAULT_INDEX, KEY, read_index, update_columns
 from oopsie_backend.qa.action_qa_config import CONFIG as ACTION_QA_CONFIG
 from oopsie_backend.qa.action_qa_report import render_action_qa_report
@@ -196,6 +200,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--retry-errors", action="store_true", help="Rerun checks whose current result is an error")
     parser.add_argument("--output", type=Path, default=None, help="Default: run.output")
     parser.add_argument("--workers", type=int, default=None, help="Default: run.workers")
+    parser.add_argument("--stage-dir", type=Path, default=None, help="Copy the checked episodes here first and read them there")
     args = parser.parse_args(argv)
 
     data_dir = Path(args.data_dir or run_cfg["data_dir"] or DEFAULT_DATA_DIR)
@@ -211,7 +216,7 @@ def main(argv: list[str] | None = None) -> int:
     df = read_index(args.index, optional={"duplicate_of": pl.String})
     sample = select_sample(
         df, limit or None, video_limit or None, sampling["random_seed"] or 0, sampling["random"],
-        config["scope"]["include_public_excluded_datasets"], set(only) if only else None,
+        config["scope"]["include_external_datasets"], set(only) if only else None,
     )
     pending = pending_checks(sample, checks, versions, args.force, args.retry_errors)
     keys = [k for k in sample.sort("rank", "dataset_repo")[KEY] if k in pending]
@@ -223,8 +228,11 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     rows = {r[KEY]: r for r in sample.select(KEY, "dataset_repo", "repo_path").iter_rows(named=True)}
+    read_dir = data_dir
+    if args.stage_dir and keys:
+        read_dir = stage_episodes(data_dir, args.stage_dir, [(rows[k]["dataset_repo"], rows[k]["repo_path"]) for k in keys], workers)
     jobs = [
-        (k, episode_path(data_dir, rows[k]["dataset_repo"], rows[k]["repo_path"]), rows[k]["repo_path"], pending[k], config)
+        (k, episode_path(read_dir, rows[k]["dataset_repo"], rows[k]["repo_path"]), rows[k]["repo_path"], pending[k], config)
         for k in keys
     ]
     new: dict[str, list[dict]] = {}

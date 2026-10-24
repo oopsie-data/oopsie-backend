@@ -1,0 +1,21 @@
+# Datasets bundled with Oopsie-Data that are not lab contributions. Every entry is
+# an external dataset: indexed and QA-checked, but never public and never counted
+# toward the lab requirements. Read by oopsie_backend.common.repos and the
+# `imported_datasets` stage (`oopsie pipeline run imports`).
+#
+# An entry is either
+#   hub: <repo id>         an already converted repo of the Hugging Face org; sync mirrors it, or
+#   converter: <name>      converted locally into <data root>/imports/<entry name>, with
+#   source: <path>         the converter's input, and
+#   args: [...]            extra converter arguments (optional).
+# Converters are listed in oopsie_backend/conversion/registry.py.
+
+datasets:
+  SOAR:
+    hub: OopsieData-Submissions/SOAR_origin
+  AutoEval:
+    hub: OopsieData-Submissions/AutoEval_origin
+  roboarena:
+    hub: OopsieData-Submissions/roboarena_upload
+  MOLMOACT2:
+    hub: OopsieData-Submissions/AI2_MOLMOACT2

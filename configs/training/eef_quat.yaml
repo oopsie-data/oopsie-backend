@@ -1,0 +1,19 @@
+# Single-arm episodes with end-effector pose actions (xyz plus scalar-last quaternion)
+# and a normalized gripper, at 10 Hz, as a LeRobot dataset.
+name: eef_quat
+formats: [lerobot]
+selection:
+  biarm: false
+  binary_gripper: true
+rate_hz: 10
+actions:
+  mode: target
+  keys: [cartesian_position, gripper_position]
+  orientation: quat
+state:
+  keys: [cartesian_position, gripper_position]
+cameras:
+  image_size: [224, 224]
+  roles:
+    wrist: ["*wrist*"]
+    exterior: ["*"]

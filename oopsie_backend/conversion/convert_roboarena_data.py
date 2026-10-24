@@ -274,7 +274,7 @@ def convert_session(
     return written, episode_counter
 
 
-def main() -> None:
+def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(
         description="Convert RoboArena evaluation sessions to oopsiedata_format_v1 HDF5",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -301,7 +301,7 @@ def main() -> None:
         default=0,
         help="Starting numeric suffix for episode IDs (default: 0).",
     )
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     source: Path = args.source.resolve()
     output_dir: Path = args.output_dir.resolve()

@@ -255,7 +255,7 @@ def convert_trajectory(
     return "written"
 
 
-def main() -> None:
+def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(
         description="Convert the SOAR dataset to oopsiedata_format_v1 HDF5",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -280,7 +280,7 @@ def main() -> None:
                         help="Starting numeric counter for episode IDs (default: 0).")
     parser.add_argument("--overwrite", action="store_true",
                         help="Overwrite existing output HDF5 files.")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     source: Path = args.source.resolve()
     output_dir: Path = args.output_dir.resolve()

@@ -14,70 +14,11 @@ SECONDS=0
 
 export HF_HUB_DISABLE_XET=1
 
-# Data lives under the shared Corral root. Code, tools and caches are staged into $SCRATCH for
-# every run, as TACC asks for job activity; their canonical copies are the git remotes. The scron
-# entry (daily.scron) fetches this repo's main into $STAGE/oopsie-backend before starting this
-# script. Git uses the runner's SSH key. Each path can be overridden from the environment.
-ROOT=${OOPSIE_ROOT:-/corral/utexas/IRI26024}
-DATA_DIR=${OOPSIE_DATA_DIR:-$ROOT/oopsiedata}
-INDEX_DIR=${OOPSIE_INDEX_DIR:-$ROOT/episode_index}
-REPORTS_DIR=${OOPSIE_REPORTS_DIR:-$ROOT/reports}
-LOG_DIR=${OOPSIE_LOG_DIR:-$ROOT/logs}
-TOKENS=${OOPSIE_TOKENS:-$DATA_DIR/tokens.yaml}
-
-: "${SCRATCH:?SCRATCH is not set}"
-STAGE=${OOPSIE_STAGE:-$SCRATCH/oopsie}
-BACKEND=${OOPSIE_BACKEND:-$STAGE/oopsie-backend}
-DOCS=${OOPSIE_DOCS:-$STAGE/oopsie-docs}
-DOCS_REMOTE=${OOPSIE_DOCS_REMOTE:-git@github.com:oopsie-data/oopsie-docs.git}
-DOCS_BRANCH=${OOPSIE_DOCS_BRANCH:-main}
-STATS_REL=docs/assets/data/stats.json
-GIT_AUTHOR=(-c user.name="oopsie-daily" -c user.email="${OOPSIE_GIT_EMAIL:-$USER@tacc.utexas.edu}")
-UV=${UV:-$STAGE/tools/bin/uv}
-export UV_PYTHON_INSTALL_DIR=${UV_PYTHON_INSTALL_DIR:-$STAGE/tools/uv-python}
-export UV_CACHE_DIR=${UV_CACHE_DIR:-$STAGE/uv-cache}
-export HF_HOME=${HF_HOME:-$STAGE/hf_home}
-
-if [[ ! -x "$UV" ]]; then
-  curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR="$(dirname "$UV")" UV_NO_MODIFY_PATH=1 sh
-fi
-if [[ ! -x "$UV" ]]; then
-  echo "error: could not install uv into $(dirname "$UV")" >&2
-  exit 1
-fi
-if [[ ! -f "$BACKEND/pyproject.toml" ]]; then
-  echo "error: no oopsie-backend checkout at $BACKEND; daily.scron stages it, or set OOPSIE_BACKEND" >&2
-  exit 1
-fi
-# The Hugging Face token is the `master` entry's hf_token in tokens.yaml, unless HF_TOKEN is set.
-if [[ -z "${HF_TOKEN:-}" ]]; then
-  if [[ -r "$TOKENS" ]]; then
-    HF_TOKEN="$(awk '/^master:/{m=1; next} /^[^[:space:]]/{m=0} m && $1 == "hf_token:" {print $2}' "$TOKENS")"
-  fi
-  if [[ -z "${HF_TOKEN:-}" ]]; then
-    echo "error: set HF_TOKEN or put master.hf_token in $TOKENS (mode 640, group G-829069)" >&2
-    exit 1
-  fi
-  export HF_TOKEN
-fi
-
-mkdir -p "$LOG_DIR" "$DATA_DIR" "$INDEX_DIR" "$REPORTS_DIR" "$UV_CACHE_DIR" "$HF_HOME"
-
-cd "$BACKEND"
-
-run_step() {
-  local name=$1
-  shift
-  local step_start=$SECONDS
-  echo "=== $(date -Is) START: ${name} ==="
-  local rc=0
-  "$@" || rc=$?
-  if (( rc != 0 )); then
-    echo "=== $(date -Is) FAILED: ${name} exited ${rc} after $((SECONDS - step_start))s ==="
-    return "$rc"
-  fi
-  echo "=== $(date -Is) SUCCESS: ${name} completed in $((SECONDS - step_start))s ==="
-}
+# The scron entry (daily.scron) fetches this repo's main into $SCRATCH/oopsie/oopsie-backend and
+# runs this script from there.
+BACKEND=${OOPSIE_BACKEND:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}
+# shellcheck source=slurm/env.sh
+source "$BACKEND/slurm/env.sh"
 
 # Stage the docs site that receives stats.json. Without it, stats.json goes to the reports
 # directory and is not published.
@@ -116,15 +57,12 @@ run_step sync_hf_org "$UV" run python -m oopsie_backend.ingest.sync \
 #   echo \"Set group G-829069 and permissions (dirs 770, files 660) under $DATA_DIR\"
 # "
 
-# Index, duplicate checks, QA, critical flags and stats (configs/pipeline.yaml), recomputing only
-# what changed. The stats leave out duplicate copies and critical episodes, so they run last.
+# The full pipeline (configs/pipeline.yaml), recomputing only what changed. QA copies the
+# episodes it checks to $EPISODE_STAGE first. Manual stages (imports, training) never run here;
+# see pipeline.slurm.
 pipeline_rc=0
-run_step pipeline "$UV" run oopsie pipeline run all --config configs/pipeline.yaml --explain \
-  --set data_dir="$DATA_DIR" \
-  --set index_path="$INDEX_DIR/episode_index.parquet" \
-  --set cache_dir="$INDEX_DIR/pipeline_cache" \
-  --set stats_docs_output="$STATS_OUT" \
-  --set reports_dir="$REPORTS_DIR" || pipeline_rc=$?
+run_step pipeline "$UV" run oopsie pipeline run all "${PIPELINE_SETTINGS[@]}" --explain \
+  --set stats_docs_output="$STATS_OUT" || pipeline_rc=$?
 
 # Publish the website stats: commit stats.json to oopsie-docs when it changed.
 publish_stats() {

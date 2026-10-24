@@ -1,0 +1,22 @@
+# Single-arm Franka episodes in the DROID layout that oopsie-rl reads:
+# joint velocity plus gripper position actions, two exterior cameras and a wrist camera.
+name: droid_joint_velocity
+formats: [rlds]
+selection:
+  robots: [franka_panda, franka_research_3]
+  biarm: false
+  binary_gripper: true
+rate_hz: 15
+actions:
+  mode: target
+  keys: [joint_velocity, gripper_position]
+state:
+  keys: [joint_position, gripper_position]
+cameras:
+  image_size: [180, 320]
+  roles:
+    wrist_image_left: ["*wrist*"]
+    exterior_image_1_left: [left, "*exterior*", "*third*", "*front*", "*"]
+    exterior_image_2_left: [right, "*exterior*", "*third*", "*side*", "*"]
+  fallback:
+    exterior_image_2_left: exterior_image_1_left

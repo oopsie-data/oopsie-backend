@@ -1,13 +1,6 @@
 # Repos in the OopsieData-Submissions org that are not Oopsie contributions.
-# Every repo not listed here is a contributor repo. Read by oopsie_backend.common.repos.
-
-# Imported datasets. Indexed and QA-checked, but never public and never counted
-# toward the lab requirements; flagged "bulk_import" in the internal report.
-external:
-  - OopsieData-Submissions/SOAR_origin
-  - OopsieData-Submissions/AutoEval_origin
-  - OopsieData-Submissions/roboarena_upload
-  - OopsieData-Submissions/AI2_MOLMOACT2
+# Every repo not listed here or as a `hub` entry of configs/imports.yaml is a
+# contributor repo. Read by oopsie_backend.common.repos.
 
 # Frozen snapshots. Never indexed or counted; their h5 files are not read.
 archive:

@@ -24,9 +24,16 @@ def qa_check_versions() -> str:
 
 @stage
 def qa_results(
-    duplicate_episodes: str, qa_check_versions: str, data_dir: str, index_path: str, workers: int, reports_dir: str
+    duplicate_episodes: str,
+    qa_check_versions: str,
+    data_dir: str,
+    index_path: str,
+    workers: int,
+    reports_dir: str,
+    stage_dir: str | None,
 ) -> str:
     """Runs every pending check on the QA sample; returns the fingerprint of the QA columns."""
     argv = ["--data-dir", data_dir, "--index", index_path, "--workers", str(workers)]
+    argv += ["--stage-dir", stage_dir] if stage_dir else []
     check_rc(run.main(argv + ["--output", str(Path(reports_dir) / "action_qa.json")]), "QA")
     return columns_fingerprint(Path(index_path), QA_COLUMNS)

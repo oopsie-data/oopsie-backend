@@ -20,10 +20,11 @@ uv run oopsie pipeline run all --explain        # the full pipeline
 | `oopsie_backend/stats` | Public and internal stats |
 | `oopsie_backend/splits` | Eval split proposals, the chosen split, and the annotated train sample |
 | `oopsie_backend/annotation` | Annotator assignment, bundles, Hugging Face distribution and collection |
+| `oopsie_backend/training` | Training data recipes: selection, unification, LeRobot, RLDS and HDF5 output |
 | `oopsie_backend/export` | Export to RLDS |
-| `oopsie_backend/conversion` | Converters from external datasets |
+| `oopsie_backend/conversion` | Converters from external datasets and the imports stage |
 | `oopsie_backend/pipeline` | Stage registry, targets and the Hamilton driver |
-| `oopsie_backend/common` | Repo kinds, h5 decoding, video paths, shared I/O |
+| `oopsie_backend/common` | Repo kinds, h5 decoding, video paths, episode staging, shared I/O |
 
 `oopsie_backend/scripts/` holds aliases for the earlier command paths.
 
@@ -37,6 +38,8 @@ uv run oopsie pipeline run all --explain        # the full pipeline
 | QA spot checks | [docs/qa-spot-checks.md](docs/qa-spot-checks.md) |
 | Action checks | [docs/action-checks.md](docs/action-checks.md) |
 | Video checks | [docs/video-checks.md](docs/video-checks.md) |
+| Imported datasets | [docs/imports.md](docs/imports.md) |
+| Training data | [docs/training-data.md](docs/training-data.md) |
 | Eval split proposals | [docs/eval-split.md](docs/eval-split.md) |
 | Annotation coordinator | [docs/annotation-coordinator.md](docs/annotation-coordinator.md) |
 | Annotator guide | [docs/annotator-guide.md](docs/annotator-guide.md) |

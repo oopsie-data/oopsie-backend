@@ -15,15 +15,18 @@ flowchart LR
 
 ## Prerequisites
 
-`/corral/utexas/IRI26024` holds data only: the mirror, the episode index, reports and logs. Code, tools and caches are staged into `$SCRATCH/oopsie` for every run, following [TACC's guidance](https://docs.tacc.utexas.edu/basics/userissues/) to keep job activity in `$SCRATCH`; their canonical copies are the git remotes.
+`/corral/utexas/IRI26024` holds data only: the mirror, imports, training data, the episode index, reports and logs. TACC does not intend Corral for computation ([TACC's guidance](https://docs.tacc.utexas.edu/basics/userissues/)). Jobs therefore stage code, tools and caches into `$SCRATCH/oopsie`, and copy the episodes they read heavily there before reading them. The canonical copies of the code are the git remotes.
 
 | Staged in `$SCRATCH/oopsie` | By |
 |---|---|
 | `oopsie-backend/` (latest `main`) | the scron entry, before the job starts |
 | `oopsie-docs/` (latest `main`) | the job; it commits and pushes `stats.json` when it changed |
 | `tools/bin/uv`, `tools/uv-python`, `uv-cache/`, `hf_home/` | the job installs uv if missing |
+| `episodes/` | QA and training (`stage_dir`): the episodes they read, with their videos; files are copied again only when they changed |
+| `training/` | training (`training_work_dir`): unified episodes and formats, before the finished dataset is copied to corral |
+| `episodes/imports/` | imports: conversions in progress, moved to `oopsiedata/imports/` when done |
 
-A purge of `$SCRATCH` only means the next run downloads these again.
+A purge of `$SCRATCH` only means the next run downloads or copies these again. The index and pipeline cache stay on corral: few files change per run, and every job that writes the index uses the same copy.
 
 One-time setup, by the member of group `G-829069` who runs the job:
 
@@ -62,6 +65,8 @@ Batch scripts live in [`slurm/`](../slurm/):
 
 - [`daily_oopsie.slurm`](../slurm/daily_oopsie.slurm) — sync, then the full pipeline (`all` target)
 - [`daily.scron`](../slurm/daily.scron) — cron schedule (3:00 daily)
+- [`pipeline.slurm`](../slurm/pipeline.slurm) — any pipeline target on a compute node, mainly the manual ones: `sbatch slurm/pipeline.slurm imports` or `sbatch slurm/pipeline.slurm training --set training_recipe=configs/training/<recipe>.yaml`, submitted from `$SCRATCH/oopsie/oopsie-backend`
+- [`env.sh`](../slurm/env.sh) — the paths, tools and token setup both jobs share
 
 Submit from anywhere:
 
@@ -232,8 +237,9 @@ falls back to each dataset's earliest-episode timestamp instead.
 All of the following are edited there, not in code - changes take effect on the
 next stats run:
 
-- The placeholder lab ids omitted from public stats. Which repos are archives,
-  external datasets or infra is set in `configs/repositories.yaml`.
+- The placeholder lab ids omitted from public stats. Which repos are archives or
+  infra is set in `configs/repositories.yaml`, and which are imported (external)
+  datasets in `configs/imports.yaml`.
 - The list of placeholder operator names (e.g. `pending_operator`, `unknown`) that
   never count as a real individual.
 - The alpha/beta lab requirement thresholds and on/off toggles that drive the
@@ -263,6 +269,8 @@ The stats stage writes two things:
 | `/corral/utexas/IRI26024/reports/action_qa.json`, `.html` | QA summary |
 | `/corral/utexas/IRI26024/episode_index/` | Episode index and pipeline cache |
 | `/corral/utexas/IRI26024/oopsiedata/annotation/` | Annotation assignments, bundles, returns and stores |
+| `/corral/utexas/IRI26024/oopsiedata/imports/` | Locally converted imported datasets ([imports](imports.md)) |
+| `/corral/utexas/IRI26024/training/` | Materialized training data, one folder per recipe ([training data](training-data.md)) |
 | `/corral/utexas/IRI26024/oopsiedata/tokens.yaml` | Hugging Face tokens (`master.hf_token` for the nightly job) |
-| `$SCRATCH/oopsie/` | Staged code, docs checkout, uv and caches |
+| `$SCRATCH/oopsie/` | Staged code, docs checkout, uv, caches, staged episodes and training work directories |
 

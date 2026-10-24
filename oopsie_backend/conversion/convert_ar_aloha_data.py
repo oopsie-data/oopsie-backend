@@ -205,7 +205,7 @@ def convert(
     return output_h5_path
 
 
-def main() -> None:
+def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(
         description="Convert ACT/ALOHA HDF5 to robotic failure dataset format",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -282,7 +282,7 @@ def main() -> None:
         default="max",
         help="How to collapse per-timestep success to a scalar: 'max' or 'last' (default: max).",
     )
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     source = Path(args.source)
     shared_kwargs = dict(
