@@ -276,7 +276,15 @@ def prune_hf_locks(repo_dir: Path) -> int:
 
 
 def prune_hf_cache(repo_dir: Path) -> None:
-    """Delete the ``.cache/huggingface`` folder of a repo, and ``.cache`` if it is then empty."""
+    """Delete the ``.cache/huggingface`` folder of a repo, and ``.cache`` if it is then empty.
+
+    The files are deleted from parallel threads, since each delete is a round trip to a network file system.
+    """
+    download = repo_dir / HF_CACHE / "download"
+    if download.is_dir():
+        with ThreadPoolExecutor(16) as pool:
+            for dirpath, _, filenames in os.walk(download):
+                pool.map(os.unlink, [os.path.join(dirpath, f) for f in filenames])
     shutil.rmtree(repo_dir / HF_CACHE, ignore_errors=True)
     try:
         (repo_dir / ".cache").rmdir()
@@ -292,6 +300,40 @@ def local_files(repo_dir: Path) -> list[str]:
         rel = Path(dirpath).relative_to(repo_dir)
         out += [(rel / f).as_posix() for f in filenames if not f.endswith(".part")]
     return out
+
+
+class Saver:
+    """Writes the sync record at most every ``interval`` seconds, then deletes the ``.cache`` of the repos it covers.
+
+    A repo's ``.cache`` is deleted only after a write that includes the repo's entries.
+    """
+
+    def __init__(self, state: dict, path: Path, state_lock: threading.Lock, dry_run: bool, interval: float = 60.0):
+        self.state, self.path, self.state_lock, self.dry_run, self.interval = state, path, state_lock, dry_run, interval
+        self.lock = threading.Lock()
+        self.last = time.monotonic()
+        self.to_prune: list[Path] = []
+
+    def done(self, prune: Path | None) -> None:
+        """Called when a repo is finished; ``prune`` is its folder if its ``.cache`` may go."""
+        with self.lock:
+            if prune is not None:
+                self.to_prune.append(prune)
+            due = time.monotonic() - self.last >= self.interval
+        if due:
+            self.save()
+
+    def save(self) -> None:
+        if self.dry_run:
+            return
+        with self.lock:
+            with self.state_lock:
+                snapshot = dict(self.state)
+            write_state(snapshot, self.path)
+            self.last = time.monotonic()
+            to_prune, self.to_prune = self.to_prune, []
+        with ThreadPoolExecutor(8) as pool:
+            list(pool.map(prune_hf_cache, to_prune))
 
 
 def each_repo(run: Callable[..., None], repo_ids: list[str], parallel: int, download: bool) -> None:
@@ -372,7 +414,8 @@ def main(argv: list[str] | None = None) -> int:
     state = read_state(state_path)
     mirror = Mirror(root, args.token, args.workers, gid)
     results: dict[str, RepoResult] = {}
-    write_lock = threading.Lock()
+    saver = Saver(state, state_path, mirror.lock, dry_run=args.dry_run)
+    log_lock = threading.Lock()
     done = {"n": 0}
 
     def run(repo_id: str, download: bool, total: int) -> None:
@@ -385,13 +428,7 @@ def main(argv: list[str] | None = None) -> int:
             result = RepoResult(repo_id, error=f"{type(exc).__name__}: {exc}")
         result.seconds = time.perf_counter() - started
         prune = not (args.keep_hf_cache or result.error or result.failed)
-        if not args.dry_run:
-            with write_lock:
-                with mirror.lock:
-                    snapshot = dict(state)
-                write_state(snapshot, state_path)
-            if prune:
-                prune_hf_cache(root / repo_id)
+        saver.done(root / repo_id if prune else None)
         if download:
             first = results[repo_id]
             first.downloaded, first.pending = result.downloaded, 0
@@ -404,7 +441,7 @@ def main(argv: list[str] | None = None) -> int:
                 f"adopted {result.adopted}, unchanged {result.unchanged}, to download {result.pending}, "
                 f"removed on Hub {len(result.removed)}"
             )
-        with write_lock:
+        with log_lock:
             done["n"] += 1
             _log(f"[{done['n']}/{total}] {repo_id}: {summary} ({result.seconds:.0f}s)")
         for line in result.failed[:5]:
@@ -414,11 +451,13 @@ def main(argv: list[str] | None = None) -> int:
     # downloads add files.
     _log(f"{'Dry run of' if args.dry_run else 'Checking'} {len(repo_ids)} repo(s) of {org} in {root / org}")
     each_repo(run, repo_ids, args.parallel_repos, download=False)
+    saver.save()
     pending = [r for r in repo_ids if results[r].pending] if not (args.dry_run or args.no_download) else []
     if pending:
         _log(f"Downloading new and changed files of {len(pending)} repo(s)")
         done["n"] = 0
         each_repo(run, pending, args.parallel_repos, download=True)
+        saver.save()
     results_list = [results[r] for r in repo_ids]
 
     gone = []

@@ -138,7 +138,8 @@ Downloads go to a temporary name next to the target over plain HTTPS and are ren
 | `--delete-removed` | delete local files the Hub no longer has |
 | `--keep-hf-cache` | keep the `.cache/huggingface` folders |
 | `--group G-829069` | set this group on every file and folder the sync creates |
-| `--workers N` | parallel checks and downloads per repo (default 4) |
+| `--parallel-repos N` | repos processed at the same time, one per worker (default 4) |
+| `--workers N` | parallel checks and downloads within a repo (default 4) |
 
 #### Permissions
 
