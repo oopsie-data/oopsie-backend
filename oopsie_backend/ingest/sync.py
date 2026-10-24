@@ -28,7 +28,9 @@ import json
 import os
 import shutil
 import sys
+import threading
 import time
+from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -144,6 +146,7 @@ class Mirror:
         self.api = HfApi(token=token)
         self.workers = workers
         self.gid = gid
+        self.lock = threading.Lock()  # guards the shared sync record
 
     def _make_dirs(self, path: Path) -> None:
         missing = []
@@ -185,10 +188,11 @@ class Mirror:
 
         def record(rel: str, hub: dict) -> None:
             st = (repo_dir / rel).stat()
-            state[(repo_id, rel)] = {
-                "dataset_repo": repo_id, "path": rel, "git_oid": hub["git_oid"],
-                "sha256": hub["sha256"], "size": st.st_size, "mtime_ns": st.st_mtime_ns,
-            }
+            with self.lock:
+                state[(repo_id, rel)] = {
+                    "dataset_repo": repo_id, "path": rel, "git_oid": hub["git_oid"],
+                    "sha256": hub["sha256"], "size": st.st_size, "mtime_ns": st.st_mtime_ns,
+                }
 
         def check(rel: str) -> str:
             """``unchanged``, ``adopted`` or ``download``."""
@@ -245,11 +249,14 @@ class Mirror:
 
         if download:
             return result
-        for key in [k for k in state if k[0] == repo_id and k[1] not in listing]:
+        with self.lock:
+            gone = [k for k in state if k[0] == repo_id and k[1] not in listing]
+        for key in gone:
             result.removed.append(key[1])
             if args.delete_removed and not args.dry_run:
                 (repo_dir / key[1]).unlink(missing_ok=True)
-                del state[key]
+                with self.lock:
+                    del state[key]
         if args.scan_local:
             result.untracked = sorted(set(local_files(repo_dir)) - set(listing) - set(result.removed))
             if args.delete_removed and not args.dry_run:
@@ -287,6 +294,18 @@ def local_files(repo_dir: Path) -> list[str]:
     return out
 
 
+def each_repo(run: Callable[..., None], repo_ids: list[str], parallel: int, download: bool) -> None:
+    """Call ``run`` for every repo, ``parallel`` repos at a time."""
+    with ThreadPoolExecutor(parallel) as pool:
+        futures = [pool.submit(run, repo_id, download, len(repo_ids)) for repo_id in repo_ids]
+        try:
+            for future in as_completed(futures):
+                future.result()
+        except BaseException:
+            pool.shutdown(wait=False, cancel_futures=True)
+            raise
+
+
 def smallest_repos(repo_ids: list[str], n: int, token: str | None) -> list[str]:
     """The ``n`` smallest contributor repos that hold ``.h5`` files; for local test mirrors."""
     sized = []
@@ -309,7 +328,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--only", nargs="+", default=None, help="Repo names to sync (default: every repo of the org)")
     parser.add_argument("--smallest", type=int, default=None, help="Sync only the N smallest contributor repos with h5 files")
     parser.add_argument("--token", default=os.environ.get("HF_TOKEN"), help="HF read token (default: $HF_TOKEN)")
-    parser.add_argument("--workers", type=int, default=4, help="Parallel downloads and checks per repo")
+    parser.add_argument("--parallel-repos", type=int, default=4, help="Repos processed at the same time, one per worker")
+    parser.add_argument("--workers", type=int, default=4, help="Parallel downloads and checks within a repo")
     parser.add_argument("--group", default=None, help="Group of every created file and folder, e.g. G-829069")
     parser.add_argument("--dry-run", action="store_true", help="Report what would be downloaded; writes nothing")
     parser.add_argument("--keep-hf-cache", action="store_true", help="Keep the .cache/huggingface folders")
@@ -352,8 +372,10 @@ def main(argv: list[str] | None = None) -> int:
     state = read_state(state_path)
     mirror = Mirror(root, args.token, args.workers, gid)
     results: dict[str, RepoResult] = {}
+    write_lock = threading.Lock()
+    done = {"n": 0}
 
-    def run(i: int, repo_id: str, download: bool) -> None:
+    def run(repo_id: str, download: bool, total: int) -> None:
         started = time.perf_counter()
         try:
             result = mirror.sync_repo(repo_id, state, args, download)
@@ -364,7 +386,10 @@ def main(argv: list[str] | None = None) -> int:
         result.seconds = time.perf_counter() - started
         prune = not (args.keep_hf_cache or result.error or result.failed)
         if not args.dry_run:
-            write_state(state, state_path)
+            with write_lock:
+                with mirror.lock:
+                    snapshot = dict(state)
+                write_state(snapshot, state_path)
             if prune:
                 prune_hf_cache(root / repo_id)
         if download:
@@ -379,20 +404,21 @@ def main(argv: list[str] | None = None) -> int:
                 f"adopted {result.adopted}, unchanged {result.unchanged}, to download {result.pending}, "
                 f"removed on Hub {len(result.removed)}"
             )
-        _log(f"[{i}/{len(repo_ids)}] {repo_id}: {summary} ({result.seconds:.0f}s)")
+        with write_lock:
+            done["n"] += 1
+            _log(f"[{done['n']}/{total}] {repo_id}: {summary} ({result.seconds:.0f}s)")
         for line in result.failed[:5]:
             _log(line, level=1)
 
     # Checking every repo first deletes the .cache folders, about one file per data file, before
     # downloads add files.
     _log(f"{'Dry run of' if args.dry_run else 'Checking'} {len(repo_ids)} repo(s) of {org} in {root / org}")
-    for i, repo_id in enumerate(repo_ids, 1):
-        run(i, repo_id, download=False)
+    each_repo(run, repo_ids, args.parallel_repos, download=False)
     pending = [r for r in repo_ids if results[r].pending] if not (args.dry_run or args.no_download) else []
     if pending:
         _log(f"Downloading new and changed files of {len(pending)} repo(s)")
-        for i, repo_id in enumerate(pending, 1):
-            run(i, repo_id, download=True)
+        done["n"] = 0
+        each_repo(run, pending, args.parallel_repos, download=True)
     results_list = [results[r] for r in repo_ids]
 
     gone = []
