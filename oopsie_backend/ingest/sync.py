@@ -22,16 +22,13 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import errno
 import grp
 import hashlib
 import json
 import os
 import shutil
 import sys
-import tempfile
 import time
-from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -80,24 +77,6 @@ def write_state(state: dict[tuple[str, str], dict], path: Path) -> None:
     tmp = path.with_name(f"{path.name}.{os.getpid()}.tmp")
     pl.DataFrame(list(state.values()), schema=STATE_SCHEMA).sort("dataset_repo", "path").write_parquet(tmp)
     os.replace(tmp, path)
-
-
-def save_state(state: dict, path: Path, free: Callable[[], None]) -> None:
-    """Write the state; if the quota is exceeded, back it up locally, call ``free`` and write again."""
-    try:
-        write_state(state, path)
-        return
-    except OSError as exc:
-        if exc.errno != errno.EDQUOT:
-            raise
-    backup = Path(tempfile.gettempdir()) / f"{path.stem}.{os.getpid()}.parquet"
-    write_state(state, backup)
-    _log(f"quota exceeded writing {path.name}; backed up to {backup}, freeing files and retrying")
-    free()
-    try:
-        write_state(state, path)
-    except OSError as exc:
-        raise OSError(exc.errno, f"{exc.strerror}; the sync record is in {backup}, copy it to {path}") from exc
 
 
 def _hash(path: Path, algorithm: str, prefix: bytes = b"") -> str:
@@ -335,6 +314,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--dry-run", action="store_true", help="Report what would be downloaded; writes nothing")
     parser.add_argument("--keep-hf-cache", action="store_true", help="Keep the .cache/huggingface folders")
     parser.add_argument("--scan-local", action="store_true", help="Also report local files and repo folders the Hub does not have")
+    parser.add_argument("--no-download", action="store_true", help="Check, adopt and delete .cache folders only; download nothing")
+    parser.add_argument("--state", type=Path, default=None, help=f"Sync record; the report is written next to it (default: <data dir>/{STATE_NAME})")
     parser.add_argument("--delete-removed", action="store_true", help="Delete local files the Hub no longer has")
     args = parser.parse_args(argv)
 
@@ -367,7 +348,7 @@ def main(argv: list[str] | None = None) -> int:
             pruned = sum(pool.map(prune_hf_locks, [root / repo_id for repo_id in repo_ids]))
         _log(f"deleted {pruned} huggingface_hub lock file(s) and unfinished download(s)")
 
-    state_path = root / STATE_NAME
+    state_path = args.state or root / STATE_NAME
     state = read_state(state_path)
     mirror = Mirror(root, args.token, args.workers, gid)
     results: dict[str, RepoResult] = {}
@@ -383,7 +364,7 @@ def main(argv: list[str] | None = None) -> int:
         result.seconds = time.perf_counter() - started
         prune = not (args.keep_hf_cache or result.error or result.failed)
         if not args.dry_run:
-            save_state(state, state_path, lambda: prune_hf_cache(root / repo_id))
+            write_state(state, state_path)
             if prune:
                 prune_hf_cache(root / repo_id)
         if download:
@@ -407,7 +388,7 @@ def main(argv: list[str] | None = None) -> int:
     _log(f"{'Dry run of' if args.dry_run else 'Checking'} {len(repo_ids)} repo(s) of {org} in {root / org}")
     for i, repo_id in enumerate(repo_ids, 1):
         run(i, repo_id, download=False)
-    pending = [r for r in repo_ids if results[r].pending] if not args.dry_run else []
+    pending = [r for r in repo_ids if results[r].pending] if not (args.dry_run or args.no_download) else []
     if pending:
         _log(f"Downloading new and changed files of {len(pending)} repo(s)")
         for i, repo_id in enumerate(pending, 1):
@@ -450,7 +431,7 @@ def main(argv: list[str] | None = None) -> int:
         ],
     }
     if not args.dry_run:
-        report_path = root / REPORT_NAME
+        report_path = state_path.parent / REPORT_NAME
         tmp = report_path.with_name(f"{REPORT_NAME}.{os.getpid()}.tmp")
         tmp.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n")
         os.replace(tmp, report_path)

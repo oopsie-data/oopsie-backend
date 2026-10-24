@@ -132,6 +132,8 @@ Downloads go to a temporary name next to the target over plain HTTPS and are ren
 | `--only REPO ...` | sync only these repos of the org |
 | `--smallest N` | sync only the N smallest contributor repos with h5 files (local test mirrors) |
 | `--dry-run` | report what would be downloaded; writes nothing |
+| `--no-download` | check and adopt files and delete `.cache` folders; download nothing |
+| `--state PATH` | keep the sync record (and the report) at `PATH` instead of the data directory, e.g. on `$SCRATCH` when Corral has no free files |
 | `--scan-local` | also report untracked local files and repo folders the Hub no longer has |
 | `--delete-removed` | delete local files the Hub no longer has |
 | `--keep-hf-cache` | keep the `.cache/huggingface` folders |
