@@ -22,14 +22,17 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import errno
 import grp
 import hashlib
 import json
 import os
 import shutil
 import sys
+import tempfile
 import time
-from concurrent.futures import ThreadPoolExecutor
+from collections.abc import Callable
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -77,6 +80,24 @@ def write_state(state: dict[tuple[str, str], dict], path: Path) -> None:
     tmp = path.with_name(f"{path.name}.{os.getpid()}.tmp")
     pl.DataFrame(list(state.values()), schema=STATE_SCHEMA).sort("dataset_repo", "path").write_parquet(tmp)
     os.replace(tmp, path)
+
+
+def save_state(state: dict, path: Path, free: Callable[[], None]) -> None:
+    """Write the state; if the quota is exceeded, back it up locally, call ``free`` and write again."""
+    try:
+        write_state(state, path)
+        return
+    except OSError as exc:
+        if exc.errno != errno.EDQUOT:
+            raise
+    backup = Path(tempfile.gettempdir()) / f"{path.stem}.{os.getpid()}.parquet"
+    write_state(state, backup)
+    _log(f"quota exceeded writing {path.name}; backed up to {backup}, freeing files and retrying")
+    free()
+    try:
+        write_state(state, path)
+    except OSError as exc:
+        raise OSError(exc.errno, f"{exc.strerror}; the sync record is in {backup}, copy it to {path}") from exc
 
 
 def _hash(path: Path, algorithm: str, prefix: bytes = b"") -> str:
@@ -130,6 +151,7 @@ class RepoResult:
     downloaded: int = 0
     adopted: int = 0
     unchanged: int = 0
+    pending: int = 0
     removed: list[str] = field(default_factory=list)
     untracked: list[str] = field(default_factory=list)
     failed: list[str] = field(default_factory=list)
@@ -169,7 +191,11 @@ class Mirror:
         finally:
             tmp.unlink(missing_ok=True)
 
-    def sync_repo(self, repo_id: str, state: dict, args: argparse.Namespace) -> RepoResult:
+    def sync_repo(self, repo_id: str, state: dict, args: argparse.Namespace, download: bool) -> RepoResult:
+        """Check every Hub file of a repo against ``state``; with ``download``, fetch the new and changed ones.
+
+        Without ``download`` (and in a dry run), ``result.pending`` counts the files that need one.
+        """
         result = RepoResult(repo_id)
         repo_dir = self.root / repo_id
         revision = self.api.dataset_info(repo_id).sha
@@ -216,11 +242,15 @@ class Mirror:
                         record(rel, listing[rel])
                         result.adopted += 1
                 todo = [rel for rel, d in decisions.items() if d == "download"]
-                if args.dry_run:
-                    result.downloaded = len(todo)
+                if not download:
+                    result.pending = len(todo)
                 else:
-                    futures = {rel: pool.submit(fetch, rel) for rel in todo}
-                    for done, (rel, future) in enumerate(futures.items(), 1):
+                    futures = {pool.submit(fetch, rel): rel for rel in todo}
+                    size = sum(listing[rel]["size"] for rel in todo)
+                    if todo:
+                        _log(f"{repo_id}: downloading {len(todo)} file(s), {size / 2**30:.1f} GiB", level=1)
+                    for done, future in enumerate(as_completed(futures), 1):
+                        rel = futures[future]
                         progress.tick("downloaded", done, len(todo))
                         try:
                             future.result()
@@ -234,6 +264,8 @@ class Mirror:
                 pool.shutdown(wait=False, cancel_futures=True)
                 raise
 
+        if download:
+            return result
         for key in [k for k in state if k[0] == repo_id and k[1] not in listing]:
             result.removed.append(key[1])
             if args.delete_removed and not args.dry_run:
@@ -338,36 +370,56 @@ def main(argv: list[str] | None = None) -> int:
     state_path = root / STATE_NAME
     state = read_state(state_path)
     mirror = Mirror(root, args.token, args.workers, gid)
-    results: list[RepoResult] = []
-    _log(f"{'Dry run of' if args.dry_run else 'Syncing'} {len(repo_ids)} repo(s) of {org} into {root / org}")
-    for i, repo_id in enumerate(repo_ids, 1):
+    results: dict[str, RepoResult] = {}
+
+    def run(i: int, repo_id: str, download: bool) -> None:
         started = time.perf_counter()
         try:
-            result = mirror.sync_repo(repo_id, state, args)
+            result = mirror.sync_repo(repo_id, state, args, download)
         except RepositoryNotFoundError:
             result = RepoResult(repo_id, error="not found")
         except Exception as exc:
             result = RepoResult(repo_id, error=f"{type(exc).__name__}: {exc}")
         result.seconds = time.perf_counter() - started
-        results.append(result)
+        prune = not (args.keep_hf_cache or result.error or result.failed)
         if not args.dry_run:
-            write_state(state, state_path)
-            if not args.keep_hf_cache and not (result.error or result.failed):
+            save_state(state, state_path, lambda: prune_hf_cache(root / repo_id))
+            if prune:
                 prune_hf_cache(root / repo_id)
-        summary = result.error or (
-            f"downloaded {result.downloaded}, adopted {result.adopted}, unchanged {result.unchanged}, "
-            f"removed on Hub {len(result.removed)}, failed {len(result.failed)}"
-        )
+        if download:
+            first = results[repo_id]
+            first.downloaded, first.pending = result.downloaded, 0
+            first.failed, first.error = result.failed, result.error
+            first.seconds += result.seconds
+            summary = result.error or f"downloaded {result.downloaded}, failed {len(result.failed)}"
+        else:
+            results[repo_id] = result
+            summary = result.error or (
+                f"adopted {result.adopted}, unchanged {result.unchanged}, to download {result.pending}, "
+                f"removed on Hub {len(result.removed)}"
+            )
         _log(f"[{i}/{len(repo_ids)}] {repo_id}: {summary} ({result.seconds:.0f}s)")
         for line in result.failed[:5]:
             _log(line, level=1)
+
+    # Checking every repo first deletes the .cache folders, about one file per data file, before
+    # downloads add files.
+    _log(f"{'Dry run of' if args.dry_run else 'Checking'} {len(repo_ids)} repo(s) of {org} in {root / org}")
+    for i, repo_id in enumerate(repo_ids, 1):
+        run(i, repo_id, download=False)
+    pending = [r for r in repo_ids if results[r].pending] if not args.dry_run else []
+    if pending:
+        _log(f"Downloading new and changed files of {len(pending)} repo(s)")
+        for i, repo_id in enumerate(pending, 1):
+            run(i, repo_id, download=True)
+    results_list = [results[r] for r in repo_ids]
 
     gone = []
     if args.scan_local and not (args.only or args.smallest) and (root / org).is_dir():
         names = {r.split("/", 1)[1] for r in repo_ids}
         gone = sorted(p.name for p in (root / org).iterdir() if p.is_dir() and not p.name.startswith(".") and p.name not in names)
 
-    failed = [r for r in results if r.error or r.failed]
+    failed = [r for r in results_list if r.error or r.failed]
     report = {
         "org": org,
         "data_dir": str(root),
@@ -375,16 +427,18 @@ def main(argv: list[str] | None = None) -> int:
         "synced_at": now_timestamps(),
         "datasets_synced": len(results) - len(failed),
         "datasets_failed": len(failed),
-        "files_downloaded": sum(r.downloaded for r in results),
-        "files_adopted": sum(r.adopted for r in results),
-        "files_unchanged": sum(r.unchanged for r in results),
-        "files_removed_on_hub": sum(len(r.removed) for r in results),
+        "files_downloaded": sum(r.downloaded for r in results_list),
+        "files_to_download": sum(r.pending for r in results_list),
+        "files_adopted": sum(r.adopted for r in results_list),
+        "files_unchanged": sum(r.unchanged for r in results_list),
+        "files_removed_on_hub": sum(len(r.removed) for r in results_list),
         "repos_not_on_hub": gone,
         "datasets": [
             {
                 "repo_id": r.repo_id,
                 "seconds": round(r.seconds, 1),
                 "downloaded": r.downloaded,
+                **({"to_download": r.pending} if r.pending else {}),
                 "adopted": r.adopted,
                 "unchanged": r.unchanged,
                 "removed_on_hub": r.removed,
@@ -392,7 +446,7 @@ def main(argv: list[str] | None = None) -> int:
                 **({"failed": r.failed} if r.failed else {}),
                 **({"error": r.error} if r.error else {}),
             }
-            for r in results
+            for r in results_list
         ],
     }
     if not args.dry_run:
@@ -401,7 +455,7 @@ def main(argv: list[str] | None = None) -> int:
         tmp.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n")
         os.replace(tmp, report_path)
     _log(
-        f"{'Would download' if args.dry_run else 'Downloaded'} {report['files_downloaded']} file(s), adopted "
+        f"Downloaded {report['files_downloaded']} file(s), {report['files_to_download']} to download, adopted "
         f"{report['files_adopted']}, unchanged {report['files_unchanged']}, removed on Hub "
         f"{report['files_removed_on_hub']}, repos failed {len(failed)}"
     )
