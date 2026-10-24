@@ -5,7 +5,7 @@ All oopsiedata processing code lives here. Every stage reads and extends one per
 ```bash
 uv sync
 uv run oopsie                                   # list stages and commands
-uv run oopsie pipeline run nightly --explain    # index, QA, critical flags and stats
+uv run oopsie pipeline run all --explain        # the full pipeline
 ```
 
 ## Layout

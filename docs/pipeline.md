@@ -16,9 +16,13 @@ flowchart LR
   critical_config --> critical_episodes
   critical_episodes --> stats
   stats_config --> stats
-  episode_index --> eval_split
-  eval_proposal --> eval_split
-  episode_index --> annotation_columns
+  critical_episodes --> eval_proposals
+  eval_proposals --> chosen_proposal
+  chosen_proposal --> eval_split
+  chosen_proposal --> train_sample
+  chosen_proposal --> annotator_assignments
+  train_sample --> annotator_assignments
+  annotator_assignments --> annotation_columns
   annotation_state --> annotation_columns
 ```
 
@@ -30,15 +34,19 @@ flowchart LR
 | `qa_results` | `qa` | `qa_*` columns, `reports/action_qa.json` and `.html` |
 | `critical_episodes` | `postqa` | `critical`, `critical_reasons` |
 | `stats` | `stats` | website `stats.json`, `reports/public_stats.*`, `reports/internal_stats.*` (with critical episodes per lab) |
+| `eval_proposals` | `splits` | `annotation/proposals/`: candidate proposals and `REPORT.md` |
+| `chosen_proposal` | `splits` | `annotation/eval_proposal.json` (write-once) |
+| `train_sample` | `splits` | `annotation/train_annotation_sample.json` (write-once) |
 | `eval_split` | `splits` | `eval_split`, `eval_proposal` |
+| `annotator_assignments` | `annotation` | `annotation/eval_assignment/`, `train_assignment/` (write-once) |
 | `annotation_columns` | `annotation` | `annotation_*` columns |
 
-`mirror_state`, `qa_check_versions`, `critical_config`, `stats_config`, `eval_proposal` and `annotation_state` run on every invocation. Each of them hashes outside state: the h5 files on disk and `configs/repositories.yaml`, the QA check versions, a config file, the chosen proposal, or the annotation assignments and stores. A downstream stage reruns only when one of those hashes changes. The sync itself runs outside the pipeline, because it is the job that changes the mirror.
+`mirror_state`, `qa_check_versions`, `critical_config`, `stats_config`, `split_config` and `annotation_state` run on every invocation. Each of them hashes outside state: the h5 files on disk and `configs/repositories.yaml`, the QA check versions, a config file, or the annotation stores. A downstream stage reruns only when one of those hashes changes. The sync itself runs outside the pipeline, because it is the job that changes the mirror.
 
 ## Running
 
 ```bash
-uv run oopsie pipeline run nightly --config configs/pipeline.yaml --explain
+uv run oopsie pipeline run all --config configs/pipeline.yaml --explain
 uv run oopsie pipeline run qa                    # one target and everything it needs
 uv run oopsie pipeline run --list                # targets and stages
 uv run oopsie pipeline run postqa --graph dag.png
@@ -51,9 +59,10 @@ uv run oopsie pipeline run postqa --graph dag.png
 | `qa` | `qa_results` |
 | `postqa` | `critical_episodes` |
 | `stats` | `stats` |
-| `splits` | `eval_split` |
+| `proposals` | `eval_proposals` |
+| `splits` | `eval_split`, `train_sample` |
 | `annotation` | `annotation_columns` |
-| `nightly` | `stats` (and everything before it) |
+| `all` | every stage that no other stage depends on, so the full pipeline |
 
 `configs/pipeline.yaml` holds every input a stage may need: the mirror, the index, the cache directory, the worker count, whether to query the Hub, the reports directory, the website `stats.json`, the chosen proposal and the annotation config.
 
@@ -66,9 +75,22 @@ Flags:
 
 Every stage also exists as a command (`oopsie <stage> <command>`, see `oopsie` without arguments), so it can be run directly with its own options.
 
-The nightly Slurm job syncs the mirror and then runs `nightly`.
+The nightly Slurm job syncs the mirror and then runs `all`. A newly registered stage is part of `all` without further changes.
 
 Downstream stages ignore duplicate copies and critical episodes. QA, the duplicate-video check and the critical flags skip copies. Split planning, the annotated train sample and the stats skip both copies and critical episodes, so the stats run after QA and the critical flags.
+
+## Human decisions
+
+Stages that need a person to decide read the decision from a file and wait until it exists; until then they leave everything unchanged and the log says what they wait for.
+
+| Decision | Where | Waiting stages |
+|---|---|---|
+| Which proposal to hold out, after reviewing `annotation/proposals/REPORT.md` | `chosen_proposal` in `configs/eval_split.yaml` | `chosen_proposal`, `train_sample`, `eval_split`, `annotator_assignments` |
+| Who annotates | `annotation/annotators.txt` (one name per line) | `annotator_assignments` |
+
+`configs/eval_split.yaml` also holds the proposal search arguments, the train sample size, and the copies and seed of the assignments. Publishing bundles to Hugging Face stays a manual command (`oopsie annotation pipeline publish`).
+
+The chosen proposal, the train sample and the assignments are written once. A run records what each was made from (`<name>.inputs`) and later keeps it; if the settings it was made from change, the run fails instead of rewriting files annotators may already have. Delete the output and its record to regenerate it. Outputs copied in by hand are adopted as they are.
 
 ## Stages and the registry
 

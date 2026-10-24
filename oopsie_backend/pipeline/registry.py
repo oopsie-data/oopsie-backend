@@ -42,6 +42,28 @@ def check_rc(rc: int, name: str) -> None:
         raise RuntimeError(f"{name} exited {rc}")
 
 
+def write_once(output: Path, inputs: str, create: Callable[[], None]) -> str:
+    """Create ``output`` (a file or folder) once; returns the fingerprint of its contents.
+
+    ``inputs`` describes what the output is made from and is recorded next to it as
+    ``<name>.inputs``. Later calls keep the output; if ``inputs`` changed, they fail instead
+    of rewriting it. An output without a record is adopted as is. Delete the output and its
+    record to regenerate it.
+    """
+    record = output.with_name(output.name + ".inputs")
+    if output.exists():
+        recorded = record.read_text() if record.is_file() else None
+        if recorded is not None and recorded != inputs:
+            raise RuntimeError(f"{output} was made from other inputs; delete it and {record.name} to regenerate it")
+        if recorded is None:
+            record.write_text(inputs)
+    else:
+        create()
+        record.write_text(inputs)
+    paths = sorted(p for p in output.rglob("*") if p.is_file()) if output.is_dir() else [output]
+    return files_fingerprint(paths)
+
+
 def files_fingerprint(paths: Iterable[Path]) -> str:
     """Hash of the contents of ``paths``; missing files hash as absent."""
     h = hashlib.sha256()

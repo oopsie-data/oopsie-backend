@@ -60,7 +60,7 @@ uv add "numpy<2.4" && uv sync --reinstall-package numpy
 
 Batch scripts live in [`slurm/`](../slurm/):
 
-- [`daily_oopsie.slurm`](../slurm/daily_oopsie.slurm) — sync, then the `nightly` pipeline target
+- [`daily_oopsie.slurm`](../slurm/daily_oopsie.slurm) — sync, then the full pipeline (`all` target)
 - [`daily.scron`](../slurm/daily.scron) — cron schedule (3:00 daily)
 
 Submit from anywhere:
@@ -199,7 +199,7 @@ Example (truncated):
 ### 2. Update the index and stats
 
 ```bash
-uv run oopsie pipeline run nightly --config configs/pipeline.yaml --explain
+uv run oopsie pipeline run all --config configs/pipeline.yaml --explain
 ```
 
 This refreshes the [episode index](episode-index.md), the duplicate checks, QA and the critical flags, then computes the stats from the index. The stats leave out duplicate copies and critical episodes; the internal report lists the critical episodes per lab. To recompute only the stats from an existing index:

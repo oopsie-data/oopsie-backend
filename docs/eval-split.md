@@ -80,7 +80,9 @@ This samples extra episodes to annotate from the proposal's train set. The pool 
 
 The output, `/corral/utexas/IRI26024/oopsiedata/annotation/train_annotation_sample.json` by default, uses the proposal layout with a single `train_annotated` split. Run steps 4 to 6 on it with the train directories, e.g. `--copies 1 --out-dir /corral/utexas/IRI26024/oopsiedata/annotation/train_assignment`.
 
-Once a proposal is chosen, record it in the index:
+In the [pipeline](pipeline.md), the `eval_proposals` stage writes the proposals to `oopsiedata/annotation/proposals/`. Setting `chosen_proposal` in `configs/eval_split.yaml` freezes that proposal as `annotation/eval_proposal.json`, records it in the index, samples the train episodes, and, once `annotation/annotators.txt` exists, writes the assignments. The commands below run the same steps by hand.
+
+To record a proposal in the index by hand:
 
 ```bash
 uv run python -m oopsie_backend.splits.record \

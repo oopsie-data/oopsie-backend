@@ -9,7 +9,14 @@ import oopsie_backend.preqa.stages  # noqa: F401
 import oopsie_backend.qa.stages  # noqa: F401
 import oopsie_backend.splits.stages  # noqa: F401
 import oopsie_backend.stats.stages  # noqa: F401
+import inspect
+
 from oopsie_backend.pipeline.registry import STAGES
+
+# Every stage no other stage depends on; computing them runs the whole pipeline.
+FINAL_STAGES = sorted(
+    set(STAGES) - {p for f in STAGES.values() for p in inspect.signature(f).parameters}
+)
 
 # Named targets of ``oopsie pipeline run``, each a list of stages to compute.
 TARGETS: dict[str, list[str]] = {
@@ -18,9 +25,10 @@ TARGETS: dict[str, list[str]] = {
     "qa": ["qa_results"],
     "postqa": ["critical_episodes"],
     "stats": ["stats"],
-    "splits": ["eval_split"],
+    "proposals": ["eval_proposals"],
+    "splits": ["eval_split", "train_sample"],
     "annotation": ["annotation_columns"],
-    "nightly": ["stats"],
+    "all": FINAL_STAGES,
 }
 
-__all__ = ["STAGES", "TARGETS"]
+__all__ = ["FINAL_STAGES", "STAGES", "TARGETS"]

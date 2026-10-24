@@ -119,7 +119,7 @@ run_step sync_hf_org "$UV" run python -m oopsie_backend.ingest.sync \
 # Index, duplicate checks, QA, critical flags and stats (configs/pipeline.yaml), recomputing only
 # what changed. The stats leave out duplicate copies and critical episodes, so they run last.
 pipeline_rc=0
-run_step pipeline "$UV" run oopsie pipeline run nightly --config configs/pipeline.yaml --explain \
+run_step pipeline "$UV" run oopsie pipeline run all --config configs/pipeline.yaml --explain \
   --set data_dir="$DATA_DIR" \
   --set index_path="$INDEX_DIR/episode_index.parquet" \
   --set cache_dir="$INDEX_DIR/pipeline_cache" \

@@ -5,8 +5,8 @@ Usage:
     uv run python -m oopsie_backend.pipeline.run --list
     uv run python -m oopsie_backend.pipeline.run qa --graph pipeline.png
 
-A target is a name from ``pipeline/stages.py``'s ``TARGETS`` (default ``nightly``)
-or a stage name. Hamilton computes the requested stages and everything upstream;
+A target is a name from ``pipeline/stages.py``'s ``TARGETS`` (default ``all``, every
+stage) or a stage name. Hamilton computes the requested stages and everything upstream;
 a stage whose code and upstream fingerprints are unchanged since its last run is
 taken from the cache in ``cache_dir``. Independent stages run in parallel.
 The config file holds every input a stage may need (``configs/pipeline.yaml``).
@@ -31,6 +31,7 @@ def build_driver(cache_dir: Path | None, parallel: bool = True) -> driver.Driver
     module = ad_hoc_utils.create_temporary_module(*STAGES.values(), module_name="oopsie_pipeline")
     builder = driver.Builder().with_modules(module)
     if cache_dir is not None:
+        cache_dir.mkdir(parents=True, exist_ok=True)
         builder = builder.with_cache(path=str(cache_dir))
     if parallel:
         builder = builder.with_adapters(FutureAdapter())
@@ -39,7 +40,7 @@ def build_driver(cache_dir: Path | None, parallel: bool = True) -> driver.Driver
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("targets", nargs="*", default=["nightly"], metavar="TARGET")
+    parser.add_argument("targets", nargs="*", default=["all"], metavar="TARGET")
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     parser.add_argument(
         "--set", action="append", default=[], metavar="KEY=VALUE", help="Override a config input; repeatable"

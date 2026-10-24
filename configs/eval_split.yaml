@@ -1,0 +1,23 @@
+# Eval split and annotator assignment stages. Outputs go to <data_dir>/annotation/.
+# The chosen proposal, the train sample and the assignments are written once: later
+# runs keep them and fail if the settings they were made from changed. Delete an
+# output (and its .inputs record) to regenerate it.
+
+# Extra arguments for `oopsie splits propose`, e.g. pins:
+#   ["--ood-common", "LAB", "--od-task", "LAB::instruction"]
+propose_args: []
+
+# Proposal id from proposals/REPORT.md to hold out; null until one is chosen.
+chosen_proposal: null
+
+train_sample:
+  num_episodes: 1000
+
+assignments:
+  annotators_file: annotators.txt   # one name per line, in <data_dir>/annotation/
+  seed: 0
+  eval:
+    copies: 2
+    split_copies: {od_task_od_scene: 3}
+  train:
+    copies: 1

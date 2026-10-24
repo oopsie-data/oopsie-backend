@@ -6,5 +6,5 @@ workers: 16
 use_hub: true
 stats_docs_output: ../oopsie-docs/docs/assets/data/stats.json
 reports_dir: /corral/utexas/IRI26024/reports
-proposal_path: eval_split_proposals/proposal_02.json
+split_config_path: configs/eval_split.yaml
 annotation_config_path: configs/annotation_pipeline.yaml
