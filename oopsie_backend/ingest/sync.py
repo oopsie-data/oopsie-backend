@@ -27,6 +27,7 @@ import hashlib
 import json
 import os
 import shutil
+import signal
 import sys
 import threading
 import time
@@ -363,6 +364,11 @@ def smallest_repos(repo_ids: list[str], n: int, token: str | None) -> list[str]:
     return [repo_id for _, repo_id in sorted(sized)[:n]]
 
 
+def _exit_on_interrupt(signum, frame) -> None:
+    _log("interrupted; progress since the last save of the sync record is redone next run")
+    os._exit(130)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--data-dir", "--local-dir", type=Path, default=DEFAULT_DATA_DIR, help="Mirror root")
@@ -383,6 +389,9 @@ def main(argv: list[str] | None = None) -> int:
 
     os.umask(0o002)
     disable_progress_bars()
+    # Worker threads in file system calls do not see KeyboardInterrupt. Stopping at any point is
+    # safe: the record is written whole, and unsaved repos keep their .cache for the next run.
+    signal.signal(signal.SIGINT, _exit_on_interrupt)
     gid = None
     if args.group:
         try:

@@ -352,3 +352,4 @@ run:  # defaults for the matching CLI flags
   only_dataset: []  # e.g. ["OopsieData-Submissions/SomeLab"]; empty = every dataset
   verbose: false
   workers: 8  # episodes checked in parallel
+  save_interval: 300  # seconds between saves of the results to the index during a run

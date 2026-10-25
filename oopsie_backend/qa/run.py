@@ -19,13 +19,19 @@ version (``qa/checks/base.py``). Adding, editing or re-configuring a check
 therefore reruns just that check; removing one drops its results. Episodes are
 read once and checked in parallel. Results go to the index's ``qa_*`` columns,
 and ``reports/action_qa.json`` and ``.html`` summarize all current results.
+
+Results are saved to the index every ``run.save_interval`` seconds and when the
+run is interrupted (SIGINT or SIGTERM), so a rerun continues where it stopped.
 """
 
 from __future__ import annotations
 
 import argparse
 import hashlib
+import signal
 import sys
+import threading
+import time
 from collections import Counter, defaultdict
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
@@ -60,6 +66,53 @@ MAX_FLAGGED_DETAIL = 20000
 
 def _log(message: str) -> None:
     print(message, file=sys.stderr)
+
+
+def _duration(seconds: float) -> str:
+    if seconds == float("inf"):
+        return "?"
+    m, s = divmod(int(seconds), 60)
+    h, m = divmod(m, 60)
+    return f"{h}:{m:02d}:{s:02d}"
+
+
+class Progress:
+    """Logs ``n/total`` with rate and estimated remaining time at most every ``interval`` seconds."""
+
+    def __init__(self, total: int, interval: float = 30.0):
+        self.total, self.interval = total, interval
+        self.start = self.last = time.monotonic()
+
+    def tick(self, n: int) -> None:
+        t = time.monotonic()
+        if n < self.total and t - self.last < self.interval:
+            return
+        self.last = t
+        elapsed = t - self.start
+        rate = n / elapsed if elapsed else 0.0
+        remaining = (self.total - n) / rate if rate else float("inf")
+        _log(
+            f"  {n}/{self.total} episode(s) checked ({n / self.total:.0%}), {rate:.2f}/s, "
+            f"elapsed {_duration(elapsed)}, remaining ~{_duration(remaining)}"
+        )
+
+
+def _stop_on_sigterm(signum, frame) -> None:
+    raise KeyboardInterrupt
+
+
+def merge_entries(entries: list[dict] | None, new: list[dict]) -> list[dict]:
+    """``entries`` with those of the checks in ``new`` replaced."""
+    replaced = {e["check"] for e in new}
+    return [e for e in entries or [] if e["check"] not in replaced] + new
+
+
+def save(
+    index: Path, results: dict[str, list[dict]], keys, versions: dict[str, str], checks: dict[str, Check]
+) -> pl.DataFrame:
+    """Write the QA columns of ``keys`` from ``results`` to the index."""
+    rows = [qa_row(key, results[key], versions, checks) for key in keys]
+    return update_columns(index, qa_frame(rows), QA_COLUMNS)
 
 
 def select_sample(
@@ -200,12 +253,14 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--retry-errors", action="store_true", help="Rerun checks whose current result is an error")
     parser.add_argument("--output", type=Path, default=None, help="Default: run.output")
     parser.add_argument("--workers", type=int, default=None, help="Default: run.workers")
+    parser.add_argument("--save-interval", type=float, default=None, help="Seconds between saves to the index; default: run.save_interval")
     parser.add_argument("--stage-dir", type=Path, default=None, help="Copy the checked episodes here first and read them there")
     args = parser.parse_args(argv)
 
     data_dir = Path(args.data_dir or run_cfg["data_dir"] or DEFAULT_DATA_DIR)
     output = Path(args.output or run_cfg["output"])
     workers = args.workers or run_cfg["workers"]
+    save_interval = args.save_interval if args.save_interval is not None else run_cfg["save_interval"]
     limit = args.limit if args.limit is not None else sampling["default_episode_limit"]
     video_limit = args.video_limit if args.video_limit is not None else sampling["video_episode_limit"]
     only = args.only_dataset if args.only_dataset is not None else run_cfg["only_dataset"]
@@ -235,24 +290,39 @@ def main(argv: list[str] | None = None) -> int:
         (k, episode_path(read_dir, rows[k]["dataset_repo"], rows[k]["repo_path"]), rows[k]["repo_path"], pending[k], config)
         for k in keys
     ]
-    new: dict[str, list[dict]] = {}
-    run_at = now()
-    with ProcessPoolExecutor(max_workers=workers) as pool:
-        for i, (key, results, _) in enumerate(pool.map(run_episode, jobs, chunksize=2), 1):
-            new[key] = [result_entry(n, versions[n], run_at, r) for n, r in results.items()]
-            if i % 500 == 0 or i == len(jobs):
-                _log(f"  {i}/{len(jobs)} episode(s) checked")
-
-    existing = dict(zip(df[KEY].to_list(), df["qa_results"].to_list())) if "qa_results" in df.columns else {}
     all_checks = enabled_checks(config)
-    touched = set(new) | {k for k, v in existing.items() if v}
-    out_rows = []
-    for key in touched:
-        replaced = {e["check"] for e in new.get(key, [])}
-        entries = [e for e in existing.get(key) or [] if e["check"] not in replaced] + new.get(key, [])
-        out_rows.append(qa_row(key, entries, versions, all_checks))
-    if out_rows:
-        df = update_columns(args.index, qa_frame(out_rows), QA_COLUMNS)
+    entries = dict(zip(df[KEY].to_list(), df["qa_results"].to_list())) if "qa_results" in df.columns else {}
+    unsaved: set[str] = set()
+    run_at = now()
+    progress = Progress(len(jobs))
+    last_save = time.monotonic()
+    finished = False
+    on_main_thread = threading.current_thread() is threading.main_thread()
+    previous_handler = signal.signal(signal.SIGTERM, _stop_on_sigterm) if on_main_thread else None
+    pool = ProcessPoolExecutor(max_workers=workers)
+    try:
+        for i, (key, results, _) in enumerate(pool.map(run_episode, jobs, chunksize=2), 1):
+            new = [result_entry(n, versions[n], run_at, r) for n, r in results.items()]
+            entries[key] = merge_entries(entries.get(key), new)
+            unsaved.add(key)
+            progress.tick(i)
+            if time.monotonic() - last_save >= save_interval and i < len(jobs):
+                save(args.index, entries, unsaved, versions, all_checks)
+                unsaved.clear()
+                last_save = time.monotonic()
+        finished = True
+    finally:
+        pool.shutdown(wait=False, cancel_futures=True)
+        if on_main_thread:
+            signal.signal(signal.SIGTERM, previous_handler or signal.SIG_DFL)
+        if not finished and unsaved:
+            save(args.index, entries, unsaved, versions, all_checks)
+            _log(f"interrupted; saved the results of {len(unsaved)} more episode(s) to {args.index}")
+
+    # Every episode with results, so dropped checks and version changes reach the summary columns.
+    touched = [k for k, v in entries.items() if v]
+    if touched:
+        df = save(args.index, entries, touched, versions, all_checks)
 
     report = build_report(df, all_checks, versions, f"index:{args.index}", config)
     write_stats_json(output, report)

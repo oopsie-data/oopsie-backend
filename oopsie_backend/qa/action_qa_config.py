@@ -341,6 +341,7 @@ def _build_config(raw: dict) -> dict:
             "only_dataset": [str(d) for d in (run_raw.get("only_dataset") or [])],
             "verbose": bool(run_raw.get("verbose", False)),
             "workers": int(run_raw.get("workers", 8)),
+            "save_interval": float(run_raw.get("save_interval", 300)),
         },
     }
 

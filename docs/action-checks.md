@@ -29,12 +29,15 @@ Each check is a function in its own file, `oopsie_backend/qa/checks/<category>/<
 - deleting a check's import and file removes its results;
 - disabling a check in the config hides its results until it is enabled again.
 
+Results are saved to the index every `run.save_interval` seconds (300 by default) and when the run is stopped with SIGINT or SIGTERM, so an interrupted run loses at most that much work and the next run continues with the remaining episodes. Each save rewrites the index file. While checks run, a progress line reports the episodes done, the rate and the estimated remaining time.
+
 Options:
 
 - `--check CATEGORY/TEST` (repeatable) limits a run to some checks.
 - `--force` reruns them even when current.
 - `--retry-errors` reruns checks that errored.
 - `--max-episodes` caps the number of episodes checked in one run.
+- `--save-interval` overrides `run.save_interval`.
 - `--limit` and `--video-limit` override the sampling.
 
 `joint_position.step_jump` and `tracking` assume radians: they are skipped as `not_radians` when the action exceeds `radians.max_abs_rad`, whether or not the `radians` check itself is enabled.
