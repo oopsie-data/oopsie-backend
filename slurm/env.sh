@@ -14,6 +14,8 @@ TOKENS=${OOPSIE_TOKENS:-$DATA_DIR/tokens.yaml}
 : "${SCRATCH:?SCRATCH is not set}"
 STAGE=${OOPSIE_STAGE:-$SCRATCH/oopsie}
 EPISODE_STAGE=${OOPSIE_EPISODE_STAGE:-$STAGE/episodes}
+# Node-local disk of each compute node; QA and training stage their episode chunks there.
+NODE_STAGE=${OOPSIE_NODE_STAGE:-/tmp/oopsie/episodes}
 DOCS=${OOPSIE_DOCS:-$STAGE/oopsie-docs}
 DOCS_REMOTE=${OOPSIE_DOCS_REMOTE:-git@github.com:oopsie-data/oopsie-docs.git}
 DOCS_BRANCH=${OOPSIE_DOCS_BRANCH:-main}
@@ -73,6 +75,8 @@ PIPELINE_SETTINGS=(
   --set cache_dir="$INDEX_DIR/pipeline_cache"
   --set reports_dir="$REPORTS_DIR"
   --set stage_dir="$EPISODE_STAGE"
+  --set node_stage_dir="$NODE_STAGE"
+  --set workers="${SLURM_CPUS_ON_NODE:-128}"
   --set training_dir="$ROOT/training"
   --set training_work_dir="$STAGE/training"
 )

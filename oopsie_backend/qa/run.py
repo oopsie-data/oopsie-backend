@@ -23,8 +23,15 @@ therefore reruns just that check; removing one drops its results. Episodes are
 read once and checked in parallel. Results go to the index's ``qa_*`` columns,
 and ``reports/action_qa.json`` and ``.html`` summarize all current results.
 
-Results are saved to the index every ``run.save_interval`` seconds and when the
-run is interrupted (SIGINT or SIGTERM), so a rerun continues where it stopped.
+Results are saved to the index every ``run.save_interval`` seconds, after each
+staged chunk and when the run is interrupted (SIGINT or SIGTERM), so a rerun
+continues where it stopped.
+
+In a multi-node Slurm job every node checks its share of the pending episodes
+(``common/shards.py``) and saves its results to ``<index dir>/shards/qa``
+instead of the index. The coordinator merges those files into the index before
+and after the run, so results of an interrupted run are kept, and then writes
+the report.
 """
 
 from __future__ import annotations
@@ -39,7 +46,7 @@ from pathlib import Path
 
 import polars as pl
 
-from oopsie_backend.common import interrupt
+from oopsie_backend.common import interrupt, shards
 from oopsie_backend.common.io import now_timestamps, write_stats_json
 from oopsie_backend.common.progress import Progress
 from oopsie_backend.common.repos import (
@@ -84,6 +91,52 @@ def save(
     """Write the QA columns of ``keys`` from ``results`` to the index."""
     rows = [qa_row(key, results[key], versions, checks) for key in keys]
     return update_columns(index, qa_frame(rows), QA_COLUMNS)
+
+
+def merge_shards(index: Path, shard_dir: Path, versions: dict[str, str], checks: dict[str, Check]) -> int:
+    """Save the results in ``shard_dir`` to the index and remove them; returns the number of episodes."""
+    found = shards.results(shard_dir)
+    entries: dict[str, list[dict]] = {}
+    for _, part in found:
+        entries |= part
+    if entries:
+        save(index, entries, list(entries), versions, checks)
+    for path, _ in found:
+        path.unlink()
+    return len(entries)
+
+
+def finalize(index: Path, output: Path, config: dict, versions: dict[str, str], checks: dict[str, Check]) -> None:
+    """Refresh the QA summary columns of every episode with results and write the report."""
+    df = read_index(index)
+    if "qa_results" in df.columns:
+        # Every episode with results, so dropped checks and version changes reach the summary columns.
+        entries = dict(zip(df[KEY].to_list(), df["qa_results"].to_list()))
+        touched = [k for k, v in entries.items() if v]
+        if touched:
+            df = save(index, entries, touched, versions, checks)
+    report = build_report(df, checks, versions, f"index:{index}", config)
+    write_stats_json(output, report)
+    render_action_qa_report(report, output.with_suffix(".html"), config["report"]["highlight_ignore"])
+    t = report["totals"]
+    _log(
+        f"{t.get('episodes_checked', 0)} episode(s) with results: {t.get('episodes_flagged', 0)} flagged, "
+        f"{t.get('episodes_skipped', 0)} with errors. Report: {output}"
+    )
+
+
+def coordinate(argv: list[str], index: Path, output: Path, config: dict) -> int:
+    """Run the checks on every node of the job and merge their results."""
+    all_checks = enabled_checks(config)
+    versions = {n: c.version(config) for n, c in all_checks.items()}
+    shard_dir = index.parent / "shards" / "qa"
+    if n := merge_shards(index, shard_dir, versions, all_checks):
+        _log(f"merged the results of {n} episode(s) from an earlier run")
+    rc = shards.run("oopsie_backend.qa.run", argv, shard_dir)
+    n = merge_shards(index, shard_dir, versions, all_checks)
+    _log(f"merged the results of {n} episode(s) from {shards.node_count()} node(s)")
+    finalize(index, output, config, versions, all_checks)
+    return rc
 
 
 def select_sample(
@@ -226,6 +279,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--workers", type=int, default=None, help="Default: run.workers")
     parser.add_argument("--save-interval", type=float, default=None, help="Seconds between saves to the index; default: run.save_interval")
     parser.add_argument("--stage-dir", type=Path, default=None, help="Copy the checked episodes here first and read them there")
+    parser.add_argument("--shard-dir", type=Path, default=None, help=argparse.SUPPRESS)
     args = parser.parse_args(argv)
     interrupt.install()
 
@@ -237,6 +291,8 @@ def main(argv: list[str] | None = None) -> int:
     video_limit = args.video_limit if args.video_limit is not None else sampling["video_episode_limit"]
     only = args.only_dataset if args.only_dataset is not None else run_cfg["only_dataset"]
     max_episodes = args.max_episodes if args.max_episodes is not None else run_cfg["max_total_episodes"]
+    if args.shard_dir is None and shards.node_count() > 1:
+        return coordinate(list(argv if argv is not None else sys.argv[1:]), args.index, output, config)
 
     checks = enabled_checks(config, args.check)
     versions = {n: c.version(config) for n, c in enabled_checks(config).items()}
@@ -249,6 +305,8 @@ def main(argv: list[str] | None = None) -> int:
     keys = [k for k in sample.sort("rank", "dataset_repo")[KEY] if k in pending]
     if max_episodes:
         keys = keys[:max_episodes]
+    if args.shard_dir is not None:
+        keys = shards.mine(keys)
     _log(
         f"{sample.height} sampled episode(s) across {sample['dataset_repo'].n_unique()} dataset(s); "
         f"{len(keys)} with pending checks ({sum(len(pending[k]) for k in keys)} check runs)"
@@ -270,6 +328,17 @@ def main(argv: list[str] | None = None) -> int:
     all_checks = enabled_checks(config)
     entries = dict(zip(df[KEY].to_list(), df["qa_results"].to_list())) if "qa_results" in df.columns else {}
     unsaved: set[str] = set()
+    ran: set[str] = set()
+
+    def persist() -> None:
+        """Save the unsaved results: to the index, or as this shard's result."""
+        ran.update(unsaved)
+        if args.shard_dir is not None:
+            shards.write_result(args.shard_dir, {k: entries[k] for k in ran})
+        else:
+            save(args.index, entries, unsaved, versions, all_checks)
+        unsaved.clear()
+
     run_at = now()
     progress = Progress(len(keys), "episode(s) checked")
     last_save = time.monotonic()
@@ -308,35 +377,29 @@ def main(argv: list[str] | None = None) -> int:
                     if interrupt.stopping():
                         raise KeyboardInterrupt
                     if running and time.monotonic() - last_save >= save_interval:
-                        save(args.index, entries, unsaved, versions, all_checks)
-                        unsaved.clear()
+                        persist()
                         last_save = time.monotonic()
                 if stage_dir:
+                    if unsaved:
+                        persist()
+                        last_save = time.monotonic()
                     unstage_episodes(data_dir, stage_dir, episodes(chunk))
             finished = True
         finally:
             pool.shutdown(wait=False, cancel_futures=True)
             if not finished and unsaved:
-                save(args.index, entries, unsaved, versions, all_checks)
-                _log(f"interrupted; saved the results of {len(unsaved)} more episode(s) to {args.index}")
+                n = len(unsaved)
+                persist()
+                _log(f"interrupted; saved the results of {n} more episode(s)")
             stager.shutdown(wait=True, cancel_futures=True)
             if not finished:
                 for chunk in staged_now:
                     unstage_episodes(data_dir, stage_dir, episodes(chunk))
 
-    # Every episode with results, so dropped checks and version changes reach the summary columns.
-    touched = [k for k, v in entries.items() if v]
-    if touched:
-        df = save(args.index, entries, touched, versions, all_checks)
-
-    report = build_report(df, all_checks, versions, f"index:{args.index}", config)
-    write_stats_json(output, report)
-    render_action_qa_report(report, output.with_suffix(".html"), config["report"]["highlight_ignore"])
-    t = report["totals"]
-    _log(
-        f"{t.get('episodes_checked', 0)} episode(s) with results: {t.get('episodes_flagged', 0)} flagged, "
-        f"{t.get('episodes_skipped', 0)} with errors. Report: {output}"
-    )
+    if unsaved:
+        persist()
+    if args.shard_dir is None:
+        finalize(args.index, output, config, versions, all_checks)
     return 0
 
 

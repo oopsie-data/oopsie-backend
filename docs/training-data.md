@@ -21,7 +21,7 @@ The pipeline target first brings the index, QA, critical flags, eval split and a
 
    The recipe's `selection` then filters the rest.
 2. **Compute** each robot's gripper range from the mirror.
-3. **Unify** each episode into `episodes/<episode_key>.h5`, with one video per camera role in `episodes/<episode_key>/`. An episode that cannot be unified under the recipe is skipped, and the manifest records why. With `stage_dir` set, the episodes and their videos are copied there 500 at a time and each chunk's copies are removed once it is unified.
+3. **Unify** each episode into `episodes/<episode_key>.h5`, with one video per camera role in `episodes/<episode_key>/`. An episode that cannot be unified under the recipe is skipped, and the manifest records why. With `node_stage_dir` set, the episodes and their videos are copied there 1,000 at a time and each chunk's copies are removed once it is unified. In a multi-node job, the gripper ranges and the unification are split across the nodes.
 4. **Write** `manifest.parquet`, `layout.json`, `recipe.yaml` and every format in `formats`.
 5. **Record** the recipe in the index's `training_sets` column for every included episode.
 

@@ -13,7 +13,9 @@ Steps:
 3. Unify every selected episode into ``episodes/`` (``training/unify.py``); unified
    episodes that are still current are reused. With ``--stage-dir``, episodes are
    copied to fast storage (``common/staging.py``) one chunk at a time and each
-   chunk's copies are removed once it is unified.
+   chunk's copies are removed once it is unified. In a multi-node Slurm job the
+   gripper ranges and the unification run on every node (``common/shards.py``,
+   shard directory ``<work-dir>/<recipe name>/shards``).
 4. Write ``manifest.parquet`` (every selected episode with its status, skip reason
    and labels), ``layout.json`` and ``recipe.yaml``, then each format in ``formats``
    (``training/writers/registry.py``) into ``<format>/``.
@@ -39,6 +41,8 @@ from pathlib import Path
 import polars as pl
 import yaml
 
+from oopsie_backend.common import shards
+from oopsie_backend.common.progress import Progress
 from oopsie_backend.common.repos import DEFAULT_DATA_DIR, episode_path
 from oopsie_backend.common.staging import chunks, stage_episodes, unstage_episodes
 from oopsie_backend.index.store import DEFAULT_INDEX, KEY, read_index, update_columns
@@ -57,25 +61,34 @@ def _log(message: str) -> None:
     print(message, file=sys.stderr)
 
 
-def gripper_ranges(selected: pl.DataFrame, data_dir: Path, workers: int) -> dict[str, tuple[float, float]]:
-    jobs = [(robot_id(r), episode_path(data_dir, r["dataset_repo"], r["repo_path"])) for r in selected.iter_rows(named=True)]
-    ranges: dict[str, tuple[float, float]] = {}
+def gripper_extents(jobs: list[tuple[str, Path]], workers: int) -> list[tuple[str, tuple[float, float] | None]]:
+    """``(robot, (min, max))`` of the gripper position of every ``(robot, path)``."""
     with ProcessPoolExecutor(max_workers=workers) as pool:
-        for robot, extent in pool.map(gripper_job, jobs, chunksize=16):
-            if extent is not None:
-                lo, hi = ranges.get(robot, extent)
-                ranges[robot] = (min(lo, extent[0]), max(hi, extent[1]))
+        return list(pool.map(gripper_job, jobs, chunksize=16))
+
+
+def gripper_ranges(extents: list[tuple[str, tuple[float, float] | None]]) -> dict[str, tuple[float, float]]:
+    ranges: dict[str, tuple[float, float]] = {}
+    for robot, extent in extents:
+        if extent is not None:
+            lo, hi = ranges.get(robot, extent)
+            ranges[robot] = (min(lo, extent[0]), max(hi, extent[1]))
     return ranges
 
 
-def unify_all(
-    selected: pl.DataFrame, recipe: dict, data_dir: Path, episodes_dir: Path, workers: int, stage_dir: Path | None = None
-) -> pl.DataFrame:
-    episodes_dir.mkdir(parents=True, exist_ok=True)
-    ranges = gripper_ranges(selected, data_dir, workers)
-    uhash = unify_hash(recipe)
-    rows = list(selected.iter_rows(named=True))
+def unify_rows(
+    rows: list[dict],
+    recipe: dict,
+    uhash: str,
+    ranges: dict[str, tuple[float, float]],
+    data_dir: Path,
+    episodes_dir: Path,
+    workers: int,
+    stage_dir: Path | None,
+) -> list[dict]:
+    """``unify_episode`` of every row, in order, staging the episodes chunk by chunk with ``stage_dir``."""
     results = []
+    progress = Progress(len(rows), "episode(s) unified")
     with ProcessPoolExecutor(max_workers=workers) as pool:
         for chunk in chunks(rows) if stage_dir is not None else [rows]:
             episodes = [(r["dataset_repo"], r["repo_path"]) for r in chunk]
@@ -89,11 +102,65 @@ def unify_all(
                     if result.get("traceback"):
                         _log(result.pop("traceback"))
                     results.append(result)
-                    if len(results) % 200 == 0 or len(results) == len(rows):
-                        _log(f"  {len(results)}/{len(rows)} episode(s) unified")
+                    progress.tick(len(results))
             finally:
                 if stage_dir is not None:
                     unstage_episodes(data_dir, stage_dir, episodes)
+    return results
+
+
+def run_shard(shard_dir: Path) -> None:
+    """One node's share of a sharded phase: gripper extents or unification."""
+    job = shards.read_input(shard_dir)
+    items = shards.mine(job["items"])
+    positions = [i for i, _ in items]
+    if job["phase"] == "extents":
+        out = gripper_extents([j for _, j in items], job["workers"])
+    else:
+        out = unify_rows(
+            [r for _, r in items], job["recipe"], job["uhash"], job["ranges"], job["data_dir"],
+            job["episodes_dir"], job["workers"], job["stage_dir"],
+        )
+    shards.write_result(shard_dir, dict(zip(positions, out)))
+
+
+def sharded(shard_dir: Path, phase: str, items: list, **payload) -> list:
+    """``phase`` of ``run_shard`` over ``items`` on every node of the job; results in order."""
+    shards.clear(shard_dir)
+    shards.write_input(shard_dir, {"phase": phase, "items": list(enumerate(items)), **payload})
+    rc = shards.run("oopsie_backend.training.materialize", [], shard_dir)
+    out: dict[int, object] = {}
+    for _, part in shards.results(shard_dir):
+        out |= part
+    shards.clear(shard_dir)
+    if rc or len(out) != len(items):
+        raise RuntimeError(f"training shards ({phase}) exited {rc} with {len(out)}/{len(items)} episode(s) done")
+    return [out[i] for i in range(len(items))]
+
+
+def unify_all(
+    selected: pl.DataFrame,
+    recipe: dict,
+    data_dir: Path,
+    episodes_dir: Path,
+    workers: int,
+    stage_dir: Path | None = None,
+    shard_dir: Path | None = None,
+) -> pl.DataFrame:
+    """Unify every selected episode; with ``shard_dir``, on every node of the job."""
+    episodes_dir.mkdir(parents=True, exist_ok=True)
+    rows = list(selected.iter_rows(named=True))
+    uhash = unify_hash(recipe)
+    extent_jobs = [(robot_id(r), episode_path(data_dir, r["dataset_repo"], r["repo_path"])) for r in rows]
+    if shard_dir is None:
+        ranges = gripper_ranges(gripper_extents(extent_jobs, workers))
+        results = unify_rows(rows, recipe, uhash, ranges, data_dir, episodes_dir, workers, stage_dir)
+    else:
+        ranges = gripper_ranges(sharded(shard_dir, "extents", extent_jobs, workers=workers))
+        results = sharded(
+            shard_dir, "unify", rows, recipe=recipe, uhash=uhash, ranges=ranges, data_dir=data_dir,
+            episodes_dir=episodes_dir, workers=workers, stage_dir=stage_dir,
+        )
     manifest = pl.DataFrame(
         [
             {KEY: r[KEY], "dataset_repo": r["dataset_repo"], "repo_path": r["repo_path"], **{c: r[c] for c in LABELS}, **res}
@@ -153,7 +220,8 @@ def materialize(
     df = read_index(index, COLUMNS, optional=OPTIONAL)
     selected = select_episodes(df, recipe)
     _log(f"{name}: {selected.height} episode(s) selected from {df.height}")
-    manifest = unify_all(selected, recipe, data_dir, work / "episodes", workers, stage_dir)
+    shard_dir = work / "shards" if shards.node_count() > 1 else None
+    manifest = unify_all(selected, recipe, data_dir, work / "episodes", workers, stage_dir, shard_dir)
     included = manifest.filter(pl.col("status").is_in(["written", "reused"]))
     counts = Counter(manifest["status"].to_list())
     _log(f"{name}: " + ", ".join(f"{n} {s}" for s, n in sorted(counts.items())))
@@ -186,14 +254,20 @@ def materialize(
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--recipe", type=Path, required=True)
+    parser.add_argument("--recipe", type=Path)
     parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
     parser.add_argument("--index", type=Path, default=DEFAULT_INDEX)
-    parser.add_argument("--out", type=Path, required=True, help="Where the finished dataset is kept")
+    parser.add_argument("--out", type=Path, help="Where the finished dataset is kept")
     parser.add_argument("--work-dir", type=Path, default=None, help="Where it is built; default: --out")
     parser.add_argument("--stage-dir", type=Path, default=None, help="Copy the selected episodes here chunk by chunk and read them there")
     parser.add_argument("--workers", type=int, default=8)
+    parser.add_argument("--shard-dir", type=Path, default=None, help=argparse.SUPPRESS)
     args = parser.parse_args(argv)
+    if args.shard_dir is not None:
+        run_shard(args.shard_dir)
+        return 0
+    if args.recipe is None or args.out is None:
+        parser.error("--recipe and --out are required")
     materialize(args.recipe, args.data_dir, args.index, args.out, args.work_dir or args.out, args.workers, args.stage_dir)
     return 0
 

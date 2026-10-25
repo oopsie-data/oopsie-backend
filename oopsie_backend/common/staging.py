@@ -19,11 +19,10 @@ from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-from oopsie_backend.common.progress import Progress
 from oopsie_backend.common.repos import episode_path
 from oopsie_backend.common.videos import _video_files, repo_root
 
-STAGE_CHUNK = 500
+STAGE_CHUNK = 1000
 
 
 def chunks(items: list, size: int = STAGE_CHUNK) -> list[list]:
@@ -87,11 +86,7 @@ def stage_episodes(
     def one(e: tuple[str, str]) -> int:
         return 0 if stop is not None and stop() else stage_episode(data_dir, stage_dir, *e)
 
-    progress = Progress(len(episodes), "episode(s) staged")
-    copied = 0
     with ThreadPoolExecutor(max_workers=workers) as pool:
-        for n, size in enumerate(pool.map(one, episodes), 1):
-            copied += size
-            progress.tick(n)
+        copied = sum(pool.map(one, episodes))
     print(f"staged {len(episodes)} episode(s) in {stage_dir}, copied {copied / 1e9:.2f} GB", file=sys.stderr)
     return stage_dir

@@ -33,7 +33,7 @@ def training_data(
     index_path: str,
     training_dir: str,
     training_work_dir: str | None,
-    stage_dir: str | None,
+    node_stage_dir: str | None,
     workers: int,
 ) -> str:
     """Materializes ``training_recipe``; returns the fingerprint of the ``training_sets`` column."""
@@ -44,6 +44,6 @@ def training_data(
         Path(training_dir),
         Path(training_work_dir or training_dir),
         workers,
-        Path(stage_dir) if stage_dir else None,
+        Path(node_stage_dir) if node_stage_dir else None,
     )
     return columns_fingerprint(Path(index_path), [TRAINING_COLUMN])

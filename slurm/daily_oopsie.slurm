@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -J oopsie-daily
 #SBATCH -A IRI23005
-#SBATCH -p vm-small
+#SBATCH -p normal
 #SBATCH -N 1
 #SBATCH -n 1
 #SBATCH -t 2-00:00:00
@@ -42,7 +42,7 @@ run_step setup_numpy bash -c "\"$UV\" add 'numpy<2.4' && \"$UV\" sync --reinstal
 
 # The full pipeline (configs/pipeline.yaml), recomputing only what changed. Its first stage syncs
 # the Hub mirror; repos that fail to sync are listed in $DATA_DIR/.sync_report.json and do not stop
-# it. QA copies the episodes it checks to $EPISODE_STAGE first. Manual stages (imports, training)
+# it. QA copies the episodes it checks to the node's $NODE_STAGE, chunk by chunk. Manual stages (imports, training)
 # never run here; see pipeline.slurm.
 pipeline_rc=0
 run_step pipeline "$UV" run oopsie pipeline run all "${PIPELINE_SETTINGS[@]}" --explain \

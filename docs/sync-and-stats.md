@@ -15,16 +15,17 @@ flowchart LR
 
 ## Prerequisites
 
-`/corral/utexas/IRI26024` holds data only: the mirror, imports, training data, the episode index, reports and logs. TACC does not intend Corral for computation ([TACC's guidance](https://docs.tacc.utexas.edu/basics/userissues/)). Jobs therefore stage code, tools and caches into `$SCRATCH/oopsie`, and copy the episodes they read heavily there before reading them. The canonical copies of the code are the git remotes.
+`/corral/utexas/IRI26024` holds data only: the mirror, imports, training data, the episode index, reports and logs. TACC does not intend Corral for computation ([TACC's guidance](https://docs.tacc.utexas.edu/basics/userissues/)). Jobs therefore stage code, tools and caches into `$SCRATCH/oopsie`, and copy the episodes they read heavily to node-local disk before reading them. The canonical copies of the code are the git remotes.
 
 | Staged in `$SCRATCH/oopsie` | By |
 |---|---|
 | `oopsie-backend/` (latest `main`) | the scron entry, before the job starts |
 | `oopsie-docs/` (latest `main`) | the job; it commits and pushes `stats.json` when it changed |
 | `tools/bin/uv`, `tools/uv-python`, `uv-cache/`, `hf_home/` | the job installs uv if missing |
-| `episodes/` | QA and training (`stage_dir`): the chunk of at most 500 episodes they are reading, with their videos (QA also holds the next chunk); each chunk is removed when it is done |
 | `training/` | training (`training_work_dir`): unified episodes and formats, before the finished dataset is copied to corral |
-| `episodes/imports/` | imports: conversions in progress, moved to `oopsiedata/imports/` when done |
+| `episodes/imports/` | imports (`stage_dir`): conversions in progress, moved to `oopsiedata/imports/` when done |
+
+QA and training stage the episodes they read on each compute node's local disk (`node_stage_dir`, `/tmp/oopsie/episodes`), at most 1,000 episodes at a time; each chunk is removed when it is done.
 
 A purge of `$SCRATCH` only means the next run downloads or copies these again. The index and pipeline cache stay on corral: few files change per run, and every job that writes the index uses the same copy.
 

@@ -30,7 +30,7 @@ if (( $# == 0 )); then
 fi
 
 rc=0
-run_step "pipeline $*" "$UV" run oopsie pipeline run "${PIPELINE_SETTINGS[@]}" --set workers="${SLURM_CPUS_ON_NODE:-16}" --explain "$@" || rc=$?
+run_step "pipeline $*" "$UV" run oopsie pipeline run "${PIPELINE_SETTINGS[@]}" --explain "$@" || rc=$?
 
 for dir in "$INDEX_DIR" "$ROOT/training" "$DATA_DIR/imports"; do
   if [[ -d "$dir" ]]; then

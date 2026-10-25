@@ -76,7 +76,9 @@ uv run oopsie pipeline run postqa --graph dag.png
 | `imports` | `imported_datasets` (manual) |
 | `training` | `training_data` (manual); needs `--set training_recipe=configs/training/<recipe>.yaml` |
 
-`configs/pipeline.yaml` holds every input a stage may need: the mirror, the index, the cache directory, the worker count, whether to query the Hub, the reports directory, the website `stats.json`, the split and annotation configs, the training directories and recipe, and `stage_dir`. With `stage_dir` set, QA and training copy the episodes they read to that directory (`common/staging.py`); on LS6 it is on `$SCRATCH`. They copy at most 500 episodes at a time and remove each chunk's copies once they are done with it, so the dataset is never copied as a whole.
+`configs/pipeline.yaml` holds every input a stage may need: the mirror, the index, the cache directory, the worker count, whether to query the Hub, the reports directory, the website `stats.json`, the split and annotation configs, the training directories and recipe, and `stage_dir`. With `node_stage_dir` set, QA and training copy the episodes they read to that directory (`common/staging.py`); on LS6 it is each compute node's local `/tmp`. They copy at most 1,000 episodes at a time and remove each chunk's copies once they are done with it, so the dataset is never copied as a whole. `stage_dir` is where imported datasets are converted.
+
+In a multi-node Slurm job, the pipeline runs on the first node, and the index build, QA and training split their per-episode work across all nodes (`common/shards.py`). The stage starts one task per node with `srun`; each task handles every n-th episode and writes its results to a shard directory on shared storage: `<index dir>/shards/index`, `<index dir>/shards/qa` and `<work dir>/<recipe>/shards`. Only the stage itself writes the index. QA results of an interrupted run stay in their shard directory and are merged at the start of the next run. The LS6 jobs run on one `normal` node with all 128 cores (`workers`), so they don't use this.
 
 Flags:
 

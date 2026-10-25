@@ -2,7 +2,7 @@
 data_dir: /corral/utexas/IRI26024/oopsiedata
 index_path: /corral/utexas/IRI26024/episode_index/episode_index.parquet
 cache_dir: /corral/utexas/IRI26024/episode_index/pipeline_cache
-workers: 16
+workers: 128  # parallel processes of the index build, QA and training; one per core of an LS6 normal node
 use_hub: true  # sync the mirror with the Hub and list Hub hashes in the index; false works offline
 stats_docs_output: ../oopsie-docs/docs/assets/data/stats.json
 reports_dir: /corral/utexas/IRI26024/reports
@@ -11,4 +11,5 @@ annotation_config_path: configs/annotation_pipeline.yaml
 training_dir: /corral/utexas/IRI26024/training
 training_recipe: null  # set with --set training_recipe=configs/training/<recipe>.yaml
 training_work_dir: null  # where training data is built; null builds in training_dir
-stage_dir: null  # fast storage that QA and training copy episodes to before reading them; null reads the mirror
+stage_dir: null  # fast storage where imported datasets are converted before they move into the mirror; null converts in place
+node_stage_dir: null  # node-local storage that QA and training copy episodes to, chunk by chunk, before reading them; null reads the mirror

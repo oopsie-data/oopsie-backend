@@ -16,6 +16,7 @@ import hashlib
 import json
 import re
 import sys
+from collections.abc import Callable
 from concurrent.futures import ProcessPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
@@ -278,13 +279,21 @@ def _read_job(job: tuple[str, Path]) -> dict:
     return read_h5(path, repo_path)
 
 
+def read_jobs(jobs: list[tuple[str, Path]], workers: int) -> list[dict]:
+    """``read_h5`` of every ``(repo_path, path)``, in order."""
+    with ProcessPoolExecutor(max_workers=workers) as pool:
+        return list(pool.map(_read_job, jobs, chunksize=32))
+
+
 def build_core(
     data_dir: Path,
     previous: pl.DataFrame | None,
     api=None,
     workers: int = 8,
+    read: Callable[[list[tuple[str, Path]], int], list[dict]] = read_jobs,
 ) -> pl.DataFrame:
-    """Core columns for every discovered episode, plus earlier rows no longer on disk."""
+    """Core columns for every discovered episode, plus earlier rows no longer on disk.
+    ``read`` reads the new or changed h5 files, by default on this node."""
     found = discover(data_dir)
     prev = {r[KEY]: r for r in previous.iter_rows(named=True)} if previous is not None else {}
     # Rows from an index without every h5 column are read again, so new columns get filled.
@@ -311,9 +320,8 @@ def build_core(
         rows[key] = row
 
     print(f"{len(found)} episode(s) found, {len(to_read)} new or changed", file=sys.stderr)
-    with ProcessPoolExecutor(max_workers=workers) as pool:
-        for (key, _), result in zip(to_read, pool.map(_read_job, [j for _, j in to_read], chunksize=32)):
-            rows[key] |= result
+    for (key, _), result in zip(to_read, read([j for _, j in to_read], workers)):
+        rows[key] |= result
 
     for key, old in prev.items():
         if key not in rows:

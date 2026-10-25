@@ -93,6 +93,9 @@ def probe_video(path: Path, size: int = PROBE_SIZE) -> VideoProbe:
         "-nostats",
         "-loglevel",
         "level+info",
+        # QA decodes in parallel worker processes, so extra decoder threads only compete for cores.
+        "-threads",
+        "1",
         "-i",
         str(path),
         "-fps_mode",
