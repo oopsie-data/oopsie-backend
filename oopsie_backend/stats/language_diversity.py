@@ -317,17 +317,29 @@ def _top_k_share(counts: Counter[str], total: int, k: int) -> float:
 def _build_near_duplicate_groups(normalized_strings: list[str]) -> list[list[str]]:
     """Greedy clusters of normalized strings with SequenceMatcher ratio >= threshold."""
     groups: list[list[str]] = []
+    # One matcher per representative caches its analysis; ratio <= 2*min(la, lb)/(la+lb),
+    # so representatives whose length differs too much are skipped before any matching.
+    matchers: list[SequenceMatcher] = []
     for text in sorted(set(normalized_strings)):
         if not text:
             continue
+        la = len(text)
         placed = False
-        for group in groups:
-            if SequenceMatcher(None, text, group[0]).ratio() >= NEAR_DUPLICATE_RATIO:
+        for group, matcher in zip(groups, matchers):
+            lb = len(group[0])
+            if 2 * min(la, lb) < NEAR_DUPLICATE_RATIO * (la + lb):
+                continue
+            matcher.set_seq1(text)
+            if (
+                matcher.quick_ratio() >= NEAR_DUPLICATE_RATIO
+                and matcher.ratio() >= NEAR_DUPLICATE_RATIO
+            ):
                 group.append(text)
                 placed = True
                 break
         if not placed:
             groups.append([text])
+            matchers.append(SequenceMatcher(None, b=text))
     return groups
 
 
