@@ -29,7 +29,7 @@ Each check is a function in its own file, `oopsie_backend/qa/checks/<category>/<
 - deleting a check's import and file removes its results;
 - disabling a check in the config hides its results until it is enabled again.
 
-Results are saved to the index every `run.save_interval` seconds (300 by default) and when the run is stopped with SIGINT or SIGTERM, so an interrupted run loses at most that much work and the next run continues with the remaining episodes. Each save rewrites the index file. While checks run, a progress line reports the episodes done, the rate and the estimated remaining time.
+Results are saved to the index every `run.save_interval` seconds (300 by default) and when the run is stopped with SIGINT or SIGTERM, so an interrupted run loses at most that much work and the next run continues with the remaining episodes. This also holds inside `oopsie pipeline run`: the signal stops the running checks, the results are saved, and the process exits at most 20 seconds after the signal (`common/interrupt.py`); a second signal exits at once. Each save rewrites the index file. While checks run, a progress line reports the episodes done, the rate and the estimated remaining time.
 
 Options:
 

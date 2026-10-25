@@ -22,6 +22,7 @@ import yaml
 from hamilton import ad_hoc_utils, driver
 from hamilton.plugins.h_threadpool import FutureAdapter
 
+from oopsie_backend.common import interrupt
 from oopsie_backend.pipeline.stages import STAGES, TARGETS
 
 DEFAULT_CONFIG = Path("configs/pipeline.yaml")
@@ -78,6 +79,7 @@ def main(argv: list[str] | None = None) -> int:
         dr.visualize_execution(final, str(args.graph.with_suffix("")), inputs=config, render_kwargs={"format": args.graph.suffix[1:] or "png"})
         print(f"wrote {args.graph}", file=sys.stderr)
         return 0
+    interrupt.install()
     results = dr.execute(final, inputs=config)
     for name in final:
         print(f"{name}: {results[name]}", file=sys.stderr)

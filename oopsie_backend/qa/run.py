@@ -28,16 +28,15 @@ from __future__ import annotations
 
 import argparse
 import hashlib
-import signal
 import sys
-import threading
 import time
 from collections import Counter, defaultdict
-from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, wait
 from pathlib import Path
 
 import polars as pl
 
+from oopsie_backend.common import interrupt
 from oopsie_backend.common.io import now_timestamps, write_stats_json
 from oopsie_backend.common.repos import (
     CONTRIBUTOR,
@@ -95,10 +94,6 @@ class Progress:
             f"  {n}/{self.total} episode(s) checked ({n / self.total:.0%}), {rate:.2f}/s, "
             f"elapsed {_duration(elapsed)}, remaining ~{_duration(remaining)}"
         )
-
-
-def _stop_on_sigterm(signum, frame) -> None:
-    raise KeyboardInterrupt
 
 
 def merge_entries(entries: list[dict] | None, new: list[dict]) -> list[dict]:
@@ -256,6 +251,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--save-interval", type=float, default=None, help="Seconds between saves to the index; default: run.save_interval")
     parser.add_argument("--stage-dir", type=Path, default=None, help="Copy the checked episodes here first and read them there")
     args = parser.parse_args(argv)
+    interrupt.install()
 
     data_dir = Path(args.data_dir or run_cfg["data_dir"] or DEFAULT_DATA_DIR)
     output = Path(args.output or run_cfg["output"])
@@ -297,27 +293,32 @@ def main(argv: list[str] | None = None) -> int:
     progress = Progress(len(jobs))
     last_save = time.monotonic()
     finished = False
-    on_main_thread = threading.current_thread() is threading.main_thread()
-    previous_handler = signal.signal(signal.SIGTERM, _stop_on_sigterm) if on_main_thread else None
     pool = ProcessPoolExecutor(max_workers=workers)
-    try:
-        for i, (key, results, _) in enumerate(pool.map(run_episode, jobs, chunksize=2), 1):
-            new = [result_entry(n, versions[n], run_at, r) for n, r in results.items()]
-            entries[key] = merge_entries(entries.get(key), new)
-            unsaved.add(key)
-            progress.tick(i)
-            if time.monotonic() - last_save >= save_interval and i < len(jobs):
+    with interrupt.stoppable():
+        try:
+            running = {pool.submit(run_episode, job) for job in jobs}
+            done_count = 0
+            while running:
+                done, running = wait(running, timeout=1.0, return_when=FIRST_COMPLETED)
+                for future in done:
+                    key, results, _ = future.result()
+                    new = [result_entry(n, versions[n], run_at, r) for n, r in results.items()]
+                    entries[key] = merge_entries(entries.get(key), new)
+                    unsaved.add(key)
+                    done_count += 1
+                    progress.tick(done_count)
+                if interrupt.stopping():
+                    raise KeyboardInterrupt
+                if running and time.monotonic() - last_save >= save_interval:
+                    save(args.index, entries, unsaved, versions, all_checks)
+                    unsaved.clear()
+                    last_save = time.monotonic()
+            finished = True
+        finally:
+            pool.shutdown(wait=False, cancel_futures=True)
+            if not finished and unsaved:
                 save(args.index, entries, unsaved, versions, all_checks)
-                unsaved.clear()
-                last_save = time.monotonic()
-        finished = True
-    finally:
-        pool.shutdown(wait=False, cancel_futures=True)
-        if on_main_thread:
-            signal.signal(signal.SIGTERM, previous_handler or signal.SIG_DFL)
-        if not finished and unsaved:
-            save(args.index, entries, unsaved, versions, all_checks)
-            _log(f"interrupted; saved the results of {len(unsaved)} more episode(s) to {args.index}")
+                _log(f"interrupted; saved the results of {len(unsaved)} more episode(s) to {args.index}")
 
     # Every episode with results, so dropped checks and version changes reach the summary columns.
     touched = [k for k, v in entries.items() if v]

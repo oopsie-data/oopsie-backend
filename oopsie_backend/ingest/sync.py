@@ -27,7 +27,6 @@ import hashlib
 import json
 import os
 import shutil
-import signal
 import sys
 import threading
 import time
@@ -42,6 +41,7 @@ from huggingface_hub.errors import RepositoryNotFoundError
 from huggingface_hub.file_download import http_get
 from huggingface_hub.utils import build_hf_headers, disable_progress_bars
 
+from oopsie_backend.common import interrupt
 from oopsie_backend.common.hf import dataset_repo_size, hub_files, list_dataset_repos_for_org, parse_org_arg
 from oopsie_backend.common.io import now_timestamps
 from oopsie_backend.common.repos import (
@@ -364,11 +364,6 @@ def smallest_repos(repo_ids: list[str], n: int, token: str | None) -> list[str]:
     return [repo_id for _, repo_id in sorted(sized)[:n]]
 
 
-def _exit_on_interrupt(signum, frame) -> None:
-    _log("interrupted; progress since the last save of the sync record is redone next run")
-    os._exit(130)
-
-
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--data-dir", "--local-dir", type=Path, default=DEFAULT_DATA_DIR, help="Mirror root")
@@ -389,9 +384,9 @@ def main(argv: list[str] | None = None) -> int:
 
     os.umask(0o002)
     disable_progress_bars()
-    # Worker threads in file system calls do not see KeyboardInterrupt. Stopping at any point is
-    # safe: the record is written whole, and unsaved repos keep their .cache for the next run.
-    signal.signal(signal.SIGINT, _exit_on_interrupt)
+    # Worker threads in file system calls do not see KeyboardInterrupt, so a signal exits at once.
+    # That is safe: the record is written whole, and unsaved repos keep their .cache for the next run.
+    interrupt.install()
     gid = None
     if args.group:
         try:
