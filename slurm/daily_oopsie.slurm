@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -J oopsie-daily
 #SBATCH -A IRI23005
-#SBATCH -p normal
+#SBATCH -p vm-small
 #SBATCH -N 1
 #SBATCH -n 1
 #SBATCH -t 2-00:00:00
@@ -13,6 +13,7 @@ umask 007
 SECONDS=0
 
 export HF_HUB_DISABLE_XET=1
+export OOPSIE_BACKEND=$SCRATCH/oopsie-backend
 
 # The scron entry (daily.scron) fetches this repo's main into $SCRATCH/oopsie/oopsie-backend and
 # runs this script from there.

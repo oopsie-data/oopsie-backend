@@ -342,10 +342,10 @@ video:
     duration_tol_s: 0.5  # flag if the longest and shortest camera differ by more than this
 
 sampling:
-  default_episode_limit: 200 # max episodes checked per dataset; --limit 0 means unlimited
-  video_episode_limit: 100  # of those, how many per dataset also get the video checks (decoding is slow); null = all of them
-  random: true  # random sample per dataset instead of the first N in sorted path order
-  random_seed: null  # set an int for a reproducible sample
+  default_episode_limit: 0 # max episodes checked per dataset; --limit 0 means unlimited
+  video_episode_limit: 0  # of those, how many per dataset also get the video checks (decoding is slow); null = all of them
+  random: false  # random sample per dataset instead of the first N in sorted path order
+  random_seed: 0  # set an int for a reproducible sample
 
 scope:
   include_stats_excluded_datasets: false  # frozen archive snapshots (oopsiedata-v0.1, -converted-v0.1, ...)
