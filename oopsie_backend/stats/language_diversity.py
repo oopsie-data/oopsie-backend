@@ -9,6 +9,8 @@ from collections import Counter, defaultdict
 from difflib import SequenceMatcher
 from typing import Any
 
+import numpy as np
+
 TOP_STRINGS_LIMIT = 15
 NEAR_DUPLICATE_RATIO = 0.9
 FAILURE_LENGTH_SHORT_MAX_WORDS = 5
@@ -105,6 +107,7 @@ _PHRASAL_VERB_PREFIXES: tuple[tuple[str, str], ...] = (
 )
 
 _TOKEN_RE = re.compile(r"[a-z']+")
+_NON_ALNUM_RE = re.compile(r"[\W_]+")
 
 
 def normalize_text(text: str) -> str:
@@ -314,32 +317,50 @@ def _top_k_share(counts: Counter[str], total: int, k: int) -> float:
     return sum(c for _, c in counts.most_common(k)) / total
 
 
+def _match_key(text: str) -> str:
+    """Lowercased text without whitespace or punctuation, used for near-duplicate matching."""
+    return _NON_ALNUM_RE.sub("", unicodedata.normalize("NFKC", text).lower())
+
+
 def _build_near_duplicate_groups(normalized_strings: list[str]) -> list[list[str]]:
-    """Greedy clusters of normalized strings with SequenceMatcher ratio >= threshold."""
-    groups: list[list[str]] = []
-    # One matcher per representative caches its analysis; ratio <= 2*min(la, lb)/(la+lb),
-    # so representatives whose length differs too much are skipped before any matching.
-    matchers: list[SequenceMatcher] = []
+    """Greedy clusters of normalized strings whose match keys have SequenceMatcher ratio >= threshold.
+
+    Strings with the same match key always share a group.
+    """
+    by_key: dict[str, list[str]] = defaultdict(list)
     for text in sorted(set(normalized_strings)):
-        if not text:
-            continue
-        la = len(text)
+        key = _match_key(text)
+        if key:
+            by_key[key].append(text)
+    keys = sorted(by_key)
+    if not keys:
+        return []
+    # Character histograms give SequenceMatcher.quick_ratio, an upper bound on ratio(),
+    # for all representatives at once; ratio() runs only on those that pass it.
+    alphabet = {c: i for i, c in enumerate(sorted(set().union(*keys)))}
+    rep_counts = np.zeros((len(keys), len(alphabet)), dtype=np.int32)
+    rep_lengths = np.zeros(len(keys), dtype=np.int64)
+
+    groups: list[list[str]] = []
+    matchers: list[SequenceMatcher] = []
+    for key in keys:
+        hist = np.bincount([alphabet[c] for c in key], minlength=len(alphabet))
+        n = len(groups)
         placed = False
-        for group, matcher in zip(groups, matchers):
-            lb = len(group[0])
-            if 2 * min(la, lb) < NEAR_DUPLICATE_RATIO * (la + lb):
-                continue
-            matcher.set_seq1(text)
-            if (
-                matcher.quick_ratio() >= NEAR_DUPLICATE_RATIO
-                and matcher.ratio() >= NEAR_DUPLICATE_RATIO
-            ):
-                group.append(text)
-                placed = True
-                break
+        if n:
+            shared = np.minimum(rep_counts[:n], hist).sum(axis=1)
+            bound = 2.0 * shared / (rep_lengths[:n] + len(key))
+            for g in np.flatnonzero(bound >= NEAR_DUPLICATE_RATIO):
+                matchers[g].set_seq1(key)
+                if matchers[g].ratio() >= NEAR_DUPLICATE_RATIO:
+                    groups[g].extend(by_key[key])
+                    placed = True
+                    break
         if not placed:
-            groups.append([text])
-            matchers.append(SequenceMatcher(None, b=text))
+            rep_counts[n] = hist
+            rep_lengths[n] = len(key)
+            groups.append(list(by_key[key]))
+            matchers.append(SequenceMatcher(None, b=key))
     return groups
 
 

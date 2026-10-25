@@ -2456,7 +2456,8 @@ def render_internal_report_html(data: dict) -> str:
       descEl.textContent =
         'Start from ' + normalizedUnique.toLocaleString() + ' normalized strings. ' +
         'Greedy clustering: sort strings alphabetically; each joins the first group whose representative ' +
-        'has ≥' + Math.round(threshold * 100) + '% Python SequenceMatcher character similarity. ' +
+        'has ≥' + Math.round(threshold * 100) + '% Python SequenceMatcher character similarity, ' +
+        'compared without case, whitespace and punctuation. ' +
         merges.toLocaleString() + ' group(s) merge 2+ strings; ' +
         singletons.toLocaleString() + ' group(s) contain a single string.';
 
