@@ -76,7 +76,7 @@ uv run oopsie pipeline run postqa --graph dag.png
 | `imports` | `imported_datasets` (manual) |
 | `training` | `training_data` (manual); needs `--set training_recipe=configs/training/<recipe>.yaml` |
 
-`configs/pipeline.yaml` holds every input a stage may need: the mirror, the index, the cache directory, the worker count, whether to query the Hub, the reports directory, the website `stats.json`, the split and annotation configs, the training directories and recipe, and `stage_dir`. With `stage_dir` set, QA and training first copy the episodes they read to that directory (`common/staging.py`); on LS6 it is on `$SCRATCH`.
+`configs/pipeline.yaml` holds every input a stage may need: the mirror, the index, the cache directory, the worker count, whether to query the Hub, the reports directory, the website `stats.json`, the split and annotation configs, the training directories and recipe, and `stage_dir`. With `stage_dir` set, QA and training copy the episodes they read to that directory (`common/staging.py`); on LS6 it is on `$SCRATCH`. They copy at most 500 episodes at a time and remove each chunk's copies once they are done with it, so the dataset is never copied as a whole.
 
 Flags:
 

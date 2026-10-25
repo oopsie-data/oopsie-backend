@@ -8,11 +8,12 @@ Usage:
 
 Steps:
 
-1. Select episodes from the index (``training/select.py``) and, with
-   ``--stage-dir``, copy them to fast storage (``common/staging.py``).
-2. Compute each robot's gripper range, used to normalize gripper positions.
+1. Select episodes from the index (``training/select.py``).
+2. Compute each robot's gripper range from the mirror, used to normalize gripper positions.
 3. Unify every selected episode into ``episodes/`` (``training/unify.py``); unified
-   episodes that are still current are reused.
+   episodes that are still current are reused. With ``--stage-dir``, episodes are
+   copied to fast storage (``common/staging.py``) one chunk at a time and each
+   chunk's copies are removed once it is unified.
 4. Write ``manifest.parquet`` (every selected episode with its status, skip reason
    and labels), ``layout.json`` and ``recipe.yaml``, then each format in ``formats``
    (``training/writers/registry.py``) into ``<format>/``.
@@ -39,7 +40,7 @@ import polars as pl
 import yaml
 
 from oopsie_backend.common.repos import DEFAULT_DATA_DIR, episode_path
-from oopsie_backend.common.staging import stage_episodes
+from oopsie_backend.common.staging import chunks, stage_episodes, unstage_episodes
 from oopsie_backend.index.store import DEFAULT_INDEX, KEY, read_index, update_columns
 from oopsie_backend.training.layout import build_layout
 from oopsie_backend.training.recipe import load_recipe, unify_hash
@@ -67,23 +68,32 @@ def gripper_ranges(selected: pl.DataFrame, data_dir: Path, workers: int) -> dict
     return ranges
 
 
-def unify_all(selected: pl.DataFrame, recipe: dict, data_dir: Path, episodes_dir: Path, workers: int) -> pl.DataFrame:
+def unify_all(
+    selected: pl.DataFrame, recipe: dict, data_dir: Path, episodes_dir: Path, workers: int, stage_dir: Path | None = None
+) -> pl.DataFrame:
     episodes_dir.mkdir(parents=True, exist_ok=True)
     ranges = gripper_ranges(selected, data_dir, workers)
     uhash = unify_hash(recipe)
     rows = list(selected.iter_rows(named=True))
-    jobs = [
-        (r[KEY], r["repo_path"], episode_path(data_dir, r["dataset_repo"], r["repo_path"]), episodes_dir, recipe, uhash, ranges.get(robot_id(r)))
-        for r in rows
-    ]
     results = []
     with ProcessPoolExecutor(max_workers=workers) as pool:
-        for i, result in enumerate(pool.map(unify_episode, jobs, chunksize=1), 1):
-            if result.get("traceback"):
-                _log(result.pop("traceback"))
-            results.append(result)
-            if i % 200 == 0 or i == len(jobs):
-                _log(f"  {i}/{len(jobs)} episode(s) unified")
+        for chunk in chunks(rows) if stage_dir is not None else [rows]:
+            episodes = [(r["dataset_repo"], r["repo_path"]) for r in chunk]
+            read_dir = stage_episodes(data_dir, stage_dir, episodes, workers) if stage_dir is not None else data_dir
+            jobs = [
+                (r[KEY], r["repo_path"], episode_path(read_dir, r["dataset_repo"], r["repo_path"]), episodes_dir, recipe, uhash, ranges.get(robot_id(r)))
+                for r in chunk
+            ]
+            try:
+                for result in pool.map(unify_episode, jobs, chunksize=1):
+                    if result.get("traceback"):
+                        _log(result.pop("traceback"))
+                    results.append(result)
+                    if len(results) % 200 == 0 or len(results) == len(rows):
+                        _log(f"  {len(results)}/{len(rows)} episode(s) unified")
+            finally:
+                if stage_dir is not None:
+                    unstage_episodes(data_dir, stage_dir, episodes)
     manifest = pl.DataFrame(
         [
             {KEY: r[KEY], "dataset_repo": r["dataset_repo"], "repo_path": r["repo_path"], **{c: r[c] for c in LABELS}, **res}
@@ -143,9 +153,7 @@ def materialize(
     df = read_index(index, COLUMNS, optional=OPTIONAL)
     selected = select_episodes(df, recipe)
     _log(f"{name}: {selected.height} episode(s) selected from {df.height}")
-    if stage_dir is not None:
-        data_dir = stage_episodes(data_dir, stage_dir, list(zip(selected["dataset_repo"], selected["repo_path"])), workers)
-    manifest = unify_all(selected, recipe, data_dir, work / "episodes", workers)
+    manifest = unify_all(selected, recipe, data_dir, work / "episodes", workers, stage_dir)
     included = manifest.filter(pl.col("status").is_in(["written", "reused"]))
     counts = Counter(manifest["status"].to_list())
     _log(f"{name}: " + ", ".join(f"{n} {s}" for s, n in sorted(counts.items())))
@@ -183,7 +191,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--index", type=Path, default=DEFAULT_INDEX)
     parser.add_argument("--out", type=Path, required=True, help="Where the finished dataset is kept")
     parser.add_argument("--work-dir", type=Path, default=None, help="Where it is built; default: --out")
-    parser.add_argument("--stage-dir", type=Path, default=None, help="Copy the selected episodes here first and read them there")
+    parser.add_argument("--stage-dir", type=Path, default=None, help="Copy the selected episodes here chunk by chunk and read them there")
     parser.add_argument("--workers", type=int, default=8)
     args = parser.parse_args(argv)
     materialize(args.recipe, args.data_dir, args.index, args.out, args.work_dir or args.out, args.workers, args.stage_dir)

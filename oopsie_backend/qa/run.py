@@ -11,8 +11,11 @@ episode key and ``sampling.random_seed``, so it stays the same as data arrives.
 Only on-disk, readable, non-duplicate episodes of contributor repos are sampled,
 and of external datasets (``configs/imports.yaml``) with ``scope.include_external_datasets``.
 
-With ``--stage-dir``, the episodes to check and their videos are first copied to
-that directory (``common/staging.py``), so the checks read fast local storage.
+With ``--stage-dir``, the episodes to check and their videos are copied to that
+directory (``common/staging.py``), so the checks read fast local storage. They
+are staged in chunks of ``STAGE_CHUNK``: the next chunk is copied while the
+current one is checked, and a chunk's copies are removed once it is done or the
+run stops, so at most two chunks occupy the staging directory.
 
 A check runs on an episode only when the index holds no result of its current
 version (``qa/checks/base.py``). Adding, editing or re-configuring a check
@@ -31,20 +34,22 @@ import hashlib
 import sys
 import time
 from collections import Counter, defaultdict
-from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, wait
+from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, ThreadPoolExecutor, wait
 from pathlib import Path
 
 import polars as pl
 
 from oopsie_backend.common import interrupt
 from oopsie_backend.common.io import now_timestamps, write_stats_json
+from oopsie_backend.common.progress import Progress
 from oopsie_backend.common.repos import (
     CONTRIBUTOR,
     DEFAULT_DATA_DIR,
     EXTERNAL,
     episode_path,
 )
-from oopsie_backend.common.staging import stage_episodes
+from oopsie_backend.common.staging import chunks as split_chunks
+from oopsie_backend.common.staging import stage_episodes, unstage_episodes
 from oopsie_backend.index.store import DEFAULT_INDEX, KEY, read_index, update_columns
 from oopsie_backend.qa.action_qa_config import CONFIG as ACTION_QA_CONFIG
 from oopsie_backend.qa.action_qa_report import render_action_qa_report
@@ -65,35 +70,6 @@ MAX_FLAGGED_DETAIL = 20000
 
 def _log(message: str) -> None:
     print(message, file=sys.stderr)
-
-
-def _duration(seconds: float) -> str:
-    if seconds == float("inf"):
-        return "?"
-    m, s = divmod(int(seconds), 60)
-    h, m = divmod(m, 60)
-    return f"{h}:{m:02d}:{s:02d}"
-
-
-class Progress:
-    """Logs ``n/total`` with rate and estimated remaining time at most every ``interval`` seconds."""
-
-    def __init__(self, total: int, interval: float = 30.0):
-        self.total, self.interval = total, interval
-        self.start = self.last = time.monotonic()
-
-    def tick(self, n: int) -> None:
-        t = time.monotonic()
-        if n < self.total and t - self.last < self.interval:
-            return
-        self.last = t
-        elapsed = t - self.start
-        rate = n / elapsed if elapsed else 0.0
-        remaining = (self.total - n) / rate if rate else float("inf")
-        _log(
-            f"  {n}/{self.total} episode(s) checked ({n / self.total:.0%}), {rate:.2f}/s, "
-            f"elapsed {_duration(elapsed)}, remaining ~{_duration(remaining)}"
-        )
 
 
 def merge_entries(entries: list[dict] | None, new: list[dict]) -> list[dict]:
@@ -279,46 +255,74 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     rows = {r[KEY]: r for r in sample.select(KEY, "dataset_repo", "repo_path").iter_rows(named=True)}
-    read_dir = data_dir
-    if args.stage_dir and keys:
-        read_dir = stage_episodes(data_dir, args.stage_dir, [(rows[k]["dataset_repo"], rows[k]["repo_path"]) for k in keys], workers)
-    jobs = [
-        (k, episode_path(read_dir, rows[k]["dataset_repo"], rows[k]["repo_path"]), rows[k]["repo_path"], pending[k], config)
-        for k in keys
-    ]
+
+    def episodes(chunk: list[str]) -> list[tuple[str, str]]:
+        return [(rows[k]["dataset_repo"], rows[k]["repo_path"]) for k in chunk]
+
+    def jobs(chunk: list[str], read_dir: Path) -> list[tuple]:
+        return [
+            (k, episode_path(read_dir, rows[k]["dataset_repo"], rows[k]["repo_path"]), rows[k]["repo_path"], pending[k], config)
+            for k in chunk
+        ]
+
+    stage_dir = args.stage_dir
+    chunks = split_chunks(keys) if stage_dir else [keys]
     all_checks = enabled_checks(config)
     entries = dict(zip(df[KEY].to_list(), df["qa_results"].to_list())) if "qa_results" in df.columns else {}
     unsaved: set[str] = set()
     run_at = now()
-    progress = Progress(len(jobs))
+    progress = Progress(len(keys), "episode(s) checked")
     last_save = time.monotonic()
     finished = False
     pool = ProcessPoolExecutor(max_workers=workers)
+    stager = ThreadPoolExecutor(max_workers=1)
+
+    def stage(chunk: list[str]):
+        return stager.submit(stage_episodes, data_dir, stage_dir, episodes(chunk), workers, interrupt.stopping)
+
+    staged_now: list[list[str]] = [chunks[0]] if stage_dir and keys else []
     with interrupt.stoppable():
         try:
-            running = {pool.submit(run_episode, job) for job in jobs}
+            staged = stage(chunks[0]) if stage_dir and keys else None
             done_count = 0
-            while running:
-                done, running = wait(running, timeout=1.0, return_when=FIRST_COMPLETED)
-                for future in done:
-                    key, results, _ = future.result()
-                    new = [result_entry(n, versions[n], run_at, r) for n, r in results.items()]
-                    entries[key] = merge_entries(entries.get(key), new)
-                    unsaved.add(key)
-                    done_count += 1
-                    progress.tick(done_count)
-                if interrupt.stopping():
-                    raise KeyboardInterrupt
-                if running and time.monotonic() - last_save >= save_interval:
-                    save(args.index, entries, unsaved, versions, all_checks)
-                    unsaved.clear()
-                    last_save = time.monotonic()
+            for i, chunk in enumerate(chunks):
+                read_dir = data_dir
+                staged_now = [chunk, *chunks[i + 1 : i + 2]] if stage_dir else []
+                if staged is not None:
+                    while not wait([staged], timeout=1.0).done:
+                        if interrupt.stopping():
+                            raise KeyboardInterrupt
+                    read_dir = staged.result()
+                    _log(f"chunk {i + 1}/{len(chunks)}: {len(chunk)} episode(s)")
+                    staged = stage(chunks[i + 1]) if i + 1 < len(chunks) else None
+                running = {pool.submit(run_episode, job) for job in jobs(chunk, read_dir)}
+                while running:
+                    done, running = wait(running, timeout=1.0, return_when=FIRST_COMPLETED)
+                    for future in done:
+                        key, results, _ = future.result()
+                        new = [result_entry(n, versions[n], run_at, r) for n, r in results.items()]
+                        entries[key] = merge_entries(entries.get(key), new)
+                        unsaved.add(key)
+                        done_count += 1
+                        progress.tick(done_count)
+                    if interrupt.stopping():
+                        raise KeyboardInterrupt
+                    if running and time.monotonic() - last_save >= save_interval:
+                        save(args.index, entries, unsaved, versions, all_checks)
+                        unsaved.clear()
+                        last_save = time.monotonic()
+                if stage_dir:
+                    unstage_episodes(data_dir, stage_dir, episodes(chunk))
             finished = True
         finally:
             pool.shutdown(wait=False, cancel_futures=True)
             if not finished and unsaved:
                 save(args.index, entries, unsaved, versions, all_checks)
                 _log(f"interrupted; saved the results of {len(unsaved)} more episode(s) to {args.index}")
+            stager.shutdown(wait=True, cancel_futures=True)
+            if not finished:
+                for chunk in staged_now:
+                    unstage_episodes(data_dir, stage_dir, episodes(chunk))
 
     # Every episode with results, so dropped checks and version changes reach the summary columns.
     touched = [k for k, v in entries.items() if v]

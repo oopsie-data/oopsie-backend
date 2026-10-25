@@ -22,7 +22,7 @@ flowchart LR
 | `oopsie-backend/` (latest `main`) | the scron entry, before the job starts |
 | `oopsie-docs/` (latest `main`) | the job; it commits and pushes `stats.json` when it changed |
 | `tools/bin/uv`, `tools/uv-python`, `uv-cache/`, `hf_home/` | the job installs uv if missing |
-| `episodes/` | QA and training (`stage_dir`): the episodes they read, with their videos; files are copied again only when they changed |
+| `episodes/` | QA and training (`stage_dir`): the chunk of at most 500 episodes they are reading, with their videos (QA also holds the next chunk); each chunk is removed when it is done |
 | `training/` | training (`training_work_dir`): unified episodes and formats, before the finished dataset is copied to corral |
 | `episodes/imports/` | imports: conversions in progress, moved to `oopsiedata/imports/` when done |
 
