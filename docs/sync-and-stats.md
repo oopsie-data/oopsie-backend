@@ -205,13 +205,13 @@ next stats run:
 - The placeholder lab ids omitted from public stats. Which repos are archives or
   infra is set in `configs/repositories.yaml`, and which are imported (external)
   datasets in `configs/imports.yaml`.
-- The list of placeholder operator names (e.g. `pending_operator`, `unknown`) that
-  never count as a real individual.
+- The list of placeholder operator names (e.g. `pending_operator`, `unknown`),
+  whose episodes are flagged in the dataset inventory.
 - The alpha/beta lab requirement thresholds and on/off toggles that drive the
   colored status dot on each row of the "All datasets" inventory: a lab is
   "alpha" if any of its dataset repos predates `alpha_cutoff_date`, otherwise
-  "beta"; a lab *passes* its tier if even one individual clears every *enabled*
-  clause for that tier (never summed across people). `task_diversity` and
+  "beta"; a lab *passes* its tier if its episodes, summed over all of its
+  datasets and operators, clear every *enabled* clause for that tier. `task_diversity` and
   `per_task_cap` are placeholders - not implemented yet, always disabled.
 
 If the file is missing, the code falls back to built-in defaults matching the

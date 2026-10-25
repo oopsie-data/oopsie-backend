@@ -36,6 +36,7 @@ import oopsie_backend.qa.checks.general.length_mismatch  # noqa: F401
 import oopsie_backend.qa.checks.general.placeholder_metadata  # noqa: F401
 import oopsie_backend.qa.checks.general.required_state_keys  # noqa: F401
 import oopsie_backend.qa.checks.general.scale_consistency  # noqa: F401
+import oopsie_backend.qa.checks.general.static_robot  # noqa: F401
 import oopsie_backend.qa.checks.general.tracking_residual  # noqa: F401
 import oopsie_backend.qa.checks.joint_position.delta_detection  # noqa: F401
 import oopsie_backend.qa.checks.joint_position.dof  # noqa: F401

@@ -16,6 +16,7 @@ CHECK_DESCRIPTIONS = {
     ("general", "duplicate_pairs"): "Two different action types hold the same values (a likely copy-paste bug)",
     ("general", "length_mismatch"): "An action and its matching robot state have different numbers of steps",
     ("general", "action_copies_state"): "Actions are exact copies of the recorded state, not real commands",
+    ("general", "static_robot"): "The robot arm barely moves over the whole episode",
     ("general", "action_chunk_shape"): "An arm action step holds a policy's whole action chunk instead of the one action executed",
     ("general", "constant_action"): "An arm action never changes over the whole episode (stuck policy or placeholder actions)",
     ("general", "command_rate"): "Each arm action is held for the same N steps: commands arrive at control_freq / N, not the declared control_freq",

@@ -481,6 +481,54 @@ def _run_general_checks(
                 findings.append(_finding(category, "delta_detection", key, **dv))
 
 
+def robust_range(values: np.ndarray, quantile: float) -> np.ndarray:
+    """Per-column spread between the ``quantile`` and ``1 - quantile`` quantiles, so a few
+    glitched steps don't count as motion."""
+    return np.quantile(values, 1.0 - quantile, axis=0) - np.quantile(values, quantile, axis=0)
+
+
+def _run_static_robot_check(
+    states: dict[str, np.ndarray],
+    cfg: dict,
+    findings: list[dict],
+    skips: list[dict],
+    checked: set[tuple[str, str]],
+    *,
+    is_biarm: bool,
+    state_names: list[str],
+) -> None:
+    """Flags an episode whose arm barely moves: every measured arm state (non-gripper joints
+    in radians, end-effector xyz in metres) spans less than its threshold."""
+    category, test, key = "general", "static_robot", "robot_state"
+    motion: dict[str, float] = {}
+    joints = states.get("joint_position")
+    if joints is not None and joints.ndim == 2 and len(joints) >= 2 and np.all(np.isfinite(joints)):
+        columns = (
+            [i for i, n in enumerate(state_names) if not _is_gripper_joint(n)]
+            if len(state_names) == joints.shape[1]
+            else list(range(joints.shape[1]))
+        )
+        if columns and np.max(np.abs(joints[:, columns])) <= cfg["max_abs_rad"]:
+            motion["joint_range_rad"] = float(np.max(robust_range(joints[:, columns], cfg["quantile"])))
+    pose = states.get("cartesian_position")
+    n_arms = 2 if is_biarm else 1
+    if (
+        pose is not None and pose.ndim == 2 and len(pose) >= 2 and pose.shape[1] % n_arms == 0
+        and pose.shape[1] // n_arms >= 3 and np.all(np.isfinite(pose))
+    ):
+        width = pose.shape[1] // n_arms
+        xyz = np.concatenate([pose[:, a * width : a * width + 3] for a in range(n_arms)], axis=1)
+        if np.max(np.abs(xyz)) <= cfg["max_abs_position_m"]:
+            motion["position_range_m"] = float(np.max(robust_range(xyz, cfg["quantile"])))
+    if not motion:
+        skips.append(_skip(category, test, key, "no_arm_state"))
+        return
+    checked.add((category, test))
+    limits = {"joint_range_rad": cfg["max_joint_range_rad"], "position_range_m": cfg["max_position_range_m"]}
+    if all(v < limits[k] for k, v in motion.items()):
+        findings.append(_finding(category, test, key, **motion))
+
+
 # ── cartesian_position ────────────────────────────────────────────────────────
 
 
@@ -1625,6 +1673,16 @@ def run_action_qa_on_episode(
     _run_general_checks(
         actions, states, declared_action_space, config["general"], findings, skips, checked, control_freq=control_freq
     )
+    if config["general"]["static_robot"]["enabled"]:
+        _run_static_robot_check(
+            states,
+            config["general"]["static_robot"],
+            findings,
+            skips,
+            checked,
+            is_biarm=is_biarm,
+            state_names=state_joint_names or [],
+        )
     if "cartesian_position" in declared_action_space:
         _run_cartesian_position_checks(
             actions,

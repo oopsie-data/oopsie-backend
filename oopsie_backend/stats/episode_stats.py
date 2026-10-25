@@ -388,10 +388,7 @@ def _attach_requirement_status(
         entry["lab_id"] = primary_lab
         entry["lab_type"] = info["lab_type"] if info else None
         entry["requirement_status"] = info["status"] if info else "no_data"
-        entry["qualifying_individual"] = info["qualifying_individual"] if info else None
-        entry["best_individual"] = info["best_individual"] if info else None
-        entry["best_individual_stats"] = info["best_individual_stats"] if info else None
-        entry["individuals_considered"] = info["individuals_considered"] if info else 0
+        entry["requirement_stats"] = info["requirement_stats"] if info else None
         entry["placeholder_operator_episodes"] = info["placeholder_operator_episodes"] if info else 0
         entry["placeholder_operator_names"] = info["placeholder_operator_names"] if info else []
 

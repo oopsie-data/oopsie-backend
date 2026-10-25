@@ -12,9 +12,15 @@ qa_checks:
   - general/action_chunk_shape     # each step holds an action chunk, not one action
   - general/duplicate_pairs        # two action types hold the same values
   - general/required_state_keys    # a state the action space needs is missing
+  - general/static_robot           # the arm barely moves over the whole episode
   - joint_position/dof             # joint count disagrees with the joint names or state
   - joint_velocity/dof
   - cartesian_position/quaternion_shape
   - cartesian_velocity/shape
   - video/decoding                 # a video is missing or fails to decode
   - video/frozen                   # a camera stalls for a stretch while the robot state moves
+
+# QA checks that make an episode critical only when one video (the finding's key) has at least this
+# many findings. A check listed here must not also be in qa_checks.
+qa_check_min_findings:
+  video/corrupted_frames: 5        # single frames unlike both their neighbours

@@ -19,8 +19,8 @@ labs:
   # Operator names that are template/placeholder values, not a real person.
   # Matched case-insensitively after trimming whitespace (an empty/blank name is
   # always treated as a placeholder too, regardless of this list). Episodes
-  # credited to these names never count toward the per-individual requirement
-  # check below, but ARE still shown (flagged) in the dataset inventory.
+  # credited to these names count toward the lab requirements below and are
+  # flagged in the dataset inventory.
   placeholder_operator_names:
     - unknown
     - operator
@@ -40,8 +40,8 @@ labs:
 # ===== Lab requirements =======
 # ===============================
 
-# A lab passes its tier if even ONE individual (operator) within it independently
-# meets every *enabled* clause below - requirements are never summed across people.
+# A lab passes its tier if its episodes, summed over all of its datasets and
+# operators, meet every *enabled* clause below.
 requirements:
   # A lab is "alpha" if ANY of its dataset repos has a real creation date before
   # this cutoff (per the Hub's repo creation timestamp); otherwise it's "beta".
@@ -50,17 +50,17 @@ requirements:
   alpha:
     enabled: true
     # "Qualifying episode" = has a valid success/failure annotation.
-    min_qualifying_episodes_per_individual: 50
+    min_qualifying_episodes: 50
 
   beta:
     # 1. Volume.
     volume:
       enabled: true
-      min_qualifying_episodes_per_individual: 750
-      min_failures_per_individual: 350
+      min_qualifying_episodes: 750
+      min_failures: 350
       # 750 rollouts averaging 24s each = 5h, so this also rules out e.g. all
       # 1-second rollouts meeting the episode count alone.
-      min_duration_hours_per_individual: 5.0
+      min_duration_hours: 5.0
     # 2. Task diversity - not yet implemented. Always treated as disabled.
     task_diversity:
       enabled: false

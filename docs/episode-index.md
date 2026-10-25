@@ -77,7 +77,7 @@ See [action checks](action-checks.md#running-and-adding-checks).
 
 ### Critical episodes (`postqa.critical`)
 
-`critical` and `critical_reasons` (`read_error`, `duplicate_video`, `qa_error` or `qa:<category>/<test>`), as configured in `configs/critical.yaml`.
+`critical` and `critical_reasons` (`read_error`, `duplicate_video`, `qa_error` or `qa:<category>/<test>`), as configured in `configs/critical.yaml`. Checks under `qa_checks` make an episode critical on any finding; checks under `qa_check_min_findings` only when one video has at least the given number of findings.
 
 ### Manual QA notes (`qa.merge_notes --index`)
 

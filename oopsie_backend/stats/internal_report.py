@@ -243,10 +243,7 @@ def _dataset_inventory_section(dataset_inventory: dict[str, dict]) -> str:
                 "bulk": bool(info.get("bulk_import")),
                 "lab_type": info.get("lab_type"),
                 "status": info.get("requirement_status"),
-                "qualifying_individual": info.get("qualifying_individual"),
-                "best_individual": info.get("best_individual"),
-                "best_individual_stats": info.get("best_individual_stats"),
-                "individuals_considered": int(info.get("individuals_considered") or 0),
+                "requirement_stats": info.get("requirement_stats"),
                 "placeholder_episodes": int(info.get("placeholder_operator_episodes") or 0),
                 "placeholder_names": info.get("placeholder_operator_names") or [],
             }
@@ -256,13 +253,13 @@ def _dataset_inventory_section(dataset_inventory: dict[str, dict]) -> str:
     thresholds = {
         "alpha": {
             "enabled": req["alpha"]["enabled"],
-            "min_qualifying_episodes": req["alpha"]["min_qualifying_episodes_per_individual"],
+            "min_qualifying_episodes": req["alpha"]["min_qualifying_episodes"],
         },
         "beta": {
             "enabled": req["beta"]["volume"]["enabled"],
-            "min_qualifying_episodes": req["beta"]["volume"]["min_qualifying_episodes_per_individual"],
-            "min_failures": req["beta"]["volume"]["min_failures_per_individual"],
-            "min_duration_hours": req["beta"]["volume"]["min_duration_hours_per_individual"],
+            "min_qualifying_episodes": req["beta"]["volume"]["min_qualifying_episodes"],
+            "min_failures": req["beta"]["volume"]["min_failures"],
+            "min_duration_hours": req["beta"]["volume"]["min_duration_hours"],
         },
     }
     thresholds_payload = json.dumps(thresholds, ensure_ascii=False).replace("</", "<\\/")
@@ -296,7 +293,7 @@ def _dataset_inventory_section(dataset_inventory: dict[str, dict]) -> str:
   <div class="inventory-legend">
     <span class="legend-item"><span class="req-dot req-dot-pass"></span> Requirements met</span>
     <span class="legend-item"><span class="req-dot req-dot-fail"></span> Not met</span>
-    <span class="legend-item"><span class="req-dot req-dot-no_data"></span> No individual data yet</span>
+    <span class="legend-item"><span class="req-dot req-dot-no_data"></span> No data yet</span>
     <span class="legend-item"><span class="req-dot req-dot-not_evaluated"></span> Requirement disabled</span>
     <span class="legend-item"><span class="req-placeholder-dot"></span> Has placeholder-operator episodes</span>
   </div>
@@ -1399,6 +1396,14 @@ def render_internal_report_html(data: dict) -> str:
       white-space: nowrap;
     }}
     .inventory-date.is-fallback {{ font-style: italic; }}
+    .inventory-req {{
+      grid-column: 1 / -1;
+      margin-top: -0.4rem;
+      padding-left: 1rem;
+      font-size: 0.75rem;
+      color: var(--ink-muted);
+      font-feature-settings: "tnum";
+    }}
     @media (max-width: 760px) {{
       .inventory-head-row, .inventory-axis-row {{ display: none; }}
       .inventory-row {{
@@ -2079,9 +2084,25 @@ def render_internal_report_html(data: dict) -> str:
     function statusLabel(status) {{
       if (status === 'pass') return 'Meets requirements';
       if (status === 'fail') return 'Does not meet requirements';
-      if (status === 'no_data') return 'No individual data yet';
+      if (status === 'no_data') return 'No data yet';
       if (status === 'not_evaluated') return 'Requirement disabled';
       return 'Not evaluated';
+    }}
+
+    // The lab's totals against the thresholds of its tier.
+    function requirementSummary(it) {{
+      const th = THRESHOLDS[it.lab_type];
+      if (!it.requirement_stats || !th) return '';
+      const s = it.requirement_stats;
+      const parts = [fmtInt(s.qualifying_episodes) + '/' + fmtInt(th.min_qualifying_episodes) + ' qualifying episodes'];
+      if (it.lab_type !== 'alpha') {{
+        parts.push(fmtInt(s.failures) + '/' + fmtInt(th.min_failures) + ' failures');
+        parts.push(s.duration_hours.toFixed(1) + '/' + th.min_duration_hours.toFixed(1) + ' hours');
+      }}
+      let summary = parts.join(', ');
+      const n = s.contributors_supported;
+      if (n != null) summary += ' — supports ' + fmtInt(n) + (n === 1 ? ' contributor' : ' contributors');
+      return summary;
     }}
 
     function requirementTooltip(it) {{
@@ -2089,30 +2110,16 @@ def render_internal_report_html(data: dict) -> str:
       const typeLabel = it.lab_type ? (it.lab_type === 'alpha' ? 'Alpha' : 'Beta') + ' lab' : 'Lab type unknown';
       lines.push(typeLabel + ' — ' + statusLabel(it.status));
 
-      const th = THRESHOLDS[it.lab_type];
-      const who = it.status === 'pass' ? it.qualifying_individual : it.best_individual;
-      if (who && it.best_individual_stats && th) {{
-        const s = it.best_individual_stats;
-        const whoLabel = it.status === 'pass' ? who : ('Closest: ' + who);
-        if (it.lab_type === 'alpha') {{
-          lines.push(whoLabel + ' — ' + fmtInt(s.qualifying_episodes) + '/' + fmtInt(th.min_qualifying_episodes) + ' qualifying episodes');
-        }} else {{
-          lines.push(
-            whoLabel + ' — ' + fmtInt(s.qualifying_episodes) + '/' + fmtInt(th.min_qualifying_episodes) + ' qualifying, ' +
-            fmtInt(s.failures) + '/' + fmtInt(th.min_failures) + ' failures, ' +
-            s.duration_hours.toFixed(1) + '/' + th.min_duration_hours.toFixed(1) + ' hours'
-          );
-        }}
-        if (it.individuals_considered > 1) {{
-          lines.push('(' + it.individuals_considered + ' individuals considered)');
-        }}
+      const summary = requirementSummary(it);
+      if (summary) {{
+        lines.push(summary);
       }} else if (it.status === 'no_data') {{
-        lines.push('No non-placeholder individual submissions yet.');
+        lines.push('No submissions yet.');
       }}
       if (it.placeholder_episodes) {{
         lines.push(
           '⚠ ' + fmtInt(it.placeholder_episodes) + ' episode(s) credited to a placeholder operator name (' +
-          it.placeholder_names.join(', ') + ') — excluded from this check.'
+          it.placeholder_names.join(', ') + ').'
         );
       }}
       return lines.join('\\n');
@@ -2231,6 +2238,10 @@ def render_internal_report_html(data: dict) -> str:
           '<div class="inventory-metric" title="' + esc(hrsTitle) + '"><div class="bar-track"><div class="' + fillClass + '" style="width:' + hrsWidth + '%"></div></div>' +
             '<span class="bar-count">' + fmtHours(it.hours) + '</span></div>' +
           '<span class="inventory-date' + fallback + '" title="' + esc(dateTitle) + '">' + esc(dateLabel) + '</span>';
+        const summary = requirementSummary(it);
+        if (summary) {{
+          row.innerHTML += '<span class="inventory-req">' + esc(summary) + '</span>';
+        }}
         rowsEl.appendChild(row);
       }});
     }}

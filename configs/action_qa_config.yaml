@@ -50,6 +50,15 @@ general:
     action: confirm_and_discuss
     atol: 1.0e-6  # how close an action must be to the state to count as a copy
     min_fraction: 0.9  # flag if at least this share of steps are copies of the same step's state (the next step's state is not flagged)
+  static_robot:  # checks whether the robot arm barely moves over the whole episode (an idle or failed recording)
+    enabled: true
+    confidence: high_confidence
+    action: confirm_and_discuss
+    max_joint_range_rad: 0.05  # flag if no non-gripper joint spans this much (about 3 degrees)
+    max_position_range_m: 0.02  # ... and the end-effector xyz spans less than this in every axis
+    quantile: 0.01  # spans are measured between this and the 1 - quantile quantile, so single glitches don't count
+    max_abs_rad: 6.5  # joint states beyond this aren't radians and are left out
+    max_abs_position_m: 5.0  # xyz states beyond this aren't metres and are left out
   scale_consistency:  # checks whether actions are on the same scale as the robot state (gripper position only)
     enabled: false
     confidence: lower_confidence

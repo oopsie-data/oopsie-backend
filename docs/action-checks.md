@@ -60,6 +60,7 @@ Options:
 | `duplicate_pairs` | off | two declared action arrays of the same shape are equal to within `atol` (1e-9) / `rtol` (0) |
 | `length_mismatch` | on | an action and its matching state have different numbers of timesteps |
 | `action_copies_state` | on | `joint_position` or `cartesian_position` action equals the same-named state, at the same step or the next, to within `atol` (1e-6) in at least `min_fraction` (0.9) of steps. Skipped when the state never moves (`state_static`) |
+| `static_robot` | on | the arm barely moves: no non-gripper `joint_position` state spans `max_joint_range_rad` (0.05) and no `cartesian_position` xyz spans `max_position_range_m` (0.02 m). Spans run between the `quantile` (0.01) and 1 - `quantile` quantiles. A joint state beyond `max_abs_rad` (6.5) or an xyz beyond `max_abs_position_m` (5) is left out; with neither state usable the check is skipped (`no_arm_state`) |
 | `gripper_binary_present` | on | the episode has no non-empty `gripper_binary` action. Reports the gripper keys declared and recorded instead |
 | `gripper_range` | on | `gripper_binary` action falls outside [0, 1] by more than `atol` (0.05), e.g. -1/+1 encoding |
 | `gripper_command_range` | on | `gripper_position` action exceeds the episode's `gripper_position` state range by more than `max_fraction` (0.25) of the state's scale (the larger of its span and its largest absolute value), with an allowed margin of at least `min_margin` (0.05) |

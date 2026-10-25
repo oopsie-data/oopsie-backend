@@ -72,6 +72,9 @@ MESSAGES: dict[tuple[str, str], str] = {
         "The arm actions equal the recorded robot state at the same step, which suggests the "
         "actions were rebuilt from the states instead of logged as commands. Please confirm "
         "how the actions were recorded.",
+    ("general", "static_robot"):
+        "The robot arm barely moves during the episode, which points to an idle recording or a "
+        "policy that never started. Please confirm whether the episode shows a real rollout.",
     ("joint_position", "delta_detection"):
         "Joint position actions look like step-to-step changes rather than absolute joint "
         "positions. Please record absolute joint targets.",
@@ -406,6 +409,14 @@ _DETAILS = {
         f"{f['key']} equals the "
         + ("next step's" if f.get("lag") == 1 else "same step's")
         + f" state in {f['matching_fraction']:.0%} of steps"
+    ),
+    ("general", "static_robot"): lambda f: "the arm barely moves: " + ", ".join(
+        part
+        for part in (
+            f"joints span {_num(f['joint_range_rad'])} rad" if f.get("joint_range_rad") is not None else "",
+            f"end effector spans {_num(f['position_range_m'])} m" if f.get("position_range_m") is not None else "",
+        )
+        if part
     ),
     ("general", "length_mismatch"): lambda f: f"{f['key']} has {f['action_T']} steps, {f['state_key']} state has {f['state_T']}",
     ("general", "action_chunk_shape"): lambda f: f"{f['key']} shaped {tuple(f['shape'])}",

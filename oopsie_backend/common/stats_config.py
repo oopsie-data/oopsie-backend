@@ -22,13 +22,13 @@ _FALLBACK_RAW: dict = {
     },
     "requirements": {
         "alpha_cutoff_date": "2026-07-01",
-        "alpha": {"enabled": True, "min_qualifying_episodes_per_individual": 50},
+        "alpha": {"enabled": True, "min_qualifying_episodes": 50},
         "beta": {
             "volume": {
                 "enabled": True,
-                "min_qualifying_episodes_per_individual": 750,
-                "min_failures_per_individual": 350,
-                "min_duration_hours_per_individual": 5.0,
+                "min_qualifying_episodes": 750,
+                "min_failures": 350,
+                "min_duration_hours": 5.0,
             },
             "task_diversity": {"enabled": False},
             "per_task_cap": {"enabled": False},
@@ -55,21 +55,21 @@ def _build_config(raw: dict) -> dict:
             "alpha_cutoff_date": req.get("alpha_cutoff_date", "2026-07-01"),
             "alpha": {
                 "enabled": bool(alpha_raw.get("enabled", True)),
-                "min_qualifying_episodes_per_individual": int(
-                    alpha_raw.get("min_qualifying_episodes_per_individual", 50)
+                "min_qualifying_episodes": int(
+                    alpha_raw.get("min_qualifying_episodes", 50)
                 ),
             },
             "beta": {
                 "volume": {
                     "enabled": bool(volume_raw.get("enabled", True)),
-                    "min_qualifying_episodes_per_individual": int(
-                        volume_raw.get("min_qualifying_episodes_per_individual", 750)
+                    "min_qualifying_episodes": int(
+                        volume_raw.get("min_qualifying_episodes", 750)
                     ),
-                    "min_failures_per_individual": int(
-                        volume_raw.get("min_failures_per_individual", 350)
+                    "min_failures": int(
+                        volume_raw.get("min_failures", 350)
                     ),
-                    "min_duration_hours_per_individual": float(
-                        volume_raw.get("min_duration_hours_per_individual", 5.0)
+                    "min_duration_hours": float(
+                        volume_raw.get("min_duration_hours", 5.0)
                     ),
                 },
                 "task_diversity_enabled": bool(task_diversity_raw.get("enabled", False)),

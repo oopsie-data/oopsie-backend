@@ -1,10 +1,11 @@
-"""Per-individual lab requirement checks (alpha/beta tiers).
+"""Per-lab requirement checks (alpha/beta tiers).
 
 A lab is "alpha" if any of its dataset repos has a real creation date before the
 configured cutoff (``requirements.alpha_cutoff_date`` in configs/stats_config.yaml);
-otherwise it's "beta". A lab *passes* its tier if even one individual (operator)
-within it independently clears every enabled requirement clause for that tier -
-requirements are never summed across people within a lab.
+otherwise it's "beta". A lab *passes* its tier when its episodes, summed over all
+of its datasets and operators, clear every enabled requirement clause for that tier.
+``contributors_supported`` is how many times the totals clear the bar, i.e. how
+many contributors the lab's submission covers when each needs the full bar.
 
 Thresholds, the cutoff date, and which clauses are enabled all live in
 configs/stats_config.yaml.
@@ -27,9 +28,9 @@ from oopsie_backend.stats.episode_stats import (
 )
 
 # Status values attached to each lab (and, via datasets, each inventory row):
-#   "pass"          - at least one individual clears every enabled bar for their tier
-#   "fail"          - real episode data exists, but no individual clears the bar
-#   "no_data"       - no qualifying (non-placeholder) individual data at all yet
+#   "pass"          - the lab's totals clear every enabled bar for its tier
+#   "fail"          - the lab has episodes, but its totals don't clear the bar
+#   "no_data"       - the lab has no episodes yet
 #   "not_evaluated" - that lab's tier has no enabled requirement clauses right now
 
 
@@ -47,7 +48,7 @@ def _classify_lab_type(dataset_repos: set[str], created_at: dict[str, str | None
 def _tier_status_if_disabled(lab_type: str, req: dict) -> str | None:
     """Return 'not_evaluated' if the lab's tier has nothing enabled to check, else None.
 
-    task_diversity/per_task_cap aren't implemented yet (see _meets_requirement), so
+    task_diversity/per_task_cap aren't implemented yet (see _contributors_supported), so
     their `enabled` flags are intentionally ignored here - only `volume` can make
     beta "evaluated" today, regardless of what those two stub flags say.
     """
@@ -56,25 +57,25 @@ def _tier_status_if_disabled(lab_type: str, req: dict) -> str | None:
     return None if req["beta"]["volume"]["enabled"] else "not_evaluated"
 
 
-def _meets_requirement(stats: dict, lab_type: str, req: dict) -> bool:
-    if lab_type == "alpha":
-        a = req["alpha"]
-        if not a["enabled"]:
-            return False
-        return stats["qualifying"] >= a["min_qualifying_episodes_per_individual"]
+def _times(have: float, need: float) -> int | None:
+    """How many times ``have`` covers ``need``; None when ``need`` is not positive."""
+    return int(have // need) if need > 0 else None
 
-    beta = req["beta"]
-    ok = True
-    if beta["volume"]["enabled"]:
-        v = beta["volume"]
-        hours = stats["duration_seconds"] / 3600.0
-        ok = ok and (
-            stats["qualifying"] >= v["min_qualifying_episodes_per_individual"]
-            and stats["failures"] >= v["min_failures_per_individual"]
-            and hours >= v["min_duration_hours_per_individual"]
-        )
-    # task_diversity / per_task_cap: not yet implemented, never block a pass.
-    return ok
+
+def _contributors_supported(stats: dict, lab_type: str, req: dict) -> int:
+    """How many contributors the lab's totals cover when each needs the full bar of the tier."""
+    if lab_type == "alpha":
+        fits = [_times(stats["qualifying"], req["alpha"]["min_qualifying_episodes"])]
+    else:
+        # task_diversity / per_task_cap: not yet implemented, never limit the count.
+        v = req["beta"]["volume"]
+        fits = [
+            _times(stats["qualifying"], v["min_qualifying_episodes"]),
+            _times(stats["failures"], v["min_failures"]),
+            _times(stats["duration_seconds"] / 3600.0, v["min_duration_hours"]),
+        ]
+    fits = [n for n in fits if n is not None]
+    return min(fits) if fits else int(stats["qualifying"] > 0)
 
 
 def _repo_short_name(dataset: str) -> str:
@@ -107,7 +108,7 @@ def evaluate_lab_requirements(
     never_a_lab = ARCHIVE_DATASETS | EXTERNAL_DATASETS | INFRA_DATASETS
 
     lab_datasets: defaultdict[str, set[str]] = defaultdict(set)
-    per_individual: defaultdict[tuple[str, str], dict] = defaultdict(
+    per_lab: defaultdict[str, dict] = defaultdict(
         lambda: {"episodes": 0, "qualifying": 0, "failures": 0, "duration_seconds": 0.0}
     )
     placeholder_counts: defaultdict[str, Counter] = defaultdict(Counter)
@@ -125,13 +126,11 @@ def evaluate_lab_requirements(
         dataset = canonical_dataset_repo(r.get("dataset_repo") or repo)
         lab_datasets[lab].add(dataset)
 
-        op_raw = r.get("operator_name")
-        op_norm = (op_raw or "").strip()
+        op_norm = (r.get("operator_name") or "").strip()
         if _is_placeholder_operator(op_norm, placeholder_names):
             placeholder_counts[lab][op_norm or "(blank)"] += 1
-            continue
 
-        bucket = per_individual[(lab, op_norm)]
+        bucket = per_lab[lab]
         bucket["episodes"] += 1
         primary = _primary_sf_annotation(r["annotations"])
         if primary is not None:
@@ -141,49 +140,35 @@ def evaluate_lab_requirements(
             if r["duration_seconds"]:
                 bucket["duration_seconds"] += r["duration_seconds"]
 
-    labs = set(lab_datasets) | {lab for (lab, _op) in per_individual}
     result: dict[str, dict] = {}
-    for lab in sorted(labs):
+    for lab in sorted(set(lab_datasets) | set(per_lab)):
         lab_type = _classify_lab_type(lab_datasets.get(lab, set()), dataset_created_at, cutoff)
         disabled_status = _tier_status_if_disabled(lab_type, req)
-
-        individuals = {op: s for (l, op), s in per_individual.items() if l == lab}
-        passing = [op for op, s in individuals.items() if _meets_requirement(s, lab_type, req)]
+        stats = per_lab.get(lab)
+        supported = None
+        if disabled_status is None and stats is not None:
+            supported = _contributors_supported(stats, lab_type, req)
 
         if disabled_status is not None:
             status = disabled_status
-        elif passing:
-            status = "pass"
-        elif individuals:
-            status = "fail"
-        else:
+        elif stats is None:
             status = "no_data"
-
-        qualifying_individual = passing[0] if passing else None
-        # For the tooltip: show the passer, or else whoever got closest (ranked by
-        # qualifying-episode count, the shared first bar for both tiers).
-        best_individual = None
-        best_stats = None
-        if qualifying_individual is not None:
-            best_individual = qualifying_individual
-            best_stats = individuals[qualifying_individual]
-        elif individuals:
-            best_individual = max(individuals, key=lambda op: individuals[op]["qualifying"])
-            best_stats = individuals[best_individual]
+        elif supported:
+            status = "pass"
+        else:
+            status = "fail"
 
         result[lab] = {
             "lab_type": lab_type,
             "status": status,
-            "qualifying_individual": qualifying_individual,
-            "individuals_considered": len(individuals),
-            "best_individual": best_individual,
-            "best_individual_stats": (
+            "requirement_stats": (
                 {
-                    "qualifying_episodes": best_stats["qualifying"],
-                    "failures": best_stats["failures"],
-                    "duration_hours": round(best_stats["duration_seconds"] / 3600.0, 3),
+                    "qualifying_episodes": stats["qualifying"],
+                    "failures": stats["failures"],
+                    "duration_hours": round(stats["duration_seconds"] / 3600.0, 3),
+                    "contributors_supported": supported,
                 }
-                if best_stats is not None
+                if stats is not None
                 else None
             ),
             "placeholder_operator_episodes": sum(placeholder_counts[lab].values()),
