@@ -14,8 +14,9 @@ is split by ``--split-weights``. Held-out labs and tasks are ranked by how
 close their size is to their share; episodes of a held-out unit beyond that
 share are excluded from both train and eval.
 
-Without pins, the top ``--candidates`` sets of each holdout type are crossed.
-Repeated pins of one kind form a single set that replaces the search.
+``--num-proposals`` proposals are built one after another, each preferring
+held-out labs and tasks that earlier proposals did not use. Repeated pins of
+one kind form a single set that replaces the search.
 Writes ``REPORT.md``, ``candidates.json`` and one ``proposal_XX.json`` per proposal.
 """
 
@@ -199,7 +200,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--index", type=Path, required=True)
     parser.add_argument("--out-dir", type=Path, default=Path("eval_split_proposals"))
     parser.add_argument("--seed", type=int, default=d.seed)
-    parser.add_argument("--candidates", type=int, default=d.candidates_per_split)
+    parser.add_argument("--num-proposals", type=int, default=d.num_proposals)
     pins = parser.add_argument_group("pins (repeatable; all values are held out together)")
     pins.add_argument("--ood-common", action="append", default=[], metavar="LAB")
     pins.add_argument("--ood-custom", action="append", default=[], metavar="LAB")
@@ -278,7 +279,7 @@ def main(argv: list[str] | None = None) -> int:
         num_od_tasks=args.num_od_tasks,
         num_ood_common=args.num_ood_common,
         num_ood_custom=args.num_ood_custom,
-        candidates_per_split=args.candidates,
+        num_proposals=args.num_proposals,
         common_robots=args.common_robot,
         train_only_labs=args.train_only,
         custom_robots=args.custom_robot,
@@ -299,6 +300,8 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     args.out_dir.mkdir(parents=True, exist_ok=True)
+    for old in args.out_dir.glob("proposal_*.json"):
+        old.unlink()
     (args.out_dir / "candidates.json").write_text(json.dumps(candidates, indent=2))
     for p in proposals:
         (args.out_dir / f"{p['proposal_id']}.json").write_text(json.dumps(p, indent=2))

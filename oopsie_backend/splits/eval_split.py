@@ -13,7 +13,6 @@ silently accepted.
 from __future__ import annotations
 
 import difflib
-import itertools
 import math
 import random
 import re
@@ -24,6 +23,7 @@ from pathlib import Path
 import yaml
 
 NEAR_DUPLICATE_SIMILARITY = 0.85
+REUSE_PENALTY = 1.0
 EXCLUDED = "excluded"
 ID_SPLIT = "id"
 OD_TASK_SPLIT = "od_task_id_scene"
@@ -37,21 +37,21 @@ class SplitConfig:
     eval_budget: int | None = 2000
     budget_frac: float = 0.05
     split_weights: tuple[float, float, float] = (0.2, 0.4, 0.4)
-    id_alpha: float = 0.5
+    id_alpha: float = 0.0
     id_max_group_frac: float = 0.25
     id_min_group: int = 8
     ood_lab_min: int = 40
-    ood_lab_max_quantile: float = 0.5
+    ood_lab_max_quantile: float = 0.3
     od_task_lab_quantiles: tuple[float, float] = (0.25, 0.75)
     od_task_min_tasks: int = 3
     od_task_min_episodes: int = 25
     od_task_max_share: float = 0.4
     cap_holdouts: bool = True
     holdout_task_cap: int | None = 50
-    num_od_tasks: int = 3
-    num_ood_common: int = 1
-    num_ood_custom: int = 1
-    candidates_per_split: int = 3
+    num_od_tasks: int = 16
+    num_ood_common: int = 6
+    num_ood_custom: int = 2
+    num_proposals: int = 4
     common_robots: list[str] = field(default_factory=list)
     custom_robots: list[str] = field(default_factory=list)
     train_only_labs: list[str] = field(default_factory=list)
@@ -374,10 +374,13 @@ def _cap_units(
 def sample_id(
     pool: list[dict], n_target: int, cfg: SplitConfig, rng: random.Random
 ) -> tuple[list[dict], dict]:
-    """Stratified sample over ``(lab, robot, cameras, task)`` groups.
+    """Stratified sample over labs, then over ``(lab, robot, cameras, task)`` groups.
 
-    Groups smaller than ``id_min_group`` are skipped since removing any of
-    their episodes would leave the task nearly unseen in training.
+    The target is split across labs and each lab's share across its groups,
+    both with weight ``size**id_alpha``, so labs with a few large groups do
+    not dominate. Groups smaller than ``id_min_group`` are skipped since
+    removing any of their episodes would leave the task nearly unseen in
+    training.
     """
     groups: dict[tuple, list[dict]] = defaultdict(list)
     for r in pool:
@@ -385,12 +388,17 @@ def sample_id(
     eligible = {
         g: rs for g, rs in groups.items() if len(rs) >= cfg.id_min_group and g[0] not in cfg.train_only_labs
     }
-    alloc = _allocate(
-        {g: len(rs) for g, rs in eligible.items()},
-        n_target,
-        cfg.id_alpha,
-        cfg.id_max_group_frac,
-    )
+    by_lab: dict[str, dict[tuple, int]] = defaultdict(dict)
+    for g, rs in eligible.items():
+        by_lab[g[0]][g] = len(rs)
+    # A lab can give at most the sum of its groups' caps.
+    lab_caps = {
+        lab: sum(math.floor(n * cfg.id_max_group_frac) for n in sizes.values()) for lab, sizes in by_lab.items()
+    }
+    lab_alloc = _allocate(lab_caps, n_target, cfg.id_alpha, 1.0)
+    alloc: dict[tuple, int] = {}
+    for lab, sizes in by_lab.items():
+        alloc |= _allocate(sizes, lab_alloc[lab], cfg.id_alpha, cfg.id_max_group_frac)
     picked = []
     for g in sorted(alloc):
         if alloc[g]:
@@ -588,17 +596,30 @@ def coverage_sample(rows: list[dict], n: int, levels: list, rng: random.Random) 
     return picked
 
 
-def _ranked_sets(cands: list[dict], n: int, k: int) -> list[list[dict]]:
-    """The ``k`` best ``n``-subsets of ``cands`` by summed score; ``cands`` is sorted best first."""
-    if n <= 0:
-        return [[]]
-    pool = cands[: n + k - 1]
-    if len(pool) < n:
-        return [pool]
-    combos = itertools.combinations(pool, n)
-    score = lambda x: x.get("score", _size_score(x["episodes"], x["target"]))
-    ranked = sorted(combos, key=lambda c: sum(score(x) for x in c))
-    return [list(c) for c in ranked[:k]]
+def _score(c: dict) -> float:
+    return c.get("score", _size_score(c["episodes"], c["target"]))
+
+
+def _pick_labs(cands: list[dict], n: int, uses: Counter) -> list[str]:
+    """The ``n`` labs with the lowest score plus ``REUSE_PENALTY`` per earlier use."""
+    ranked = sorted(cands, key=lambda c: (_score(c) + REUSE_PENALTY * uses[c["lab_id"]], c["lab_id"]))
+    return [c["lab_id"] for c in ranked[:n]]
+
+
+def _pick_tasks(
+    cands: list[dict], n: int, uses: Counter, lab_uses: Counter, excluded_labs: set[str]
+) -> list[tuple[str, str]]:
+    """``n`` tasks from distinct labs, each lab's best task after penalties for earlier uses."""
+    best: dict[str, tuple[float, dict]] = {}
+    for c in cands:
+        lab = c["lab_id"]
+        if lab in excluded_labs:
+            continue
+        score = _score(c) + REUSE_PENALTY * (uses[(lab, c["task"])] + 0.5 * lab_uses[lab])
+        if lab not in best or score < best[lab][0]:
+            best[lab] = (score, c)
+    ranked = sorted(best.values(), key=lambda sc: (sc[0], sc[1]["lab_id"]))
+    return [(c["lab_id"], c["task"]) for _, c in ranked[:n]]
 
 
 def enumerate_proposals(
@@ -608,39 +629,30 @@ def enumerate_proposals(
     ood_custom: list[str] | None = None,
     od_tasks: list[tuple[str, str]] | None = None,
 ) -> tuple[list[dict], dict]:
-    """Cross the top candidate sets of each holdout type.
+    """``num_proposals`` proposals that differ as much as the candidates allow.
 
     Held-out labs are chosen as ``num_ood_common`` + ``num_ood_custom`` labs,
     held-out tasks as ``num_od_tasks`` tasks from distinct labs outside the
-    held-out labs. A pinned list replaces the search for its holdout type.
+    held-out labs. Proposals are built one after another; a candidate's score
+    grows by ``REUSE_PENALTY`` for each earlier proposal that used it, and a
+    task's also by half that for each earlier use of its lab. A pinned list
+    replaces the search for its holdout type.
     """
-    k = cfg.candidates_per_split
     lab_cands = ood_lab_candidates(rows, cfg)
     task_cands = od_task_candidates(rows, cfg)
-    common = [ood_common] if ood_common else [
-        [c["lab_id"] for c in s] for s in _ranked_sets(lab_cands["common"], cfg.num_ood_common, k)
-    ]
-    custom = [ood_custom] if ood_custom else [
-        [c["lab_id"] for c in s] for s in _ranked_sets(lab_cands["custom"], cfg.num_ood_custom, k)
-    ]
-
+    lab_uses: Counter = Counter()
+    task_uses: Counter = Counter()
+    task_lab_uses: Counter = Counter()
     proposals = []
-    for c1, c2 in itertools.product(common, custom):
-        ood = c1 + c2
-        if od_tasks:
-            task_sets = [od_tasks]
-        else:
-            per_lab_best = [
-                c for c in task_cands if c["rank_in_lab"] == 0 and c["lab_id"] not in ood
-            ]
-            task_sets = [
-                [(c["lab_id"], c["task"]) for c in s]
-                for s in _ranked_sets(per_lab_best, cfg.num_od_tasks, k)
-            ]
-        for tasks in task_sets:
-            proposals.append(
-                make_proposal(rows, cfg, ood, tasks, cfg.seed + len(proposals))
-            )
+    for _ in range(cfg.num_proposals):
+        common = ood_common or _pick_labs(lab_cands["common"], cfg.num_ood_common, lab_uses)
+        custom = ood_custom or _pick_labs(lab_cands["custom"], cfg.num_ood_custom, lab_uses)
+        ood = common + custom
+        tasks = od_tasks or _pick_tasks(task_cands, cfg.num_od_tasks, task_uses, task_lab_uses, set(ood))
+        lab_uses.update(ood)
+        task_uses.update(tasks)
+        task_lab_uses.update(lab for lab, _ in tasks)
+        proposals.append(make_proposal(rows, cfg, ood, tasks, cfg.seed + len(proposals)))
     for i, p in enumerate(proposals, 1):
         p["proposal_id"] = f"proposal_{i:02d}"
     return proposals, {"ood_lab": lab_cands, "od_task": task_cands}
