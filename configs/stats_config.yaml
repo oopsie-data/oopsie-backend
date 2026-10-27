@@ -17,6 +17,8 @@ datasets:
     - OopsieData-Submissions/oopsiedata-v0.1
     - OopsieData-Submissions/oopsiedata-converted-v0.1
     - OopsieData-Submissions/oopsie-face-raw-archive-2026-08-12
+    # Copies of 500 already-counted submission episodes (failure-detection test set).
+    - OopsieData-Submissions/failure-detection-testset-v0
 
   # Bulk-import / legacy HF repos. Excluded from public stats.json only; still
   # shown in the internal report (flagged amber as "bulk_import") and excluded
