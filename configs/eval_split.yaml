@@ -5,7 +5,14 @@
 
 # Extra arguments for `oopsie splits propose`, e.g. pins:
 #   ["--ood-common", "LAB", "--od-task", "LAB::instruction"]
-propose_args: []
+# --train-only LAB keeps a lab out of every eval split.
+propose_args:
+  - --num-od-tasks=16
+  - --num-ood-common=6
+  - --num-ood-custom=2
+  - --train-only=UT_RobIn
+  - --train-only=Berkeley_RAIL
+  - --train-only=UofT_TISL
 
 # Proposal id from proposals/REPORT.md to hold out; null until one is chosen.
 chosen_proposal: null

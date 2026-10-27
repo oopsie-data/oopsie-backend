@@ -27,6 +27,7 @@ def training_data(
     critical_episodes: str,
     eval_split: str,
     annotation_columns: str,
+    unified_camera_names: str,
     training_recipe_state: str,
     training_recipe: str,
     data_dir: str,

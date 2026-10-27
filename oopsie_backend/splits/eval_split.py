@@ -47,12 +47,14 @@ class SplitConfig:
     od_task_min_episodes: int = 25
     od_task_max_share: float = 0.4
     cap_holdouts: bool = True
+    holdout_task_cap: int | None = 50
     num_od_tasks: int = 3
     num_ood_common: int = 1
     num_ood_custom: int = 1
     candidates_per_split: int = 3
     common_robots: list[str] = field(default_factory=list)
     custom_robots: list[str] = field(default_factory=list)
+    train_only_labs: list[str] = field(default_factory=list)
     seed: int = 0
 
 
@@ -67,10 +69,20 @@ def unit_targets(cfg: SplitConfig, total: int) -> dict[str, int]:
     """Target size of one held-out lab and of one held-out task."""
     b = budget(cfg, total)
     n_labs = max(1, cfg.num_ood_common + cfg.num_ood_custom)
+    task_target = b[OD_TASK_SPLIT] // max(1, cfg.num_od_tasks)
+    if cfg.holdout_task_cap:
+        task_target = min(task_target, cfg.holdout_task_cap)
     return {
         OOD_LAB_SPLIT: max(1, b[OOD_LAB_SPLIT] // n_labs),
-        OD_TASK_SPLIT: max(1, b[OD_TASK_SPLIT] // max(1, cfg.num_od_tasks)),
+        OD_TASK_SPLIT: max(1, task_target),
     }
+
+
+def labelable(task_counts: Counter, cfg: SplitConfig) -> int:
+    """Episodes of a held-out unit left after capping each of its tasks at ``holdout_task_cap``."""
+    if not cfg.holdout_task_cap:
+        return sum(task_counts.values())
+    return sum(min(n, cfg.holdout_task_cap) for n in task_counts.values())
 
 
 def _size_score(n: int, target: int) -> float:
@@ -185,16 +197,26 @@ def lab_summary(rows: list[dict], cfg: SplitConfig) -> list[dict]:
 
 
 def ood_lab_candidates(rows: list[dict], cfg: SplitConfig) -> dict[str, list[dict]]:
-    """Labs in the lower size quantiles, split by embodiment class, closest to the per-lab target first."""
+    """Labs in the lower size quantiles, split by embodiment class, best first.
+
+    A lab's size is its ``labelable`` episode count. The score is the distance
+    of that size to the per-lab target plus ``log(episodes / labelable)``, the
+    share of the lab that the task cap would drop from both train and eval.
+    """
     target = unit_targets(cfg, len(rows))[OOD_LAB_SPLIT]
     quantiles = _lab_size_quantiles(rows)
-    tasks_by_lab = {lab: {r["task"] for r in rs} for lab, rs in _by(rows, "lab_id").items()}
+    by_lab = _by(rows, "lab_id")
+    tasks_by_lab = {lab: {r["task"] for r in rs} for lab, rs in by_lab.items()}
     out: dict[str, list[dict]] = {"common": [], "custom": []}
     summary = lab_summary(rows, cfg)
-    for lab in sorted(summary, key=lambda s: _size_score(s["episodes"], target)):
+    for lab in summary:
+        lab["labelable"] = labelable(Counter(r["task"] for r in by_lab[lab["lab_id"]]), cfg)
+        lab["score"] = _size_score(lab["labelable"], target) + math.log(lab["episodes"] / lab["labelable"])
+    for lab in sorted(summary, key=lambda s: s["score"]):
         if (
             lab["episodes"] < cfg.ood_lab_min
             or quantiles[lab["lab_id"]] > cfg.ood_lab_max_quantile
+            or lab["lab_id"] in cfg.train_only_labs
         ):
             continue
         lab["target"] = target
@@ -256,7 +278,7 @@ def od_task_candidates(rows: list[dict], cfg: SplitConfig) -> list[dict]:
         labs_per_task[r["task"]].add(r["lab_id"])
     out = []
     for lab, rs in _by(rows, "lab_id").items():
-        if not lo <= quantiles[lab] <= hi:
+        if not lo <= quantiles[lab] <= hi or lab in cfg.train_only_labs:
             continue
         tasks = Counter(r["task"] for r in rs)
         big_tasks = [t for t, n in tasks.items() if n >= cfg.od_task_min_episodes]
@@ -329,6 +351,26 @@ def _subsample(rs: list[dict], n: int, alpha: float, rng: random.Random) -> list
     return kept
 
 
+def _cap_units(
+    rs: list[dict], unit_fn, cap: int | dict, alpha: float, rng: random.Random, excluded: list[dict]
+) -> list[dict]:
+    """Subsample each unit of ``rs`` to its cap, appending the rest to ``excluded``.
+
+    ``cap`` is one limit for every unit or a limit per unit.
+    """
+    kept = []
+    for unit in sorted({unit_fn(r) for r in rs}):
+        unit_rs = [r for r in rs if unit_fn(r) == unit]
+        limit = cap[unit] if isinstance(cap, dict) else cap
+        if len(unit_rs) > limit:
+            sub = _subsample(unit_rs, limit, alpha, rng)
+            sub_keys = {key(r) for r in sub}
+            excluded.extend(r for r in unit_rs if key(r) not in sub_keys)
+            unit_rs = sub
+        kept.extend(unit_rs)
+    return kept
+
+
 def sample_id(
     pool: list[dict], n_target: int, cfg: SplitConfig, rng: random.Random
 ) -> tuple[list[dict], dict]:
@@ -340,7 +382,9 @@ def sample_id(
     groups: dict[tuple, list[dict]] = defaultdict(list)
     for r in pool:
         groups[(*scene(r), r["task"])].append(r)
-    eligible = {g: rs for g, rs in groups.items() if len(rs) >= cfg.id_min_group}
+    eligible = {
+        g: rs for g, rs in groups.items() if len(rs) >= cfg.id_min_group and g[0] not in cfg.train_only_labs
+    }
     alloc = _allocate(
         {g: len(rs) for g, rs in eligible.items()},
         n_target,
@@ -434,19 +478,13 @@ def make_proposal(
     rng = random.Random(seed)
     excluded: list[dict] = []
     if cfg.cap_holdouts:
-        for name, field_fn in ((OOD_LAB_SPLIT, lambda r: r["lab_id"]), (OD_TASK_SPLIT, lambda r: (r["lab_id"], r["task"]))):
-            capped = []
-            units = sorted({field_fn(r) for r in splits[name]})
-            cap = budget(cfg, len(rows))[name] // max(1, len(units))
-            for unit in units:
-                rs = [r for r in splits[name] if field_fn(r) == unit]
-                if len(rs) > cap:
-                    kept = _subsample(rs, cap, cfg.id_alpha, rng)
-                    kept_keys = {key(r) for r in kept}
-                    excluded.extend(r for r in rs if key(r) not in kept_keys)
-                    rs = kept
-                capped.extend(rs)
-            splits[name] = capped
+        task_of = lambda r: (r["lab_id"], r["task"])
+        for name, field_fn in ((OOD_LAB_SPLIT, lambda r: r["lab_id"]), (OD_TASK_SPLIT, task_of)):
+            if cfg.holdout_task_cap:
+                splits[name] = _cap_units(splits[name], task_of, cfg.holdout_task_cap, cfg.id_alpha, rng, excluded)
+            sizes = Counter(field_fn(r) for r in splits[name])
+            caps = _allocate(sizes, budget(cfg, len(rows))[name], 0.0, 1.0)
+            splits[name] = _cap_units(splits[name], field_fn, caps, cfg.id_alpha, rng, excluded)
     targets = budget(cfg, len(rows))
     splits[ID_SPLIT], id_info = sample_id(pool, targets[ID_SPLIT], cfg, rng)
     id_keys = {key(r) for r in splits[ID_SPLIT]}
@@ -457,6 +495,9 @@ def make_proposal(
         f"{lab}::{task}": nearest_task(task, train_tasks) for lab, task in od_tasks
     }
     problems = check_proposal(train, splits)
+    in_eval = sorted({r["lab_id"] for s in SPLITS for r in splits[s]} & set(cfg.train_only_labs))
+    if in_eval:
+        problems.append(f"train-only lab(s) in eval: {in_eval}")
     problems += [
         f"note: {k} has near-duplicate train task '{t}' (similarity {r:.2f})"
         for k, (t, r) in nearest.items()
@@ -548,14 +589,15 @@ def coverage_sample(rows: list[dict], n: int, levels: list, rng: random.Random) 
 
 
 def _ranked_sets(cands: list[dict], n: int, k: int) -> list[list[dict]]:
-    """The ``k`` best ``n``-subsets of ``cands`` by summed size score; ``cands`` is sorted best first."""
+    """The ``k`` best ``n``-subsets of ``cands`` by summed score; ``cands`` is sorted best first."""
     if n <= 0:
         return [[]]
     pool = cands[: n + k - 1]
     if len(pool) < n:
         return [pool]
     combos = itertools.combinations(pool, n)
-    ranked = sorted(combos, key=lambda c: sum(_size_score(x["episodes"], x["target"]) for x in c))
+    score = lambda x: x.get("score", _size_score(x["episodes"], x["target"]))
+    ranked = sorted(combos, key=lambda c: sum(score(x) for x in c))
     return [list(c) for c in ranked[:k]]
 
 

@@ -55,6 +55,10 @@ Episodes are discovered under `<data_dir>/OopsieData-Submissions/<repo>/` and, f
 
 An h5 is re-read only when its size or modification time changed, or when the index lacks one of the h5 columns, which happens once after a column is added. When the Hub listing of a repo fails, the earlier hashes and `on_hub` values are kept. `--no-hub` skips the listing.
 
+### Camera names (`index.camera_names`)
+
+`unified_cameras` (`camera`, `name` per recorded camera; `name` is null for a camera that is left out) and `camera_name_issues` (cameras without a unified name, cameras marked `unknown`, and names two cameras of an episode share), as configured in `configs/camera_names.yaml`; see [camera names](camera-names.md).
+
 ### Duplicate episodes (`preqa.duplicate_episodes`)
 
 Two on-disk episodes are copies when they have the same `content_hash` (`identical_data`), the same Hub hash for every camera's video (`identical_videos`), or the same lab, timestamp, duration, instruction, robot and cameras with a recorded timestamp (`same_metadata`, which catches re-exported or trimmed copies). Copies linked by any rule form a group. The first copy is kept, contributor repos first and then by repo and path; every other copy gets `duplicate_of`, its key. `duplicate_reasons` lists the rules that link an episode to another copy, and `duplicate_group` lists the other copies' keys. Split planning, the train sample, QA and the duplicate-video check leave out episodes with `duplicate_of` set.
@@ -77,7 +81,7 @@ See [action checks](action-checks.md#running-and-adding-checks).
 
 ### Critical episodes (`postqa.critical`)
 
-`critical` and `critical_reasons` (`read_error`, `duplicate_video`, `qa_error` or `qa:<category>/<test>`), as configured in `configs/critical.yaml`. Checks under `qa_checks` make an episode critical on any finding; checks under `qa_check_min_findings` only when one video has at least the given number of findings.
+`critical` and `critical_reasons` (`read_error`, `duplicate_video`, `qa_error`, `short` or `qa:<category>/<test>`), as configured in `configs/critical.yaml`. `short` marks episodes shorter than `min_duration_seconds`. Checks under `qa_checks` make an episode critical on any finding; checks under `qa_check_min_findings` only when one video has at least the given number of findings.
 
 ### Manual QA notes (`qa.merge_notes --index`)
 

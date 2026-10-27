@@ -21,7 +21,7 @@ A check runs on an episode only when the index holds no result of its current
 version (``qa/checks/base.py``). Adding, editing or re-configuring a check
 therefore reruns just that check; removing one drops its results. Episodes are
 read once and checked in parallel. Results go to the index's ``qa_*`` columns,
-and ``reports/action_qa.json`` and ``.html`` summarize all current results.
+and ``reports/action_qa.html`` summarizes all current results.
 
 Results are saved to the index every ``run.save_interval`` seconds, after each
 staged chunk and when the run is interrupted (SIGINT or SIGTERM), so a rerun
@@ -40,14 +40,12 @@ import argparse
 import hashlib
 import sys
 import time
-from collections import Counter, defaultdict
 from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, ThreadPoolExecutor, wait
 from pathlib import Path
 
 import polars as pl
 
 from oopsie_backend.common import interrupt, shards
-from oopsie_backend.common.io import now_timestamps, write_stats_json
 from oopsie_backend.common.progress import Progress
 from oopsie_backend.common.repos import (
     CONTRIBUTOR,
@@ -65,15 +63,12 @@ from oopsie_backend.qa.checks.registry import enabled_checks
 from oopsie_backend.qa.columns import (
     QA_COLUMNS,
     current_entries,
-    finding_dict,
     qa_frame,
     qa_row,
     result_entry,
 )
 from oopsie_backend.qa.engine import now, run_episode
-
-MAX_FLAGGED_DETAIL = 20000
-
+from oopsie_backend.qa.report import build_report
 
 def _log(message: str) -> None:
     print(message, file=sys.stderr)
@@ -116,8 +111,7 @@ def finalize(index: Path, output: Path, config: dict, versions: dict[str, str], 
         if touched:
             df = save(index, entries, touched, versions, checks)
     report = build_report(df, checks, versions, f"index:{index}", config)
-    write_stats_json(output, report)
-    render_action_qa_report(report, output.with_suffix(".html"), config["report"]["highlight_ignore"])
+    render_action_qa_report(report, output, config["report"]["highlight_ignore"])
     t = report["totals"]
     _log(
         f"{t.get('episodes_checked', 0)} episode(s) with results: {t.get('episodes_flagged', 0)} flagged, "
@@ -191,75 +185,6 @@ def pending_checks(
         if names:
             out[key] = names
     return out
-
-
-def build_report(df: pl.DataFrame, checks: dict[str, Check], versions: dict[str, str], scope: str, config: dict) -> dict:
-    """The ``action_qa.json`` summary of every current result in the index."""
-    tests: dict[str, list[str]] = defaultdict(list)
-    for c in checks.values():
-        tests[c.category].append(c.test)
-    totals: Counter = Counter()
-    per_dataset: dict[str, dict] = {}
-    flagged: list[dict] = []
-    rows = df.filter(pl.col("qa_results").list.len() > 0) if "qa_results" in df.columns else df.clear()
-    for r in rows.sort("dataset_repo", "repo_path").iter_rows(named=True):
-        current = current_entries(r["qa_results"], versions)
-        if not current:
-            continue
-        ds = per_dataset.setdefault(
-            r["dataset_repo"],
-            {
-                "episodes_checked": 0,
-                "errors": 0,
-                "episodes_flagged": 0,
-                "tests": {
-                    cat: {
-                        t: {"checked_episodes": 0, "flagged_episodes": 0, "flagged_keys": Counter(), "skips": Counter()}
-                        for t in ts
-                    }
-                    for cat, ts in tests.items()
-                },
-            },
-        )
-        ds["episodes_checked"] += 1
-        if any(e["error"] for e in current):
-            ds["errors"] += 1
-        findings = []
-        for e in current:
-            cat, test = e["check"].split("/")
-            stats = ds["tests"][cat][test]
-            stats["checked_episodes"] += e["ran"]
-            stats["flagged_episodes"] += bool(e["findings"])
-            stats["flagged_keys"].update(f["key"] for f in e["findings"])
-            stats["skips"].update(s["reason"] for s in e["skips"])
-            findings += [finding_dict(f) for f in e["findings"]]
-        if findings:
-            ds["episodes_flagged"] += 1
-            flagged.append(
-                {
-                    "dataset_repo": r["dataset_repo"],
-                    "repo_path": r["repo_path"],
-                    "episode_id": Path(r["repo_path"]).stem,
-                    "findings": findings,
-                }
-            )
-    for ds in per_dataset.values():
-        totals["episodes_checked"] += ds["episodes_checked"]
-        totals["episodes_skipped"] += ds["errors"]
-        totals["episodes_flagged"] += ds["episodes_flagged"]
-        for cat in ds["tests"].values():
-            for stats in cat.values():
-                stats["flagged_keys"] = dict(stats["flagged_keys"])
-                stats["skips"] = dict(stats["skips"])
-    return {
-        "schema_version": 3,
-        "generated_at": now_timestamps(),
-        "scope": scope,
-        "config_snapshot": {k: v for k, v in config.items() if k != "run"} | {"check_versions": versions},
-        "totals": dict(totals),
-        "per_dataset": per_dataset,
-        "flagged_episodes": flagged[:MAX_FLAGGED_DETAIL],
-    }
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -349,41 +274,55 @@ def main(argv: list[str] | None = None) -> int:
     def stage(chunk: list[str]):
         return stager.submit(stage_episodes, data_dir, stage_dir, episodes(chunk), workers, interrupt.stopping)
 
-    staged_now: list[list[str]] = [chunks[0]] if stage_dir and keys else []
+    # Chunks whose episodes are checked from the staging directory, each with its unfinished jobs. The
+    # next chunk is submitted as soon as it is staged, so workers never wait for a chunk to drain; one
+    # chunk is staged ahead, so at most two chunks are on disk.
+    open_jobs: dict[int, int] = {}
+    chunk_of: dict = {}
+    staged = None
+    next_chunk = 0
     with interrupt.stoppable():
         try:
-            staged = stage(chunks[0]) if stage_dir and keys else None
+            if not stage_dir:
+                chunk_of = {pool.submit(run_episode, job): 0 for job in jobs(keys, data_dir)}
+                open_jobs[0] = len(chunk_of)
+                next_chunk = len(chunks)
             done_count = 0
-            for i, chunk in enumerate(chunks):
-                read_dir = data_dir
-                staged_now = [chunk, *chunks[i + 1 : i + 2]] if stage_dir else []
-                if staged is not None:
-                    while not wait([staged], timeout=1.0).done:
-                        if interrupt.stopping():
-                            raise KeyboardInterrupt
+            while chunk_of or staged is not None or next_chunk < len(chunks):
+                if staged is None and next_chunk < len(chunks) and len(open_jobs) < 2:
+                    staged = stage(chunks[next_chunk])
+                waiting = set(chunk_of) | ({staged} if staged is not None else set())
+                done, _ = wait(waiting, timeout=1.0, return_when=FIRST_COMPLETED)
+                if staged is not None and staged in done:
                     read_dir = staged.result()
-                    _log(f"chunk {i + 1}/{len(chunks)}: {len(chunk)} episode(s)")
-                    staged = stage(chunks[i + 1]) if i + 1 < len(chunks) else None
-                running = {pool.submit(run_episode, job) for job in jobs(chunk, read_dir)}
-                while running:
-                    done, running = wait(running, timeout=1.0, return_when=FIRST_COMPLETED)
-                    for future in done:
-                        key, results, _ = future.result()
-                        new = [result_entry(n, versions[n], run_at, r) for n, r in results.items()]
-                        entries[key] = merge_entries(entries.get(key), new)
-                        unsaved.add(key)
-                        done_count += 1
-                        progress.tick(done_count)
-                    if interrupt.stopping():
-                        raise KeyboardInterrupt
-                    if running and time.monotonic() - last_save >= save_interval:
-                        persist()
-                        last_save = time.monotonic()
-                if stage_dir:
-                    if unsaved:
-                        persist()
-                        last_save = time.monotonic()
-                    unstage_episodes(data_dir, stage_dir, episodes(chunk))
+                    staged = None
+                    chunk = chunks[next_chunk]
+                    _log(f"chunk {next_chunk + 1}/{len(chunks)}: {len(chunk)} episode(s)")
+                    if not chunk_of and not done_count:
+                        progress.restart()
+                    chunk_of |= {pool.submit(run_episode, job): next_chunk for job in jobs(chunk, read_dir)}
+                    open_jobs[next_chunk] = len(chunk)
+                    next_chunk += 1
+                for future in done & set(chunk_of):
+                    key, results, _ = future.result()
+                    new = [result_entry(n, versions[n], run_at, r) for n, r in results.items()]
+                    entries[key] = merge_entries(entries.get(key), new)
+                    unsaved.add(key)
+                    done_count += 1
+                    progress.tick(done_count)
+                    i = chunk_of.pop(future)
+                    open_jobs[i] -= 1
+                    if not open_jobs[i]:
+                        del open_jobs[i]
+                        if stage_dir:
+                            persist()
+                            last_save = time.monotonic()
+                            unstage_episodes(data_dir, stage_dir, episodes(chunks[i]))
+                if interrupt.stopping():
+                    raise KeyboardInterrupt
+                if unsaved and time.monotonic() - last_save >= save_interval:
+                    persist()
+                    last_save = time.monotonic()
             finished = True
         finally:
             pool.shutdown(wait=False, cancel_futures=True)
@@ -392,9 +331,9 @@ def main(argv: list[str] | None = None) -> int:
                 persist()
                 _log(f"interrupted; saved the results of {n} more episode(s)")
             stager.shutdown(wait=True, cancel_futures=True)
-            if not finished:
-                for chunk in staged_now:
-                    unstage_episodes(data_dir, stage_dir, episodes(chunk))
+            if not finished and stage_dir:
+                for i in [*open_jobs, *([next_chunk] if next_chunk < len(chunks) else [])]:
+                    unstage_episodes(data_dir, stage_dir, episodes(chunks[i]))
 
     if unsaved:
         persist()

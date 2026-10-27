@@ -1,6 +1,6 @@
 # Video checks
 
-The video checks run as the `video` category of the action QA. Their results land in the same report and dashboard (`reports/action_qa.json` / `.html`) as the action checks: one grid column per check and a per-episode drilldown keyed by camera.
+The video checks run as the `video` category of the action QA. Their results land in the same report and dashboard (`reports/action_qa.html`) as the action checks: one grid column per check and a per-episode drilldown keyed by camera.
 
 ```bash
 uv run python -m oopsie_backend.qa.run \

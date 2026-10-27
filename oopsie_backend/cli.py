@@ -11,7 +11,7 @@ import sys
 
 COMMANDS: dict[str, dict[str, str]] = {
     "ingest": {"sync": "ingest.sync"},
-    "index": {"build": "index.build"},
+    "index": {"build": "index.build", "camera-names": "index.camera_names", "camera-sheet": "index.camera_sheet"},
     "qa": {
         "run": "qa.run",
         "render-report": "qa.render_report",

@@ -31,7 +31,9 @@ eval_split_proposals/
   ...
 ```
 
-An annotation budget, by default 2000 episodes, is split across the three groups by `--split-weights`. Each held-out lab and each held-out task gets an equal part of its group's budget as a target size. Candidates are ranked by `|log(size / target)|`. Once a unit is chosen, episodes beyond its target are moved to `excluded`, which is neither train nor eval.
+An annotation budget, by default 2000 episodes, is split across the three groups by `--split-weights`. Each held-out lab and each held-out task gets an equal part of its group's budget as a target size, and a held-out task's target is at most `--holdout-task-cap`. Task candidates are ranked by `|log(size / target)|`.
+
+Every task in both held-out groups is labeled with at most `--holdout-task-cap` episodes, since more episodes of one task are mostly near-identical. A lab's labelable size is its episode count after this cap. Lab candidates are ranked by `|log(labelable / target)| + log(episodes / labelable)`, where the second term penalizes labs that would lose most of their episodes to the cap. Once the units are chosen, each group's budget is filled evenly across its units, and units smaller than an even share pass their remainder to the larger ones. Episodes beyond a unit's share are moved to `excluded`, which is neither train nor eval.
 
 "Medium" and "small" labs are defined by rank in the lab size ordering, not by share of the data. Task candidates must have no near-duplicate anywhere in the dataset. The candidate table lists each lab's best task before any lab's second, so its top rows span several labs.
 
@@ -45,6 +47,7 @@ Without pins, the script crosses the top `--candidates` (default 3) sets of each
 | `--num-ood-common` / `--num-ood-custom` | 1 / 1 | Held-out labs per embodiment class |
 | `--ood-common LAB` / `--ood-custom LAB` | search | Pin held-out labs |
 | `--od-task 'LAB::instruction'` | search | Pin held-out tasks |
+| `--train-only LAB` | none | Lab that never enters an eval split, neither held out nor sampled for ID |
 | `--common-robot` / `--custom-robot` | auto | Override robot class. Auto means common if at least two labs use it, after lowercasing and replacing punctuation |
 | `--ood-lab-min` | 40 | Minimum size of a held-out lab |
 | `--ood-lab-max-quantile` | 0.5 | Held-out labs come from the smaller half of labs |
@@ -54,7 +57,8 @@ Without pins, the script crosses the top `--candidates` (default 3) sets of each
 | `--id-alpha` | 0.5 | ID group weight is `size**alpha`; 1 is proportional, 0 is uniform |
 | `--id-max-group-frac` | 0.25 | Max fraction of a group taken for ID eval |
 | `--id-min-group` | 8 | Groups smaller than this are never sampled |
-| `--no-holdout-cap` | off | Label held-out units in full instead of capping them at their target |
+| `--holdout-task-cap` | 50 | Max labeled episodes per task in both held-out groups; 0 disables |
+| `--no-holdout-cap` | off | Label held-out units in full instead of capping them at the task cap and the group budget |
 | `--seed` | 0 | Sampling seed |
 
 A held-out task must not appear in any other lab. Every scene it uses must also keep training episodes on other tasks.

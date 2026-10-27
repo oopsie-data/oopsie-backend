@@ -6,7 +6,7 @@ The action checks read the full per-timestep `actions/*` and `observations/robot
 uv run oopsie qa run --data-dir /corral/utexas/IRI26024/oopsiedata --index episode_index.parquet --workers 16
 ```
 
-Results are stored in the [episode index](episode-index.md) and summarized in `reports/action_qa.json` / `.html`: one grid column per check, with a per-episode drilldown of the values that tripped it. Toggles and thresholds live in `configs/action_qa_config.yaml`, one section per category below; parameter names are given in the tables with their defaults in parentheses.
+Results are stored in the [episode index](episode-index.md) and summarized in `reports/action_qa.html`, which is rendered from the index: one grid column per check, with a per-episode drilldown of the values that tripped it. Toggles and thresholds live in `configs/action_qa_config.yaml`, one section per category below; parameter names are given in the tables with their defaults in parentheses.
 
 ## Running and adding checks
 

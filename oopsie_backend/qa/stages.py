@@ -35,5 +35,5 @@ def qa_results(
     """Runs every pending check on the QA sample; returns the fingerprint of the QA columns."""
     argv = ["--data-dir", data_dir, "--index", index_path, "--workers", str(workers)]
     argv += ["--stage-dir", node_stage_dir] if node_stage_dir else []
-    check_rc(run.main(argv + ["--output", str(Path(reports_dir) / "action_qa.json")]), "QA")
+    check_rc(run.main(argv + ["--output", str(Path(reports_dir) / "action_qa.html")]), "QA")
     return columns_fingerprint(Path(index_path), QA_COLUMNS)

@@ -3,10 +3,11 @@
 Usage:
     uv run python -m oopsie_backend.postqa.critical --index episode_index.parquet
 
-Reads the index's ``read_error``, ``has_duplicate_video``, ``qa_error`` and
-``qa_findings`` columns and writes, for every episode, ``critical`` and
-``critical_reasons`` (``read_error``, ``duplicate_video``, ``qa_error`` or
-``qa:<category>/<test>``), replacing earlier values. A check in ``qa_checks``
+Reads the index's ``read_error``, ``has_duplicate_video``, ``qa_error``,
+``duration_seconds`` and ``qa_findings`` columns and writes, for every episode,
+``critical`` and ``critical_reasons`` (``read_error``, ``duplicate_video``,
+``qa_error``, ``short`` or ``qa:<category>/<test>``), replacing earlier values.
+``short`` marks episodes shorter than ``min_duration_seconds``. A check in ``qa_checks``
 counts on any finding; a check in ``qa_check_min_findings`` counts only when
 one finding key (a camera, for video checks) has at least that many findings. Episodes that QA has not
 checked can only be critical through the index conditions. Duplicate copies
@@ -29,7 +30,7 @@ from oopsie_backend.qa.checks.registry import all_checks
 CRITICAL_CONFIG = Path(__file__).resolve().parent.parent.parent / "configs" / "critical.yaml"
 SCHEMA = {KEY: pl.String, "critical": pl.Boolean, "critical_reasons": pl.List(pl.String)}
 COLUMNS = ["critical", "critical_reasons"]
-INPUTS = ["duplicate_of", "read_error", "has_duplicate_video", "qa_error", "qa_findings"]
+INPUTS = ["duplicate_of", "read_error", "has_duplicate_video", "qa_error", "duration_seconds", "qa_findings"]
 
 
 def load_config(path: Path = CRITICAL_CONFIG) -> dict:
@@ -63,6 +64,9 @@ def critical_frame(df: pl.DataFrame, cfg: dict) -> pl.DataFrame:
             reasons.append("duplicate_video")
         if cfg.get("qa_error") and r.get("qa_error"):
             reasons.append("qa_error")
+        min_duration = cfg.get("min_duration_seconds")
+        if min_duration is not None and r.get("duration_seconds") is not None and r["duration_seconds"] < min_duration:
+            reasons.append("short")
         counts = Counter((f"{f['category']}/{f['test']}", f["key"]) for f in r.get("qa_findings") or [])
         hit = sorted(
             {c for c, _ in counts if c in checks}

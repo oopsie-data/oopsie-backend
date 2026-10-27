@@ -5,6 +5,7 @@
 read_error: true        # the h5 could not be read
 duplicate_video: true   # a video file is identical to another episode's or camera's (preqa.duplicate_videos)
 qa_error: false         # a QA check failed with an error on the episode
+min_duration_seconds: 2 # episodes shorter than this; null disables the condition
 
 # QA checks (category/test) whose findings make an episode critical.
 qa_checks:

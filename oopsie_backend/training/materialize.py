@@ -93,8 +93,13 @@ def unify_rows(
         for chunk in chunks(rows) if stage_dir is not None else [rows]:
             episodes = [(r["dataset_repo"], r["repo_path"]) for r in chunk]
             read_dir = stage_episodes(data_dir, stage_dir, episodes, workers) if stage_dir is not None else data_dir
+            if not results:
+                progress.restart()
             jobs = [
-                (r[KEY], r["repo_path"], episode_path(read_dir, r["dataset_repo"], r["repo_path"]), episodes_dir, recipe, uhash, ranges.get(robot_id(r)))
+                (
+                    r[KEY], r["repo_path"], episode_path(read_dir, r["dataset_repo"], r["repo_path"]), episodes_dir,
+                    recipe, uhash, ranges.get(robot_id(r)), r["unified_cameras"],
+                )
                 for r in chunk
             ]
             try:
@@ -169,7 +174,7 @@ def unify_all(
         schema_overrides={"success": pl.Float64, "failure_categories": pl.List(pl.String)},
         infer_schema_length=None,
     )
-    for column in ("num_steps", "fps", "action_widths", "state_widths", "cameras", "reason"):
+    for column in ("num_steps", "fps", "action_widths", "state_widths", "cameras", "actions_from_states", "filled_steps", "reason"):
         if column not in manifest.columns:
             manifest = manifest.with_columns(pl.lit(None).alias(column))
     keep = {f"{k}.h5" for k in manifest.filter(pl.col("status").is_in(["written", "reused"]))[KEY]}

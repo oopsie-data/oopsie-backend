@@ -1,10 +1,11 @@
 """Select the episodes of a recipe from the episode index.
 
 Every recipe leaves out episodes that are not on disk, unreadable, duplicate
-copies, critical or held out by the eval split (any ``eval_split`` value,
-including ``excluded``). ``selection`` then filters by repo kind, dataset, lab,
+copies or critical. ``selection.splits`` picks the training episodes (``train``,
+those the eval split does not hold out) and any ``eval_split`` values. ``selection``
+then filters by repo kind, dataset, lab,
 robot, the embodiment flags of the index (``biarm``, ``binary_gripper``,
-``dexterous_hand``), length and outcome, and ``max_episodes`` keeps a stable
+``dexterous_hand``), length in steps and seconds, and outcome, and ``max_episodes`` keeps a stable
 pseudo-random subset ranked by a hash of the episode key and ``seed``.
 
 An episode's ``success`` is the mean success of its annotations (falling back
@@ -18,16 +19,18 @@ import hashlib
 import polars as pl
 from oopsie_data_tools.annotation_tool.annotation_schema import OUTCOME_SUCCESS
 
+from oopsie_backend.index.camera_names import UNIFIED_TYPE
 from oopsie_backend.index.store import KEY
 
 OPTIONAL = {
     "duplicate_of": pl.String,
     "critical": pl.Boolean,
     "eval_split": pl.String,
+    "unified_cameras": UNIFIED_TYPE,
 }
 COLUMNS = [
     "dataset_repo", "repo_path", "repo_kind", "on_disk", "read_error", "episode_id", "lab_id", "robot_name",
-    "gripper_name", "policy_name", "biarm", "binary_gripper", "dexterous_hand", "num_steps", "language_instruction", "task", "annotations",
+    "gripper_name", "policy_name", "biarm", "binary_gripper", "dexterous_hand", "num_steps", "duration_seconds", "language_instruction", "task", "annotations",
 ]
 
 
@@ -48,9 +51,10 @@ def select_episodes(index: pl.DataFrame, recipe: dict) -> pl.DataFrame:
         pl.col("read_error").is_null(),
         pl.col("duplicate_of").is_null(),
         ~pl.col("critical").fill_null(False),
-        pl.col("eval_split").is_null(),
+        pl.col("eval_split").fill_null("train").is_in(sel["splits"]),
         pl.col("repo_kind").is_in(sel["repo_kinds"]),
         pl.col("num_steps").fill_null(0) >= sel["min_steps"],
+        pl.col("duration_seconds").fill_null(0) >= (sel["min_seconds"] or 0),
     ]
     for column, include, exclude in (
         ("dataset_repo", sel["datasets"], sel["exclude_datasets"]),

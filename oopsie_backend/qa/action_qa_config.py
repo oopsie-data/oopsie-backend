@@ -346,7 +346,7 @@ def _build_config(raw: dict) -> dict:
                 if run_raw.get("max_total_episodes") is not None
                 else None
             ),
-            "output": _resolve_path(run_raw.get("output")) or (_BACKEND_ROOT / "reports" / "action_qa.json"),
+            "output": _resolve_path(run_raw.get("output")) or (_BACKEND_ROOT / "reports" / "action_qa.html"),
             "only_dataset": [str(d) for d in (run_raw.get("only_dataset") or [])],
             "verbose": bool(run_raw.get("verbose", False)),
             "workers": int(run_raw.get("workers", 8)),

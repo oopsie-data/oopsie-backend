@@ -21,6 +21,10 @@ class Progress:
         self.total, self.what, self.interval = total, what, interval
         self.start = self.last = time.monotonic()
 
+    def restart(self) -> None:
+        """Measure from now, e.g. once the work actually starts after a setup step."""
+        self.start = self.last = time.monotonic()
+
     def tick(self, n: int) -> None:
         t = time.monotonic()
         if n < self.total and t - self.last < self.interval:

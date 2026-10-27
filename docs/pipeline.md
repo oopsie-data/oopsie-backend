@@ -9,6 +9,8 @@ flowchart LR
   mirror --> mirror_state
   mirror_state --> episode_index
   episode_index --> duplicate_episodes
+  duplicate_episodes --> unified_camera_names
+  camera_names_config --> unified_camera_names
   duplicate_episodes --> duplicate_videos
   duplicate_episodes --> qa_results
   qa_check_versions --> qa_results
@@ -29,6 +31,7 @@ flowchart LR
   critical_episodes --> training_data
   eval_split --> training_data
   annotation_columns --> training_data
+  unified_camera_names --> training_data
   training_recipe_state --> training_data
 ```
 
@@ -38,8 +41,9 @@ The dashed edge is not a dependency: the manual `imported_datasets` stage writes
 |---|---|---|
 | `episode_index` | `index` | core columns: h5 metadata, file references, Hub hashes, content hash |
 | `duplicate_episodes` | `preqa` | `duplicate_of`, `duplicate_reasons`, `duplicate_group` |
+| `unified_camera_names` | `index` | `unified_cameras`, `camera_name_issues` |
 | `duplicate_videos` | `preqa` | `video_duplicates`, `has_duplicate_video` |
-| `qa_results` | `qa` | `qa_*` columns, `reports/action_qa.json` and `.html` |
+| `qa_results` | `qa` | `qa_*` columns, `reports/action_qa.html` |
 | `critical_episodes` | `postqa` | `critical`, `critical_reasons` |
 | `stats` | `stats` | website `stats.json`, `reports/public_stats.*`, `reports/internal_stats.*` (with critical episodes per lab) |
 | `eval_proposals` | `splits` | `annotation/proposals/`: candidate proposals and `REPORT.md` |
@@ -51,7 +55,7 @@ The dashed edge is not a dependency: the manual `imported_datasets` stage writes
 | `imported_datasets` (manual) | `conversion` | `<data root>/imports/<name>/` for the local imports of `configs/imports.yaml` |
 | `training_data` (manual) | `training` | `<training_dir>/<recipe>/`, `training_sets` |
 
-`mirror_state`, `qa_check_versions`, `critical_config`, `stats_config`, `split_config`, `annotation_state` and `training_recipe_state` run on every invocation. Each of them hashes outside state: the h5 files on disk with `configs/repositories.yaml` and `configs/imports.yaml`, the QA check versions, a config file, or the annotation stores. A downstream stage reruns only when one of those hashes changes. The sync itself runs outside the pipeline, because it is the job that changes the mirror.
+`mirror_state`, `camera_names_config`, `qa_check_versions`, `critical_config`, `stats_config`, `split_config`, `annotation_state` and `training_recipe_state` run on every invocation. Each of them hashes outside state: the h5 files on disk with `configs/repositories.yaml` and `configs/imports.yaml`, the QA check versions, a config file, or the annotation stores. A downstream stage reruns only when one of those hashes changes. The sync itself runs outside the pipeline, because it is the job that changes the mirror.
 
 ## Running
 
@@ -64,7 +68,7 @@ uv run oopsie pipeline run postqa --graph dag.png
 
 | Target | Stages |
 |---|---|
-| `index` | `episode_index` |
+| `index` | `episode_index`, `unified_camera_names` |
 | `preqa` | `duplicate_episodes`, `duplicate_videos` |
 | `qa` | `qa_results` |
 | `postqa` | `critical_episodes` |

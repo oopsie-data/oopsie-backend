@@ -357,7 +357,7 @@ report:  # HTML page display only; doesn't change what the checks flag
 run:  # defaults for the matching CLI flags
   data_dir: null  # null = compute_local_stats.py's default data dir
   max_total_episodes: null  # cap across all datasets combined; null = unlimited
-  output: reports/action_qa.json
+  output: reports/action_qa.html
   only_dataset: []  # e.g. ["OopsieData-Submissions/SomeLab"]; empty = every dataset
   verbose: false
   workers: 8  # episodes checked in parallel

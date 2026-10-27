@@ -16,6 +16,13 @@ In target mode, a key the episode lacks is derived where no kinematics are neede
   Derived and converted velocities carry the angular part as a rotation vector rate.
 - ``gripper_position`` from ``gripper_binary``, and ``gripper_binary`` = gripper position > 0.5.
 
+With ``actions.from_states``, actions are generated from the states instead:
+for every action key (``always``) or for those the episode cannot provide
+otherwise (``missing``). They are computed on the resampled steps
+(``action_from_state``): a position action is the next step's state, a velocity
+the change to the next step's state times the rate, and ``gripper_binary`` the
+next gripper state > 0.5. The last step has no next state and is dropped.
+
 Gripper positions are scaled to [0, 1] with the range of their robot
 (``actions.gripper: normalized``) and must have one value per arm. Anything
 else makes the episode a ``Skip``.
@@ -26,7 +33,7 @@ from __future__ import annotations
 import numpy as np
 from scipy.spatial.transform import Rotation
 
-from oopsie_backend.training.recipe import STATE_KEYS
+from oopsie_backend.training.recipe import STATE_KEYS, STATE_SOURCE
 from oopsie_backend.training.source import Skip, SourceEpisode
 
 ROTATION_WIDTH = {"quat": 4, "matrix": 9, "rot6d": 6, "rotvec": 3}
@@ -162,10 +169,32 @@ class Unifier:
             return self._gripper(ep.states[key])
         return ep.states[key]
 
-    def unify(self, ep: SourceEpisode) -> tuple[dict[str, np.ndarray], dict[str, np.ndarray]]:
-        """``(actions, states)`` by key, at the source rate."""
+    def _from_states(self, key: str, ep: SourceEpisode) -> bool:
+        """Whether the action ``key`` is generated from the states."""
+        mode = self.actions_cfg["from_states"]
+        if mode == "always":
+            return True
+        if mode == "never":
+            return False
+        try:
+            self.action(key, ep, derive=True)
+            return False
+        except Skip:
+            if key in STATE_SOURCE and STATE_SOURCE[key] in ep.states:
+                return True
+            raise
+
+    def unify(self, ep: SourceEpisode) -> tuple[dict[str, np.ndarray], dict[str, np.ndarray], dict[str, np.ndarray]]:
+        """``(actions, states, bases)`` by key, at the source rate.
+
+        ``bases`` holds, for every action generated from the states, the state it
+        is generated from (see ``action_from_state``).
+        """
+        bases = {}
         if self.actions_cfg["mode"] == "target":
             action_keys, state_keys, derive = self.actions_cfg["keys"], self.state_cfg["keys"], True
+            bases = {k: self.state(STATE_SOURCE[k], ep) for k in action_keys if self._from_states(k, ep)}
+            action_keys = [k for k in action_keys if k not in bases]
         else:
             declared = ep.profile.get("action_space") or sorted(ep.actions)
             action_keys = [k for k in declared if k in ep.actions]
@@ -173,8 +202,22 @@ class Unifier:
             derive = False
         actions = {k: self.action(k, ep, derive) for k in action_keys}
         states = {k: self.state(k, ep) for k in state_keys}
-        for part, arrays in (("action", actions), ("state", states)):
+        for part, arrays in (("action", actions), ("state", states), ("state", bases)):
             for k, v in arrays.items():
                 if k.startswith("gripper_") and v.shape[1] != ep.arms:
                     raise Skip(f"{k} {part} has width {v.shape[1]}, expected one per arm ({ep.arms})")
-        return actions, states
+        return actions, states, bases
+
+
+def action_from_state(key: str, state: np.ndarray, rate: float, orientation: str, arms: int) -> np.ndarray:
+    """The action ``key`` of every step but the last, from the resampled state it is generated from."""
+    if key in ("joint_position", "cartesian_position", "gripper_position"):
+        return state[1:]
+    if key == "gripper_binary":
+        return (state[1:] > 0.5).astype(np.float64)
+    if key == "joint_velocity":
+        return (state[1:] - state[:-1]) * rate
+    poses = decode_poses(state, arms, orientation)
+    return _velocity_from_poses(
+        [(p[1:], r[1:]) for p, r in poses], [(p[:-1], r[:-1]) for p, r in poses], rate
+    )

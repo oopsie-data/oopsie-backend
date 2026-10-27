@@ -1,13 +1,16 @@
 """Map an episode's cameras to the recipe's camera roles and write one video per role.
 
-``cameras.roles`` maps each role to glob patterns over camera names, tried in
-order; the first role to match a camera takes it, so a camera fills at most one
-role. ``cameras.fallback`` fills a role that matched nothing with another role's
-camera. A role that is still empty skips the episode (``missing: skip``) or is
-left blank (``missing: blank``), which the writers turn into black frames.
+``cameras.roles`` maps each role to glob patterns over unified camera names
+(``configs/camera_names.yaml``), tried in order; the first role to match a
+camera takes it, so a camera fills at most one role. ``cameras.fallback`` fills a role that matched nothing with another role's
+camera. A role in ``cameras.optional`` that is still empty is left blank; any
+other empty role skips the episode (``missing: skip``) or is left blank
+(``missing: blank``). An episode in which every role is empty is skipped. The writers turn blank roles into black frames and mark them
+in a camera mask.
 
 Each role's video is resampled to one frame per unified step, resized to
-``image_size`` and encoded with the ffmpeg of ``imageio-ffmpeg`` (H.264, ``crf``). A video that ends early
+``image_size`` regardless of its aspect ratio (``image_size: null`` keeps the
+source resolution, rounded down to even sides for H.264) and encoded with the ffmpeg of ``imageio-ffmpeg`` (H.264, ``crf``). A video that ends early
 repeats its last frame.
 """
 
@@ -26,22 +29,24 @@ from oopsie_backend.training.source import Skip
 FFMPEG = imageio_ffmpeg.get_ffmpeg_exe()
 
 
-def assign_roles(cameras: list[str], cfg: dict) -> dict[str, str | None]:
-    """Camera name per role, or None for a blank role."""
+def assign_roles(cameras: dict[str, str], cfg: dict) -> dict[str, str | None]:
+    """Source camera per role, or None for a blank role; ``cameras`` maps unified names to source cameras."""
     taken: set[str] = set()
     out: dict[str, str | None] = {}
     for role, patterns in cfg["roles"].items():
         out[role] = None
         for pattern in [patterns] if isinstance(patterns, str) else patterns:
-            matches = sorted(c for c in cameras if c not in taken and fnmatch.fnmatch(c.lower(), pattern.lower()))
+            matches = sorted(n for n in cameras if n not in taken and fnmatch.fnmatch(n, pattern))
             if matches:
-                out[role] = matches[0]
+                out[role] = cameras[matches[0]]
                 taken.add(matches[0])
                 break
     for role, other in cfg["fallback"].items():
         if out[role] is None:
             out[role] = out[other]
-    empty = [r for r, c in out.items() if c is None]
+    if all(c is None for c in out.values()):
+        raise Skip(f"no camera for any role among {sorted(cameras)}")
+    empty = [r for r, c in out.items() if c is None and r not in cfg["optional"]]
     if empty and cfg["missing"] == "skip":
         raise Skip(f"no camera for role(s) {empty} among {sorted(cameras)}")
     return out
@@ -56,7 +61,7 @@ def _resize(frame: np.ndarray, size: tuple[int, int]) -> np.ndarray:
 
 
 def transcode(
-    path: Path, source_steps: int, steps: np.ndarray, out: Path, size: tuple[int, int], fps: float, crf: int
+    path: Path, source_steps: int, steps: np.ndarray, out: Path, size: tuple[int, int] | None, fps: float, crf: int
 ) -> None:
     """Write the frames of ``path`` at the source steps ``steps`` (nondecreasing) to ``out``.
 
@@ -71,6 +76,9 @@ def transcode(
         capture.release()
         raise Skip(f"no frames in {path.name}")
     wanted = np.minimum((steps * num_frames) // source_steps, num_frames - 1)
+    if size is None:
+        h, w = int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT)), int(capture.get(cv2.CAP_PROP_FRAME_WIDTH))
+        size = (h - h % 2, w - w % 2)
     height, width = size
     out.parent.mkdir(parents=True, exist_ok=True)
     cmd = [

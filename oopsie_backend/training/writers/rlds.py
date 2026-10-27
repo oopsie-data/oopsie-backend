@@ -2,9 +2,11 @@
 
 Each step holds ``observation/<role>`` images, ``observation/state`` and one
 ``observation/<state key>`` per state key, ``action`` and ``action_dict/<key>``,
-``reward``, ``discount``, ``is_first``, ``is_last``, ``is_terminal`` and
-``language_instruction``. Recipes whose camera roles and keys use the DROID names
-(``exterior_image_1_left``, ``wrist_image_left``, ``joint_velocity`` plus
+``is_filled`` (the step adds no new source step), ``reward``, ``discount``,
+``is_first``, ``is_last``, ``is_terminal`` and ``language_instruction``.
+``observation/camera_mask`` marks, in role order, the roles with a camera; a blank
+role holds black images. Recipes whose camera roles and keys use the DROID
+names (``exterior_image_1_left``, ``wrist_image_left``, ``joint_velocity`` plus
 ``gripper_position``) match the layout ``oopsie-rl`` reads; ``file_path`` starts
 with ``success/`` or ``failure/``, from which ``oopsie-rl`` infers the outcome.
 The last step of a successful episode (success >= 0.5) has reward 1.
@@ -49,7 +51,9 @@ def read_example(episodes_dir: Path, row: dict, layout: dict) -> dict[str, Any]:
         state, state_mask, state_dict = padded(f["state"], layout["state"])
         videos = {r: str(f.attrs.get(f"camera/{r}", "")) for r in layout["roles"]}
         fps = float(f.attrs["fps"])
+        filled = np.asarray(f["filled"], dtype=bool)
     n = len(action)
+    camera_mask = np.array([bool(videos[r]) for r in layout["roles"]])
     images = {r: _frames(episodes_dir / v if v else None, n, size) for r, v in videos.items()}
     success = row["success"]
     succeeded = success is not None and success >= 0.5
@@ -63,9 +67,11 @@ def read_example(episodes_dir: Path, row: dict, layout: dict) -> dict[str, Any]:
                     **{r: next(it) for r, it in images.items()},
                     "state": state[t],
                     **{k: v[t] for k, v in state_dict.items()},
+                    "camera_mask": camera_mask,
                 },
                 "action": action[t],
                 "action_dict": {k: v[t] for k, v in action_dict.items()},
+                "is_filled": bool(filled[t]),
                 "reward": np.float32(1.0 if last and succeeded else 0.0),
                 "discount": np.float32(1.0),
                 "is_first": t == 0,
@@ -115,9 +121,11 @@ class UnifiedRLDSBuilder(tfds.core.GeneratorBasedBuilder):
                                 **{r: tfds.features.Image(shape=(h, w, 3), dtype=np.uint8, encoding_format="jpeg") for r in self._layout["roles"]},
                                 "state": vector(width("state")),
                                 **{k: vector(n) for k, n in self._layout["state"].items()},
+                                "camera_mask": tfds.features.Tensor(shape=(len(self._layout["roles"]),), dtype=np.bool_),
                             },
                             "action": vector(width("action")),
                             "action_dict": {k: vector(n) for k, n in self._layout["action"].items()},
+                            "is_filled": tfds.features.Scalar(np.bool_),
                             "reward": tfds.features.Scalar(np.float32),
                             "discount": tfds.features.Scalar(np.float32),
                             "is_first": tfds.features.Scalar(np.bool_),

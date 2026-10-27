@@ -6,12 +6,14 @@ Layout::
     lerobot/data/chunk-000/episode_000000.parquet
     lerobot/videos/chunk-000/observation.images.<role>/episode_000000.mp4
 
-Frames hold ``observation.state``, ``action``, their masks, ``timestamp``,
-``frame_index``, ``episode_index``, ``index`` and ``task_index``. Episode
+Frames hold ``observation.state``, ``action``, their masks, ``filled``,
+``observation.camera_mask`` (in role order, the roles with a camera; the others
+hold black video),
+``timestamp``, ``frame_index``, ``episode_index``, ``index`` and ``task_index``. Episode
 labels (``success``, ``failure_categories``) and the source episode are extra
 fields of ``episodes.jsonl``. The unified videos are hard-linked (or copied);
-a blank role gets a black video. LeRobot needs one frame rate, so the recipe
-must set ``rate_hz`` unless every episode has the same rate.
+a blank role gets a black video. LeRobot needs one frame rate, so ``rate_hz: null``
+or ``upsample: native`` work only when every episode ends up at the same rate.
 """
 
 from __future__ import annotations
@@ -107,6 +109,7 @@ def write(episodes_dir: Path, out: Path, included: pl.DataFrame, layout: dict, r
             action, action_mask, _ = padded(f["action"], layout["action"])
             state, state_mask, _ = padded(f["state"], layout["state"])
             videos = {r: str(f.attrs.get(f"camera/{r}", "")) for r in roles}
+            filled = np.asarray(f["filled"], dtype=bool)
         n = len(action)
         frames = pl.DataFrame(
             {
@@ -114,6 +117,8 @@ def write(episodes_dir: Path, out: Path, included: pl.DataFrame, layout: dict, r
                 "observation.state_mask": [state_mask.tolist()] * n,
                 "action": action.tolist(),
                 "action_mask": [action_mask.tolist()] * n,
+                "filled": filled,
+                "observation.camera_mask": [[bool(videos[r]) for r in roles]] * n,
                 "timestamp": (np.arange(n) / fps).astype(np.float32),
                 "frame_index": np.arange(n, dtype=np.int64),
                 "episode_index": np.full(n, ep_index, dtype=np.int64),
@@ -125,6 +130,7 @@ def write(episodes_dir: Path, out: Path, included: pl.DataFrame, layout: dict, r
                 "action": pl.List(pl.Float32),
                 "observation.state_mask": pl.List(pl.Boolean),
                 "action_mask": pl.List(pl.Boolean),
+                "observation.camera_mask": pl.List(pl.Boolean),
             },
         )
         data_path = out / f"data/chunk-{chunk:03d}/episode_{ep_index:06d}.parquet"
@@ -178,6 +184,8 @@ def write(episodes_dir: Path, out: Path, included: pl.DataFrame, layout: dict, r
         "observation.state_mask": {"dtype": "bool", "shape": [len(dim_names(layout["state"]))], "names": dim_names(layout["state"])},
         "action": {"dtype": "float32", "shape": [len(dim_names(layout["action"]))], "names": dim_names(layout["action"])},
         "action_mask": {"dtype": "bool", "shape": [len(dim_names(layout["action"]))], "names": dim_names(layout["action"])},
+        "filled": scalar("bool"),
+        "observation.camera_mask": {"dtype": "bool", "shape": [len(roles)], "names": roles},
         "timestamp": scalar("float32"),
         "frame_index": scalar("int64"),
         "episode_index": scalar("int64"),

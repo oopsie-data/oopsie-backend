@@ -1,4 +1,4 @@
-"""Write per-lab feedback text from action_qa.json: an "Automated checks" block per lab,
+"""Write per-lab feedback text from the index's QA results: an "Automated checks" block per lab,
 on its own (lab_feedback_automated.txt) and appended to each lab's section of the
 hand-written visual-review drafts (lab_feedback_combined.txt). The drafts file itself is
 never modified. Which checks appear, and their confidence/action tags, come from the
@@ -6,34 +6,30 @@ never modified. Which checks appear, and their confidence/action tags, come from
 
 Usage:
     uv run python -m oopsie_backend.qa.render_lab_feedback \\
-        --input reports/action_qa.json \\
+        --index episode_index.parquet \\
         --drafts reports/lab_feedback_drafts.txt
 """
 
 from __future__ import annotations
 
 import argparse
-import json
 import sys
 from pathlib import Path
 
+from oopsie_backend.index.store import DEFAULT_INDEX
 from oopsie_backend.qa.action_qa_config import CONFIG as ACTION_QA_CONFIG
 from oopsie_backend.qa.lab_feedback import (
     automated_report,
     render_automated,
     render_combined,
 )
+from oopsie_backend.qa.report import index_report
 
 
 def main(argv: list[str] | None = None) -> int:
     reports_dir = ACTION_QA_CONFIG["run"]["output"].parent
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument(
-        "--input",
-        type=Path,
-        default=ACTION_QA_CONFIG["run"]["output"],
-        help="Path to action_qa.json (default: run.output from action_qa_config.yaml).",
-    )
+    parser.add_argument("--index", type=Path, default=DEFAULT_INDEX)
     parser.add_argument(
         "--drafts",
         type=Path,
@@ -49,10 +45,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--examples", type=int, default=3, help="Example episodes per item (default: 3).")
     args = parser.parse_args(argv)
 
-    if not args.input.is_file():
-        print(f"error: input not found: {args.input}", file=sys.stderr)
+    if not args.index.is_file():
+        print(f"error: index not found: {args.index}", file=sys.stderr)
         return 1
-    report = json.loads(args.input.read_text(encoding="utf-8"))
+    report = index_report(args.index, ACTION_QA_CONFIG)
     blocks = automated_report(report, ACTION_QA_CONFIG["lab_feedback"], args.examples)
 
     args.output_dir.mkdir(parents=True, exist_ok=True)

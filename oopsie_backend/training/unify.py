@@ -1,15 +1,18 @@
 """Write the unified episodes of a recipe: ``episodes/<episode_key>.h5`` and ``episodes/<episode_key>/<role>.mp4``.
 
 A unified episode holds ``action/<key>`` and ``state/<key>`` as ``(T, D)`` float32
-at the recipe rate, each at its own width (writers pad to a common width), and
-the attrs ``fps``, ``source_fps``, ``unify_hash``, ``gripper_range``, the source
-file's ``source_size`` and ``source_mtime_ns``, and ``camera/<role>`` (the video
-file, or empty for a blank role). It is rewritten only when one of these
+at the recipe rate, each at its own width (writers pad to a common width),
+``filled`` (``(T,)`` bool, the steps that add no new source step), and the attrs
+``fps``, ``source_fps``, ``unify_hash``, ``gripper_range``, ``unified_cameras``, the source file's
+``source_size`` and ``source_mtime_ns``, ``actions_from_states`` (the action keys
+generated from the states) and ``camera/<role>`` (the video file, or empty for a
+blank role). It is rewritten only when one of these
 changed. Labels are not stored here but in the manifest, so new annotations
 never require a rewrite.
 
-Rate changes take, for each output step, the latest source step at or before
-it; actions are converted at the source rate first.
+Actions and states are converted at the source rate, then resampled
+(``training/resample.py``); actions generated from the states are computed after
+resampling. Videos take the frame of the latest source step at or before each step.
 """
 
 from __future__ import annotations
@@ -23,7 +26,9 @@ import h5py
 import numpy as np
 
 from oopsie_backend.training.cameras import assign_roles, transcode
-from oopsie_backend.training.convert import Unifier
+from oopsie_backend.training.convert import Unifier, action_from_state
+from oopsie_backend.training.recipe import STATE_SOURCE
+from oopsie_backend.training.resample import plan, resample
 from oopsie_backend.training.source import Skip, read_source
 
 ROBOT = ("robot_name", "gripper_name")
@@ -56,11 +61,6 @@ def gripper_job(args: tuple[str, Path]) -> tuple[str, tuple[float, float] | None
         return robot, None
 
 
-def output_steps(length: int, source_rate: float, rate: float) -> np.ndarray:
-    n = max(1, int(np.floor(length * rate / source_rate + 1e-9)))
-    return np.minimum(np.floor(np.arange(n) * source_rate / rate + 1e-9).astype(np.int64), length - 1)
-
-
 def _current(path: Path, expected: dict) -> bool:
     if not path.is_file():
         return False
@@ -83,12 +83,14 @@ def _summary(path: Path) -> dict:
             "action_widths": json.dumps(_widths(f["action"])),
             "state_widths": json.dumps(_widths(f["state"])),
             "cameras": json.dumps({k[len("camera/"):]: str(f.attrs[k]) for k in f.attrs if k.startswith("camera/")}),
+            "actions_from_states": str(f.attrs["actions_from_states"]),
+            "filled_steps": int(np.asarray(f["filled"]).sum()),
         }
 
 
 def unify_episode(job: tuple) -> dict:
     """Unify one episode; returns its manifest fields (``status``, ``reason`` and the ``_summary``)."""
-    key, repo_path, source, out_dir, recipe, uhash, gripper_range = job
+    key, repo_path, source, out_dir, recipe, uhash, gripper_range, unified = job
     out = out_dir / f"{key}.h5"
     st = source.stat()
     expected = {
@@ -96,15 +98,33 @@ def unify_episode(job: tuple) -> dict:
         "source_size": st.st_size,
         "source_mtime_ns": st.st_mtime_ns,
         "gripper_range": json.dumps(gripper_range),
+        "unified_cameras": json.dumps(sorted((e["camera"], e["name"]) for e in unified or [])),
     }
     if _current(out, expected):
         return {"status": "reused", "reason": None, **_summary(out)}
     try:
         ep = read_source(source, repo_path)
-        actions, states = Unifier(recipe, gripper_range).unify(ep)
-        rate = float(recipe["rate_hz"] or ep.rate)
-        steps = output_steps(ep.length, ep.rate, rate)
-        roles = assign_roles(sorted(ep.videos), recipe["cameras"])
+        actions, states, bases = Unifier(recipe, gripper_range).unify(ep)
+        p = plan(ep.length, ep.rate, recipe["rate_hz"], recipe["upsample"])
+        orientation = recipe["actions"]["orientation"]
+        actions = {k: resample(k, v, p, orientation, ep.arms) for k, v in actions.items()}
+        states = {k: resample(k, v, p, orientation, ep.arms) for k, v in states.items()}
+        if bases:
+            if len(p) < 2:
+                raise Skip("too short to generate actions from the states")
+            for k, v in bases.items():
+                actions[k] = action_from_state(k, resample(STATE_SOURCE[k], v, p, orientation, ep.arms), p.rate, orientation, ep.arms)
+            p = p.head(len(p) - 1)
+            actions = {k: v[: len(p)] for k, v in actions.items()}
+            states = {k: v[: len(p)] for k, v in states.items()}
+        actions = {k: actions[k] for k in (recipe["actions"]["keys"] or actions)}
+        rate = p.rate
+        if unified is None:
+            raise Skip("no unified camera names; run oopsie index camera-names")
+        names = {e["name"]: e["camera"] for e in unified if e["name"] and e["camera"] in ep.videos}
+        if not names:
+            raise Skip("no camera has a unified name")
+        roles = assign_roles(names, recipe["cameras"])
         cams = recipe["cameras"]
         videos = {}
         for role, camera in roles.items():
@@ -112,16 +132,18 @@ def unify_episode(job: tuple) -> dict:
                 videos[role] = ""
                 continue
             rel = f"{key}/{role}.mp4"
-            transcode(ep.videos[camera], ep.length, steps, out_dir / rel, tuple(cams["image_size"]), rate, cams["crf"])
+            size = tuple(cams["image_size"]) if cams["image_size"] else None
+            transcode(ep.videos[camera], ep.length, p.index, out_dir / rel, size, rate, cams["crf"])
             videos[role] = rel
         tmp = out.with_name(f".{out.name}.{os.getpid()}.tmp")
         with h5py.File(tmp, "w") as f:
             for name, arrays in (("action", actions), ("state", states)):
                 group = f.create_group(name)
                 for k, v in arrays.items():
-                    group.create_dataset(k, data=v[steps].astype(np.float32))
+                    group.create_dataset(k, data=v.astype(np.float32))
+            f.create_dataset("filled", data=p.filled)
             f.attrs.update(expected)
-            f.attrs.update({"fps": rate, "source_fps": ep.rate, "num_steps": len(steps)})
+            f.attrs.update({"fps": rate, "source_fps": ep.rate, "num_steps": len(p), "actions_from_states": json.dumps(sorted(bases))})
             f.attrs.update({f"camera/{r}": v for r, v in videos.items()})
             f.attrs["camera_sources"] = json.dumps(roles)
         os.replace(tmp, out)

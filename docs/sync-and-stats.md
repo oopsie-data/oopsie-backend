@@ -233,7 +233,7 @@ The stats stage writes two things:
 | `oopsie-docs` `docs/assets/data/stats.json` | Public dashboard stats, committed by the job (in `reports/` if the docs repo could not be fetched) |
 | `/corral/utexas/IRI26024/reports/public_stats.json`, `.html` | Public stats copy and snapshot |
 | `/corral/utexas/IRI26024/reports/internal_stats.json`, `.html` | Full internal stats (all repos; not published) |
-| `/corral/utexas/IRI26024/reports/action_qa.json`, `.html` | QA summary |
+| `/corral/utexas/IRI26024/reports/action_qa.html` | QA summary |
 | `/corral/utexas/IRI26024/episode_index/` | Episode index and pipeline cache |
 | `/corral/utexas/IRI26024/oopsiedata/annotation/` | Annotation assignments, bundles, returns and stores |
 | `/corral/utexas/IRI26024/oopsiedata/imports/` | Locally converted imported datasets ([imports](imports.md)) |

@@ -15,5 +15,5 @@ state:
 cameras:
   image_size: [224, 224]
   roles:
-    wrist: ["*wrist*"]
-    exterior: ["*"]
+    wrist: [wrist]
+    exterior: [exterior_front, exterior_side, exterior_back, exterior_top, head]

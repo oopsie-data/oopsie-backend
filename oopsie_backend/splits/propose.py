@@ -69,12 +69,12 @@ def _candidate_tables(candidates: dict) -> list[str]:
             lines += ["None within the size limits.", ""]
             continue
         lines += [
-            "| lab | episodes | target | share | robots | tasks | tasks shared with other labs |",
-            "|---|---:|---:|---:|---|---:|---:|",
+            "| lab | episodes | labelable | target | share | robots | tasks | tasks shared with other labs |",
+            "|---|---:|---:|---:|---:|---|---:|---:|",
         ]
         for c in cands:
             lines.append(
-                f"| {c['lab_id']} | {c['episodes']} | {c['target']} | {_pct(c['frac'])} | {', '.join(c['robots'])} | "
+                f"| {c['lab_id']} | {c['episodes']} | {c['labelable']} | {c['target']} | {_pct(c['frac'])} | {', '.join(c['robots'])} | "
                 f"{c['tasks']} | {len(c['shared_tasks'])} |"
             )
         lines.append("")
@@ -212,6 +212,9 @@ def main(argv: list[str] | None = None) -> int:
     )
     pins.add_argument("--common-robot", action="append", default=[], metavar="ROBOT")
     pins.add_argument("--custom-robot", action="append", default=[], metavar="ROBOT")
+    pins.add_argument(
+        "--train-only", action="append", default=[], metavar="LAB", help="Lab that never enters an eval split"
+    )
     knobs = parser.add_argument_group("sizes")
     knobs.add_argument("--num-od-tasks", type=int, default=d.num_od_tasks, help="Held-out tasks, from distinct labs")
     knobs.add_argument("--num-ood-common", type=int, default=d.num_ood_common, help="Held-out labs on common robots")
@@ -249,6 +252,12 @@ def main(argv: list[str] | None = None) -> int:
         help="Label held-out labs and tasks in full instead of capping them at their budget share",
     )
     knobs.add_argument("--od-task-max-share", type=float, default=d.od_task_max_share)
+    knobs.add_argument(
+        "--holdout-task-cap",
+        type=int,
+        default=d.holdout_task_cap,
+        help="Max labeled episodes per task in held-out labs and held-out tasks; 0 disables",
+    )
     args = parser.parse_args(argv)
 
     cfg = SplitConfig(
@@ -265,11 +274,13 @@ def main(argv: list[str] | None = None) -> int:
         od_task_min_episodes=args.od_task_min_episodes,
         od_task_max_share=args.od_task_max_share,
         cap_holdouts=not args.no_holdout_cap,
+        holdout_task_cap=args.holdout_task_cap or None,
         num_od_tasks=args.num_od_tasks,
         num_ood_common=args.num_ood_common,
         num_ood_custom=args.num_ood_custom,
         candidates_per_split=args.candidates,
         common_robots=args.common_robot,
+        train_only_labs=args.train_only,
         custom_robots=args.custom_robot,
         seed=args.seed,
     )

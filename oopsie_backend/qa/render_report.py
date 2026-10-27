@@ -1,48 +1,41 @@
-"""Render a standalone HTML page from action_qa.json (run_action_qa.py also does this
-automatically after each run; use this to re-render without re-running the checks).
+"""Render the QA report page from the index's ``qa_*`` columns without running the checks
+(``qa run`` also writes it after each run).
 
 Usage:
     uv run python -m oopsie_backend.qa.render_report \\
-        --input reports/action_qa.json \\
+        --index episode_index.parquet \\
         --output reports/action_qa.html
 """
 
 from __future__ import annotations
 
 import argparse
-import json
 import sys
 from pathlib import Path
 
+from oopsie_backend.index.store import DEFAULT_INDEX
 from oopsie_backend.qa.action_qa_config import CONFIG as ACTION_QA_CONFIG
 from oopsie_backend.qa.action_qa_report import render_action_qa_report
+from oopsie_backend.qa.report import index_report
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
-        "--input",
-        type=Path,
-        default=ACTION_QA_CONFIG["run"]["output"],
-        help="Path to action_qa.json (default: run.output from action_qa_config.yaml).",
-    )
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--index", type=Path, default=DEFAULT_INDEX)
     parser.add_argument(
         "--output",
         type=Path,
-        default=None,
-        help="HTML output path (default: same stem as --input with .html).",
+        default=ACTION_QA_CONFIG["run"]["output"],
+        help="HTML output path (default: run.output from action_qa_config.yaml).",
     )
     args = parser.parse_args(argv)
 
-    input_path = args.input.resolve()
-    if not input_path.is_file():
-        print(f"error: input not found: {input_path}", file=sys.stderr)
+    if not args.index.is_file():
+        print(f"error: index not found: {args.index}", file=sys.stderr)
         return 1
-
-    output_path = args.output or input_path.with_suffix(".html")
-    report = json.loads(input_path.read_text(encoding="utf-8"))
-    render_action_qa_report(report, output_path, ACTION_QA_CONFIG["report"]["highlight_ignore"])
-    print(f"Wrote action QA report: {output_path}", file=sys.stderr)
+    report = index_report(args.index, ACTION_QA_CONFIG)
+    render_action_qa_report(report, args.output, ACTION_QA_CONFIG["report"]["highlight_ignore"])
+    print(f"Wrote action QA report: {args.output}", file=sys.stderr)
     return 0
 
 

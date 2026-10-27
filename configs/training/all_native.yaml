@@ -9,6 +9,6 @@ actions:
 cameras:
   image_size: [180, 320]
   roles:
-    wrist: ["*wrist*"]
-    exterior: ["*"]
+    wrist: [wrist, wrist_left, wrist_right]
+    exterior: [exterior_front, exterior_side, exterior_back, exterior_top, head]
   missing: blank

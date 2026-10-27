@@ -1,4 +1,4 @@
-"""Per-lab feedback text from action_qa.json (run_action_qa.py).
+"""Per-lab feedback text from the QA report (``qa/report.py``).
 
 Each lab gets an "Automated checks" block: one numbered item per flagged check, tagged with
 the check's confidence and the action we ask for (``lab_feedback`` in action_qa_config.yaml),

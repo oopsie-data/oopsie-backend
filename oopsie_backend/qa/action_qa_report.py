@@ -1,4 +1,4 @@
-"""Render action_qa.json (from run_action_qa.py, action and video checks) as a standalone
+"""Render the QA report (``qa/report.py``, action and video checks) as a standalone
 HTML page: a dataset x check grid of flagged/checked episode counts, with each cell linking to the flagged
 episodes and the values that tripped the check.
 """
@@ -451,7 +451,7 @@ def _drilldown(report: dict, checks: list[tuple[str, str]]) -> str:
                     f'<td class="det">{escape(_fmt(details))}</td></tr>'
                 )
             more = (
-                f'<tr><td colspan="3" class="muted">+{len(hits) - MAX_ROWS_PER_CHECK} more in action_qa.json</td></tr>'
+                f'<tr><td colspan="3" class="muted">+{len(hits) - MAX_ROWS_PER_CHECK} more not listed</td></tr>'
                 if len(hits) > MAX_ROWS_PER_CHECK
                 else ""
             )
@@ -480,7 +480,7 @@ def _cell_episodes(report: dict) -> str:
     return json.dumps(cells).replace("</", "<\\/")
 
 
-def render_action_qa_report(report: dict, output_path: Path, highlight_ignore: list[str] | tuple[str, ...] = ()) -> None:
+def action_qa_html(report: dict, highlight_ignore: list[str] | tuple[str, ...] = ()) -> str:
     """``highlight_ignore``: ``category.check`` names that don't turn a dataset's name red."""
     checks = _checks(report)
     totals = report.get("totals", {})
@@ -496,7 +496,7 @@ def render_action_qa_report(report: dict, output_path: Path, highlight_ignore: l
         else ""
     )
 
-    html = f"""<!DOCTYPE html>
+    return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -532,6 +532,9 @@ def render_action_qa_report(report: dict, output_path: Path, highlight_ignore: l
 </body>
 </html>
 """
+
+
+def render_action_qa_report(report: dict, output_path: Path, highlight_ignore: list[str] | tuple[str, ...] = ()) -> None:
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(html, encoding="utf-8")
+    output_path.write_text(action_qa_html(report, highlight_ignore), encoding="utf-8")

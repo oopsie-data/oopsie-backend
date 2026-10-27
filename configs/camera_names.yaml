@@ -1,0 +1,202 @@
+# Unified camera names. Read by oopsie_backend.index.camera_names, which writes `unified_cameras`
+# (source camera -> unified name) and `camera_name_issues` to the episode index.
+#
+# A unified name is one of `names`, optionally followed by `_2`, `_3`, ... for a further camera of
+# the same placement and by `_stereo` for the second image of a stereo pair (exterior_side_2_stereo).
+# `null` leaves a camera out (infrared); `unknown` leaves it out and reports it as an issue.
+# A camera is looked up in `datasets.<dataset>.robots.<robot_name>`, then in `datasets.<dataset>`,
+# then in `biarm_aliases` for bimanual episodes, then in `aliases`. In a single-arm episode, a lone
+# wrist_left or wrist_right becomes wrist.
+
+names:
+  - wrist            # on the end effector; wrist_left / wrist_right on bimanual robots
+  - wrist_left
+  - wrist_right
+  - head             # on the robot body or the operator: head, chest, torso, ego cameras
+  - exterior_front   # static, facing the robot across the workspace
+  - exterior_side    # static, from the side of the workspace
+  - exterior_top     # static, looking down onto the workspace
+  - exterior_back    # static, behind the robot, looking over it
+  - tactile          # image of a visuotactile sensor, not a camera view
+
+aliases:
+  wrist: wrist
+  wrist_cam: wrist
+  wrist_image: wrist
+  wrist_image_left: wrist_left
+  wrist_view: wrist
+  main_wrist: wrist
+  hand: wrist
+  inhand: wrist
+  eye_in_hand: wrist
+  TCP_camera: wrist
+  left_wrist: wrist_left
+  wrist_left: wrist_left
+  cam_left_wrist: wrist_left
+  cam_wrist_l: wrist_left
+  left_wrist_cam: wrist_left
+  camera_wrist_left: wrist_left
+  wristL: wrist_left
+  oakd_left_wrist_view: wrist_left
+  right_wrist: wrist_right
+  wrist_right: wrist_right
+  cam_right_wrist: wrist_right
+  cam_wrist_r: wrist_right
+  right_wrist_cam: wrist_right
+  camera_wrist_right: wrist_right
+  wristR: wrist_right
+  oakd_right_wrist_view: wrist_right
+
+  head: head
+  cam_head: head
+  cam_chest: head
+  torso_front: head
+  ego_view: head
+  aria: head
+  head_left: head
+  head_right: head_stereo
+  cam_left_head: head
+  cam_right_head: head_stereo
+  ego_left: head
+  ego_right: head_stereo
+  left_ego_image: head
+
+  front: exterior_front
+  front_cam: exterior_front
+  front_view: exterior_front
+  front_zed: exterior_front
+  oakd_front_view: exterior_front
+  agentview: exterior_front
+  agentview_left: exterior_front
+  agentview_right: exterior_front_stereo
+  exterior: exterior_front
+  main: exterior_front
+  global: exterior_front
+  image_primary: exterior_front
+  middle_scene: exterior_front
+  static_cam: exterior_front
+  exo: exterior_front
+  exo_cam: exterior_front
+  low: exterior_front
+
+  side: exterior_side
+  side_cam: exterior_side
+  side_view: exterior_side
+  oakd_side_view: exterior_side
+  left: exterior_side
+  right: exterior_side_2
+  left_cam: exterior_side
+  right_cam: exterior_side_2
+  left_base_cam: exterior_side
+  right_base_cam: exterior_side_2
+  exterior_left: exterior_side
+  exterior_right: exterior_side_2
+  exterior_image_1_left: exterior_side
+  exterior_image_2_left: exterior_side_2
+  exterior_1_left: exterior_side
+  high_left: exterior_side
+  high_right: exterior_side_2
+  static_left: exterior_side
+  external: exterior_side
+
+  top: exterior_top
+  top_cam: exterior_top
+  top_camera: exterior_top
+  top_view: exterior_top
+  overhead: exterior_top
+  overhead_cam: exterior_top
+  overhead_stereo_left: exterior_top
+  overhead_stereo_right: exterior_top_stereo
+  ceiling: exterior_top
+  high: exterior_top
+  cam_high: exterior_top
+  camera_high: exterior_top
+  echo_camera: exterior_top
+
+  back: exterior_back
+  right_shoulder_cam: exterior_back
+
+  tactile: tactile
+  cam_chest_ir: null
+  cam_wrist_l_ir: null
+  cam_wrist_r_ir: null
+
+biarm_aliases:
+  left: wrist_left
+  right: wrist_right
+  left_camera: wrist_left
+  right_camera: wrist_right
+
+datasets:
+  Araya:
+    image: exterior_front
+    left_ego_image: exterior_side
+  Berkeley_HybridRobotics:
+    base: exterior_top
+  CMU_Auton:
+    exterior_image_1: exterior_side
+  CMU_Intent:
+    zed: wrist
+  ETH_RK:                          # camera names do not match the views; every camera is left out
+    front_view: null
+    top_view: null
+    oakd_front_view: null
+    oakd_side_view: null
+    oakd_wrist_bottom_view: null
+    oakd_wrist_top_view: null
+    oakd_left_wrist_view: null
+    oakd_right_wrist_view: null
+  GT_PAIR:
+    front: exterior_top
+  GT_RL2:
+    front_cam: exterior_back
+  GT_YC:
+    workspace: exterior_top
+  Harvard_EML:
+    robots:
+      ARX X5 dual-arm manipulator mounted on a mobile base:
+        base_image: exterior_front
+      ARX X5 dual-arm tabletop manipulator:
+        base_image: exterior_front
+      ARX X5 single-arm mobile manipulator:
+        base_image: exterior_front
+      ARX X5 single-arm tabletop manipulator:
+        base_image: exterior_top
+  MIT_CLEAR:
+    third_person: exterior_side
+  MIT_PA:
+    ego_global: head
+  NYU_LR:
+    head_right: head
+  Princeton_PRPL:
+    overhead_cam: exterior_side
+  PSU_FMC:
+    logitech_1: exterior_front
+    logitech_2: exterior_side
+  Sejong_RCV:
+    left_front: wrist_left
+    right_front: wrist_right
+    top: exterior_top
+  Stanford_FFL:
+    wrist_left: wrist
+    wrist_right: wrist_stereo
+  UCSD_ARCLAB:
+    third_person: exterior_top
+  UIUC_DASLAB:
+    base: exterior_front
+  UTA_RPL:
+    zed_17225336_left: wrist
+    zed_17225336_right: wrist_stereo
+    zed_24013089_left: exterior_side
+    zed_24013089_right: exterior_side_stereo
+    zed_24395123_left: exterior_side_2
+    zed_24395123_right: exterior_side_2_stereo
+  UW_REAL:
+    camera_0: exterior_front
+    cam_2_scene: exterior_front
+    cam_3_wrist: wrist_left
+    cam_4_wrist: wrist_right
+    wrist_cam_0: wrist_left
+    wrist_cam_1: wrist_right
+  VUA_KL:
+    overhead_cam: exterior_front

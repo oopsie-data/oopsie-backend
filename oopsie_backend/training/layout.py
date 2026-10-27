@@ -17,7 +17,8 @@ from oopsie_backend.training.recipe import ACTION_KEYS, STATE_KEYS
 
 
 def build_layout(recipe: dict, included: pl.DataFrame) -> dict:
-    layout = {"roles": list(recipe["cameras"]["roles"]), "image_size": list(recipe["cameras"]["image_size"])}
+    size = recipe["cameras"]["image_size"]
+    layout = {"roles": list(recipe["cameras"]["roles"]), "image_size": list(size) if size else None}
     for part, order, cfg in (("action", ACTION_KEYS, recipe["actions"]), ("state", STATE_KEYS, recipe["state"])):
         widths: dict[str, int] = {}
         for raw in included[f"{part}_widths"].to_list():

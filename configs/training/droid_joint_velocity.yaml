@@ -15,8 +15,8 @@ state:
 cameras:
   image_size: [180, 320]
   roles:
-    wrist_image_left: ["*wrist*"]
-    exterior_image_1_left: [left, "*exterior*", "*third*", "*front*", "*"]
-    exterior_image_2_left: [right, "*exterior*", "*third*", "*side*", "*"]
+    wrist_image_left: [wrist]
+    exterior_image_1_left: [exterior_side, exterior_front, exterior_back, exterior_top]
+    exterior_image_2_left: [exterior_side_2, exterior_front, exterior_side, exterior_back, exterior_top]
   fallback:
     exterior_image_2_left: exterior_image_1_left

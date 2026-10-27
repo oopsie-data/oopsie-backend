@@ -32,6 +32,7 @@ so100:  # SO-100 and SO-101
   - so101_follower
 so101_bimanual:
   - bimanual-so101
+  - bi_so_follower
 
 aloha:  # bimanual stations (ALOHA and Trossen AI)
   - ALOHA
@@ -85,9 +86,23 @@ gim_arm_xl_dual:
   - gim_arm_xl_dual
 rainbow_rby1m:
   - rainbow_rby1m
-ultra_gen2:
+ultra_gen2:  # Ultra, all generations
   - ultra_gen2
+  - ultra
 unitree_g1:
   - unitree_g1
 yor_agilex_nero:
   - yor_agilex_nero
+agilex_piper:
+  - agilex_piper
+agilex_piper_bimanual:  # Cobot Magic
+  - agilex_cobot_magic_piper
+  - agilex_piper_cobot_magic
+agibot_g2:
+  - agibot_g2_t2v2_crsB
+robotis_ffw:
+  - ffw_bg2_rev4
+mabel:
+  - mabel
+pal_kangaroo:
+  - pal_kangaroo
