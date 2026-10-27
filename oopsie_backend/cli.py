@@ -26,7 +26,12 @@ COMMANDS: dict[str, dict[str, str]] = {
         "render-public": "stats.render_public",
         "render-internal": "stats.render_internal",
     },
-    "splits": {"propose": "splits.propose", "record": "splits.record", "sample-train": "splits.sample_train"},
+    "splits": {
+        "propose": "splits.propose",
+        "record": "splits.record",
+        "sample-train": "splits.sample_train",
+        "package": "splits.package",
+    },
     "annotation": {
         "assign": "annotation.assign",
         "package": "annotation.package",

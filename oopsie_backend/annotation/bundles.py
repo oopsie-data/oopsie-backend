@@ -32,6 +32,7 @@ BLIND_GROUPS = ("episode_annotations", "source_data")
 BLIND_ATTR_PREFIXES = ("source_",)
 BLIND_ATTRS = ("previous_episode_id",)
 REDACTED_POLICY = "redacted"
+SOURCE_FIELDS = ("split", "lab_id", "robot", "task")
 
 
 def sample_uid(dataset_repo: str, repo_path: str) -> str:
@@ -131,6 +132,7 @@ def write_bundle(
             }
             if not blind:
                 entry |= {"dataset_repo": e["dataset_repo"], "repo_path": e["repo_path"]}
+                entry |= {k: e[k] for k in SOURCE_FIELDS if k in e}
             manifest_entries.append(entry)
         manifest = {
             "annotator": annotator,

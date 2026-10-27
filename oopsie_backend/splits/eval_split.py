@@ -330,7 +330,7 @@ def _allocate(sizes: dict, n_target: int, alpha: float, cap_frac: float) -> dict
         quota = {g: remaining * w / norm for g, w in weights.items()}
         step = {g: min(caps[g] - alloc[g], math.floor(q)) for g, q in quota.items()}
         if not any(step.values()):
-            for g in sorted(open_groups, key=lambda g: -(quota[g] % 1))[:remaining]:
+            for g in sorted(open_groups, key=lambda g: (-(quota[g] % 1), str(g)))[:remaining]:
                 step[g] = 1
         for g, s in step.items():
             alloc[g] += s
@@ -347,7 +347,7 @@ def _subsample(rs: list[dict], n: int, alpha: float, rng: random.Random) -> list
     alloc = _allocate({g: len(v) for g, v in groups.items()}, n, alpha, 1.0)
     kept = []
     for g in sorted(alloc):
-        kept.extend(rng.sample(sorted(groups[g], key=lambda r: r["repo_path"]), alloc[g]))
+        kept.extend(rng.sample(sorted(groups[g], key=key), alloc[g]))
     return kept
 
 
@@ -394,7 +394,7 @@ def sample_id(
     picked = []
     for g in sorted(alloc):
         if alloc[g]:
-            rs = sorted(eligible[g], key=lambda r: r["repo_path"])
+            rs = sorted(eligible[g], key=key)
             picked.extend(rng.sample(rs, alloc[g]))
     info = {
         "groups": len(groups),

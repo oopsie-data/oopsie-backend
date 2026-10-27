@@ -72,6 +72,16 @@ Each proposal lists checks:
 
 Instructions are compared as strings, so paraphrases with low similarity still need a manual pass. Use the nearest-task column in the candidate table for this.
 
+To look through a proposal's eval data, zip its three splits on LS6:
+
+```bash
+uv run oopsie splits package \
+  --proposal /corral/utexas/IRI26024/oopsiedata/annotation/proposals/proposal_01.json \
+  --data-dir /corral/utexas/IRI26024/oopsiedata
+```
+
+This writes `id.zip`, `od_task_id_scene.zip` and `od_task_od_scene.zip` into `/corral/utexas/IRI26024/oopsiedata/annotation/review_bundles/proposal_01/` by default. Each zip unpacks to `<split>/` in the layout of the annotation bundles (section 5), with episodes ordered by lab and task, so `oopsie-data annotate --samples-dir <split>/episodes` opens it. The copies are not blind: they keep their annotations and source data, and `eval_manifest.json` lists each episode's source, lab, robot and task. `--only SPLIT ...` packages a subset. The command exits non-zero if any episode lacks its h5 or videos.
+
 ## 3b. Sample train episodes for annotation (optional)
 
 ```bash
