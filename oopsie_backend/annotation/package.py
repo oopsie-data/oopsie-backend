@@ -20,7 +20,7 @@ from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 from oopsie_backend.annotation.bundles import write_bundle
-from oopsie_backend.common.repos import DEFAULT_ANNOTATION_DIR, DEFAULT_DATA_DIR
+from oopsie_backend.common.repos import DEFAULT_DATA_DIR, annotation_dir
 
 
 def _package(job: tuple) -> tuple[str, list[str]]:
@@ -38,7 +38,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--assignment-dir", type=Path, required=True)
     parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
-    parser.add_argument("--out-dir", type=Path, default=DEFAULT_ANNOTATION_DIR / "eval_bundles")
+    parser.add_argument("--out-dir", type=Path, help="Default: <data-dir>/annotation/eval_bundles")
     parser.add_argument(
         "--keep-annotations",
         action="store_true",
@@ -47,6 +47,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--only", nargs="+", metavar="ANNOTATOR", help="Package only these annotators")
     parser.add_argument("--workers", type=int, default=4, help="Bundles written in parallel")
     args = parser.parse_args(argv)
+    args.out_dir = args.out_dir or annotation_dir(args.data_dir) / "eval_bundles"
 
     lists = sorted(args.assignment_dir.glob("*.json"))
     lists = [p for p in lists if p.name != "assignment_summary.json"]

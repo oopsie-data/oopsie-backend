@@ -22,7 +22,7 @@ from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 from oopsie_backend.annotation.bundles import write_bundle
-from oopsie_backend.common.repos import DEFAULT_ANNOTATION_DIR, DEFAULT_DATA_DIR
+from oopsie_backend.common.repos import DEFAULT_DATA_DIR, annotation_dir
 from oopsie_backend.splits.eval_split import SPLITS
 
 
@@ -42,9 +42,10 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--proposal", type=Path, required=True, help="proposal_XX.json or eval_proposal.json")
     parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
-    parser.add_argument("--out-dir", type=Path, default=DEFAULT_ANNOTATION_DIR / "review_bundles")
+    parser.add_argument("--out-dir", type=Path, help="Default: <data-dir>/annotation/review_bundles")
     parser.add_argument("--only", nargs="+", choices=SPLITS, metavar="SPLIT", help="Package only these splits")
     args = parser.parse_args(argv)
+    args.out_dir = args.out_dir or annotation_dir(args.data_dir) / "review_bundles"
 
     proposal = json.loads(args.proposal.read_text())
     proposal_id = proposal.get("proposal_id", args.proposal.stem)
