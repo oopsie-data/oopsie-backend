@@ -10,7 +10,7 @@ import runpy
 import sys
 
 COMMANDS: dict[str, dict[str, str]] = {
-    "ingest": {"sync": "ingest.sync"},
+    "ingest": {"sync": "ingest.sync", "upload-times": "ingest.upload_times"},
     "index": {"build": "index.build", "camera-names": "index.camera_names", "camera-sheet": "index.camera_sheet"},
     "qa": {
         "run": "qa.run",

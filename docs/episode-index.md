@@ -55,6 +55,12 @@ Episodes are discovered under `<data_dir>/OopsieData-Submissions/<repo>/` and, f
 
 An h5 is re-read only when its size or modification time changed, or when the index lacks one of the h5 columns, which happens once after a column is added. When the Hub listing of a repo fails, the earlier hashes and `on_hub` values are kept. `--no-hub` skips the listing.
 
+### Hub upload times (`ingest.upload_times`)
+
+`hub_uploaded_at` is the date of the commit that first added the episode's h5 to the default branch of its Hub repo, and `hub_upload_commit` is that commit. A file added by a merged pull request counts from the merge commit. Both are null for episodes not on the Hub. The history of each repo, commits and trees without file contents, is kept as a bare git clone in `<data root>/.hub_history/<repo>.git` and fetched incrementally. A repo whose fetch fails keeps its earlier values. A repo whose history was squashed on the Hub dates every file to the squash commit.
+
+No stage depends on these columns, so they rerun after the sync or the index changes without invalidating anything downstream. `uv run oopsie ingest upload-times --data-dir <mirror> --index episode_index.parquet` runs the step on its own.
+
 ### Camera names (`index.camera_names`)
 
 `unified_cameras` (`camera`, `name` per recorded camera; `name` is null for a camera that is left out) and `camera_name_issues` (cameras without a unified name, cameras marked `unknown`, and names two cameras of an episode share), as configured in `configs/camera_names.yaml`; see [camera names](camera-names.md).

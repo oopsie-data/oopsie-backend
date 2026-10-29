@@ -31,9 +31,9 @@ eval_split_proposals/
   ...
 ```
 
-An annotation budget, by default 2000 episodes, is split across the three groups by `--split-weights`. Each held-out lab and each held-out task gets an equal part of its group's budget as a target size, and a held-out task's target is at most `--holdout-task-cap`. Task candidates are ranked by `|log(size / target)|`.
+An annotation budget, by default 2000 episodes, is split across the three groups by `--split-weights`. Each held-out lab and each held-out task gets an equal part of its group's budget as a target size, and a held-out task's target is at most `--holdout-task-cap`.
 
-Every task in both held-out groups is labeled with at most `--holdout-task-cap` episodes, since more episodes of one task are mostly near-identical. A lab's labelable size is its episode count after this cap. Lab candidates are ranked by `|log(labelable / target)| + log(episodes / labelable)`, where the second term penalizes labs that would lose most of their episodes to the cap. Once the units are chosen, each group's budget is filled evenly across its units, and units smaller than an even share pass their remainder to the larger ones. Episodes beyond a unit's share are moved to `excluded`, which is neither train nor eval.
+Every task in both held-out groups is labeled with at most `--holdout-task-cap` episodes, since more episodes of one task are mostly near-identical. A lab's labelable size is its episode count after this cap. Lab candidates are ranked by `|log(labelable / target)| + log(episodes / labelable)`, where the second term penalizes labs that would lose most of their episodes to the cap. Task candidates are ranked the same way, by `|log(capped / target)| + log(episodes / capped)`, where `capped` is the task's episode count after the cap. Once the units are chosen, each group's budget is filled evenly across its units, and units smaller than an even share pass their remainder to the larger ones. Episodes beyond a unit's share are moved to `excluded`, which is neither train nor eval.
 
 "Medium" and "small" labs are defined by rank in the lab size ordering, not by share of the data. Task candidates must have no near-duplicate anywhere in the dataset. The candidate table lists each lab's best task before any lab's second, so its top rows span several labs.
 
@@ -43,7 +43,9 @@ The script writes `--num-proposals` (default 4) proposals that differ as much as
 |---|---|---|
 | `--eval-budget` / `--budget-frac` | 2000 / 0.05 | Episodes to label in total; pass `--eval-budget -1` to use the fraction instead |
 | `--split-weights` | 0.2,0.4,0.4 | Budget shares of `id`, `od_task_id_scene` and `od_task_od_scene` |
-| `--num-od-tasks` | 16 | Held-out tasks, each from a different lab |
+| `--num-od-tasks` | 16 | Held-out tasks |
+| `--od-tasks-per-lab` | 1 | Max held-out tasks from one lab; every lab's best task is chosen before any lab's second |
+| `--no-od-task-spread` | off | Rank held-out tasks by score alone instead of choosing every lab's best task before any lab's second |
 | `--num-ood-common` / `--num-ood-custom` | 6 / 2 | Held-out labs per embodiment class |
 | `--ood-common LAB` / `--ood-custom LAB` | search | Pin held-out labs |
 | `--od-task 'LAB::instruction'` | search | Pin held-out tasks |
@@ -94,7 +96,7 @@ This samples extra episodes to annotate from the proposal's train set. The pool 
 
 The output, `/corral/utexas/IRI26024/oopsiedata/annotation/train_annotation_sample.json` by default, uses the proposal layout with a single `train_annotated` split. Run steps 4 to 6 on it with the train directories, e.g. `--copies 1 --out-dir /corral/utexas/IRI26024/oopsiedata/annotation/train_assignment`.
 
-In the [pipeline](pipeline.md), the `eval_proposals` stage writes the proposals to `oopsiedata/annotation/proposals/`. Setting `chosen_proposal` in `configs/eval_split.yaml` freezes that proposal as `annotation/eval_proposal.json`, records it in the index, samples the train episodes, and, once `annotation/annotators.txt` exists, writes the assignments. The commands below run the same steps by hand.
+In the [pipeline](pipeline.md), the `eval_proposals` stage writes the proposals to `oopsiedata/annotation/proposals/`. It passes `propose_args` from `configs/eval_split.yaml` to the script; these currently hold out tasks only (1000 `id` and 1000 `od_task_id_scene` episodes, at most 20 per task, from 58 tasks with up to 5 per lab). Setting `chosen_proposal` in `configs/eval_split.yaml` freezes that proposal as `annotation/eval_proposal.json`, records it in the index, samples the train episodes, and, once `annotation/annotators.txt` exists, writes the assignments. The commands below run the same steps by hand.
 
 To record a proposal in the index by hand:
 

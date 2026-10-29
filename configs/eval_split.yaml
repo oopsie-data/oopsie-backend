@@ -10,6 +10,15 @@ propose_args:
   - --train-only=UT_RobIn
   - --train-only=Berkeley_RAIL
   - --train-only=UofT_TISL
+  - --eval-budget=2000
+  - --split-weights=0.5,0.5,0
+  - --num-ood-common=0
+  - --num-ood-custom=0
+  - --num-od-tasks=58
+  - --od-tasks-per-lab=5
+  - --holdout-task-cap=20
+  - --od-task-min-episodes=10
+  - --no-od-task-spread
 
 # Proposal id from proposals/REPORT.md to hold out; null until one is chosen.
 chosen_proposal: null

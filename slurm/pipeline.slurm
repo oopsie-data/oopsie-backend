@@ -14,18 +14,31 @@
 #   cd $SCRATCH/oopsie/oopsie-backend
 #   sbatch slurm/pipeline.slurm training --set training_recipe=configs/training/droid_joint_velocity.yaml
 #   sbatch slurm/pipeline.slurm imports
+#   sbatch slurm/pipeline.slurm sync --hf-token hf_... --set data_dir=/path/to/mirror
+#
+# --hf-token replaces HF_TOKEN and the token in tokens.yaml.
 
 set -euo pipefail
 umask 007
 SECONDS=0
 export HF_HUB_DISABLE_XET=1
 
+args=()
+while (( $# )); do
+  case $1 in
+    --hf-token) export HF_TOKEN=$2; shift 2 ;;
+    --hf-token=*) export HF_TOKEN=${1#*=}; shift ;;
+    *) args+=("$1"); shift ;;
+  esac
+done
+set -- ${args[@]+"${args[@]}"}
+
 BACKEND=${OOPSIE_BACKEND:-${SLURM_SUBMIT_DIR:-$PWD}}
 # shellcheck source=slurm/env.sh
 source "$BACKEND/slurm/env.sh"
 
 if (( $# == 0 )); then
-  echo "usage: sbatch slurm/pipeline.slurm TARGET [--set KEY=VALUE ...]" >&2
+  echo "usage: sbatch slurm/pipeline.slurm TARGET [--hf-token TOKEN] [--set KEY=VALUE ...]" >&2
   exit 2
 fi
 

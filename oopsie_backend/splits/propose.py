@@ -6,7 +6,7 @@ Usage:
 
 Three held-out groups per proposal:
   id                 stratified sample whose (lab, robot, cameras, task) stays in train
-  od_task_id_scene   full tasks from several medium multi-task labs, one per lab
+  od_task_id_scene   full tasks from several medium multi-task labs, by default one per lab
   od_task_od_scene   full small labs on common and on custom robots
 
 The annotation budget (``--eval-budget`` or ``--budget-frac`` of all episodes)
@@ -217,7 +217,14 @@ def main(argv: list[str] | None = None) -> int:
         "--train-only", action="append", default=[], metavar="LAB", help="Lab that never enters an eval split"
     )
     knobs = parser.add_argument_group("sizes")
-    knobs.add_argument("--num-od-tasks", type=int, default=d.num_od_tasks, help="Held-out tasks, from distinct labs")
+    knobs.add_argument("--num-od-tasks", type=int, default=d.num_od_tasks, help="Held-out tasks")
+    knobs.add_argument("--od-tasks-per-lab", type=int, default=d.od_tasks_per_lab, help="Max held-out tasks from one lab")
+    knobs.add_argument(
+        "--no-od-task-spread",
+        dest="od_task_spread",
+        action="store_false",
+        help="Rank held-out tasks by score alone instead of taking every lab's best task first",
+    )
     knobs.add_argument("--num-ood-common", type=int, default=d.num_ood_common, help="Held-out labs on common robots")
     knobs.add_argument("--num-ood-custom", type=int, default=d.num_ood_custom, help="Held-out labs on custom robots")
     knobs.add_argument("--eval-budget", type=int, default=d.eval_budget, help="Episodes to label in total; -1 uses --budget-frac")
@@ -277,6 +284,8 @@ def main(argv: list[str] | None = None) -> int:
         cap_holdouts=not args.no_holdout_cap,
         holdout_task_cap=args.holdout_task_cap or None,
         num_od_tasks=args.num_od_tasks,
+        od_tasks_per_lab=args.od_tasks_per_lab,
+        od_task_spread=args.od_task_spread,
         num_ood_common=args.num_ood_common,
         num_ood_custom=args.num_ood_custom,
         num_proposals=args.num_proposals,

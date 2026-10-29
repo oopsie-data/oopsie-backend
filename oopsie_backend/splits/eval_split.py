@@ -49,6 +49,8 @@ class SplitConfig:
     cap_holdouts: bool = True
     holdout_task_cap: int | None = 50
     num_od_tasks: int = 16
+    od_tasks_per_lab: int = 1
+    od_task_spread: bool = True
     num_ood_common: int = 6
     num_ood_custom: int = 2
     num_proposals: int = 4
@@ -265,9 +267,10 @@ def od_task_candidates(rows: list[dict], cfg: SplitConfig) -> list[dict]:
     A task qualifies when it is absent from every other lab, has no
     near-duplicate task anywhere, holds between ``od_task_min_episodes``
     episodes and ``od_task_max_share`` of its lab, and each of its scenes still
-    has training episodes on other tasks. Candidates are ordered by closeness
-    to the task target size, with each lab's best task first so that the top
-    of the list spans several labs.
+    has training episodes on other tasks. A candidate's score is the distance of
+    its capped size to the task target plus ``log(episodes / capped size)``, the
+    share the task cap drops. Candidates are ordered by score, with each lab's
+    best task first so that the top of the list spans several labs.
     """
     target = unit_targets(cfg, len(rows))[OD_TASK_SPLIT]
     quantiles = _lab_size_quantiles(rows)
@@ -290,12 +293,16 @@ def od_task_candidates(rows: list[dict], cfg: SplitConfig) -> list[dict]:
             if share > cfg.od_task_max_share or labs_per_task[task] != {lab}:
                 continue
             held = [r for r in rs if r["task"] == task]
-            kept_scenes = {scene(r) for r in rs if r["task"] != task}
-            if not {scene(r) for r in held} <= kept_scenes:
+            scene_tasks = {
+                "|".join(scene(h)[1:]): sorted({r["task"] for r in rs if scene(r) == scene(h) and r["task"] != task})
+                for h in held
+            }
+            if not all(scene_tasks.values()):
                 continue
             similar, similarity = nearest_task(task, all_tasks - {task})
             if similarity >= NEAR_DUPLICATE_SIMILARITY:
                 continue
+            kept = min(n, cfg.holdout_task_cap) if cfg.holdout_task_cap else n
             out.append(
                 {
                     "lab_id": lab,
@@ -307,14 +314,16 @@ def od_task_candidates(rows: list[dict], cfg: SplitConfig) -> list[dict]:
                     "lab_tasks": len(tasks),
                     "success_rate": _success_rate(held),
                     "target": target,
+                    "score": _size_score(kept, target) + math.log(n / kept),
+                    "scene_tasks": scene_tasks,
                 }
             )
-    out.sort(key=lambda c: _size_score(c["episodes"], c["target"]))
+    out.sort(key=lambda c: c["score"])
     rank_in_lab: Counter = Counter()
     for c in out:
         c["rank_in_lab"] = rank_in_lab[c["lab_id"]]
         rank_in_lab[c["lab_id"]] += 1
-    out.sort(key=lambda c: (c["rank_in_lab"], _size_score(c["episodes"], c["target"])))
+    out.sort(key=lambda c: (c["rank_in_lab"], c["score"]))
     return out
 
 
@@ -607,19 +616,40 @@ def _pick_labs(cands: list[dict], n: int, uses: Counter) -> list[str]:
 
 
 def _pick_tasks(
-    cands: list[dict], n: int, uses: Counter, lab_uses: Counter, excluded_labs: set[str]
+    cands: list[dict],
+    n: int,
+    uses: Counter,
+    lab_uses: Counter,
+    excluded_labs: set[str],
+    per_lab: int = 1,
+    spread: bool = True,
 ) -> list[tuple[str, str]]:
-    """``n`` tasks from distinct labs, each lab's best task after penalties for earlier uses."""
-    best: dict[str, tuple[float, dict]] = {}
-    for c in cands:
+    """``n`` tasks, at most ``per_lab`` from one lab, after penalties for earlier uses.
+
+    A task is skipped when it would leave one of its scenes without training tasks
+    next to the lab's tasks picked before it. With ``spread``, every lab's best
+    task ranks before any lab's second; otherwise tasks rank by score alone.
+    """
+    scored = sorted(
+        (
+            (_score(c) + REUSE_PENALTY * (uses[(c["lab_id"], c["task"])] + 0.5 * lab_uses[c["lab_id"]]), c)
+            for c in cands
+            if c["lab_id"] not in excluded_labs
+        ),
+        key=lambda sc: (sc[0], sc[1]["lab_id"], sc[1]["task"]),
+    )
+    rank: Counter = Counter()
+    held: dict[str, set[str]] = defaultdict(set)
+    ranked = []
+    for score, c in scored:
         lab = c["lab_id"]
-        if lab in excluded_labs:
+        if rank[lab] >= per_lab or any(set(ts) <= held[lab] | {c["task"]} for ts in c["scene_tasks"].values()):
             continue
-        score = _score(c) + REUSE_PENALTY * (uses[(lab, c["task"])] + 0.5 * lab_uses[lab])
-        if lab not in best or score < best[lab][0]:
-            best[lab] = (score, c)
-    ranked = sorted(best.values(), key=lambda sc: (sc[0], sc[1]["lab_id"]))
-    return [(c["lab_id"], c["task"]) for _, c in ranked[:n]]
+        ranked.append((rank[lab], score, c))
+        rank[lab] += 1
+        held[lab].add(c["task"])
+    ranked.sort(key=lambda r: (r[0] if spread else 0, r[1], r[2]["lab_id"]))
+    return [(c["lab_id"], c["task"]) for _, _, c in ranked[:n]]
 
 
 def enumerate_proposals(
@@ -632,7 +662,7 @@ def enumerate_proposals(
     """``num_proposals`` proposals that differ as much as the candidates allow.
 
     Held-out labs are chosen as ``num_ood_common`` + ``num_ood_custom`` labs,
-    held-out tasks as ``num_od_tasks`` tasks from distinct labs outside the
+    held-out tasks as ``num_od_tasks`` tasks, at most ``od_tasks_per_lab`` per lab, outside the
     held-out labs. Proposals are built one after another; a candidate's score
     grows by ``REUSE_PENALTY`` for each earlier proposal that used it, and a
     task's also by half that for each earlier use of its lab. A pinned list
@@ -648,7 +678,9 @@ def enumerate_proposals(
         common = ood_common or _pick_labs(lab_cands["common"], cfg.num_ood_common, lab_uses)
         custom = ood_custom or _pick_labs(lab_cands["custom"], cfg.num_ood_custom, lab_uses)
         ood = common + custom
-        tasks = od_tasks or _pick_tasks(task_cands, cfg.num_od_tasks, task_uses, task_lab_uses, set(ood))
+        tasks = od_tasks or _pick_tasks(
+            task_cands, cfg.num_od_tasks, task_uses, task_lab_uses, set(ood), cfg.od_tasks_per_lab, cfg.od_task_spread
+        )
         lab_uses.update(ood)
         task_uses.update(tasks)
         task_lab_uses.update(lab for lab, _ in tasks)

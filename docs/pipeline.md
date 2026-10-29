@@ -8,6 +8,8 @@ flowchart LR
   hub_mirror --> mirror_state
   mirror --> mirror_state
   mirror_state --> episode_index
+  hub_mirror --> hub_upload_times
+  episode_index --> hub_upload_times
   episode_index --> duplicate_episodes
   duplicate_episodes --> unified_camera_names
   camera_names_config --> unified_camera_names
@@ -40,6 +42,7 @@ The dashed edge is not a dependency: the manual `imported_datasets` stage writes
 | Stage | Package | Writes |
 |---|---|---|
 | `episode_index` | `index` | core columns: h5 metadata, file references, Hub hashes, content hash |
+| `hub_upload_times` | `ingest` | `hub_uploaded_at`, `hub_upload_commit`; `<data root>/.hub_history/` |
 | `duplicate_episodes` | `preqa` | `duplicate_of`, `duplicate_reasons`, `duplicate_group` |
 | `unified_camera_names` | `index` | `unified_cameras`, `camera_name_issues` |
 | `duplicate_videos` | `preqa` | `video_duplicates`, `has_duplicate_video` |

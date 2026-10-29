@@ -51,7 +51,7 @@ def main(argv: list[str] | None = None) -> int:
     proposal_id = proposal.get("proposal_id", args.proposal.stem)
     splits = args.only or list(SPLITS)
     out_dir = args.out_dir / proposal_id
-    jobs = [(s, split_entries(proposal, s), args.data_dir, out_dir, proposal_id) for s in splits]
+    jobs = [(s, e, args.data_dir, out_dir, proposal_id) for s in splits if (e := split_entries(proposal, s))]
 
     failed = 0
     with ProcessPoolExecutor(max_workers=len(jobs)) as pool:

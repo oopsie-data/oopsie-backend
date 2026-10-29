@@ -66,7 +66,7 @@ Batch scripts live in [`slurm/`](../slurm/):
 
 - [`daily_oopsie.slurm`](../slurm/daily_oopsie.slurm) — the full pipeline (`all` target), which starts with the sync
 - [`daily.scron`](../slurm/daily.scron) — cron schedule (3:00 daily)
-- [`pipeline.slurm`](../slurm/pipeline.slurm) — any pipeline target on a compute node, mainly the manual ones: `sbatch slurm/pipeline.slurm imports` or `sbatch slurm/pipeline.slurm training --set training_recipe=configs/training/<recipe>.yaml`, submitted from `$SCRATCH/oopsie/oopsie-backend`
+- [`pipeline.slurm`](../slurm/pipeline.slurm) — any pipeline target on a compute node, mainly the manual ones: `sbatch slurm/pipeline.slurm imports` or `sbatch slurm/pipeline.slurm training --set training_recipe=configs/training/<recipe>.yaml`, submitted from `$SCRATCH/oopsie/oopsie-backend`. `--set data_dir=<dir>` syncs or reads another mirror, and `--hf-token <token>` replaces `HF_TOKEN` and `tokens.yaml`.
 - [`env.sh`](../slurm/env.sh) — the paths, tools and token setup both jobs share
 
 Submit from anywhere:
