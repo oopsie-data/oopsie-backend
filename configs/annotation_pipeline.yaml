@@ -3,6 +3,8 @@
 # OopsieData-Submissions folder, so every run sees the same assignments, bundles,
 # returns and stores. --data-dir and --index override the values below.
 repo_id: OopsieData-Submissions/oopsie-annotation
+# Annotators open pull requests with their annotated h5 files here.
+returns_repo_id: OopsieData-Submissions/oopsie-annotation-returns
 data_dir: /corral/utexas/IRI26024/oopsiedata
 index: /corral/utexas/IRI26024/episode_index/episode_index.parquet
 stage_dir: annotation_repo

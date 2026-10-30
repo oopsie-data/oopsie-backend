@@ -1,5 +1,8 @@
 """Mirror every dataset repo of the Hugging Face org into ``<data_dir>/<org>/<repo>/``.
 
+Archive and infra repos of ``configs/repositories.yaml`` are skipped unless named
+with ``--only``.
+
 A file is downloaded when it is new, when its Hub blob changed, or when the local
 copy no longer has the size and modification time recorded after its download.
 That record is one table for the whole mirror, ``<data_dir>/.sync_state.parquet``;
@@ -50,6 +53,7 @@ from oopsie_backend.common.repos import (
     EXTERNAL_DATASETS,
     HF_ORG,
     IGNORED_DIR_NAMES,
+    INFRA_DATASETS,
     data_root,
 )
 
@@ -368,7 +372,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--data-dir", "--local-dir", type=Path, default=DEFAULT_DATA_DIR, help="Mirror root")
     parser.add_argument("--org", default=HF_ORG)
-    parser.add_argument("--only", nargs="+", default=None, help="Repo names to sync (default: every repo of the org)")
+    parser.add_argument("--only", nargs="+", default=None, help="Repo names to sync, archive and infra repos included (default: every other repo of the org)")
     parser.add_argument("--smallest", type=int, default=None, help="Sync only the N smallest contributor repos with h5 files")
     parser.add_argument("--token", default=os.environ.get("HF_TOKEN"), help="HF read token (default: $HF_TOKEN)")
     parser.add_argument("--parallel-repos", type=int, default=4, help="Repos processed at the same time, one per worker")
@@ -399,9 +403,11 @@ def main(argv: list[str] | None = None) -> int:
         _log("warning: no HF_TOKEN; the Hub lists only public repos")
     org = parse_org_arg(args.org)
     root = data_root(args.data_dir)
-    repo_ids = list_dataset_repos_for_org(org, args.token)
+    listed = list_dataset_repos_for_org(org, args.token)
     if args.only:
-        repo_ids = [r for r in repo_ids if r.split("/", 1)[1] in set(args.only)]
+        repo_ids = [r for r in listed if r.split("/", 1)[1] in set(args.only)]
+    else:
+        repo_ids = [r for r in listed if r not in ARCHIVE_DATASETS | INFRA_DATASETS]
     if args.smallest is not None:
         repo_ids = smallest_repos(repo_ids, args.smallest, args.token)
     if not repo_ids:
@@ -466,7 +472,7 @@ def main(argv: list[str] | None = None) -> int:
 
     gone = []
     if args.scan_local and not (args.only or args.smallest) and (root / org).is_dir():
-        names = {r.split("/", 1)[1] for r in repo_ids}
+        names = {r.split("/", 1)[1] for r in listed}
         gone = sorted(p.name for p in (root / org).iterdir() if p.is_dir() and not p.name.startswith(".") and p.name not in names)
 
     failed = [r for r in results_list if r.error or r.failed]

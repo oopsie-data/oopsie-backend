@@ -167,8 +167,8 @@ Copies are blind by default:
 ```bash
 P="uv run python -m oopsie_backend.annotation.pipeline --config configs/annotation_pipeline.yaml"
 $P stage      # LS6: package every batch into stage_dir
-$P publish    # create the private repo if needed and upload stage_dir
-$P pull       # download annotated h5s from pull requests
+$P publish    # create the private batch and returns repos if needed and upload stage_dir
+$P pull       # download annotated h5s from the returns repo's pull requests
 $P collect    # add them to each batch's store
 $P status     # returned/assigned per annotator and batch
 $P release    # LS6: write source episodes with collected annotations
@@ -177,14 +177,14 @@ $P release    # LS6: write source episodes with collected annotations
 `stage` writes `<folder>/<batch>/` per annotator, where `<folder>` is the annotator name in lowercase ASCII with `_` separators, and a `README.md` with the annotator-to-folder table and the commands annotators run:
 
 ```bash
-hf download <repo> --repo-type dataset --include "<folder>/*" --local-dir oopsie-annotation
+oopsie-data annotation download
 oopsie-data annotate --samples-dir oopsie-annotation/<folder>/batch_1/episodes --annotator-name "<name>"
-hf upload <repo> oopsie-annotation/<folder> <folder> --repo-type dataset --include "*.h5" --create-pr
+oopsie-data annotation upload
 ```
 
-`publish` refuses to upload if the repo exists and is public.
+`annotation download` asks for the annotator's full name and a Hugging Face token and downloads only that annotator's folder of the batch repo (`repo_id`). `annotation upload` opens a pull request with every h5 annotated under that name on the returns repo (`returns_repo_id`), at the same paths. `publish` creates both repos as private datasets and refuses to upload if either exists and is public.
 
-`pull` checks every open or merged pull request. A pull request is rejected if it changes anything other than `<folder>/<batch>/episodes/NNNN.h5` files of one known annotator folder. Accepted ones are downloaded to `returns_dir/pr_NNNN/`, with only the changed h5 files and the manifests of the touched batches. A pull request is downloaded again only when its head commit changes. `--close` closes open pull requests once downloaded. Pull requests never need to be merged, and `returns_dir/pull_requests.json` records the result for each.
+`pull` checks every open or merged pull request of the returns repo. A pull request is rejected if it changes anything other than `<folder>/<batch>/episodes/NNNN.h5` files of one known annotator folder. Accepted ones are downloaded to `returns_dir/pr_NNNN/`, with only the changed h5 files and, from the batch repo, the manifests of the touched batches. A pull request is downloaded again only when its head commit changes. `--close` closes open pull requests once downloaded. Pull requests never need to be merged, and `returns_dir/pull_requests.json` records the result for each.
 
 `collect` passes every `pr_*/<folder>/<batch>` folder to `collect_eval_annotations` with that batch's assignment directory and store. Because the store is append-only and keyed by content, `pull` and `collect` can be re-run as returns arrive. When an annotator uploads twice, both versions are kept as revisions and the later timestamp is current.
 

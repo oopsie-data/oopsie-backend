@@ -2,15 +2,16 @@
 # Every repo not listed here or as a `hub` entry of configs/imports.yaml is a
 # contributor repo. Read by oopsie_backend.common.repos.
 
-# Frozen snapshots. Never indexed or counted; their h5 files are not read.
+# Frozen snapshots. Never synced, indexed or counted; their h5 files are not read.
 archive:
   - OopsieData-Submissions/oopsiedata-v0.1
   - OopsieData-Submissions/oopsiedata-converted-v0.1
   - OopsieData-Submissions/oopsie-face-raw-archive-2026-08-12
 
-# Site assets and the annotation repo. Never indexed, and left out of the
-# dataset inventory.
+# Site assets and the annotation repos. Never synced or indexed, and left out
+# of the dataset inventory.
 infra:
   - OopsieData-Submissions/Visualizer_Previews
   - OopsieData-Submissions/WebVisualizer
   - OopsieData-Submissions/oopsie-annotation
+  - OopsieData-Submissions/oopsie-annotation-returns

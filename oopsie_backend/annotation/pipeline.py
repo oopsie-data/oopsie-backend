@@ -6,8 +6,8 @@ Usage:
 
 Commands, in pipeline order:
   stage     (LS6) package every batch into ``stage_dir`` as ``<folder>/<batch>/``
-  publish   create the private dataset repo if needed and upload ``stage_dir``
-  pull      download annotated h5s from the repo's pull requests to ``returns_dir``
+  publish   create the private batch and returns repos if needed and upload ``stage_dir``
+  pull      download annotated h5s from the returns repo's pull requests to ``returns_dir``
   collect   add pulled annotations to each batch's store and write its summary
   status    returned vs assigned annotations per annotator and batch
   index     write assignment and collected annotations to the episode index
@@ -64,10 +64,11 @@ def publish(cfg: PipelineConfig, args: argparse.Namespace) -> int:
         print(f"error: {cfg.stage_dir} is not staged; run stage first", file=sys.stderr)
         return 1
     api = HfApi()
-    api.create_repo(cfg.repo_id, repo_type="dataset", private=True, exist_ok=True)
-    if not api.repo_info(cfg.repo_id, repo_type="dataset").private:
-        print(f"error: {cfg.repo_id} is public; make it private before uploading", file=sys.stderr)
-        return 1
+    for repo in (cfg.repo_id, cfg.returns_repo_id):
+        api.create_repo(repo, repo_type="dataset", private=True, exist_ok=True)
+        if not api.repo_info(repo, repo_type="dataset").private:
+            print(f"error: {repo} is public; make it private before uploading", file=sys.stderr)
+            return 1
     api.upload_large_folder(cfg.repo_id, cfg.stage_dir, repo_type="dataset", num_workers=args.workers)
     print(f"uploaded {cfg.stage_dir} to https://huggingface.co/datasets/{cfg.repo_id}", file=sys.stderr)
     return 0

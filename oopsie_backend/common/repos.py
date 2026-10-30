@@ -4,7 +4,7 @@
 ``configs/imports.yaml`` the imported datasets. Each dataset has a kind:
 ``contributor`` (every org repo not listed), ``external`` (imported datasets,
 never public), ``archive`` (frozen snapshots) or ``infra`` (site assets and the
-annotation repo). Only contributor and external datasets hold episodes.
+annotation repos). Only contributor and external datasets hold episodes.
 
 Imported datasets are either repos of the org or converted locally into
 ``<data root>/imports/<name>``; the latter have the dataset id ``imports/<name>``.

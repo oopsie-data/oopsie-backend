@@ -1,11 +1,12 @@
 """Distribute annotation batches through a Hugging Face dataset repo and pull returns from its pull requests.
 
-The repo holds ``<folder>/<batch>/`` per annotator (see ``stage_annotation_repo``).
-Annotators return their annotated h5 files as pull requests. A pull request is
-accepted when it only changes ``<folder>/<batch>/episodes/NNNN.h5`` files of a
-single annotator folder; accepted pull requests are downloaded to
-``<returns_dir>/pr_NNNN/`` together with that folder's manifests. A pull
-request is downloaded again only when its head commit changes.
+The batch repo holds ``<folder>/<batch>/`` per annotator (see ``stage_annotation_repo``).
+Annotators return their annotated h5 files, at the same paths, as pull requests
+to a separate returns repo (``oopsie-data annotation upload``). A pull request
+is accepted when it only changes ``<folder>/<batch>/episodes/NNNN.h5`` files of
+a single annotator folder; accepted pull requests are downloaded to
+``<returns_dir>/pr_NNNN/``, together with that folder's manifests from the
+batch repo. A pull request is downloaded again only when its head commit changes.
 """
 
 from __future__ import annotations
@@ -38,6 +39,7 @@ class Batch:
 @dataclass
 class PipelineConfig:
     repo_id: str
+    returns_repo_id: str
     data_dir: Path
     stage_dir: Path
     returns_dir: Path
@@ -56,6 +58,7 @@ def load_config(path: Path, data_dir: Path | None = None, index: Path | None = N
     index = index or (Path(raw["index"]) if raw.get("index") else None)
     return PipelineConfig(
         repo_id=raw["repo_id"],
+        returns_repo_id=raw["returns_repo_id"],
         data_dir=data_dir,
         stage_dir=root / raw["stage_dir"],
         returns_dir=root / raw["returns_dir"],
@@ -114,18 +117,22 @@ def check_pull_request(paths: set[str], folders: set[str], batches: list[str]) -
 def pull_returns(
     api: HfApi, cfg: PipelineConfig, folders: set[str], close: bool = False
 ) -> list[dict]:
-    """Download every acceptable pull request that changed since the last pull; return one row per pull request."""
+    """Download every acceptable pull request of the returns repo that changed since the last pull.
+
+    Returns one row per pull request.
+    """
+    repo = cfg.returns_repo_id
     batches = [b.name for b in cfg.batches]
     heads = {
         ref.ref: ref.target_commit
-        for ref in api.list_repo_refs(cfg.repo_id, repo_type="dataset", include_pull_requests=True).pull_requests
+        for ref in api.list_repo_refs(repo, repo_type="dataset", include_pull_requests=True).pull_requests
     }
     rows = []
-    for d in api.get_repo_discussions(cfg.repo_id, repo_type="dataset", discussion_type="pull_request"):
+    for d in api.get_repo_discussions(repo, repo_type="dataset", discussion_type="pull_request"):
         if d.status not in PULLED_STATUSES:
             continue
         row = {"num": d.num, "author": d.author, "status": d.status, "title": d.title}
-        details = api.get_discussion_details(cfg.repo_id, d.num, repo_type="dataset")
+        details = api.get_discussion_details(repo, d.num, repo_type="dataset")
         paths = changed_paths(details.diff or "")
         folder, reason = check_pull_request(paths, folders, batches)
         row |= {"folder": folder, "files": len(paths)}
@@ -140,18 +147,20 @@ def pull_returns(
         else:
             touched = sorted({p.split("/")[1] for p in paths})
             api.snapshot_download(
+                repo, repo_type="dataset", revision=f"refs/pr/{d.num}", local_dir=dest, allow_patterns=sorted(paths)
+            )
+            api.snapshot_download(
                 cfg.repo_id,
                 repo_type="dataset",
-                revision=f"refs/pr/{d.num}",
                 local_dir=dest,
-                allow_patterns=sorted(paths) + [f"{folder}/{b}/{MANIFEST_NAME}" for b in touched],
+                allow_patterns=[f"{folder}/{b}/{MANIFEST_NAME}" for b in touched],
             )
             if head:
                 marker.write_text(head)
             result = "downloaded"
         if close and d.status == "open":
             api.change_discussion_status(
-                cfg.repo_id, d.num, "closed", repo_type="dataset", comment="Annotations collected, thank you."
+                repo, d.num, "closed", repo_type="dataset", comment="Annotations collected, thank you."
             )
             result += ", closed"
         rows.append(row | {"result": result})

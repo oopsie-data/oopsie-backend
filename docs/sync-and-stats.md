@@ -116,7 +116,7 @@ export HF_TOKEN=<master.hf_token from /corral/utexas/IRI26024/oopsiedata/tokens.
 sg G-829069 -c "uv run oopsie ingest sync --data-dir /corral/utexas/IRI26024/oopsiedata"
 ```
 
-For every repo of the org, the sync lists the Hub at the repo's current commit and compares each file with `.sync_state.parquet`, which records every synced file's Hub blob id, sha256, local size and modification time:
+The sync skips the archive and infra repos of `configs/repositories.yaml`, such as the annotation repo, unless `--only` names them. For every other repo of the org, it lists the Hub at the repo's current commit and compares each file with `.sync_state.parquet`, which records every synced file's Hub blob id, sha256, local size and modification time:
 
 | Local file | Action |
 |---|---|

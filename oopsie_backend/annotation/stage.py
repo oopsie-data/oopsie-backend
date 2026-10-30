@@ -45,7 +45,7 @@ def _package(job: tuple) -> tuple[str, list[str]]:
     return str(target), missing
 
 
-def readme(repo_id: str, batches: list[str], folders: dict[str, str], counts: dict[tuple[str, str], int]) -> str:
+def readme(batches: list[str], folders: dict[str, str], counts: dict[tuple[str, str], int]) -> str:
     rows = "\n".join(
         f"| {name} | `{folder}` | " + " | ".join(str(counts.get((name, b), 0)) for b in batches) + " |"
         for name, folder in sorted(folders.items())
@@ -65,8 +65,10 @@ Each annotator has one folder with {len(batches)} batches ({", ".join(batches)})
 ## Download your folder
 
 ```bash
-hf download {repo_id} --repo-type dataset --include "<folder>/*" --local-dir oopsie-annotation
+oopsie-data annotation download
 ```
+
+This asks for your full name, as listed above, and a HuggingFace token, and downloads only your folder into `oopsie-annotation/`.
 
 ## Annotate
 
@@ -79,10 +81,10 @@ Episodes are numbered in the order they should be annotated.
 ## Upload your annotations
 
 ```bash
-hf upload {repo_id} oopsie-annotation/<folder> <folder> --repo-type dataset --include "*.h5" --create-pr
+oopsie-data annotation upload
 ```
 
-This opens a pull request with your annotated files. You can upload again at any time; later uploads replace earlier ones.
+This opens a pull request with your annotated files on the returns repo. You can upload again at any time; later uploads replace earlier ones.
 """
 
 
@@ -136,7 +138,7 @@ def main(argv: list[str] | None = None) -> int:
         taken[folder] = name
 
     args.out_dir.mkdir(parents=True, exist_ok=True)
-    (args.out_dir / "README.md").write_text(readme(args.repo_id, batch_names, folders, counts))
+    (args.out_dir / "README.md").write_text(readme(batch_names, folders, counts))
 
     failed = 0
     with ProcessPoolExecutor(max_workers=args.workers) as pool:
