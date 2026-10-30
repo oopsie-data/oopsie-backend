@@ -3,16 +3,13 @@
 Usage:
     uv run python -m oopsie_backend.annotation.stage \\
         --batch batch_1=eval_assignment --batch batch_2=train_assignment \\
-        --data-dir /corral/utexas/IRI26024/oopsiedata --out-dir annotation_repo \\
-        --repo-id OopsieData-Submissions/oopsie-annotation
+        --data-dir /corral/utexas/IRI26024/oopsiedata --out-dir annotation_repo
 
 Writes ``<folder>/<batch>/`` per annotator and batch, each holding
 ``eval_manifest.json`` and ``episodes/0001.h5``, ``episodes/0001_<cam>.mp4``, ...
 ``<folder>`` is the annotator name in lowercase ASCII with ``_`` separators.
 A ``README.md`` at the root lists every annotator's folder and the commands
-to download, annotate and upload. Upload the tree with
-
-    hf upload-large-folder <repo-id> annotation_repo --repo-type dataset
+to download, annotate and upload. ``annotation.pipeline publish`` uploads the tree.
 """
 
 from __future__ import annotations
@@ -98,7 +95,6 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
     parser.add_argument("--out-dir", type=Path, default=Path("annotation_repo"))
-    parser.add_argument("--repo-id", default="OopsieData-Submissions/oopsie-annotation")
     parser.add_argument(
         "--keep-annotations",
         action="store_true",
@@ -147,7 +143,6 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"  {target}: {msg}", file=sys.stderr)
             failed += len(missing)
     print(f"{len(jobs)} bundle(s) in {args.out_dir}, {failed} episode(s) not packaged", file=sys.stderr)
-    print(f"upload with: hf upload-large-folder {args.repo_id} {args.out_dir} --repo-type dataset", file=sys.stderr)
     return 1 if failed else 0
 
 

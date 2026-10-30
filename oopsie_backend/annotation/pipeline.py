@@ -51,7 +51,6 @@ def stage(cfg: PipelineConfig, args: argparse.Namespace) -> int:
     argv += [
         "--data-dir", str(cfg.data_dir),
         "--out-dir", str(cfg.stage_dir),
-        "--repo-id", cfg.repo_id,
         "--workers", str(args.workers),
     ]
     if args.only:
@@ -69,7 +68,11 @@ def publish(cfg: PipelineConfig, args: argparse.Namespace) -> int:
         if not api.repo_info(repo, repo_type="dataset").private:
             print(f"error: {repo} is public; make it private before uploading", file=sys.stderr)
             return 1
-    api.upload_large_folder(cfg.repo_id, cfg.stage_dir, repo_type="dataset", num_workers=args.workers)
+    if hasattr(api, "upload_large_folder"):
+        api.upload_large_folder(cfg.repo_id, cfg.stage_dir, repo_type="dataset", num_workers=args.workers)
+    else:
+        # huggingface_hub 2 commits large folders in batches and resumes in upload_folder itself.
+        api.upload_folder(repo_id=cfg.repo_id, folder_path=cfg.stage_dir, repo_type="dataset")
     print(f"uploaded {cfg.stage_dir} to https://huggingface.co/datasets/{cfg.repo_id}", file=sys.stderr)
     return 0
 
