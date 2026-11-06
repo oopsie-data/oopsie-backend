@@ -23,8 +23,8 @@ FINAL_STAGES = sorted(set(_AUTOMATIC) - {p for f in _AUTOMATIC.values() for p in
 # Named targets of ``oopsie pipeline run``, each a list of stages to compute.
 TARGETS: dict[str, list[str]] = {
     "sync": ["hub_mirror"],
-    "index": ["episode_index", "unified_camera_names"],
-    "preqa": ["duplicate_episodes", "duplicate_videos"],
+    "index": ["episode_index", "hub_upload_times"],
+    "preqa": ["duplicate_episodes", "duplicate_videos", "unified_camera_names"],
     "qa": ["qa_results"],
     "postqa": ["critical_episodes"],
     "stats": ["stats"],

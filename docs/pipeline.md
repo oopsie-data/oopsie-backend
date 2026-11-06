@@ -71,8 +71,8 @@ uv run oopsie pipeline run postqa --graph dag.png
 
 | Target | Stages |
 |---|---|
-| `index` | `episode_index`, `unified_camera_names` |
-| `preqa` | `duplicate_episodes`, `duplicate_videos` |
+| `index` | `episode_index`, `hub_upload_times` |
+| `preqa` | `duplicate_episodes`, `duplicate_videos`, `unified_camera_names` |
 | `qa` | `qa_results` |
 | `postqa` | `critical_episodes` |
 | `stats` | `stats` |
