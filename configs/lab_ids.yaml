@@ -1,0 +1,6 @@
+# Canonical lab_id -> raw lab_id values recorded in the h5 files. Read by the index build, which
+# stores the canonical name in `lab_id`. Labs not listed keep their recorded lab_id.
+
+Enactic_OpenArm:
+  - Enact
+  - Enatic_OpenArm

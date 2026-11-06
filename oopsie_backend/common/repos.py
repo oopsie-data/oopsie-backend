@@ -21,6 +21,7 @@ from oopsie_backend.common.stats_config import CONFIG
 CONFIG_DIR = Path(__file__).resolve().parent.parent.parent / "configs"
 REPOSITORIES_CONFIG = CONFIG_DIR / "repositories.yaml"
 IMPORTS_CONFIG = CONFIG_DIR / "imports.yaml"
+LAB_IDS_CONFIG = CONFIG_DIR / "lab_ids.yaml"
 _REPOS = yaml.safe_load(REPOSITORIES_CONFIG.read_text()) or {}
 IMPORTS_PREFIX = "imports"
 
@@ -34,6 +35,18 @@ def load_imports(path: Path = IMPORTS_CONFIG) -> dict[str, dict]:
         if entry.get("converter") and not entry.get("source"):
             raise ValueError(f"{path}: {name} needs a source")
     return datasets
+
+
+def load_lab_aliases(path: Path = LAB_IDS_CONFIG) -> dict[str, str]:
+    """Raw lab_id -> canonical lab_id, from ``configs/lab_ids.yaml``."""
+    config = yaml.safe_load(path.read_text()) or {}
+    aliases = {}
+    for canonical, raw_names in config.items():
+        for raw in raw_names or []:
+            if aliases.get(raw, canonical) != canonical:
+                raise ValueError(f"{path}: {raw} is listed under {aliases[raw]} and {canonical}")
+            aliases[raw] = canonical
+    return aliases
 
 
 def import_dataset_id(name: str, entry: dict) -> str:

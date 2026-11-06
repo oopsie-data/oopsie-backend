@@ -6,6 +6,7 @@ Archive and infra repos (``configs/repositories.yaml``) are not indexed;
 external datasets are indexed as ``external`` with ``public = false``. A file is re-read
 only when its size or modification time changed. File hashes come from the Hub
 listing: ``sha256`` for LFS files and the git object id for all files.
+``lab_id`` is mapped to its canonical name from ``configs/lab_ids.yaml``.
 ``content_hash`` hashes the action and robot state arrays, so copies of an
 episode share it; ``preqa.duplicate_episodes`` uses it to mark duplicates.
 """
@@ -37,6 +38,7 @@ from oopsie_backend.common.repos import (
     import_dataset_id,
     is_local_import,
     load_imports,
+    load_lab_aliases,
     org_dir,
     repo_kind,
 )
@@ -354,8 +356,9 @@ def build_core(
             video["sha256"] = v["sha256"] if v else None
             video["git_oid"] = v["git_oid"] if v else None
 
+    lab_aliases = load_lab_aliases()
     for row in rows.values():
-        lab = row.get("lab_id")
+        lab = row["lab_id"] = lab_aliases.get(row.get("lab_id"), row.get("lab_id"))
         row["public"] = row["repo_kind"] == CONTRIBUTOR and lab not in PUBLIC_EXCLUDED_LABS
     df = pl.DataFrame(
         [{c: row.get(c) for c in CORE_SCHEMA} for row in rows.values()], schema=CORE_SCHEMA

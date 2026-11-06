@@ -5,7 +5,7 @@ from __future__ import annotations
 import hashlib
 from pathlib import Path
 
-from oopsie_backend.common.repos import IMPORTS_CONFIG, REPOSITORIES_CONFIG
+from oopsie_backend.common.repos import IMPORTS_CONFIG, LAB_IDS_CONFIG, REPOSITORIES_CONFIG
 from oopsie_backend.index import build, camera_names
 from oopsie_backend.index.core import CORE_SCHEMA, discover
 from oopsie_backend.index.store import columns_fingerprint
@@ -14,8 +14,8 @@ from oopsie_backend.pipeline.registry import check_rc, files_fingerprint, stage
 
 @stage(always_run=True)
 def mirror_state(hub_mirror: str, data_dir: str, index_path: str) -> str:
-    """Runs after the Hub sync. Fingerprint of every indexed h5's path, size and modification time, the repo and import configs and the index's existence."""
-    h = hashlib.sha256(files_fingerprint([REPOSITORIES_CONFIG, IMPORTS_CONFIG]).encode())
+    """Runs after the Hub sync. Fingerprint of every indexed h5's path, size and modification time, the repo, import and lab id configs and the index's existence."""
+    h = hashlib.sha256(files_fingerprint([REPOSITORIES_CONFIG, IMPORTS_CONFIG, LAB_IDS_CONFIG]).encode())
     h.update(b"index" if Path(index_path).is_file() else b"no index")
     for dataset_repo, repo_path, path, _ in discover(Path(data_dir)):
         st = path.stat()

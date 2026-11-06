@@ -37,7 +37,7 @@ Episodes are discovered under `<data_dir>/OopsieData-Submissions/<repo>/` and, f
 | `episode_key`, `dataset_repo`, `repo_path` | identity; `repo_path` is the h5 path inside the HF repo |
 | `repo_kind`, `public` | see above |
 | `on_disk`, `on_hub` | whether the h5 is in the local mirror and in the Hub listing; rows whose file disappeared stay with `on_disk = false` |
-| `schema`, `episode_id`, `lab_id`, `operator_name`, `language_instruction`, `timestamp` | root attributes of the h5; `timestamp` is null before 2000 |
+| `schema`, `episode_id`, `lab_id`, `operator_name`, `language_instruction`, `timestamp` | root attributes of the h5; `lab_id` is mapped to its canonical name from `configs/lab_ids.yaml`; `timestamp` is null before 2000 |
 | `task` | `language_instruction` lowercased, whitespace collapsed, surrounding punctuation stripped |
 | `robot_name`, `gripper_name`, `policy_name`, `control_freq`, `is_biarm`, `uses_mobile_base`, `action_space`, `robot_state_keys` | from `robot_profile` |
 | `single_arm`, `biarm` | embodiment: one arm or two, from `is_biarm` |
