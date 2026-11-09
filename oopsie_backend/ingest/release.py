@@ -318,8 +318,10 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     if args.command == "list":
-        for tag in sorted(HfApi(token=args.token).list_repo_refs(args.repo, repo_type="dataset").tags, key=lambda t: t.name):
-            print(f"{tag.name}  {tag.target_commit[:12]}")
+        api = HfApi(token=args.token)
+        for tag in sorted(api.list_repo_refs(args.repo, repo_type="dataset").tags, key=lambda t: t.name):
+            commit = api.dataset_info(args.repo, revision=tag.name).sha
+            print(f"{tag.name}  {commit[:12]}")
         return 0
     try:
         publish(

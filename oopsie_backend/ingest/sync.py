@@ -433,7 +433,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.revisions or args.release:
         if root.resolve() == DEFAULT_DATA_DIR.resolve():
             # A pinned sync replaces newer files with their snapshot versions.
-            _log(f"error: --revisions would overwrite the shared mirror {root}; pass another --data-dir")
+            _log(f"error: a pinned sync (--revisions, --release) would overwrite the shared mirror {root}; pass another --data-dir")
             return 1
         if args.release:
             args.revisions = release.fetch(args.release, root, token=args.token) / "snapshot.json"
