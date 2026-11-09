@@ -15,3 +15,5 @@ infra:
   - OopsieData-Submissions/WebVisualizer
   - OopsieData-Submissions/oopsie-annotation
   - OopsieData-Submissions/oopsie-annotation-returns
+  # Data releases: snapshot, index and annotation files; see oopsie_backend/ingest/release.py.
+  - OopsieData-Submissions/oopsiedata-releases

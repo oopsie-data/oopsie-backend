@@ -34,6 +34,7 @@ TARGETS: dict[str, list[str]] = {
     "all": FINAL_STAGES,
     "imports": ["imported_datasets"],
     "training": ["training_data"],
+    "release": ["data_release"],
 }
 
 __all__ = ["FINAL_STAGES", "STAGES", "TARGETS"]

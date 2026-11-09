@@ -56,6 +56,7 @@ Paths are set in `configs/pipeline.yaml` (values on LS6):
 | `annotator_assignments` | `annotation` (dependency) | assigns episodes to annotators. Writes `<data>/annotation/eval_assignment/`, `<data>/annotation/train_assignment/` | **waits for you** to fill `<data>/annotation/annotators.txt`; write-once |
 | `annotation_columns` | `annotation` | pulls annotations into the index. Writes `<index>` (`annotation_*` columns) | annotation config or stores changed |
 | `training_data` | `training` | materializes a training set. Writes `<training>/<recipe>/`, `<index>` (column `training_sets`) | **manual**; recipe changed |
+| `data_release` | `release` | publishes a data release: the Hub commit of every repo, the index and the annotation files. Writes the folder `<name>/` and tag `<name>` of `OopsieData-Submissions/oopsiedata-releases` | **manual**; needs `--set release_snapshot=<clean sync report>`; runs no other stage |
 
 Write-once outputs are never rewritten; if their settings change the run fails. Delete the output and its `.inputs` file to regenerate.
 
@@ -75,6 +76,7 @@ Write-once outputs are never rewritten; if their settings change the run fails. 
 | `annotation` | `annotation_columns` |
 | `imports` | `imported_datasets` |
 | `training` | `training_data`; needs `--set training_recipe=configs/training/<recipe>.yaml` |
+| `release` | `data_release`; needs `--set release_snapshot=<clean sync report>` (see [sync-and-stats.md](sync-and-stats.md#data-releases)) |
 
 ## Graph
 

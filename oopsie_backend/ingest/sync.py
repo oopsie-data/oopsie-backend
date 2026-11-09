@@ -20,13 +20,15 @@ the Hub listing nor the record, and for repo folders the Hub no longer has.
 Snapshots: the report lists the Hub commit of every repo that synced completely.
 A copy of a clean report (``datasets_failed: 0``) is a snapshot of the data;
 ``--revisions <snapshot>`` downloads each of its repos at that commit, into a data
-dir other than the shared mirror.
+dir other than the shared mirror. Published snapshots are data releases
+(``oopsie_backend.ingest.release``); ``--release <name>`` downloads one, with its
+episode index and annotation files, and syncs its data.
 
 Usage:
     export HF_TOKEN=hf_...
     uv run oopsie ingest sync --data-dir /corral/utexas/IRI26024/oopsiedata
-    cp /corral/utexas/IRI26024/oopsiedata/.sync_report.json /corral/utexas/IRI26024/oopsiedata/snapshots/$(date -I).json
-    uv run oopsie ingest sync --data-dir /path/to/copy --revisions /corral/utexas/IRI26024/oopsiedata/snapshots/2026-11-08.json
+    uv run oopsie ingest sync --data-dir /path/to/copy --release 2026-11-08
+    uv run oopsie ingest sync --data-dir /path/to/copy --revisions snapshot.json
 """
 
 from __future__ import annotations
@@ -63,6 +65,7 @@ from oopsie_backend.common.repos import (
     INFRA_DATASETS,
     data_root,
 )
+from oopsie_backend.ingest import release
 
 STATE_NAME = ".sync_state.parquet"
 REPORT_NAME = ".sync_report.json"
@@ -399,6 +402,11 @@ def main(argv: list[str] | None = None) -> int:
         help="A snapshot (a copy of a clean .sync_report.json): sync each of its repos at its recorded commit, "
         "into a data dir other than the shared mirror",
     )
+    parser.add_argument(
+        "--release", default=None,
+        help="A published data release, e.g. 2026-11-08: download its snapshot, index and annotation files "
+        "to <data dir>/releases/<name>/ and sync each repo at its commit, into a data dir other than the shared mirror",
+    )
     args = parser.parse_args(argv)
 
     os.umask(0o002)
@@ -419,11 +427,16 @@ def main(argv: list[str] | None = None) -> int:
     org = parse_org_arg(args.org)
     root = data_root(args.data_dir)
     revisions = None
-    if args.revisions:
+    if args.revisions and args.release:
+        _log("error: pass --revisions or --release, not both")
+        return 1
+    if args.revisions or args.release:
         if root.resolve() == DEFAULT_DATA_DIR.resolve():
             # A pinned sync replaces newer files with their snapshot versions.
             _log(f"error: --revisions would overwrite the shared mirror {root}; pass another --data-dir")
             return 1
+        if args.release:
+            args.revisions = release.fetch(args.release, root, token=args.token) / "snapshot.json"
         snapshot = json.loads(args.revisions.read_text())
         revisions = {d["repo_id"]: d["commit"] for d in snapshot["datasets"] if d.get("commit")}
         missing = [d["repo_id"] for d in snapshot["datasets"] if not d.get("commit")]

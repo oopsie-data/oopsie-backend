@@ -137,6 +137,8 @@ Downloads go to a temporary name next to the target over plain HTTPS and are ren
 | `--state PATH` | keep the sync record (and the report) at `PATH` instead of the data directory, e.g. on `$SCRATCH` when Corral has no free files |
 | `--scan-local` | also report untracked local files and repo folders the Hub no longer has |
 | `--delete-removed` | delete local files the Hub no longer has |
+| `--release NAME` | download a [data release](#data-releases) and sync each repo at its commit; not into the shared mirror |
+| `--revisions FILE` | sync each repo of a snapshot file at its commit; not into the shared mirror |
 | `--keep-hf-cache` | keep the `.cache/huggingface` folders |
 | `--group G-829069` | set this group on every file and folder the sync creates |
 | `--parallel-repos N` | repos processed at the same time, one per worker (default 4) |
@@ -166,6 +168,36 @@ Downloaded 12 file(s), adopted 0, unchanged 37041, removed on Hub 3, repos faile
 The first sync of an existing `snapshot_download` mirror reports most files as adopted.
 
 `<data_dir>/.sync_report.json` holds the totals and, per repo, the counts, the files removed on the Hub, untracked files (with `--scan-local`), and failures. `repos_not_on_hub` lists local repo folders the Hub no longer has. The nightly job fails at the end if `datasets_failed` is not 0.
+
+#### Data releases
+
+A release pins the data so that anyone can download the exact same copy, with the index built from it. Each release is a folder and a tag, named after the sync date, in the private repo [`OopsieData-Submissions/oopsiedata-releases`](https://huggingface.co/datasets/OopsieData-Submissions/oopsiedata-releases):
+
+| File | Contents |
+|---|---|
+| `snapshot.json` | a clean sync report; `datasets[].commit` is the Hub commit of every synced repo |
+| `episode_index.parquet` | the index built from exactly that data |
+| `annotation/` | `eval_proposal.json`, `train_annotation_sample.json`, `eval_assignment/`, `train_assignment/`, `annotators.txt`, `proposals/`, annotation stores, with their `.inputs` records |
+| `configs/` | the backend's `configs/` |
+| `manifest.json` | backend commit, commits of the annotation repos, sha256 of every file |
+
+The sync report records a repo's commit only when the repo synced completely. To publish a release, sync, update the index, then:
+
+```bash
+cp $DATA_DIR/.sync_report.json $DATA_DIR/snapshots/$(date -I).json
+uv run oopsie ingest release publish --snapshot $DATA_DIR/snapshots/$(date -I).json
+# or: uv run oopsie pipeline run release "${PIPELINE_SETTINGS[@]}" --set release_snapshot=$DATA_DIR/snapshots/$(date -I).json
+```
+
+Publishing refuses unless the sync was clean, every index episode is in the snapshot with the sha256 the index recorded, and the sync record lists exactly the files of each pinned commit (`--skip-hub-check` skips the last). `--dry-run` runs the checks and builds the release without uploading. Releases are never replaced. `oopsie ingest release list` lists them.
+
+To download a release (never into the shared mirror):
+
+```bash
+uv run oopsie ingest sync --release 2026-11-08 --data-dir /path/to/data
+```
+
+This downloads the release to `<data dir>/releases/2026-11-08/` (the index is `episode_index.parquet` there), copies `annotation/` to `<data dir>/annotation/` where missing, and syncs every repo at its commit. `--revisions <snapshot.json>` syncs from a local snapshot file instead. A release breaks if a lab deletes its repo or squashes its history.
 
 ### 2. Update the index and stats
 

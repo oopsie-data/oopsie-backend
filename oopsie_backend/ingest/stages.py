@@ -7,7 +7,7 @@ from pathlib import Path
 
 from oopsie_backend.common.repos import data_root
 from oopsie_backend.index.store import columns_fingerprint
-from oopsie_backend.ingest import sync, upload_times
+from oopsie_backend.ingest import release, sync, upload_times
 from oopsie_backend.pipeline.registry import files_fingerprint, stage
 
 
@@ -31,3 +31,19 @@ def hub_upload_times(hub_mirror: str, episode_index: str, data_dir: str, index_p
     if use_hub and upload_times.main(["--data-dir", data_dir, "--index", index_path]):
         print("hub_upload_times: some repos failed; see the log above", file=sys.stderr)
     return columns_fingerprint(Path(index_path), upload_times.COLUMNS)
+
+
+@stage(always_run=True, manual=True)
+def data_release(
+    data_dir: str, index_path: str, use_hub: bool, release_snapshot: str | None, release_name: str | None
+) -> str:
+    """Publishes the mirror's Hub commits, the index and the annotation files as a release; returns its Hub commit.
+
+    Depends on no other stage: it publishes the mirror and index as they are, and refuses unless they match
+    the snapshot (see ``oopsie_backend.ingest.release``).
+    """
+    if not use_hub:
+        raise ValueError("a release is published to the Hub; it needs use_hub=true")
+    if not release_snapshot:
+        raise ValueError("set release_snapshot, e.g. --set release_snapshot=<copy of .sync_report.json>")
+    return release.publish(Path(release_snapshot), Path(data_dir), Path(index_path), name=release_name)
