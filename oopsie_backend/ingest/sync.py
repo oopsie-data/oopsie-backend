@@ -17,9 +17,16 @@ Files the Hub no longer has are listed in the report; ``--delete-removed`` delet
 them. ``--scan-local`` also walks the repo folders for files that are in neither
 the Hub listing nor the record, and for repo folders the Hub no longer has.
 
+Snapshots: the report lists the Hub commit of every repo that synced completely.
+A copy of a clean report (``datasets_failed: 0``) is a snapshot of the data;
+``--revisions <snapshot>`` downloads each of its repos at that commit, into a data
+dir other than the shared mirror.
+
 Usage:
     export HF_TOKEN=hf_...
     uv run oopsie ingest sync --data-dir /corral/utexas/IRI26024/oopsiedata
+    cp /corral/utexas/IRI26024/oopsiedata/.sync_report.json /corral/utexas/IRI26024/oopsiedata/snapshots/$(date -I).json
+    uv run oopsie ingest sync --data-dir /path/to/copy --revisions /corral/utexas/IRI26024/oopsiedata/snapshots/2026-11-08.json
 """
 
 from __future__ import annotations
@@ -142,11 +149,13 @@ class RepoResult:
     untracked: list[str] = field(default_factory=list)
     failed: list[str] = field(default_factory=list)
     error: str | None = None
+    commit: str | None = None  # the Hub commit synced
 
 
 class Mirror:
-    def __init__(self, root: Path, token: str | None, workers: int, gid: int | None):
+    def __init__(self, root: Path, token: str | None, workers: int, gid: int | None, revisions: dict[str, str] | None = None):
         self.root = root
+        self.revisions = revisions or {}  # repo id -> pinned commit; other repos sync their latest commit
         self.token = token
         self.api = HfApi(token=token)
         self.workers = workers
@@ -185,7 +194,8 @@ class Mirror:
         """
         result = RepoResult(repo_id)
         repo_dir = self.root / repo_id
-        revision = self.api.dataset_info(repo_id).sha
+        revision = self.revisions.get(repo_id) or self.api.dataset_info(repo_id).sha
+        result.commit = revision
         _log(f"{repo_id}: listing the Hub", level=1)
         listing = hub_files(self.api, repo_id, revision=revision)
         _log(f"{repo_id}: {len(listing)} file(s) on the Hub; checking local copies", level=1)
@@ -384,6 +394,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--no-download", action="store_true", help="Check, adopt and delete .cache folders only; download nothing")
     parser.add_argument("--state", type=Path, default=None, help=f"Sync record; the report is written next to it (default: <data dir>/{STATE_NAME})")
     parser.add_argument("--delete-removed", action="store_true", help="Delete local files the Hub no longer has")
+    parser.add_argument(
+        "--revisions", type=Path, default=None,
+        help="A snapshot (a copy of a clean .sync_report.json): sync each of its repos at its recorded commit, "
+        "into a data dir other than the shared mirror",
+    )
     args = parser.parse_args(argv)
 
     os.umask(0o002)
@@ -403,8 +418,24 @@ def main(argv: list[str] | None = None) -> int:
         _log("warning: no HF_TOKEN; the Hub lists only public repos")
     org = parse_org_arg(args.org)
     root = data_root(args.data_dir)
+    revisions = None
+    if args.revisions:
+        if root.resolve() == DEFAULT_DATA_DIR.resolve():
+            # A pinned sync replaces newer files with their snapshot versions.
+            _log(f"error: --revisions would overwrite the shared mirror {root}; pass another --data-dir")
+            return 1
+        snapshot = json.loads(args.revisions.read_text())
+        revisions = {d["repo_id"]: d["commit"] for d in snapshot["datasets"] if d.get("commit")}
+        missing = [d["repo_id"] for d in snapshot["datasets"] if not d.get("commit")]
+        if missing:
+            _log(f"warning: {len(missing)} repo(s) of the snapshot have no commit and are skipped: {', '.join(missing)}")
     listed = list_dataset_repos_for_org(org, args.token)
-    if args.only:
+    if revisions is not None:
+        repo_ids = [r for r in revisions if not args.only or r.split("/", 1)[1] in set(args.only)]
+        gone_from_hub = sorted(set(repo_ids) - set(listed))
+        if gone_from_hub:
+            _log(f"warning: snapshot repo(s) not listed on the Hub: {', '.join(gone_from_hub)}")
+    elif args.only:
         repo_ids = [r for r in listed if r.split("/", 1)[1] in set(args.only)]
     else:
         repo_ids = [r for r in listed if r not in ARCHIVE_DATASETS | INFRA_DATASETS]
@@ -422,7 +453,7 @@ def main(argv: list[str] | None = None) -> int:
 
     state_path = args.state or root / STATE_NAME
     state = read_state(state_path)
-    mirror = Mirror(root, args.token, args.workers, gid)
+    mirror = Mirror(root, args.token, args.workers, gid, revisions)
     results: dict[str, RepoResult] = {}
     saver = Saver(state, state_path, mirror.lock, dry_run=args.dry_run)
     log_lock = threading.Lock()
@@ -501,6 +532,8 @@ def main(argv: list[str] | None = None) -> int:
                 **({"untracked": r.untracked} if args.scan_local else {}),
                 **({"failed": r.failed} if r.failed else {}),
                 **({"error": r.error} if r.error else {}),
+                # Only a fully synced repo matches its commit; a snapshot is a copy of a report.
+                **({"commit": r.commit} if not (r.error or r.failed or r.pending or r.removed) else {}),
             }
             for r in results_list
         ],
