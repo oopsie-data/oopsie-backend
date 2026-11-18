@@ -2,6 +2,8 @@
 
 Training data is materialized from the episode index by recipes. Each recipe is a YAML file in `configs/training/`. It names which episodes to use, how to unify them, and which output formats to write. The nightly pipeline never materializes anything; every recipe is run on request.
 
+See the [training package README](../oopsie_backend/training/README.md) for a file map and entry points.
+
 ```bash
 uv run oopsie pipeline run training --set training_recipe=configs/training/droid_joint_velocity.yaml
 uv run oopsie training materialize --recipe configs/training/eef_quat.yaml \

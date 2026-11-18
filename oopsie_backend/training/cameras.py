@@ -1,17 +1,7 @@
-"""Map an episode's cameras to the recipe's camera roles and write one video per role.
+"""Assign camera roles and write resized, resampled H.264 videos.
 
-``cameras.roles`` maps each role to glob patterns over unified camera names
-(``configs/camera_names.yaml``), tried in order; the first role to match a
-camera takes it, so a camera fills at most one role. ``cameras.fallback`` fills a role that matched nothing with another role's
-camera. A role in ``cameras.optional`` that is still empty is left blank; any
-other empty role skips the episode (``missing: skip``) or is left blank
-(``missing: blank``). An episode in which every role is empty is skipped. The writers turn blank roles into black frames and mark them
-in a camera mask.
-
-Each role's video is resampled to one frame per unified step, resized to
-``image_size`` regardless of its aspect ratio (``image_size: null`` keeps the
-source resolution, rounded down to even sides for H.264) and encoded with the ffmpeg of ``imageio-ffmpeg`` (H.264, ``crf``). A video that ends early
-repeats its last frame.
+Matches unified camera names to role patterns, applies fallbacks and missing-view
+rules, and selects source video frames for each prepared step.
 """
 
 from __future__ import annotations
@@ -24,7 +14,7 @@ import cv2
 import imageio_ffmpeg
 import numpy as np
 
-from oopsie_backend.training.source import Skip
+from oopsie_backend.training.read_episode import Skip
 
 FFMPEG = imageio_ffmpeg.get_ffmpeg_exe()
 

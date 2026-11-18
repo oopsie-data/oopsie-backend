@@ -40,7 +40,7 @@ COMMANDS: dict[str, dict[str, str]] = {
         "pipeline": "annotation.pipeline",
     },
     "pipeline": {"run": "pipeline.run"},
-    "training": {"materialize": "training.materialize"},
+    "training": {"materialize": "training.build_dataset"},
     "export": {"to-rlds": "export.to_rlds"},
     "convert": {
         "imports": "conversion.imports",
@@ -49,7 +49,11 @@ COMMANDS: dict[str, dict[str, str]] = {
         "roboarena": "conversion.convert_roboarena_data",
         "soar": "conversion.convert_soar_data",
     },
-    "tools": {"inspect-hdf5": "tools.inspect_hdf5", "visualize": "tools.visualize_episodes"},
+    "tools": {
+        "inspect-hdf5": "tools.inspect_hdf5",
+        "visualize": "tools.visualize_episodes",
+        "parquet-html": "tools.parquet_html",
+    },
 }
 
 

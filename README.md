@@ -20,7 +20,7 @@ uv run oopsie pipeline run all --explain        # the full pipeline
 | `oopsie_backend/stats` | Public and internal stats |
 | `oopsie_backend/splits` | Eval split proposals, the chosen split, and the annotated train sample |
 | `oopsie_backend/annotation` | Annotator assignment, bundles, Hugging Face distribution and collection |
-| `oopsie_backend/training` | Training data recipes: selection, unification, LeRobot, RLDS and HDF5 output |
+| [oopsie_backend/training](oopsie_backend/training/README.md) | Training data recipes: selection, unification, LeRobot, RLDS and HDF5 output |
 | `oopsie_backend/export` | Export to RLDS |
 | `oopsie_backend/conversion` | Converters from external datasets and the imports stage |
 | `oopsie_backend/pipeline` | Stage registry, targets and the Hamilton driver |

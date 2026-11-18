@@ -1,10 +1,7 @@
-"""Output formats of a materialized dataset, by the name recipes use in ``formats``.
+"""Resolve recipe output formats to lazily imported writer functions.
 
-A writer is ``write(episodes_dir, out, included, layout, recipe)``: it reads the
-unified episodes of the ``included`` manifest rows and writes the format into
-``out``. ``hdf5`` needs no writer: the unified episodes, ``layout.json`` and
-``manifest.parquet`` are that format. Writers are imported on use, so RLDS
-loads TensorFlow only when a recipe asks for it.
+Writers accept prepared episodes, output path, included manifest rows, layout
+and recipe. HDF5 uses the prepared episodes directly and needs no writer.
 """
 
 from __future__ import annotations

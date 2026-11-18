@@ -1,19 +1,7 @@
-"""Write a materialized dataset in the LeRobot v2.1 format.
+"""Export prepared episodes as a LeRobot v2.1 dataset at one common rate.
 
-Layout::
-
-    lerobot/meta/info.json, tasks.jsonl, episodes.jsonl, episodes_stats.jsonl
-    lerobot/data/chunk-000/episode_000000.parquet
-    lerobot/videos/chunk-000/observation.images.<role>/episode_000000.mp4
-
-Frames hold ``observation.state``, ``action``, their masks, ``filled``,
-``observation.camera_mask`` (in role order, the roles with a camera; the others
-hold black video),
-``timestamp``, ``frame_index``, ``episode_index``, ``index`` and ``task_index``. Episode
-labels (``success``, ``failure_categories``) and the source episode are extra
-fields of ``episodes.jsonl``. The unified videos are hard-linked (or copied);
-a blank role gets a black video. LeRobot needs one frame rate, so ``rate_hz: null``
-or ``upsample: native`` work only when every episode ends up at the same rate.
+Writes Parquet frames, camera videos, vector/camera masks, task and episode
+metadata, and per-episode statistics; missing views receive black video.
 """
 
 from __future__ import annotations
@@ -30,7 +18,7 @@ import numpy as np
 import polars as pl
 
 from oopsie_backend.training.cameras import FFMPEG
-from oopsie_backend.training.layout import dim_names, padded
+from oopsie_backend.training.vector_layout import dim_names, padded
 
 CODEBASE_VERSION = "v2.1"
 CHUNK_SIZE = 1000

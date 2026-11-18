@@ -1,31 +1,7 @@
-"""Unify the actions and robot states of a source episode.
+"""Convert action and state arrays to a recipe's target representation.
 
-Cartesian poses are split per arm into a position and a rotation, then written in
-the recipe's orientation representation (``quat`` is scalar last; ``rot6d`` is
-the first two columns of the rotation matrix). A pose block of width 7 is a
-quaternion pose, as the Oopsie recorder writes it; other widths follow the
-profile's ``orientation_representation`` (actions) or
-``robot_state_orientation_representation`` (states).
-
-In target mode, a key the episode lacks is derived where no kinematics are needed:
-
-- ``joint_position`` = joint state + ``joint_velocity`` / rate, and back:
-  ``joint_velocity`` = (``joint_position`` action - joint state) * rate.
-- ``cartesian_position`` from ``cartesian_velocity`` and the pose state, and
-  ``cartesian_velocity`` = [(position - state position) * rate, rotvec(R R_state⁻¹) * rate].
-  Derived and converted velocities carry the angular part as a rotation vector rate.
-- ``gripper_position`` from ``gripper_binary``, and ``gripper_binary`` = gripper position > 0.5.
-
-With ``actions.from_states``, actions are generated from the states instead:
-for every action key (``always``) or for those the episode cannot provide
-otherwise (``missing``). They are computed on the resampled steps
-(``action_from_state``): a position action is the next step's state, a velocity
-the change to the next step's state times the rate, and ``gripper_binary`` the
-next gripper state > 0.5. The last step has no next state and is dropped.
-
-Gripper positions are scaled to [0, 1] with the range of their robot
-(``actions.gripper: normalized``) and must have one value per arm. Anything
-else makes the episode a ``Skip``.
+Derives compatible position/velocity commands, converts pose orientations,
+normalizes grippers and optionally generates actions from consecutive states.
 """
 
 from __future__ import annotations
@@ -34,7 +10,7 @@ import numpy as np
 from scipy.spatial.transform import Rotation
 
 from oopsie_backend.training.recipe import STATE_KEYS, STATE_SOURCE
-from oopsie_backend.training.source import Skip, SourceEpisode
+from oopsie_backend.training.read_episode import Skip, SourceEpisode
 
 ROTATION_WIDTH = {"quat": 4, "matrix": 9, "rot6d": 6, "rotvec": 3}
 

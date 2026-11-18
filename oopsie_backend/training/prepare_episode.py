@@ -1,18 +1,7 @@
-"""Write the unified episodes of a recipe: ``episodes/<episode_key>.h5`` and ``episodes/<episode_key>/<role>.mp4``.
+"""Prepare and cache one episode's unified HDF5 arrays and camera videos.
 
-A unified episode holds ``action/<key>`` and ``state/<key>`` as ``(T, D)`` float32
-at the recipe rate, each at its own width (writers pad to a common width),
-``filled`` (``(T,)`` bool, the steps that add no new source step), and the attrs
-``fps``, ``source_fps``, ``unify_hash``, ``gripper_range``, ``unified_cameras``, the source file's
-``source_size`` and ``source_mtime_ns``, ``actions_from_states`` (the action keys
-generated from the states) and ``camera/<role>`` (the video file, or empty for a
-blank role). It is rewritten only when one of these
-changed. Labels are not stored here but in the manifest, so new annotations
-never require a rewrite.
-
-Actions and states are converted at the source rate, then resampled
-(``training/resample.py``); actions generated from the states are computed after
-resampling. Videos take the frame of the latest source step at or before each step.
+Coordinates conversion, resampling and camera processing; reuses current outputs
+and returns manifest fields with status, dimensions and skip or failure reasons.
 """
 
 from __future__ import annotations
@@ -26,10 +15,10 @@ import h5py
 import numpy as np
 
 from oopsie_backend.training.cameras import assign_roles, transcode
-from oopsie_backend.training.convert import Unifier, action_from_state
+from oopsie_backend.training.convert_actions_states import Unifier, action_from_state
 from oopsie_backend.training.recipe import STATE_SOURCE
 from oopsie_backend.training.resample import plan, resample
-from oopsie_backend.training.source import Skip, read_source
+from oopsie_backend.training.read_episode import Skip, read_source
 
 ROBOT = ("robot_name", "gripper_name")
 

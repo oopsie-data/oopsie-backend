@@ -8,6 +8,33 @@ df = pl.read_parquet("episode_index.parquet")
 contributor = df.filter(pl.col("on_disk") & pl.col("public") & pl.col("duplicate_of").is_null())
 ```
 
+## Browse as HTML
+
+Create a standalone viewer and open the resulting HTML file in a browser:
+
+```bash
+uv run oopsie tools parquet-html data/releases/2026-11-08/episode_index_sample.parquet
+```
+
+The HTML is written beside the source with the same name and an `.html` extension.
+It works offline and provides search, sorting, pagination, visible-column controls,
+column types and a row inspector for nested lists, annotations and QA results.
+It does not load episode videos or modify the Parquet file.
+
+By default it embeds the first 1,000 rows and labels the preview with the full row
+count. Search and sorting operate on embedded rows only. Use `--max-rows 0` to
+embed all rows (large indexes can produce large HTML files), `--columns NAME ...`
+to export selected columns, or `--out PATH.html` to choose the output path:
+
+```bash
+uv run oopsie tools parquet-html data/releases/2026-11-08/episode_index.parquet \
+  --max-rows 0 --columns episode_key dataset_repo robot_name language_instruction \
+  --out reports/episode_index.html
+```
+
+Timestamps use ISO strings; integers beyond JavaScript's exact integer range,
+decimals and nonfinite numbers are displayed as strings to preserve their values.
+
 ## Writing
 
 `oopsie_backend.index.store` reads and writes the index:
@@ -101,7 +128,7 @@ See [action checks](action-checks.md#running-and-adding-checks).
 
 `annotation_batch`, `annotation_split` (the split it was assigned in, including `train_annotated`), `annotation_assigned`, `annotation_returned` and `annotation_records` (the current collected annotation per annotator).
 
-### Training data (`training.materialize`)
+### Training data (`training.build_dataset`)
 
 `training_sets`: the recipes whose materialized dataset holds the episode (see [training data](training-data.md)). Materializing a recipe replaces that recipe's entries.
 

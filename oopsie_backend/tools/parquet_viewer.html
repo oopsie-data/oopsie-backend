@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Parquet viewer</title>
+<style>
+  :root { color-scheme: light dark; --bg: #fafaf8; --panel: #fff; --text: #222b28; --muted: #626d66; --line: #dce2dc; --accent: #17644f; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #151b18; --panel: #1d2521; --text: #e5ece7; --muted: #a6b4ab; --line: #35443b; --accent: #80d4b2; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 28px; background: var(--bg); color: var(--text); font: 14px/1.5 system-ui, sans-serif; }
+  h1 { margin: 0; font-size: 24px; overflow-wrap: anywhere; }
+  .eyebrow { color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+  .muted, #source, #summary { color: var(--muted); }
+  #source { margin: 6px 0 18px; overflow-wrap: anywhere; font-size: 12px; }
+  #summary { margin-bottom: 16px; }
+  .toolbar, footer { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin: 16px 0; }
+  .search { flex: 1; min-width: 220px; }
+  label { display: inline-flex; align-items: center; gap: 8px; }
+  .search { display: flex; flex-direction: column; align-items: stretch; gap: 4px; }
+  button, input, select { font: inherit; color: inherit; }
+  button, select, input[type="search"] { border: 1px solid var(--line); border-radius: 6px; background: var(--panel); padding: 8px 10px; }
+  button { cursor: pointer; }
+  button:disabled { opacity: .45; cursor: default; }
+  button:hover:not(:disabled) { border-color: var(--accent); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  details { border: 1px solid var(--line); border-radius: 8px; background: var(--panel); padding: 10px 14px; margin: 12px 0; }
+  summary { cursor: pointer; font-weight: 600; }
+  #columns { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 6px 14px; margin-top: 14px; }
+  #columns label { overflow-wrap: anywhere; }
+  .column-actions { display: flex; gap: 8px; margin-top: 12px; }
+  .table-wrap { overflow: auto; max-height: 65vh; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+  table { border-collapse: separate; border-spacing: 0; width: 100%; text-align: left; }
+  th, td { padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; white-space: nowrap; }
+  th { position: sticky; top: 0; background: var(--panel); z-index: 1; }
+  th button { border: 0; padding: 0; font-weight: 600; background: transparent; }
+  td .value { display: block; max-width: 340px; overflow: hidden; text-overflow: ellipsis; }
+  tbody tr:hover { background: color-mix(in srgb, var(--accent) 5%, var(--panel)); }
+  .row-button { padding: 0; border: 0; background: transparent; color: var(--accent); text-decoration: underline; }
+  #status { margin-right: auto; }
+  #schema td { white-space: normal; overflow-wrap: anywhere; }
+  #schema code { font-size: 12px; }
+  dialog { color: var(--text); background: var(--panel); border: 1px solid var(--line); border-radius: 12px; width: min(960px, 94vw); max-height: 88vh; padding: 22px; }
+  dialog::backdrop { background: #0008; }
+  .dialog-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .dialog-head h2 { font-size: 19px; margin: 0; }
+  #record article { border-top: 1px solid var(--line); margin-top: 14px; padding-top: 10px; }
+  #record h3 { margin: 0 0 4px; font-size: 14px; overflow-wrap: anywhere; }
+  #record pre { white-space: pre-wrap; overflow-wrap: anywhere; margin: 6px 0; font-size: 12px; }
+  @media (max-width: 600px) { body { padding: 16px; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Parquet explorer</div>
+  <h1 id="title">Parquet file</h1>
+  <p id="source"></p>
+  <p id="summary"></p>
+</header>
+<div class="toolbar">
+  <label class="search">Search all exported columns
+    <input id="search" type="search" placeholder="Dataset, robot, task, annotation…" autocomplete="off">
+  </label>
+  <label>Rows per page <select id="page-size"><option>25</option><option>50</option><option>100</option></select></label>
+</div>
+<details>
+  <summary id="column-summary">Visible columns</summary>
+  <div class="column-actions"><button id="all-columns">Show all</button><button id="default-columns">Reset columns</button></div>
+  <div id="columns"></div>
+</details>
+<div class="table-wrap"><table id="data-table" aria-label="Parquet rows"><thead></thead><tbody></tbody></table></div>
+<footer>
+  <span id="status" role="status" aria-live="polite"></span>
+  <button id="previous">Previous</button><span id="page"></span><button id="next">Next</button>
+</footer>
+<p class="muted">Click a row number to inspect every exported field, including nested lists and annotations. Search and sorting apply to the exported rows.</p>
+<details><summary>Column schema</summary><table id="schema"><thead><tr><th>Column</th><th>Parquet / Arrow type</th></tr></thead><tbody></tbody></table></details>
+<noscript>This interactive table requires JavaScript enabled. The data is embedded in this file; no network access is needed.</noscript>
+<dialog id="detail" aria-labelledby="record-title">
+  <div class="dialog-head"><h2 id="record-title">Row details</h2><button id="close-detail">Close</button></div>
+  <div id="record"></div>
+</dialog>
+<script id="parquet-data" type="application/json">__PARQUET_PAYLOAD__</script>
+<script>
+"use strict";
+const data = JSON.parse(document.getElementById("parquet-data").textContent);
+const $ = id => document.getElementById(id);
+const fmt = value => value === null ? "null" : typeof value === "object" ? JSON.stringify(value) : String(value);
+const element = (tag, text, className) => {
+  const node = document.createElement(tag);
+  if (text !== undefined) node.textContent = text;
+  if (className) node.className = className;
+  return node;
+};
+const preferred = ["episode_key", "dataset_repo", "robot_name", "language_instruction", "num_steps", "duration_seconds", "critical", "eval_split"];
+const defaults = data.columns.map((c, i) => preferred.includes(c.name) ? i : -1).filter(i => i >= 0);
+if (!defaults.length) defaults.push(...data.columns.slice(0, 8).map((_, i) => i));
+let visible = new Set(defaults), filtered = data.rows.map((_, i) => i);
+let page = 0, pageSize = 25, sortColumn = null, sortDirection = 1;
+const collator = new Intl.Collator(undefined, {numeric: true, sensitivity: "base"});
+const searchText = data.rows.map(row => row.map(fmt).join("\n").toLocaleLowerCase());
+$("title").textContent = data.name;
+document.title = data.name + " · Parquet explorer";
+$("source").textContent = data.source;
+$("summary").textContent = `${data.total_rows.toLocaleString()} total rows · ${data.columns.length} of ${data.total_columns} columns exported · ` +
+  (data.rows.length < data.total_rows ? `Preview: first ${data.rows.length.toLocaleString()} rows. Remaining rows are not embedded; export with --max-rows 0 to include all rows.` : "All rows included.");
+
+function compare(a, b) {
+  if (a === b) return 0;
+  if (a === null) return 1;
+  if (b === null) return -1;
+  if (typeof a === "number" && typeof b === "number") return (a - b) * sortDirection;
+  return collator.compare(fmt(a), fmt(b)) * sortDirection;
+}
+function applyFilter() {
+  const query = $("search").value.trim().toLocaleLowerCase();
+  filtered = data.rows.map((_, i) => i).filter(i => !query || searchText[i].includes(query));
+  if (sortColumn !== null) filtered.sort((a, b) => compare(data.rows[a][sortColumn], data.rows[b][sortColumn]));
+  page = 0;
+  render();
+}
+function inspectRow(index) {
+  $("record-title").textContent = `Row ${(index + 1).toLocaleString()}`;
+  $("record").replaceChildren();
+  data.columns.forEach((column, i) => {
+    const article = element("article");
+    const value = data.rows[index][i];
+    article.append(element("h3", column.name), element("div", column.type, "muted"),
+      element("pre", typeof value === "object" ? JSON.stringify(value, null, 2) : fmt(value)));
+    $("record").append(article);
+  });
+  $("detail").showModal();
+}
+function render() {
+  const table = $("data-table"), head = element("tr");
+  head.append(element("th", "Row"));
+  const shown = data.columns.map((_, i) => i).filter(i => visible.has(i));
+  for (const i of shown) {
+    const th = element("th"), button = element("button", data.columns[i].name + (sortColumn === i ? (sortDirection === 1 ? " ↑" : " ↓") : ""));
+    th.setAttribute("scope", "col");
+    th.setAttribute("aria-sort", sortColumn === i ? (sortDirection === 1 ? "ascending" : "descending") : "none");
+    button.title = data.columns[i].type;
+    button.addEventListener("click", () => {
+      sortDirection = sortColumn === i ? -sortDirection : 1;
+      sortColumn = i;
+      applyFilter();
+    });
+    th.append(button); head.append(th);
+  }
+  table.tHead.replaceChildren(head);
+  const body = table.tBodies[0]; body.replaceChildren();
+  const start = page * pageSize;
+  for (const index of filtered.slice(start, start + pageSize)) {
+    const row = element("tr"), cell = element("td"), button = element("button", (index + 1).toLocaleString(), "row-button");
+    button.setAttribute("aria-label", `Inspect row ${index + 1}`);
+    button.addEventListener("click", () => inspectRow(index));
+    cell.append(button); row.append(cell);
+    for (const i of shown) {
+      const td = element("td"), value = data.rows[index][i], span = element("span", fmt(value), "value");
+      if (value === null) span.classList.add("muted");
+      span.title = fmt(value).slice(0, 500);
+      td.append(span); row.append(td);
+    }
+    body.append(row);
+  }
+  if (!filtered.length) {
+    const row = element("tr"), cell = element("td", "No matching rows.");
+    cell.colSpan = shown.length + 1; row.append(cell); body.append(row);
+  }
+  const pages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  $("status").textContent = `${filtered.length.toLocaleString()} matching / ${data.rows.length.toLocaleString()} exported rows · ${filtered.length ? start + 1 : 0}–${Math.min(start + pageSize, filtered.length)}`;
+  $("page").textContent = `Page ${page + 1} of ${pages.toLocaleString()}`;
+  $("previous").disabled = page === 0;
+  $("next").disabled = page + 1 >= pages;
+  $("column-summary").textContent = `Visible columns (${shown.length} / ${data.columns.length})`;
+}
+function columnControls() {
+  $("columns").replaceChildren();
+  data.columns.forEach((column, i) => {
+    const label = element("label"), checkbox = element("input");
+    checkbox.type = "checkbox"; checkbox.checked = visible.has(i);
+    checkbox.addEventListener("change", () => { checkbox.checked ? visible.add(i) : visible.delete(i); render(); });
+    label.append(checkbox, document.createTextNode(column.name));
+    $("columns").append(label);
+  });
+}
+let searchTimer;
+$("search").addEventListener("input", () => { clearTimeout(searchTimer); searchTimer = setTimeout(applyFilter, 150); });
+$("page-size").addEventListener("change", event => { pageSize = Number(event.target.value); page = 0; render(); });
+$("previous").addEventListener("click", () => { if (page > 0) { page--; render(); } });
+$("next").addEventListener("click", () => { if ((page + 1) * pageSize < filtered.length) { page++; render(); } });
+$("all-columns").addEventListener("click", () => { visible = new Set(data.columns.map((_, i) => i)); columnControls(); render(); });
+$("default-columns").addEventListener("click", () => { visible = new Set(defaults); columnControls(); render(); });
+$("close-detail").addEventListener("click", () => $("detail").close());
+for (const column of data.columns) {
+  const row = element("tr"), type = element("td"); type.append(element("code", column.type));
+  row.append(element("td", column.name), type); $("schema").tBodies[0].append(row);
+}
+columnControls(); render();
+</script>
+</body>
+</html>

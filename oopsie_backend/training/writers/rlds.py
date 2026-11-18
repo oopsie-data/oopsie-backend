@@ -1,15 +1,7 @@
-"""Write a materialized dataset as an RLDS (TFDS) dataset: ``rlds/<recipe name>/1.0.0``.
+"""Export prepared episodes as an RLDS/TFDS dataset at <name>/1.0.0.
 
-Each step holds ``observation/<role>`` images, ``observation/state`` and one
-``observation/<state key>`` per state key, ``action`` and ``action_dict/<key>``,
-``is_filled`` (the step adds no new source step), ``reward``, ``discount``,
-``is_first``, ``is_last``, ``is_terminal`` and ``language_instruction``.
-``observation/camera_mask`` marks, in role order, the roles with a camera; a blank
-role holds black images. Recipes whose camera roles and keys use the DROID
-names (``exterior_image_1_left``, ``wrist_image_left``, ``joint_velocity`` plus
-``gripper_position``) match the layout ``oopsie-rl`` reads; ``file_path`` starts
-with ``success/`` or ``failure/``, from which ``oopsie-rl`` infers the outcome.
-The last step of a successful episode (success >= 0.5) has reward 1.
+Writes images, action/state vectors and masks, language, rewards, episode flags
+and provenance. DROID camera/key recipes provide the layout oopsie-rl reads.
 """
 
 from __future__ import annotations
@@ -25,7 +17,7 @@ import numpy as np
 import polars as pl
 import tensorflow_datasets as tfds
 
-from oopsie_backend.training.layout import padded
+from oopsie_backend.training.vector_layout import padded
 
 VERSION = tfds.core.Version("1.0.0")
 

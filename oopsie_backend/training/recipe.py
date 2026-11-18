@@ -1,8 +1,7 @@
-"""Training data recipes: which episodes, how they are unified, and the output formats.
+"""Load and validate training recipes, defaults and camera presets.
 
-A recipe is a YAML file in ``configs/training/``; ``load_recipe`` fills in the
-defaults below and validates it. ``unify_hash`` covers every setting and the code that
-change a unified episode, so unified episodes are reused across format changes.
+Defines selection, conversion and output settings, and fingerprints the settings
+and implementation files that determine whether prepared episodes can be reused.
 """
 
 from __future__ import annotations
@@ -146,7 +145,7 @@ def load_recipe(path: Path) -> dict:
 
 
 # Modules whose code shapes a unified episode.
-UNIFY_CODE = ("source.py", "convert.py", "resample.py", "cameras.py", "unify.py")
+UNIFY_CODE = ("read_episode.py", "convert_actions_states.py", "resample.py", "cameras.py", "prepare_episode.py")
 
 
 def unify_hash(recipe: dict) -> str:

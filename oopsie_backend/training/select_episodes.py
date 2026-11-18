@@ -1,15 +1,7 @@
-"""Select the episodes of a recipe from the episode index.
+"""Select indexed episodes using recipe filters and deterministic sampling.
 
-Every recipe leaves out episodes that are not on disk, unreadable, duplicate
-copies or critical. ``selection.splits`` picks the training episodes (``train``,
-those the eval split does not hold out) and any ``eval_split`` values. ``selection``
-then filters by repo kind, dataset, lab,
-robot, the embodiment flags of the index (``biarm``, ``binary_gripper``,
-``dexterous_hand``), length in steps and seconds, and outcome, and ``max_episodes`` keeps a stable
-pseudo-random subset ranked by a hash of the episode key and ``seed``.
-
-An episode's ``success`` is the mean success of its annotations (falling back
-to the annotation outcome); ``failure_categories`` is the union of their categories.
+Excludes missing, unreadable, duplicate and critical episodes; aggregates success
+and failure labels and filters by split, source, embodiment, length and outcome.
 """
 
 from __future__ import annotations

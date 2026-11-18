@@ -1,8 +1,7 @@
-"""Pipeline stages of the training data.
+"""Register manual training stages and their pipeline dependencies.
 
-Manual: ``oopsie pipeline run training --set training_recipe=configs/training/<recipe>.yaml``
-materializes one recipe, after the stages it depends on are current. The nightly
-pipeline never runs it.
+Fingerprints the recipe and builds its dataset after index, QA, split, annotation
+and camera-name dependencies are current. Nightly runs do not build training sets.
 """
 
 from __future__ import annotations
@@ -11,7 +10,7 @@ from pathlib import Path
 
 from oopsie_backend.index.store import columns_fingerprint
 from oopsie_backend.pipeline.registry import files_fingerprint, stage
-from oopsie_backend.training.materialize import TRAINING_COLUMN, materialize
+from oopsie_backend.training.build_dataset import TRAINING_COLUMN, materialize
 
 
 @stage(always_run=True, manual=True)
