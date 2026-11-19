@@ -11,7 +11,13 @@ import sys
 
 COMMANDS: dict[str, dict[str, str]] = {
     "ingest": {"sync": "ingest.sync", "upload-times": "ingest.upload_times", "release": "ingest.release"},
-    "index": {"build": "index.build", "camera-names": "index.camera_names", "camera-sheet": "index.camera_sheet"},
+    "index": {
+        "build": "index.build",
+        "camera-names": "index.camera_names",
+        "camera-sheet": "index.camera_sheet",
+        "embodiments": "index.embodiments",
+        "policies": "index.policies",
+    },
     "qa": {
         "run": "qa.run",
         "render-report": "qa.render_report",
@@ -25,6 +31,7 @@ COMMANDS: dict[str, dict[str, str]] = {
         "compute-hf": "stats.compute_hf",
         "render-public": "stats.render_public",
         "render-internal": "stats.render_internal",
+        "analysis": "stats.analysis.run",
     },
     "splits": {
         "propose": "splits.propose",
@@ -38,6 +45,7 @@ COMMANDS: dict[str, dict[str, str]] = {
         "stage": "annotation.stage",
         "collect": "annotation.collect_returns",
         "pipeline": "annotation.pipeline",
+        "flags": "annotation.flags",
     },
     "pipeline": {"run": "pipeline.run"},
     "training": {"materialize": "training.materialize"},

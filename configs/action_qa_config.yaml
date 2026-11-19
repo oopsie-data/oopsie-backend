@@ -340,6 +340,12 @@ video:
     confidence: high_confidence
     action: confirm_and_discuss
     duration_tol_s: 0.5  # flag if the longest and shortest camera differ by more than this
+  browser_playable:  # checks whether every video uses a codec and pixel format that web browsers play
+    enabled: true
+    confidence: high_confidence
+    action: fix_and_resubmit
+    codecs: [h264, vp8, vp9, av1]
+    pixel_formats: [yuv420p, yuvj420p]
 
 sampling:
   default_episode_limit: 0 # max episodes checked per dataset; --limit 0 means unlimited

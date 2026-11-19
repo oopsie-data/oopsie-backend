@@ -145,6 +145,11 @@ DEFAULT_CHECKS: dict[str, dict[str, dict]] = {
         "fps": {"enabled": True, "fps_rel_tol": 0.05},
         "duration": {"enabled": True, "duration_tol_s": 0.5, "duration_rel_tol": 0.05},
         "camera_duration_mismatch": {"enabled": True, "duration_tol_s": 0.5},
+        "browser_playable": {
+            "enabled": True,
+            "codecs": ["h264", "vp8", "vp9", "av1"],
+            "pixel_formats": ["yuv420p", "yuvj420p"],
+        },
     },
 }
 
@@ -230,6 +235,7 @@ DEFAULT_LAB_FEEDBACK: dict[str, dict[str, tuple[str, str]]] = {
         "periodic_skips": ("lower_confidence", "confirm_and_discuss"),
         "recording_gap": ("lower_confidence", "confirm_and_discuss"),
         "state_jump": ("lower_confidence", "confirm_and_discuss"),
+        "browser_playable": ("high_confidence", "fix_and_resubmit"),
     },
 }
 

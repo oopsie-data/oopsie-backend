@@ -13,6 +13,7 @@ archive:
 infra:
   - OopsieData-Submissions/Visualizer_Previews
   - OopsieData-Submissions/WebVisualizer
+  - OopsieData-Submissions/failure-detection-testset-v0
   - OopsieData-Submissions/oopsie-annotation
   - OopsieData-Submissions/oopsie-annotation-returns
   # Data releases: snapshot, index and annotation files; see oopsie_backend/ingest/release.py.

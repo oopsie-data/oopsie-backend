@@ -26,7 +26,7 @@ def training_recipe_state(training_recipe: str | None) -> str:
 def training_data(
     critical_episodes: str,
     eval_split: str,
-    annotation_columns: str,
+    annotation_flags: str,
     unified_camera_names: str,
     training_recipe_state: str,
     training_recipe: str,

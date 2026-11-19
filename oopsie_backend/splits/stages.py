@@ -33,8 +33,14 @@ def split_config(split_config_path: str) -> str:
 
 @stage
 def eval_proposals(critical_episodes: str, split_config: str, split_config_path: str, data_dir: str, index_path: str) -> str:
-    """Candidate proposals in ``annotation/proposals/``, from episodes that are neither duplicate nor critical."""
-    out = annotation_dir(Path(data_dir)) / "proposals"
+    """Candidate proposals in ``annotation/proposals/``, from episodes that are neither duplicate nor critical.
+
+    Once a proposal is chosen (``annotation/eval_proposal.json`` exists), the proposals are kept as they are.
+    """
+    ann = annotation_dir(Path(data_dir))
+    out = ann / "proposals"
+    if (ann / "eval_proposal.json").is_file():
+        return files_fingerprint(sorted(out.glob("*.json")))
     argv = ["--index", index_path, "--out-dir", str(out), *load_split_config(split_config_path).get("propose_args", [])]
     check_rc(propose.main(argv), "propose eval split")
     return files_fingerprint(sorted(out.glob("*.json")))

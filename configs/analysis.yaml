@@ -1,0 +1,77 @@
+# Settings of the dataset analysis (oopsie_backend.stats.analysis), the statistics of
+# plans/stats.md. Read by `oopsie stats analysis`.
+
+# Task clusters: instructions whose embeddings have at least this cosine similarity are merged.
+embedding_model: sentence-transformers/all-MiniLM-L6-v2
+similarity_threshold: 0.85
+similarity_thresholds: [0.75, 0.8, 0.85, 0.9, 0.95]   # entry 1 reports every one of these
+
+# Verb and object extraction.
+spacy_model: en_core_web_sm
+top_verbs: 15            # verbs shown per group and used for the task × failure shares
+top_objects: 15
+
+# Groups smaller than this are left out of share comparisons and listed instead.
+min_group_episodes: 50
+
+# Nouns that name places rather than objects; not counted as objects.
+object_stopwords: [left, right, top, bottom, front, back, side, middle, center, centre, edge, corner, end, position, area, place, location, space, way, robot, gripper, arm, hand]
+
+# Verbs replaced by the verb of their purpose clause ("use the box to push the cube" -> push).
+light_verbs: [use, try, attempt, help]
+
+# Verb phrases (lemma, with particle) merged into one verb. Unlisted verbs keep their lemma.
+verb_synonyms:
+  pick up: pick
+  pick: pick
+  grab: pick
+  grasp: pick
+  take: pick
+  lift: pick
+  lift up: pick
+  put: place
+  put down: place
+  place: place
+  set: place
+  set down: place
+  drop: place
+  move: move
+  push: push
+  shove: push
+  pull: pull
+  open: open
+  close: close
+  shut: close
+  turn on: turn_on
+  switch on: turn_on
+  turn off: turn_off
+  switch off: turn_off
+  fold: fold
+  unfold: unfold
+  wipe: wipe
+  clean: wipe
+  pour: pour
+  stack: stack
+  unstack: unstack
+  insert: insert
+  plug: insert
+  plug in: insert
+  hang: hang
+  rotate: rotate
+  turn: rotate
+  flip: flip
+  press: press
+  hand: hand_over
+  hand over: hand_over
+
+# Action features of the episodes (entries 36 and 38 to 41).
+data:
+  idle_speed_fraction: 0.05     # a step is idle below this fraction of the episode's 95th percentile joint speed
+  sudden_stop_seconds: 0.2      # a fall from above half the 95th percentile speed to idle within this time is a sudden stop
+  gripper_low: 0.3              # normalized gripper levels of the open and close hysteresis
+  gripper_high: 0.7
+  gripper_full: 0.95            # a close that reaches this normalized level closed on nothing
+  window_seconds: 2.0           # entry 38: window before and after a segment start
+  # Gripper end that means closed, per `<robot_name>/<gripper_name>`, `high` or `low`;
+  # robots not listed have no closed-on-nothing feature.
+  gripper_closed: {}

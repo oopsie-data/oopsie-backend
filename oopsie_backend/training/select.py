@@ -1,7 +1,9 @@
 """Select the episodes of a recipe from the episode index.
 
 Every recipe leaves out episodes that are not on disk, unreadable, duplicate
-copies or critical. ``selection.splits`` picks the training episodes (``train``,
+copies, excluded by the annotation flags (``annotation_excluded``) or critical. Episodes
+of a held-out eval split ignore ``critical``: their split was chosen among episodes that
+were not critical, so later QA changes cannot shrink it. ``selection.splits`` picks the training episodes (``train``,
 those the eval split does not hold out) and any ``eval_split`` values. ``selection``
 then filters by repo kind, dataset, lab,
 robot, the embodiment flags of the index (``biarm``, ``binary_gripper``,
@@ -21,11 +23,13 @@ from oopsie_data_tools.annotation_tool.annotation_schema import OUTCOME_SUCCESS
 
 from oopsie_backend.index.camera_names import UNIFIED_TYPE
 from oopsie_backend.index.store import KEY
+from oopsie_backend.splits.eval_split import SPLITS
 
 OPTIONAL = {
     "duplicate_of": pl.String,
     "critical": pl.Boolean,
     "eval_split": pl.String,
+    "annotation_excluded": pl.Boolean,
     "unified_cameras": UNIFIED_TYPE,
 }
 COLUMNS = [
@@ -50,7 +54,8 @@ def select_episodes(index: pl.DataFrame, recipe: dict) -> pl.DataFrame:
         pl.col("on_disk"),
         pl.col("read_error").is_null(),
         pl.col("duplicate_of").is_null(),
-        ~pl.col("critical").fill_null(False),
+        ~pl.col("critical").fill_null(False) | pl.col("eval_split").is_in(SPLITS).fill_null(False),
+        ~pl.col("annotation_excluded").fill_null(False),
         pl.col("eval_split").fill_null("train").is_in(sel["splits"]),
         pl.col("repo_kind").is_in(sel["repo_kinds"]),
         pl.col("num_steps").fill_null(0) >= sel["min_steps"],

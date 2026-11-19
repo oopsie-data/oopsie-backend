@@ -1,0 +1,68 @@
+# Problems found in the annotators' returns. Read by oopsie_backend.annotation.flags, which writes
+# `annotation_flags`, `annotation_excluded` and `annotation_unusable` to the episode index. Training
+# curation and the statistics leave out excluded episodes; the statistics also leave out the records
+# of a rule with `unusable_record: true`. The index keeps every record. Other flags are informational.
+
+# Each rule matches the additional notes or the episode description of an annotator's current
+# record. Patterns are case-insensitive regular expressions; a match of an `unless` pattern in the
+# same text cancels the rule. One annotator's matching record is enough.
+notes:
+  delete_requested:
+    exclude: true
+    patterns:
+      - '\bdelet'
+      - '\bdiscard'
+      - 'not a real episode'
+    unless:
+      - &not_loaded '(videos?|it) (is |are |does |do )?(not|n.t) (load|play|visible|appear to load)|not loading|(n.t|can.?t) see (it|the video)|^no video|broken video|videos are broken|this video is playing'
+  cut_short:
+    exclude: true
+    patterns:
+      - 'cut (off|short)|cuts off|clipped|looks cut off'
+      - '\b(terminated|ended|stopped)( too| to)? early'
+      - '\bends?( right)? (abruptly|early|too early|before|during|at exactly)|end abruptly|ends a little short|video ends|stopped right before'
+      - '\bincomplete (episode|trajectory|task|data|video)|^incomplete\.?$|inclomplete'
+      - '(video|episode|clip|trajectory|recording)[^.]{0,30}(not (be )?complete|incomplete)'
+      - 'full video|too short to judge'
+      - '(did not|didn.t) (finish recording|capture)|(does not|doesn.t) (contain|capture) the|(video|clip)[^.]{0,20}(does not|doesn.t) include'
+  human_interference:  # a person acts on the robot or the task objects during the attempt
+    exclude: true
+    patterns:
+      - 'interven|human (help|assistance)|with (some )?help'
+      - 'human jostl|jostled the robot|flipped by (a |the )?human'
+      - '(operator|human|person|someone) (touches|touched)'
+      - '(human|person|someone)[^.]{0,40}\b(moves|moved|removes|removed) the'
+  human_in_scene:  # a person is visible, sets up or resets the scene
+    patterns:
+      - '\bhuman (activity|reset|setting|hand)'
+      - '\b(by|from) (a |the )?human\b'
+      - '\b(the|a) human (re|sets|adjust|places|picks)'
+      - '\b(person|someone) (re|is |sets|places|adjusts)'
+      - 'operator.s face|face is visible'
+  video_broken:
+    exclude: true
+    patterns:
+      - '\bfrozen\b|extreme artifacts|corrupt'
+      - 'frame jumps|frames are missing|stitched|out of sync'
+      - 'low.res|low resolution|low.frame ?rate|frame ?rate is (very )?low'
+  video_not_loaded:  # the annotator could not watch the video; QA's video/browser_playable finds the cause
+    unusable_record: true
+    patterns:
+      - *not_loaded
+  teleoperated:
+    patterns:
+      - 'teleop'
+  instruction_problem:
+    patterns:
+      - 'instruction|task (description|prompt|language)|task is (flawed|unclear|impossible)|unclear task|impossible task'
+      - 'wrong label|mislabel|vague|ambig|unspecified|not well.defined'
+      - 'there is no|no [a-z]+ (visible|in the scene)|don.t see (any|a)|is there a'
+
+# Idle steps move slower than `idle_speed_fraction` of the episode's 95th percentile speed of the
+# joint (or, without joint states, Cartesian) positions in the episode file.
+idle:
+  exclude: false
+  idle_speed_fraction: 0.05
+  max_idle_share: 0.6           # flag when a larger share of steps is idle
+  min_idle_start_seconds: 5.0   # flag when the robot is idle this long at the start ...
+  min_idle_start_share: 0.25    # ... and for at least this share of the episode

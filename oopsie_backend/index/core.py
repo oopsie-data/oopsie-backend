@@ -153,7 +153,8 @@ def _timestamp(raw) -> datetime | None:
     return dt if dt >= MIN_TIMESTAMP else None
 
 
-def _content_hash(f: h5py.File) -> str:
+def episode_content_hash(f: h5py.File) -> str:
+    """SHA-256 over the action and robot state arrays."""
     h = hashlib.sha256()
     for group_name in ("actions", "observations/robot_states"):
         group = f.get(group_name)
@@ -260,7 +261,7 @@ def read_h5(path: Path, repo_path: str) -> dict:
                 "num_steps": n,
                 "duration_seconds": n / control_freq if n and control_freq else None,
                 "annotations": _annotations(f),
-                "content_hash": _content_hash(f),
+                "content_hash": episode_content_hash(f),
             }
         repo_dir = path
         for _ in Path(repo_path).parts:

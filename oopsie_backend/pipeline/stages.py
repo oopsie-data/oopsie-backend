@@ -24,17 +24,24 @@ FINAL_STAGES = sorted(set(_AUTOMATIC) - {p for f in _AUTOMATIC.values() for p in
 TARGETS: dict[str, list[str]] = {
     "sync": ["hub_mirror"],
     "index": ["episode_index", "hub_upload_times"],
-    "preqa": ["duplicate_episodes", "duplicate_videos", "unified_camera_names"],
+    "preqa": [
+        "duplicate_episodes",
+        "duplicate_videos",
+        "unified_camera_names",
+        "unified_embodiments",
+        "unified_policies",
+    ],
     "qa": ["qa_results"],
     "postqa": ["critical_episodes"],
     "stats": ["stats"],
     "proposals": ["eval_proposals"],
     "splits": ["eval_split", "train_sample"],
-    "annotation": ["annotation_columns"],
+    "annotation": ["annotation_flags"],
     "all": FINAL_STAGES,
     "imports": ["imported_datasets"],
     "training": ["training_data"],
     "release": ["data_release"],
+    "analysis": ["dataset_analysis", "annotation_analysis"],
 }
 
 __all__ = ["FINAL_STAGES", "STAGES", "TARGETS"]

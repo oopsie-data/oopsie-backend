@@ -1,4 +1,4 @@
-"""Pipeline stages of the index: observe the mirror, build the core columns and name the cameras."""
+"""Pipeline stages of the index: observe the mirror, build the core columns and unify camera, embodiment and policy names."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ import hashlib
 from pathlib import Path
 
 from oopsie_backend.common.repos import IMPORTS_CONFIG, LAB_IDS_CONFIG, REPOSITORIES_CONFIG
-from oopsie_backend.index import build, camera_names
+from oopsie_backend.index import build, camera_names, embodiments, policies
 from oopsie_backend.index.core import CORE_SCHEMA, discover
 from oopsie_backend.index.store import columns_fingerprint
 from oopsie_backend.pipeline.registry import check_rc, files_fingerprint, stage
@@ -42,3 +42,29 @@ def unified_camera_names(episode_index: str, duplicate_episodes: str, camera_nam
     """``unified_cameras`` and ``camera_name_issues``; returns their fingerprint."""
     check_rc(camera_names.main(["--index", index_path]), "camera names")
     return columns_fingerprint(Path(index_path), camera_names.COLUMNS)
+
+
+@stage(always_run=True)
+def embodiments_config() -> str:
+    """Fingerprint of ``configs/embodiments.yaml``."""
+    return files_fingerprint([embodiments.EMBODIMENTS_CONFIG])
+
+
+@stage
+def unified_embodiments(episode_index: str, duplicate_episodes: str, embodiments_config: str, index_path: str) -> str:
+    """``unified_arm``, ``unified_end_effector``, ``end_effector_type``, ``embodiment`` and ``embodiment_issues``; returns their fingerprint."""
+    check_rc(embodiments.main(["--index", index_path]), "embodiments")
+    return columns_fingerprint(Path(index_path), embodiments.COLUMNS)
+
+
+@stage(always_run=True)
+def policies_config() -> str:
+    """Fingerprint of ``configs/policies.yaml``."""
+    return files_fingerprint([policies.POLICIES_CONFIG])
+
+
+@stage
+def unified_policies(episode_index: str, duplicate_episodes: str, policies_config: str, index_path: str) -> str:
+    """``policy_family``, ``policy_class``, ``frontier_group`` and ``policy_issues``; returns their fingerprint."""
+    check_rc(policies.main(["--index", index_path]), "policies")
+    return columns_fingerprint(Path(index_path), policies.COLUMNS)
