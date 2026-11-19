@@ -246,3 +246,11 @@ eval_assignment/
 eval_bundles/
 train_assignment/
 train_bundles/
+
+*.parquet
+*.lock
+
+plans/
+lab_mails/
+*.csv
+site/

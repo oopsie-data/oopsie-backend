@@ -30,16 +30,16 @@ uv run oopsie pipeline run all --explain        # the full pipeline
 
 ## Documentation
 
-| Topic | Doc |
-|-------|-----|
-| Pipeline | [docs/pipeline.md](docs/pipeline.md) |
-| Episode index | [docs/episode-index.md](docs/episode-index.md) |
-| Sync and stats | [docs/sync-and-stats.md](docs/sync-and-stats.md) |
-| QA spot checks | [docs/qa-spot-checks.md](docs/qa-spot-checks.md) |
-| Action checks | [docs/action-checks.md](docs/action-checks.md) |
-| Video checks | [docs/video-checks.md](docs/video-checks.md) |
-| Imported datasets | [docs/imports.md](docs/imports.md) |
-| Training data | [docs/training-data.md](docs/training-data.md) |
-| Eval split proposals | [docs/eval-split.md](docs/eval-split.md) |
-| Annotation coordinator | [docs/annotation-coordinator.md](docs/annotation-coordinator.md) |
-| Annotator guide | [docs/annotator-guide.md](docs/annotator-guide.md) |
+The documentation is a MkDocs site in `docs/`, starting at [docs/index.md](docs/index.md). To browse it locally:
+
+```bash
+uv run --group docs mkdocs serve
+```
+
+| Topic | Page |
+|---|---|
+| Architecture | [docs/architecture.md](docs/architecture.md) |
+| Pipeline and stages | [docs/pipeline/index.md](docs/pipeline/index.md) |
+| LS6 runbook | [docs/operations/ls6.md](docs/operations/ls6.md) |
+| Index columns, configs, commands | [docs/reference/](docs/reference/index-columns.md) |
+| Development | [docs/development.md](docs/development.md) |

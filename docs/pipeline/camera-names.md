@@ -2,12 +2,9 @@
 
 Episodes name their cameras freely: the same wrist camera appears as `wrist`, `wrist_cam`, `eye_in_hand`, `hand` or `TCP_camera`, and `left` is an exterior camera in one setup and a wrist camera in another. `configs/camera_names.yaml` maps every recorded camera to a unified name, which the index stores in `unified_cameras` and training recipes use for their camera roles ([training data](training-data.md#cameras)).
 
-```bash
-uv run oopsie index camera-names --index episode_index.parquet
-uv run oopsie index camera-sheet --data-dir <mirror> --index episode_index.parquet --out reports/camera_names.html
-```
-
-The pipeline runs `camera-names` as the `unified_camera_names` stage, after the duplicate check and whenever the config changes.
+| Stage | Target | Runs after | Writes |
+|---|---|---|---|
+| `unified_camera_names` | `preqa` | `duplicate_episodes`, `camera_names_config` | `unified_cameras`, `camera_name_issues` |
 
 ## Names
 
@@ -45,3 +42,10 @@ A mapping to `null` leaves the camera out, as for infrared images. Training skip
 `oopsie index camera-sheet` writes a page with one row per dataset and camera combination: the middle frame of every camera of one episode, labelled with its recorded and unified name. Rows with issues come first. When a new dataset arrives, its cameras show up as issues in the `camera-names` output; add them to `configs/camera_names.yaml` after checking their frames on the sheet.
 
 The placements (`front`, `side`, `top`, `back`) are judged from a single frame, relative to the robot base. A camera at about 45° is ambiguous between front and side.
+
+## Running it by hand
+
+```bash
+uv run oopsie index camera-names --index episode_index.parquet
+uv run oopsie index camera-sheet --data-dir <mirror> --index episode_index.parquet --out reports/camera_names.html
+```

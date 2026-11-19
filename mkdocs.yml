@@ -1,0 +1,83 @@
+site_name: Oopsie backend
+site_description: Data curation, QA, annotation and training data for Oopsie-Data
+docs_dir: docs
+strict: true
+use_directory_urls: false
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
+  anchors: warn
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.indexes
+    - navigation.top
+    - navigation.footer
+    - content.code.copy
+    - search.highlight
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Light mode
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+nav:
+  - Home: index.md
+  - Architecture: architecture.md
+  - Pipeline:
+      - pipeline/index.md
+      - Hub sync: pipeline/sync.md
+      - Episode index: pipeline/episode-index.md
+      - Duplicates: pipeline/duplicates.md
+      - Camera names: pipeline/camera-names.md
+      - Embodiments: pipeline/embodiments.md
+      - Policies: pipeline/policies.md
+      - QA:
+          - pipeline/qa/index.md
+          - Action checks: pipeline/qa/action-checks.md
+          - Video checks: pipeline/qa/video-checks.md
+          - Spot checks: pipeline/qa/spot-checks.md
+      - Critical episodes: pipeline/critical-episodes.md
+      - Stats: pipeline/stats.md
+      - Eval split: pipeline/eval-split.md
+      - Train sample: pipeline/train-sample.md
+      - Annotation:
+          - pipeline/annotation/index.md
+          - Annotation flags: pipeline/annotation/flags.md
+          - Annotator guide: pipeline/annotation/annotator-guide.md
+      - Imported datasets: pipeline/imports.md
+      - Training data: pipeline/training-data.md
+      - Dataset analysis: pipeline/analysis.md
+      - Data releases: pipeline/release.md
+  - Operations:
+      - LS6 runbook: operations/ls6.md
+  - Reference:
+      - Index columns: reference/index-columns.md
+      - Configs: reference/configs.md
+      - Commands: reference/commands.md
+  - Development: development.md

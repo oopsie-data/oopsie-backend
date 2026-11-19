@@ -1,22 +1,27 @@
 # Training data
 
-Training data is materialized from the episode index by recipes. Each recipe is a YAML file in `configs/training/`. It names which episodes to use, how to unify them, and which output formats to write. The nightly pipeline never materializes anything; every recipe is run on request.
+Episodes from different labs record different action spaces, control rates, joint counts and cameras. A training set needs one consistent layout, so training data is materialized by **recipes**: YAML files in `configs/training/` that name which episodes to use, how to unify them, and which output formats to write. Nothing is materialized nightly; every recipe is built on request.
+
+| Stage | Target | Runs after | Writes |
+|---|---|---|---|
+| `training_data` (manual) | `training` | `critical_episodes`, `eval_split`, `annotation_flags`, `unified_camera_names`, `training_recipe_state` | `<training_dir>/<recipe>/`, `training_sets` |
 
 ```bash
 uv run oopsie pipeline run training --set training_recipe=configs/training/droid_joint_velocity.yaml
+sbatch slurm/pipeline.slurm training --set training_recipe=configs/training/all_native.yaml   # on LS6
 uv run oopsie training materialize --recipe configs/training/eef_quat.yaml \
     --data-dir <mirror> --index episode_index.parquet --out <training dir>
-sbatch slurm/pipeline.slurm training --set training_recipe=configs/training/all_native.yaml   # LS6
 ```
 
-The pipeline target first brings the index, QA, critical flags, eval split and annotation columns up to date, then materializes the recipe. `oopsie training materialize` reads the index as it is.
+The pipeline target first brings the index, QA, critical flags, eval split and annotation flags up to date, then materializes the recipe. `oopsie training materialize` uses the index as it is.
 
 ## Steps
 
 1. **Select** episodes from the index. These are always left out:
    - episodes not on disk, or unreadable;
    - duplicate copies;
-   - critical episodes.
+   - episodes the [annotation flags](annotation/flags.md) exclude (`annotation_excluded`);
+   - critical episodes, except those of a held-out eval split (`id`, `od_task_id_scene`, `od_task_od_scene`). Those were chosen among episodes that were not critical, so later changes to QA or `configs/critical.yaml` cannot shrink the eval set.
 
    The recipe's `selection` then filters the rest. `selection.splits` picks the eval split: `train` (the default) takes the episodes the eval split does not hold out, and `id`, `od_task_id_scene`, `od_task_od_scene` or `excluded` take the held-out ones, so a recipe can materialize the eval set.
 2. **Compute** each robot's gripper range from the mirror.

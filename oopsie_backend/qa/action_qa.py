@@ -10,7 +10,7 @@ Checks are grouped into categories matching ``configs/action_qa_config.yaml``'s
 sections: ``general`` (any action space) plus one per arm action space
 (``joint_position``, ``joint_velocity``, ``cartesian_position``, ``cartesian_velocity``).
 Every finding/skip carries its ``category`` and ``test``. See
-``docs/action-checks.md`` for what each check flags.
+``docs/pipeline/qa/action-checks.md`` for what each check flags.
 """
 
 from __future__ import annotations

@@ -4,7 +4,7 @@ Assignments are written once to ``<data_dir>/annotation/eval_assignment`` and
 ``train_assignment`` from the chosen proposal, the train sample and the settings in
 ``configs/eval_split.yaml``. The index columns hold every collected annotation, and the
 flags of ``configs/annotation_flags.yaml`` mark the problems the annotators found;
-pulling and collecting returns stay manual commands (``docs/annotation-coordinator.md``).
+pulling and collecting returns stay manual commands (``docs/pipeline/annotation/index.md``).
 """
 
 from __future__ import annotations
