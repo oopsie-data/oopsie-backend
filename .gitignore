@@ -235,6 +235,10 @@ reports/*
 
 # Local test data and QA bundles
 data/
+!/data/
+/data/*
+!/data/releases/
+/data/releases/*
 qa_out/
 
 # Hugging Face tokens; kept in the data directory on LS6, never in the repo
