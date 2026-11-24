@@ -32,7 +32,7 @@ uv run oopsie                               # every command, by command group
 
 The defaults in `configs/pipeline.yaml` are the LS6 paths: the mirror in `/corral/utexas/IRI26024/oopsiedata`, the index in `/corral/utexas/IRI26024/episode_index/`.
 
-Next: [Pipeline](pipeline/index.md) for the stages and how to run them, and the [LS6 runbook](operations/ls6.md) for the nightly job.
+Next: [Pipeline overview](pipeline/index.md) for the mirror, the index and the rules they follow, [Running the pipeline](pipeline/running.md) for the stages and targets, and the [LS6 runbook](operations/ls6.md) for the nightly job.
 
 ## Key concepts
 
@@ -46,7 +46,7 @@ Next: [Pipeline](pipeline/index.md) for the stages and how to run them, and the 
 | **Target** | a named set of stages. `oopsie pipeline run <target>` runs them, and first any stage they depend on that is out of date. |
 | **Pipeline** | every stage chained together. The team runs it to build the index and publish releases; users do not need it. |
 
-Command groups follow the code folders and targets follow the order of a run, so a name like `index` can be both, with different contents. [Commands, stages and targets](pipeline/index.md#commands-stages-and-targets) explains how they map.
+Command groups follow the code folders and targets follow the order of a run, so a name like `index` can be both, with different contents. [Commands, stages and targets](pipeline/running.md#commands-stages-and-targets) explains how they map.
 
 ## The pipeline in brief
 
@@ -63,7 +63,7 @@ flowchart LR
   release --> users["users"]
 ```
 
-[Architecture](architecture.md) explains the design, and [Pipeline](pipeline/index.md) every stage.
+[Pipeline overview](pipeline/index.md) explains the design, and [Running the pipeline](pipeline/running.md) every stage.
 
 ## Where to look things up
 

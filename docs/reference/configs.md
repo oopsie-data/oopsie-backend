@@ -1,10 +1,10 @@
 # Configs
 
-All settings live in `configs/`. They are edited by hand and take effect on the next run: each config is watched by the pipeline, so a change reruns the stages that read it ([what reruns](../pipeline/index.md#what-reruns)). Every file starts with a comment that explains its keys.
+All settings live in `configs/`. They are edited by hand and take effect on the next run: each config is watched by the pipeline, so a change reruns the stages that read it ([what reruns](../pipeline/running.md#what-reruns)). Every file starts with a comment that explains its keys.
 
 | File | Read by | Sets |
 |---|---|---|
-| `pipeline.yaml` | `oopsie pipeline run` | the [inputs](../pipeline/index.md#inputs) of every stage: paths, workers, Hub access |
+| `pipeline.yaml` | `oopsie pipeline run` | the [inputs](../pipeline/running.md#inputs) of every stage: paths, workers, Hub access |
 | `repositories.yaml` | sync, index build, stats | the org's `archive` and `infra` repos; every other repo is a contributor repo |
 | `imports.yaml` | sync, index build, [imports](../pipeline/imports.md) | the external datasets: Hub repos and local conversions |
 | `lab_ids.yaml` | index build | canonical lab ids and the misspellings recorded for them |
@@ -26,7 +26,7 @@ All settings live in `configs/`. They are edited by hand and take effect on the 
 
 Most configs only change derived columns, and a change is undone by reverting it. Two need more care:
 
-- **`eval_split.yaml`**: once a proposal is chosen, changing `propose_args`, `train_sample` or `assignments` makes the run fail rather than rewrite the frozen outputs ([human decisions](../pipeline/index.md#human-decisions)).
+- **`eval_split.yaml`**: once a proposal is chosen, changing `propose_args`, `train_sample` or `assignments` makes the run fail rather than rewrite the frozen outputs ([human decisions](../pipeline/index.md#human-decisions-and-guarantees)).
 - **`annotation_flags.yaml`**: a changed rule can exclude episodes from training and the statistics. Review the matches of every excluding reason after a change.
 
 When adding a new dataset, expect issues from the unification stages: its camera, robot, gripper and policy names show up in `camera_name_issues`, `embodiment_issues` and `policy_issues` until they are added to the corresponding config.

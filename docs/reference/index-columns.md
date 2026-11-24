@@ -11,7 +11,7 @@ Written by the [index build](../pipeline/episode-index.md) (`episode_index`).
 | `episode_key` | string | the row key: the first 16 hex characters of `sha1("<dataset_repo>/<repo_path>")` |
 | `dataset_repo` | string | the repo, e.g. `OopsieData-Submissions/SomeLab`, or `imports/<name>` for a local import |
 | `repo_path` | string | the h5 path inside the repo |
-| `repo_kind` | string | `contributor` or `external` ([repo kinds](../architecture.md#repos)) |
+| `repo_kind` | string | `contributor` or `external` ([repo kinds](../pipeline/index.md#repos)) |
 | `public` | bool | counted in the public stats: a contributor repo whose lab id is not a placeholder |
 | `on_disk`, `on_hub` | bool | whether the h5 is in the mirror and in the Hub listing; rows whose file disappeared stay with `on_disk = false` |
 | `schema`, `episode_id`, `operator_name`, `language_instruction` | string | root attributes of the h5 |

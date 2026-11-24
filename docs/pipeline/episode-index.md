@@ -1,6 +1,6 @@
 # Episode index
 
-The index build creates the [episode index](../architecture.md#the-episode-index): it finds every episode in the mirror, reads its h5 metadata and the Hub's hashes, and writes one row per episode. All later stages add their columns to these rows.
+The index build creates the [episode index](index.md#the-episode-index): it finds every episode in the mirror, reads its h5 metadata and the Hub's hashes, and writes one row per episode. All later stages add their columns to these rows.
 
 | Stage | Target | Runs after | Writes |
 |---|---|---|---|
@@ -8,7 +8,7 @@ The index build creates the [episode index](../architecture.md#the-episode-index
 
 ## What it reads
 
-Episodes are discovered under `<data_dir>/OopsieData-Submissions/<repo>/` and, for local imports, under `<data_dir>/imports/<name>/`, whose dataset id is `imports/<name>`. Archive and infra repos are skipped ([repo kinds](../architecture.md#repos)).
+Episodes are discovered under `<data_dir>/OopsieData-Submissions/<repo>/` and, for local imports, under `<data_dir>/imports/<name>/`, whose dataset id is `imports/<name>`. Archive and infra repos are skipped ([repo kinds](index.md#repos)).
 
 For each h5 file, the build reads the root attributes (lab, operator, instruction, timestamp), the robot profile (robot, gripper, policy, control frequency, action space), the lab's own annotations, the camera list, and the action and state arrays, which it hashes into `content_hash`. It also lists every repo on the Hub to record the Hub's sha256 and git object id of each h5 and video. Lab ids are mapped to canonical names with `configs/lab_ids.yaml`, which fixes labs that recorded misspelled ids.
 

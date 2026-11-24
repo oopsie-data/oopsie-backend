@@ -1,6 +1,6 @@
 # Commands
 
-Every command runs as `uv run oopsie <group> <command>`, and `--help` after a command prints its options. `uv run oopsie` alone lists them. A command group is named after the code folder its commands live in; it is not a pipeline stage or target, see [Commands, stages and targets](../pipeline/index.md#commands-stages-and-targets).
+Every command runs as `uv run oopsie <group> <command>`, and `--help` after a command prints its options. `uv run oopsie` alone lists them. A command group is named after the code folder its commands live in; it is not a pipeline stage or target, see [Commands, stages and targets](../pipeline/running.md#commands-stages-and-targets).
 
 ## For users
 
@@ -18,7 +18,7 @@ Everything below is for running the pipeline.
 
 | Command | Does |
 |---|---|
-| `pipeline run [TARGET]` | runs a target and every stage it needs ([pipeline](../pipeline/index.md#running)) |
+| `pipeline run [TARGET]` | runs a target and every stage it needs ([pipeline](../pipeline/running.md#running)) |
 
 ## Ingest
 

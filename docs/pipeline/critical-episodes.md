@@ -24,7 +24,7 @@ Only episodes that QA has checked can be critical through a QA check. Duplicate 
 
 ## Effect
 
-The stats, split planning, the train sample, training and the dataset analysis leave critical episodes out. One exception protects the eval set: training keeps held-out eval episodes even if they become critical after the split was chosen ([guarantees](../architecture.md#guarantees)).
+The stats, split planning, the train sample, training and the dataset analysis leave critical episodes out. One exception protects the eval set: training keeps held-out eval episodes even if they become critical after the split was chosen ([guarantees](index.md#human-decisions-and-guarantees)).
 
 The internal stats report lists the critical episodes per lab with their reasons.
 

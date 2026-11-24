@@ -24,7 +24,7 @@ Choosing the split is a human decision:
 2. Someone reviews the report, and possibly the eval episodes themselves ([below](#reviewing-a-proposal)), and sets `chosen_proposal` in `configs/eval_split.yaml` to a proposal id.
 3. `chosen_proposal` freezes that proposal as `annotation/eval_proposal.json`, and `eval_split` records it in the index. The [train sample](train-sample.md) and the [annotator assignments](annotation/index.md#assignments) follow.
 
-From then on the split does not change. The frozen proposal is written once, and `eval_proposals` stops regenerating proposals, so later changes to QA or the critical flags cannot affect them ([guarantees](../architecture.md#guarantees)).
+From then on the split does not change. The frozen proposal is written once, and `eval_proposals` stops regenerating proposals, so later changes to QA or the critical flags cannot affect them ([guarantees](index.md#human-decisions-and-guarantees)).
 
 `propose_args` in `configs/eval_split.yaml` holds the options the stage passes to the proposal search, described below. `--train-only LAB` there keeps a lab out of every eval split.
 
