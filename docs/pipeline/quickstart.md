@@ -1,6 +1,6 @@
 # Quickstart
 
-For the Oopsie-Data team. On LS6, run anything heavier than `--list` on a compute node, not the login node; the [LS6 runbook](../operations/ls6.md) has the Slurm scripts.
+The pipeline processes the whole dataset in many steps, so it needs a large machine and a token with access to the labs' repos. On LS6, run anything heavier than `--list` on a compute node, not the login node; the [LS6 runbook](../operations/ls6.md) has the Slurm scripts.
 
 ```bash
 uv sync                                                    # install

@@ -21,7 +21,7 @@ df = pl.read_parquet("/path/to/data/releases/2026-11-08/episode_index.parquet")
 
 Next: [Download a release](using/download.md) for what the download contains, and [Reading the index](using/reading-the-index.md) for selecting episodes and finding their files.
 
-## Run the full pipeline *(Oopsie-Data team only)*
+## Run the full pipeline *(heavy, many steps)*
 
 ```bash
 uv sync                                     # install
@@ -44,7 +44,7 @@ Next: the [pipeline quickstart](pipeline/quickstart.md), the [overview](pipeline
 | **Command group** | a set of commands named after a code folder, run as `oopsie <group> <command>`, e.g. `oopsie ingest sync`. |
 | **Stage** | one step of the pipeline. It calls a command's code and writes its result to the index or to files. |
 | **Target** | a named set of stages. `oopsie pipeline run <target>` runs them, and first any stage they depend on that is out of date. |
-| **Pipeline** | every stage chained together. The team runs it to build the index and publish releases; users do not need it. |
+| **Pipeline** | every stage chained together. The Oopsie-Data team runs it to build the index and publish releases; most users only need a release. |
 
 Command groups follow the code folders and targets follow the order of a run, so a name like `index` can be both, with different contents. [Running commands](pipeline/running-commands.md) explains how they map.
 
