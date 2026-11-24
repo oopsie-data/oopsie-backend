@@ -22,12 +22,15 @@ A copy of a clean report (``datasets_failed: 0``) is a snapshot of the data;
 ``--revisions <snapshot>`` downloads each of its repos at that commit, into a data
 dir other than the shared mirror. Published snapshots are data releases
 (``oopsie_backend.ingest.release``); ``--release <name>`` downloads one, with its
-episode index and annotation files, and syncs its data.
+episode index and annotation files, and syncs its data. ``--split test`` (or
+``train``) with ``--release`` downloads only the release index and the h5 and
+video files of that split's episodes.
 
 Usage:
     export HF_TOKEN=hf_...
     uv run oopsie ingest sync --data-dir /corral/utexas/IRI26024/oopsiedata
     uv run oopsie ingest sync --data-dir /path/to/copy --release 2026-11-08
+    uv run oopsie ingest sync --data-dir /path/to/copy --release 2026-11-08 --split test
     uv run oopsie ingest sync --data-dir /path/to/copy --revisions snapshot.json
 """
 
@@ -156,9 +159,19 @@ class RepoResult:
 
 
 class Mirror:
-    def __init__(self, root: Path, token: str | None, workers: int, gid: int | None, revisions: dict[str, str] | None = None):
+    def __init__(
+        self,
+        root: Path,
+        token: str | None,
+        workers: int,
+        gid: int | None,
+        revisions: dict[str, str] | None = None,
+        wanted: dict[str, dict[str, str]] | None = None,
+    ):
         self.root = root
         self.revisions = revisions or {}  # repo id -> pinned commit; other repos sync their latest commit
+        # repo id -> {path: git oid}: sync only these files of each repo (--split); None syncs every file
+        self.wanted = wanted
         self.token = token
         self.api = HfApi(token=token)
         self.workers = workers
@@ -201,7 +214,25 @@ class Mirror:
         result.commit = revision
         _log(f"{repo_id}: listing the Hub", level=1)
         listing = hub_files(self.api, repo_id, revision=revision)
-        _log(f"{repo_id}: {len(listing)} file(s) on the Hub; checking local copies", level=1)
+        # The files to check and download; ``listing`` stays complete so that files outside a split
+        # are never reported as removed from the Hub.
+        selected = listing
+        if self.wanted is not None:
+            selected = {}
+            for rel, oid in self.wanted.get(repo_id, {}).items():
+                hub = listing.get(rel)
+                if hub is None:
+                    result.failed.append(f"{rel}: not in the repo at commit {revision}")
+                elif hub["git_oid"] != oid:
+                    result.failed.append(f"{rel}: the Hub has blob {hub['git_oid']}, the index recorded {oid}")
+                else:
+                    selected[rel] = hub
+        _log(
+            f"{repo_id}: {len(listing)} file(s) on the Hub"
+            + (f", {len(selected)} in the split" if self.wanted is not None else "")
+            + "; checking local copies",
+            level=1,
+        )
         progress = Progress(repo_id)
 
         def record(rel: str, hub: dict) -> None:
@@ -214,7 +245,7 @@ class Mirror:
 
         def check(rel: str) -> str:
             """``unchanged``, ``adopted`` or ``download``."""
-            hub, path, old = listing[rel], repo_dir / rel, state.get((repo_id, rel))
+            hub, path, old = selected[rel], repo_dir / rel, state.get((repo_id, rel))
             try:
                 st = path.stat()
             except FileNotFoundError:
@@ -228,26 +259,26 @@ class Mirror:
             return "download"
 
         def fetch(rel: str) -> None:
-            self.download(repo_id, revision, rel, listing[rel], repo_dir / rel)
+            self.download(repo_id, revision, rel, selected[rel], repo_dir / rel)
 
         with ThreadPoolExecutor(self.workers) as pool:
             try:
                 decisions = {}
-                for rel, decision in zip(listing, pool.map(check, listing)):
+                for rel, decision in zip(selected, pool.map(check, selected)):
                     decisions[rel] = decision
-                    progress.tick("checked", len(decisions), len(listing))
+                    progress.tick("checked", len(decisions), len(selected))
                 for rel, decision in decisions.items():
                     if decision == "unchanged":
                         result.unchanged += 1
                     elif decision == "adopted":
-                        record(rel, listing[rel])
+                        record(rel, selected[rel])
                         result.adopted += 1
                 todo = [rel for rel, d in decisions.items() if d == "download"]
                 if not download:
                     result.pending = len(todo)
                 else:
                     futures = {pool.submit(fetch, rel): rel for rel in todo}
-                    size = sum(listing[rel]["size"] for rel in todo)
+                    size = sum(selected[rel]["size"] for rel in todo)
                     if todo:
                         _log(f"{repo_id}: downloading {len(todo)} file(s), {size / 2**30:.1f} GiB", level=1)
                     for done, future in enumerate(as_completed(futures), 1):
@@ -258,7 +289,7 @@ class Mirror:
                         except Exception as exc:
                             result.failed.append(f"{rel}: {type(exc).__name__}: {exc}")
                             continue
-                        record(rel, listing[rel])
+                        record(rel, selected[rel])
                         result.downloaded += 1
             except BaseException:
                 # Ctrl+C: drop the queued checks and downloads; running ones finish.
@@ -407,6 +438,11 @@ def main(argv: list[str] | None = None) -> int:
         help="A published data release, e.g. 2026-11-08: download its snapshot, index and annotation files "
         "to <data dir>/releases/<name>/ and sync each repo at its commit, into a data dir other than the shared mirror",
     )
+    parser.add_argument(
+        "--split", choices=sorted(release.SPLITS), default=None,
+        help="With --release: download only the release index and the h5 and video files of this split's "
+        "episodes (test: eval_split id and od_task_id_scene; train: no eval_split)",
+    )
     args = parser.parse_args(argv)
 
     os.umask(0o002)
@@ -427,8 +463,12 @@ def main(argv: list[str] | None = None) -> int:
     org = parse_org_arg(args.org)
     root = data_root(args.data_dir)
     revisions = None
+    wanted = None
     if args.revisions and args.release:
         _log("error: pass --revisions or --release, not both")
+        return 1
+    if args.split and not args.release:
+        _log("error: --split needs --release, whose index defines the split")
         return 1
     if args.revisions or args.release:
         if root.resolve() == DEFAULT_DATA_DIR.resolve():
@@ -436,15 +476,28 @@ def main(argv: list[str] | None = None) -> int:
             _log(f"error: a pinned sync (--revisions, --release) would overwrite the shared mirror {root}; pass another --data-dir")
             return 1
         if args.release:
-            args.revisions = release.fetch(args.release, root, token=args.token) / "snapshot.json"
+            out = release.fetch(args.release, root, token=args.token, index_only=bool(args.split))
+            args.revisions = out / "snapshot.json"
+            if args.split:
+                wanted, n_episodes = release.split_files(out / "episode_index.parquet", args.split)
+                n_files = sum(len(f) for f in wanted.values())
+                _log(f"split {args.split}: {n_episodes} episode(s), {n_files} file(s) in {len(wanted)} repo(s)")
         snapshot = json.loads(args.revisions.read_text())
         revisions = {d["repo_id"]: d["commit"] for d in snapshot["datasets"] if d.get("commit")}
         missing = [d["repo_id"] for d in snapshot["datasets"] if not d.get("commit")]
         if missing:
             _log(f"warning: {len(missing)} repo(s) of the snapshot have no commit and are skipped: {', '.join(missing)}")
     listed = list_dataset_repos_for_org(org, args.token)
+    if wanted is not None:
+        uncommitted = sorted(set(wanted) - set(revisions))
+        if uncommitted:
+            _log(f"error: split repo(s) without a commit in the snapshot: {', '.join(uncommitted)}")
+            return 1
     if revisions is not None:
-        repo_ids = [r for r in revisions if not args.only or r.split("/", 1)[1] in set(args.only)]
+        repo_ids = [
+            r for r in revisions
+            if (not args.only or r.split("/", 1)[1] in set(args.only)) and (wanted is None or r in wanted)
+        ]
         gone_from_hub = sorted(set(repo_ids) - set(listed))
         if gone_from_hub:
             _log(f"warning: snapshot repo(s) not listed on the Hub: {', '.join(gone_from_hub)}")
@@ -466,7 +519,7 @@ def main(argv: list[str] | None = None) -> int:
 
     state_path = args.state or root / STATE_NAME
     state = read_state(state_path)
-    mirror = Mirror(root, args.token, args.workers, gid, revisions)
+    mirror = Mirror(root, args.token, args.workers, gid, revisions, wanted)
     results: dict[str, RepoResult] = {}
     saver = Saver(state, state_path, mirror.lock, dry_run=args.dry_run)
     log_lock = threading.Lock()
@@ -524,6 +577,7 @@ def main(argv: list[str] | None = None) -> int:
         "org": org,
         "data_dir": str(root),
         "dry_run": args.dry_run,
+        **({"split": args.split, "split_episodes": n_episodes} if args.split else {}),
         "synced_at": now_timestamps(),
         "datasets_synced": len(results) - len(failed),
         "datasets_failed": len(failed),

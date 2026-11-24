@@ -32,13 +32,31 @@ This prints each release's name and the commit of the release repo it points to.
 
 ## Download
 
+### The whole release
+
 ```bash
 uv run oopsie ingest sync --release 2026-11-08 --data-dir /path/to/data
 ```
 
-This downloads the release's index, then every episode file at its pinned commit. Every file is checked against the hash the Hub records for it.
+This downloads the release's index, then every file of every lab repo at its pinned commit.
 
-<!-- TODO: document `--split test` and `--split train` once implemented. -->
+### Only the test or the train set
+
+```bash
+uv run oopsie ingest sync --release 2026-11-08 --split test --data-dir /path/to/data
+```
+
+`--split` downloads the release's index, snapshot and manifest, and then only the h5 and video files of the episodes in that split:
+
+| `--split` | Episodes | `eval_split` in the index | Size (`2026-11-08`) |
+|---|---|---|---|
+| `test` | 2,000 | `id` or `od_task_id_scene` | about 30 GiB |
+| `train` | 144,210 | null | about 1.6 TiB |
+| none: the whole release | 147,076 | any | about 1.7 TiB |
+
+`excluded` episodes belong to neither split: they come from the same held-out labs and tasks as the test set, so never train on them ([test and train](reading-the-index.md#test-and-train)). Each file is checked against the blob the index recorded for it, so the files always match the index.
+
+To get more later, run the command again with another split or without `--split`, into the same folder: files you already have are kept and only the rest downloads.
 
 ## What you get
 
@@ -48,9 +66,9 @@ This downloads the release's index, then every episode file at its pinned commit
 │   ├── episode_index.parquet     # one row per episode
 │   ├── snapshot.json             # the pinned commit of every repo
 │   ├── manifest.json             # backend commit and the sha256 of every release file
-│   ├── annotation/               # eval split and annotation assignments
-│   └── configs/                  # the backend configs the release was built with
-├── annotation/                   # copied from the release where missing
+│   ├── annotation/               # eval split and annotation assignments (not with --split)
+│   └── configs/                  # the backend configs the release was built with (not with --split)
+├── annotation/                   # copied from the release where missing (not with --split)
 └── OopsieData-Submissions/
     └── <lab repo>/
         ├── <episode>.h5          # actions, states and metadata

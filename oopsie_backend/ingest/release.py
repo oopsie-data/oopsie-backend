@@ -42,6 +42,7 @@ from huggingface_hub import HfApi, snapshot_download
 from oopsie_backend.common.hf import hub_files
 from oopsie_backend.common.io import now_timestamps
 from oopsie_backend.common.repos import CONFIG_DIR, DEFAULT_DATA_DIR, IMPORTS_PREFIX, annotation_dir, data_root
+from oopsie_backend.splits.eval_split import ID_SPLIT, OD_TASK_SPLIT
 
 RELEASE_REPO = "OopsieData-Submissions/oopsiedata-releases"
 DEFAULT_INDEX = Path("/corral/utexas/IRI26024/episode_index/episode_index.parquet")
@@ -57,6 +58,14 @@ ANNOTATION_FILES = [
     "proposals",
 ]
 ANNOTATION_STORE_GLOBS = ["*_annotations.jsonl", "*_annotations_summary.json"]
+# The release files a partial download (``sync --split``) fetches; it skips annotation/ and configs/.
+INDEX_FILES = ["snapshot.json", "manifest.json", "episode_index.parquet"]
+# Subsets of a release that ``oopsie ingest sync --release NAME --split SPLIT`` downloads.
+# ``excluded`` and ``od_task_od_scene`` episodes are in neither.
+SPLITS = {
+    "test": pl.col("eval_split").is_in([ID_SPLIT, OD_TASK_SPLIT]),
+    "train": pl.col("eval_split").is_null(),
+}
 
 
 def _log(message: str) -> None:
@@ -88,10 +97,29 @@ def check_snapshot(snapshot: dict) -> list[str]:
         problems.append(f"{snapshot['datasets_failed']} repo(s) failed to sync")
     if snapshot.get("files_to_download"):
         problems.append(f"{snapshot['files_to_download']} file(s) were left to download")
+    if snapshot.get("split"):
+        problems.append(f"the snapshot is a partial download (--split {snapshot['split']})")
     missing = [d["repo_id"] for d in snapshot["datasets"] if not d.get("commit")]
     if missing:
         problems.append(f"repo(s) without a commit: {', '.join(missing)}")
     return problems
+
+
+def split_files(index_path: Path, split: str) -> tuple[dict[str, dict[str, str]], int]:
+    """The files of the episodes in ``split``: ``{repo id: {path: git oid}}`` and the episode count.
+
+    Each episode contributes its h5 and the mp4 of every camera; the git oids are the ones the index recorded.
+    """
+    rows = pl.read_parquet(index_path, columns=["dataset_repo", "repo_path", "h5_git_oid", "videos", "eval_split"]).filter(
+        SPLITS[split] & ~pl.col("dataset_repo").str.starts_with(f"{IMPORTS_PREFIX}/")
+    )
+    files: dict[str, dict[str, str]] = {}
+    for r in rows.iter_rows(named=True):
+        repo = files.setdefault(r["dataset_repo"], {})
+        repo[r["repo_path"]] = r["h5_git_oid"]
+        for v in r["videos"] or []:
+            repo[v["path"]] = v["git_oid"]
+    return files, rows.height
 
 
 def check_index(index: pl.DataFrame, state: pl.DataFrame, repos: set[str]) -> list[str]:
@@ -269,24 +297,32 @@ def publish(
     return commit.oid
 
 
-def fetch(name: str, data_dir: Path, repo_id: str = RELEASE_REPO, token: str | None = None) -> Path:
+def fetch(
+    name: str, data_dir: Path, repo_id: str = RELEASE_REPO, token: str | None = None, index_only: bool = False
+) -> Path:
     """Download release ``name`` into ``<data dir>/releases/<name>/``; returns that folder.
 
     Copies its ``annotation/`` files to ``<data dir>/annotation/`` where missing; existing ones are kept.
+    With ``index_only``, downloads only the snapshot, manifest and index (``INDEX_FILES``).
     """
     root = data_root(data_dir)
     local = root / "releases"
+    patterns = [f"{name}/{f}" for f in INDEX_FILES] if index_only else [f"{name}/*"]
     snapshot_download(
-        repo_id, repo_type="dataset", revision=name, allow_patterns=[f"{name}/*"], local_dir=local, token=token
+        repo_id, repo_type="dataset", revision=name, allow_patterns=patterns, local_dir=local, token=token
     )
     shutil.rmtree(local / ".cache", ignore_errors=True)
     out = local / name
     if not (out / "snapshot.json").is_file():
         raise FileNotFoundError(f"release {name} has no snapshot.json in {repo_id}")
     manifest = json.loads((out / "manifest.json").read_text())
-    bad = [f for f, sha in manifest["files"].items() if _sha256(out / f) != sha]
+    expected = {f: sha for f, sha in manifest["files"].items() if not index_only or f in INDEX_FILES}
+    bad = [f for f, sha in expected.items() if _sha256(out / f) != sha]
     if bad:
         raise RuntimeError(f"release {name}: downloaded file(s) do not match the manifest: {', '.join(bad)}")
+    if index_only:
+        _log(f"release {name}: index downloaded to {out / 'episode_index.parquet'}")
+        return out
     ann = annotation_dir(root)
     kept = []
     for src in sorted((out / "annotation").iterdir()):

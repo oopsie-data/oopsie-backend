@@ -60,6 +60,7 @@ On LS6, run it under `sg G-829069` so that new files belong to the project group
 | `--delete-removed` | delete local files the Hub no longer has |
 | `--release NAME` | download a [data release](release.md) and sync each repo at its pinned commit |
 | `--revisions FILE` | sync each repo at the commit a snapshot file gives |
+| `--split test`, `--split train` | with `--release`: download only the release index and that split's h5 and video files ([download a release](../using/download.md#only-the-test-or-the-train-set)); the report records the split, and `release publish` refuses it |
 | `--keep-hf-cache` | keep the `.cache/huggingface` folders |
 | `--group GROUP` | set this group on every file and folder the sync creates |
 | `--parallel-repos N` | repos synced at the same time (default 4) |

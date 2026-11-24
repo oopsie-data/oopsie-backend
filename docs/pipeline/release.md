@@ -34,6 +34,7 @@ or, through the pipeline, `uv run oopsie pipeline run release --set release_snap
 Publishing refuses unless:
 
 - the sync was clean;
+- the sync was not a partial download (`--split`);
 - every index episode is in the snapshot, with the sha256 the index recorded;
 - the sync record lists exactly the files of each pinned commit (`--skip-hub-check` skips this check).
 
