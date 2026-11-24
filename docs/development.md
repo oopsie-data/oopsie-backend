@@ -20,7 +20,9 @@ The backend is a uv project; dataframes use polars. New functionality belongs in
 | `pipeline` | the stage registry, targets and the Hamilton driver |
 | `common` | repo kinds, h5 decoding, video paths, staging, shards, shared I/O |
 
-`oopsie_backend/cli.py` maps `oopsie <stage> <command>` to modules. Each command is a module with a `main(argv)` and its own argument parser.
+`oopsie_backend/scripts/` holds aliases for the earlier command paths.
+
+`oopsie_backend/cli.py` maps `oopsie <group> <command>` to modules; a command group is usually named after its package (`convert` runs `conversion`). Each command is a module with a `main(argv)` and its own argument parser.
 
 ## Adding a stage
 

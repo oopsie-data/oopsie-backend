@@ -1,51 +1,12 @@
 # oopsie-backend
 
-All oopsiedata processing code lives here. Every stage reads and extends one per-episode parquet index; [Hamilton](https://hamilton.apache.org/) runs the stages and reruns only what changed.
+All Oopsie-Data processing code lives here. Every stage reads and extends one per-episode parquet index; [Hamilton](https://hamilton.apache.org/) runs the stages and reruns only what changed.
 
-To download the data, ask the Oopsie-Data team for a read-only Hugging Face token, then:
+There are two things you can do:
 
-```bash
-uv sync
-export HF_TOKEN=<your read-only token>
-uv run oopsie ingest release list                                       # the published releases
-uv run oopsie ingest sync --release 2026-11-08 --data-dir /path/to/data
-```
+1. **Download the data and use it**: get a release (the full dataset or a part of it) and its episode index. See [Download a release](docs/using/download.md).
+2. **Run the pipeline** (the Oopsie-Data team): sync the labs' uploads, build the index, run QA, the eval split, the annotation and the releases. See [Pipeline](docs/pipeline/index.md).
 
-To run the pipeline (the Oopsie-Data team):
-
-```bash
-uv sync
-uv run oopsie                                   # list command groups and commands
-uv run oopsie pipeline run all --explain        # the full pipeline
-```
-
-## Layout
-
-| Package | Contents |
-|---|---|
-| `oopsie_backend/ingest` | Sync the Hugging Face org to the local mirror |
-| `oopsie_backend/index` | Build the episode index and read or update its columns |
-| `oopsie_backend/preqa` | Checks before QA: duplicate episodes and duplicate videos |
-| `oopsie_backend/qa` | QA checks, one file per check, reports, spot checks and lab feedback |
-| `oopsie_backend/postqa` | Critical episodes |
-| `oopsie_backend/stats` | Public and internal stats |
-| `oopsie_backend/splits` | Eval split proposals, the chosen split, and the annotated train sample |
-| `oopsie_backend/annotation` | Annotator assignment, bundles, Hugging Face distribution and collection |
-| `oopsie_backend/training` | Training data recipes: selection, unification, LeRobot, RLDS and HDF5 output |
-| `oopsie_backend/export` | Export to RLDS |
-| `oopsie_backend/conversion` | Converters from external datasets and the imports stage |
-| `oopsie_backend/pipeline` | Stage registry, targets and the Hamilton driver |
-| `oopsie_backend/common` | Repo kinds, h5 decoding, video paths, episode staging, shared I/O |
-
-`oopsie_backend/scripts/` holds aliases for the earlier command paths.
-
-## Documentation
-
-The documentation is a MkDocs site in `docs/`, starting at [docs/index.md](docs/index.md). To browse it locally:
-
-```bash
-uv run --group docs mkdocs serve
-```
 
 | Topic | Page |
 |---|---|
@@ -55,4 +16,11 @@ uv run --group docs mkdocs serve
 | Pipeline and stages | [docs/pipeline/index.md](docs/pipeline/index.md) |
 | LS6 runbook | [docs/operations/ls6.md](docs/operations/ls6.md) |
 | Index columns, configs, commands | [docs/reference/](docs/reference/index-columns.md) |
-| Development | [docs/development.md](docs/development.md) |
+| Code layout, adding a stage, browsing the docs locally | [docs/development.md](docs/development.md) |
+
+
+You can also browse the documentation as an MkDocs site, built from `docs/` and starting at [docs/index.md](docs/index.md):
+
+```bash
+uv run --group docs mkdocs serve     # then open http://127.0.0.1:8000
+```
