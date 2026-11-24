@@ -48,10 +48,10 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - Using the data:
+  - Get the data:
       - Download a release: using/download.md
       - Reading the index: using/reading-the-index.md
-  - Pipeline:
+  - Run the full pipeline:
       - Quickstart: pipeline/quickstart.md
       - Overview: pipeline/index.md
       - Running:
@@ -86,5 +86,4 @@ nav:
   - Reference:
       - Index columns: reference/index-columns.md
       - Configs: reference/configs.md
-      - Commands: reference/commands.md
   - Development: development.md

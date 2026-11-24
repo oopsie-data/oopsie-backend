@@ -4,21 +4,16 @@ All Oopsie-Data processing code lives here. Every stage reads and extends one pe
 
 There are two things you can do:
 
-1. **Download the data and use it** (this is the quickstart): get a release (the full dataset or a part of it) and its episode index. See [Download a release](docs/using/download.md).
-2. **Run the entire pipeline** (more heavy): sync the labs' uploads, build the index, run QA, the eval split, the annotation and the releases. See the [pipeline quickstart](docs/pipeline/quickstart.md).
-
+1. **Get the data** *(start here)*: download a release, the full dataset or a part of it, and its episode index. It takes minutes, and it is what most people need.
+2. **Run the full pipeline** *(Oopsie-Data team only)*: rebuild everything from the labs' uploads: sync, index, QA, eval split, annotation and releases. It is heavy and needs LS6 and the team's token.
 
 | Topic | Page |
 |---|---|
-| Download a release | [docs/using/download.md](docs/using/download.md) |
-| Reading the index | [docs/using/reading-the-index.md](docs/using/reading-the-index.md) |
-| Pipeline overview: the mirror, the index, the stages, the rules | [docs/pipeline/index.md](docs/pipeline/index.md) |
-| Pipeline quickstart | [docs/pipeline/quickstart.md](docs/pipeline/quickstart.md) |
-| Running: targets or commands | [docs/pipeline/running.md](docs/pipeline/running.md) |
-| LS6 runbook | [docs/operations/ls6.md](docs/operations/ls6.md) |
-| Index columns, configs, commands | [docs/reference/](docs/reference/index-columns.md) |
-| Code layout, adding a stage, browsing the docs locally | [docs/development.md](docs/development.md) |
-
+| **Get the data** *(start here)* | [docs/using/download.md](docs/using/download.md) |
+| **Run the full pipeline** *(Oopsie-Data team only)* | [docs/pipeline/quickstart.md](docs/pipeline/quickstart.md) |
+| LS6 runbook: the nightly job, permissions, fixing failed runs | [docs/operations/ls6.md](docs/operations/ls6.md) |
+| Reference: index columns and configs | [docs/reference/](docs/reference/index-columns.md) |
+| Development: code layout, adding a stage, browsing the docs locally | [docs/development.md](docs/development.md) |
 
 You can also browse the documentation as an MkDocs site, built from `docs/` and starting at [docs/index.md](docs/index.md):
 

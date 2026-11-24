@@ -2,7 +2,7 @@
 
 Oopsie-Data collects robot episodes, successes and failures, from many labs. Each lab uploads its episodes as HDF5 files with camera videos to its own dataset repo in the `OopsieData-Submissions` organization on Hugging Face. The backend turns these uploads into curated data: it catalogs every episode, checks the data, holds out a test set, has the episodes labeled by annotators, and publishes versioned releases.
 
-## I want the data
+## Get the data *(start here)*
 
 Ask the Oopsie-Data team for a read-only Hugging Face token, then:
 
@@ -21,7 +21,7 @@ df = pl.read_parquet("/path/to/data/releases/2026-11-08/episode_index.parquet")
 
 Next: [Download a release](using/download.md) for what the download contains, and [Reading the index](using/reading-the-index.md) for selecting episodes and finding their files.
 
-## I run the pipeline
+## Run the full pipeline *(Oopsie-Data team only)*
 
 ```bash
 uv sync                                     # install
@@ -70,7 +70,7 @@ flowchart LR
 | You want to | Read |
 |---|---|
 | look up an index column or a config file | [Index columns](reference/index-columns.md), [Configs](reference/configs.md) |
-| find a command | [Commands](reference/commands.md) |
+| find a command | [All commands](pipeline/running-commands.md#all-commands) |
 | coordinate the annotators | [Annotation](pipeline/annotation/index.md) |
 | annotate episodes | [Annotator guide](pipeline/annotation/annotator-guide.md) |
 | build a training set | [Training data](pipeline/training-data.md) |
