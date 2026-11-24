@@ -12,8 +12,7 @@ Every command runs as `uv run oopsie <group> <command>`, and `--help` after a co
 
 Everything below is for running the pipeline.
 
-!!! note "TODO"
-    The `preqa` and `postqa` code (duplicate episodes, duplicate videos, critical episodes) is not registered in `cli.py` yet. Run it as `uv run python -m oopsie_backend.preqa.duplicate_episodes`, `….preqa.duplicate_videos` and `….postqa.critical`.
+> **TODO:** The `preqa` and `postqa` code (duplicate episodes, duplicate videos, critical episodes) is not registered in `cli.py` yet. Run it as `uv run python -m oopsie_backend.preqa.duplicate_episodes`, `….preqa.duplicate_videos` and `….postqa.critical`.
 
 ## Pipeline
 

@@ -174,8 +174,7 @@ The camera, embodiment and policy stages write index columns, so their code live
 
 Some targets have no command group of the same name (`all`, `preqa`, `postqa`, `proposals`), and some command groups have no target (`convert`, `export`, `tools`).
 
-!!! note "TODO"
-    The code of the `preqa` and `postqa` stages (`oopsie_backend/preqa/`, `oopsie_backend/postqa/`) is not registered in `cli.py` yet, so it runs as `uv run python -m oopsie_backend.preqa.duplicate_episodes`, `….preqa.duplicate_videos` and `….postqa.critical`.
+> **TODO:** The code of the `preqa` and `postqa` stages (`oopsie_backend/preqa/`, `oopsie_backend/postqa/`) is not registered in `cli.py` yet, so it runs as `uv run python -m oopsie_backend.preqa.duplicate_episodes`, `….preqa.duplicate_videos` and `….postqa.critical`.
 
 ## What reruns
 
