@@ -27,7 +27,7 @@ import numpy as np
 import polars as pl
 from oopsie_data_tools.annotation_tool.annotation_schema import read_annotation_attrs
 
-from oopsie_backend.common.h5 import _n_timesteps, _profile, _s, _str_list
+from oopsie_backend.common.h5 import _n_timesteps, _profile, _s, _str_list, find_h5
 from oopsie_backend.common.hf import hub_files
 from oopsie_backend.common.repos import (
     CONTRIBUTOR,
@@ -137,7 +137,7 @@ def discover(data_dir: Path) -> list[tuple[str, str, Path, str]]:
         kind = repo_kind(dataset_repo)
         if kind not in EPISODE_KINDS:
             continue
-        for path in sorted(repo_dir.rglob("*.h5")):
+        for path in find_h5(repo_dir):
             rel = path.relative_to(repo_dir)
             if IGNORED_DIRS.intersection(rel.parts):
                 continue

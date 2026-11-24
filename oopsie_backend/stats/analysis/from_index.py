@@ -6,6 +6,7 @@ verbs of 5, and 25) need the ``analysis`` extra; ``language=False`` leaves them 
 
 from __future__ import annotations
 
+import math
 import re
 from collections import Counter
 from dataclasses import dataclass
@@ -23,7 +24,7 @@ from oopsie_backend.stats.analysis.common import (
     effective_number,
     shares,
 )
-from oopsie_backend.stats.analysis.language import Parser, clusters, embed, normalize
+from oopsie_backend.stats.analysis.language import Parser, clusters, content_words, embed, normalize
 
 SUFFIX = re.compile(r"(_[2-9])?(_stereo)?$")
 WRIST_VIEWS = {"wrist", "wrist_left", "wrist_right"}
@@ -68,12 +69,15 @@ def task_diversity(lang: Language, cfg: dict) -> dict:
     return {"threshold": cfg["similarity_threshold"], "per_threshold": out}
 
 
-def word_clouds(lang: Language) -> dict:
-    """Entry 2: verbs and objects counted once per episode, and steps per instruction."""
+def word_clouds(lang: Language, episodes: pl.DataFrame, cfg: dict) -> dict:
+    """Entry 2: verbs and objects counted once per episode, steps per instruction, and the content words of the
+    instructions' first sentences, each counted once per episode (``language.content_words``)."""
+    words = content_words(episodes["language_instruction"].to_list(), cfg, first_sentence=True)
     return {
         "verbs": shares(v for vs in lang.verbs.values() for v in set(vs)),
         "objects": shares(o for os_ in lang.objects.values() for o in os_),
         "steps_per_instruction": shares(lang.steps.values()),
+        "words": {"n": episodes.height, "counts": dict(words.most_common())},
     }
 
 
@@ -120,8 +124,21 @@ def hardware(episodes: pl.DataFrame, lang: Language | None, cfg: dict) -> dict:
     }
 
 
+LENGTH_BINS = 40
+LENGTH_RANGE = (1.0, 1000.0)
+
+
+def _log_histogram(values: pl.Series) -> list[int]:
+    """Counts in ``LENGTH_BINS`` log-spaced bins over ``LENGTH_RANGE``; values outside fall into the end bins."""
+    lo, hi = math.log10(LENGTH_RANGE[0]), math.log10(LENGTH_RANGE[1])
+    idx = ((values.drop_nulls().clip(*LENGTH_RANGE).log10() - lo) / (hi - lo) * LENGTH_BINS).floor()
+    counts = Counter(min(int(i), LENGTH_BINS - 1) for i in idx.to_list())
+    return [counts.get(i, 0) for i in range(LENGTH_BINS)]
+
+
 def episode_length(episodes: pl.DataFrame, labels: pl.DataFrame) -> dict:
-    """Entry 6: duration in seconds overall, per policy class, per outcome and per failure category."""
+    """Entry 6: duration in seconds overall, per policy class, per outcome (with a log-binned histogram) and per
+    failure category."""
     df = episodes.select(KEY, "duration_seconds", "policy_class").join(
         labels.select(KEY, "outcome", "categories"), on=KEY, how="left"
     )
@@ -134,6 +151,11 @@ def episode_length(episodes: pl.DataFrame, labels: pl.DataFrame) -> dict:
         "policy_class": {str(k): distribution(g["duration_seconds"]) for (k,), g in df.group_by("policy_class")},
         "outcome": {str(k or MISSING): distribution(g["duration_seconds"]) for (k,), g in df.group_by("outcome")},
         "failure_category": {k: distribution(v) for k, v in per_category.items()},
+        "outcome_histogram": {
+            "edges": [10 ** (math.log10(LENGTH_RANGE[0]) + i * math.log10(LENGTH_RANGE[1] / LENGTH_RANGE[0]) / LENGTH_BINS)
+                      for i in range(LENGTH_BINS + 1)],
+            "counts": {str(k or MISSING): _log_histogram(g["duration_seconds"]) for (k,), g in df.group_by("outcome")},
+        },
     }
 
 
@@ -196,6 +218,40 @@ def data_growth(episodes: pl.DataFrame) -> dict:
     }
 
 
+def composition_hours(episodes: pl.DataFrame, labels: pl.DataFrame, lang: Language | None) -> dict:
+    """Entry 46: episodes and hours per verb, arm, policy class and contributor outcome.
+
+    In ``verbs`` an episode counts once for each distinct verb of its instruction, so verb hours
+    add up to more than the total. ``verb_sets`` counts every episode once, under its distinct
+    verbs joined by ``+`` (empty without a verb), for grouping verbs without counting twice."""
+    hours = dict(zip(episodes[KEY].to_list(), (episodes["duration_seconds"].fill_null(0) / 3600).to_list()))
+
+    def per(values: dict[str, list[str]]) -> dict:
+        out: dict[str, dict] = {}
+        for key, vs in values.items():
+            for v in set(vs):
+                row = out.setdefault(v, {"episodes": 0, "hours": 0.0})
+                row["episodes"] += 1
+                row["hours"] += hours[key]
+        return dict(sorted(out.items(), key=lambda kv: -kv[1]["hours"]))
+
+    def column(name: str) -> dict[str, list[str]]:
+        return {k: [v or MISSING] for k, v in episodes.select(KEY, name).iter_rows()}
+
+    outcome = dict(labels.select(KEY, "outcome").iter_rows())
+    out = {
+        "total_hours": sum(hours.values()),
+        "arm": per(column("unified_arm")),
+        "end_effector_type": per(column("end_effector_type")),
+        "policy_class": per(column("policy_class")),
+        "outcome": per({k: [outcome.get(k) or MISSING] for k in hours}),
+    }
+    if lang:
+        out["verbs"] = per(lang.verbs)
+        out["verb_sets"] = per({k: ["+".join(sorted(set(vs)))] for k, vs in lang.verbs.items()})
+    return out
+
+
 def compute(episodes: pl.DataFrame, cfg: dict, with_language: bool = True) -> dict:
     """Every index-based entry, keyed by entry."""
     labels = contributor_labels(episodes)
@@ -204,7 +260,7 @@ def compute(episodes: pl.DataFrame, cfg: dict, with_language: bool = True) -> di
     out = {}
     if lang:
         out["1_task_diversity"] = task_diversity(lang, cfg)
-        out["2_word_clouds"] = word_clouds(lang)
+        out["2_word_clouds"] = word_clouds(lang, episodes, cfg)
         out["3_verb_object_coverage"] = verb_object_coverage(lang, cfg)
     out["5_hardware"] = hardware(episodes, lang, cfg)
     out["6_episode_length"] = episode_length(episodes, labels)
@@ -212,6 +268,7 @@ def compute(episodes: pl.DataFrame, cfg: dict, with_language: bool = True) -> di
     out["9_policy_mix"] = policy_mix(episodes)
     out["10_control_setup"] = control_setup(episodes)
     out["12_data_growth"] = data_growth(episodes)
+    out["46_composition_hours"] = composition_hours(episodes, labels, lang)
     top_verbs = failures.most_common((v for vs in lang.verbs.values() for v in set(vs)), cfg["top_verbs"]) if lang else []
     out.update(
         failures.label_statistics(failures.labelled(labels, episodes), lang.verbs if lang else None, top_verbs, min_n)

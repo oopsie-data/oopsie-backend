@@ -18,6 +18,7 @@ spaCy and sentence-transformers come with the ``analysis`` extra (``uv sync --ex
 from __future__ import annotations
 
 import re
+from collections import Counter
 from dataclasses import dataclass
 
 import numpy as np
@@ -100,6 +101,33 @@ class Parser:
             steps = [Step(self._verb(t), self._objects(t)) for t in sent if self._is_step(t)]
             out[text] = steps or [Step(None, sorted({t.lemma_.lower() for t in sent if t.pos_ == "NOUN"}))]
         return out
+
+
+CONTENT_POS = {"NOUN", "VERB", "ADJ"}
+
+
+def content_words(
+    texts: list[str], cfg: dict, first_sentence: bool = False, pos: set[str] = CONTENT_POS, batch_size: int = 512
+) -> Counter:
+    """Lemmas of the words of part of speech ``pos`` (nouns, verbs and adjectives) of each text (of its first
+    sentence with ``first_sentence``), counted once per text, without spaCy's stop words, words of two letters or
+    fewer, and ``word_stopwords``."""
+    import spacy
+
+    nlp = spacy.load(cfg.get("spacy_model", "en_core_web_sm"), disable=["ner", "parser"])
+    nlp.add_pipe("sentencizer")
+    stop = set(cfg.get("word_stopwords") or [])
+    normalized = [normalize(t) for t in texts]
+    unique = sorted({t for t in normalized if t})
+    words = {}
+    for text, doc in zip(unique, nlp.pipe(unique, batch_size=batch_size)):
+        tokens = next(doc.sents) if first_sentence else doc
+        words[text] = {
+            t.lemma_.lower() for t in tokens
+            if t.pos_ in pos and t.is_alpha and not t.is_stop and len(t.text) > 2
+            and t.lemma_.lower() not in stop
+        }
+    return Counter(w for t in normalized if t for w in words[t])
 
 
 def embed(texts: list[str], model_name: str) -> np.ndarray:

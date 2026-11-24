@@ -78,7 +78,10 @@ def main(argv: list[str] | None = None) -> int:
     try:
         runpy.run_module(f"oopsie_backend.{COMMANDS[stage][command]}", run_name="__main__", alter_sys=True)
     except SystemExit as exc:
-        return exc.code if isinstance(exc.code, int) else (0 if exc.code is None else 1)
+        if exc.code is None or isinstance(exc.code, int):
+            return exc.code or 0
+        print(exc.code, file=sys.stderr)
+        return 1
     return 0
 
 

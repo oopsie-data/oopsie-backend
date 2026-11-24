@@ -16,6 +16,7 @@ from pathlib import Path
 
 import yaml
 
+from oopsie_backend.common.h5 import find_h5
 from oopsie_backend.common.stats_config import CONFIG
 
 CONFIG_DIR = Path(__file__).resolve().parent.parent.parent / "configs"
@@ -146,7 +147,7 @@ def canonical_dataset_repo(dataset: str) -> str:
 def resolve_local_episode_path(
     data_dir: Path, rel: Path
 ) -> tuple[str, str] | None:
-    """Map a local ``.h5`` path to ``(dataset_repo, repo_relative_path)``."""
+    """Map a local HDF5 path to ``(dataset_repo, repo_relative_path)``."""
     parts = rel.parts
     if data_dir.name == HF_ORG:
         if len(parts) < 2:
@@ -158,10 +159,10 @@ def resolve_local_episode_path(
 
 
 def discover_episodes(data_dir: Path) -> list[tuple[str, str, Path]]:
-    """``(dataset_repo, repo_path, absolute_path)`` for every .h5 under the org folder."""
+    """``(dataset_repo, repo_path, absolute_path)`` for every HDF5 file under the org folder."""
     root = org_dir(data_dir.resolve())
     episodes: list[tuple[str, str, Path]] = []
-    for path in sorted(root.rglob("*.h5")):
+    for path in find_h5(root):
         rel = path.relative_to(root)
         if IGNORED_DIR_NAMES.intersection(rel.parts):
             continue
@@ -174,7 +175,7 @@ def discover_episodes(data_dir: Path) -> list[tuple[str, str, Path]]:
 
 
 def discover_all_dataset_dirs(data_dir: Path) -> list[str]:
-    """Every dataset repo id on disk, including ones without .h5 files."""
+    """Every dataset repo id on disk, including ones without HDF5 files."""
     root = org_dir(data_dir.resolve())
     if not root.is_dir():
         return []

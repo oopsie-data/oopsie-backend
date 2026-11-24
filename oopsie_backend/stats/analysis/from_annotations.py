@@ -4,11 +4,11 @@ The returns are read from the index's ``annotation_*`` columns (``annotation.col
 into three frames:
 
 - outcomes: one row per annotator and episode, with ``episode_key``, ``annotator``,
-  ``outcome``, ``severity`` and ``instruction`` (the annotator's language instruction
-  where it differs from the episode's);
+  ``outcome``, ``severity``, ``instruction`` (the annotator's language instruction
+  where it differs from the episode's) and ``description``;
 - segments: one row per segment and category, with ``episode_key``, ``annotator``,
   ``segment`` (the segment's number within the annotator's episode), ``start`` and
-  ``end`` (seconds from the episode start), ``type`` and ``category``;
+  ``end`` (seconds from the episode start), ``type``, ``category`` and ``label``;
 - assigned: one row per assigned episode, with ``episode_key``, ``split`` and
   ``assigned`` (the number of annotators it was given to).
 
@@ -22,6 +22,7 @@ An annotator's categories of an episode are the union of its segment categories.
 
 from __future__ import annotations
 
+import statistics
 import sys
 from collections import Counter, defaultdict
 from itertools import combinations
@@ -54,6 +55,7 @@ from oopsie_backend.stats.analysis.common import (
     shares,
     wilson,
 )
+from oopsie_backend.stats.analysis.language import content_words
 
 OUTCOMES_SCHEMA = {
     KEY: pl.String,
@@ -61,6 +63,7 @@ OUTCOMES_SCHEMA = {
     "outcome": pl.String,
     "severity": pl.String,
     "instruction": pl.String,
+    "description": pl.String,
 }
 SEGMENTS_SCHEMA = {
     KEY: pl.String,
@@ -70,6 +73,7 @@ SEGMENTS_SCHEMA = {
     "end": pl.Float64,
     "type": pl.String,
     "category": pl.String,
+    "label": pl.String,
 }
 ASSIGNED_SCHEMA = {KEY: pl.String, "split": pl.String, "assigned": pl.Int64}
 # Episodes listed per end of the per-episode agreement ranking (entry 43).
@@ -105,6 +109,7 @@ def returns_from_index(index: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame,
                 "outcome": r["outcome"],
                 "severity": r["severity"] or None,
                 "instruction": r["language_instruction"],
+                "description": r["episode_description"] or None,
             })
             if not freq:
                 continue
@@ -116,6 +121,7 @@ def returns_from_index(index: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame,
                     "start": seg["start"] / freq,
                     "end": (seg["end"] + 1) / freq,
                     "type": seg["type"],
+                    "label": seg["label"] or None,
                 }
                 for cat in seg["failure_category"] or [None]:
                     segments.append(base | {"category": cat})
@@ -139,6 +145,10 @@ def annotator_labels(outcomes: pl.DataFrame, segments: pl.DataFrame) -> pl.DataF
     return df.select(KEY, pl.col("annotator").alias("source"), "outcome", "categories", "severity").cast(LABELS_SCHEMA)
 
 
+TIMING_BINS = 20
+START_WITHIN = (0.5, 1, 2, 5, 10)  # entry 30: seconds between the starts of paired segments
+
+
 def _segment_lists(segments: pl.DataFrame) -> dict[tuple[str, str], list[tuple[float, float, str | None]]]:
     grouped = segments.group_by(KEY, "annotator", "segment").agg(
         pl.col("start").first(), pl.col("end").first(), pl.col("category").drop_nulls().unique().sort()
@@ -150,13 +160,17 @@ def _segment_lists(segments: pl.DataFrame) -> dict[tuple[str, str], list[tuple[f
 
 
 def time_until_failure(labels: pl.DataFrame, segments: pl.DataFrame) -> dict:
-    """Entry 14: start of the first segment over the episode duration, overall and per policy class."""
+    """Entry 14: start of the first segment over the episode duration, overall (with a histogram of
+    ``TIMING_BINS`` equal bins over 0–1) and per policy class."""
     first = segments.group_by(KEY, "annotator").agg(pl.col("start").min())
     df = labels.join(first, left_on=[KEY, "source"], right_on=[KEY, "annotator"], how="inner").with_columns(
         (pl.col("start") / pl.col("duration_seconds")).clip(0, 1).alias("relative")
     )
+    bins = (df["relative"] * TIMING_BINS).floor().clip(0, TIMING_BINS - 1).cast(pl.Int64).value_counts()
+    histogram = dict(zip(*bins.sort("relative").to_dict(as_series=False).values()))
     return {
         "overall": distribution(df["relative"]),
+        "histogram": [histogram.get(i, 0) for i in range(TIMING_BINS)],
         "policy_class": {str(k): distribution(g["relative"]) for (k,), g in df.group_by("policy_class")},
     }
 
@@ -169,8 +183,13 @@ def _segment_counts(labels: pl.DataFrame, segments: pl.DataFrame) -> pl.DataFram
 
 
 def segments_per_episode(labels: pl.DataFrame, segments: pl.DataFrame) -> dict:
-    """Entry 17: number of segments per annotated episode."""
-    return shares(_segment_counts(labels, segments)["segments"].to_list())
+    """Entry 17: number of segments per label, and per episode as the lower median over its annotators."""
+    counts = _segment_counts(labels, segments)
+    per_episode = counts.group_by(KEY).agg(pl.col("segments"))["segments"].to_list()
+    return {
+        "labels": shares(counts["segments"].to_list()),
+        "episodes": shares(statistics.median_low(c) for c in per_episode),
+    }
 
 
 def recovery(labels: pl.DataFrame, segments: pl.DataFrame, min_n: int) -> dict:
@@ -388,7 +407,8 @@ def _three_annotators(labels: pl.DataFrame, segments: pl.DataFrame) -> dict:
 
 
 def temporal_agreement(pairs: list[dict], labels: pl.DataFrame, segments: pl.DataFrame) -> dict:
-    """Entry 30: overlap and start difference of paired segments, and agreement on the number of segments.
+    """Entry 30: overlap (with a histogram of ``TIMING_BINS`` equal bins over 0–1) and start difference of paired
+    segments (with the share within each of ``START_WITHIN`` seconds), and agreement on the number of segments.
 
     Also the IoU of the time two annotators cover, which counts pairs where only one marks
     segments, and the common moment of three annotators.
@@ -400,7 +420,11 @@ def temporal_agreement(pairs: list[dict], labels: pl.DataFrame, segments: pl.Dat
     return {
         "annotator_pairs": len(pairs),
         "iou": distribution(overlaps),
+        "iou_histogram": [
+            sum(min(int(o * TIMING_BINS), TIMING_BINS - 1) == i for o in overlaps) for i in range(TIMING_BINS)
+        ],
         "start_difference_seconds": distribution(starts),
+        "start_within_seconds": {str(t): sum(d <= t for d in starts) / len(starts) if starts else None for t in START_WITHIN},
         "same_segment_count_share": sum(p["counts"][0] == p["counts"][1] for p in pairs) / len(pairs) if pairs else None,
         "unpaired_segment_share": unpaired / total if total else None,
         "covered_time": _union_agreement(labels, segments),
@@ -639,6 +663,17 @@ def changed_instructions(outcomes: pl.DataFrame, episodes: pl.DataFrame, contrib
         "changed_disagreements": dict(direction),
         "episodes_listed": listed,
     }
+
+
+def description_words(outcomes: pl.DataFrame, segments: pl.DataFrame, cfg: dict) -> dict:
+    """Entry 47: content words of the annotators' failure descriptions, i.e. the descriptions of labels with a
+    failure outcome and the labels of all segments, each counted once per text (``language.content_words``);
+    ``verbs`` keeps only verbs and adjectives, which name what went wrong rather than the objects."""
+    texts = outcomes.filter(pl.col("outcome") == FAILURE)["description"].drop_nulls().to_list()
+    texts += segments.unique([KEY, "annotator", "segment"])["label"].drop_nulls().to_list()
+    words = content_words(texts, cfg)
+    verbs = content_words(texts, cfg, pos={"VERB", "ADJ"})
+    return {"texts": len(texts), "counts": dict(words.most_common()), "verbs": dict(verbs.most_common())}
 
 
 def compute(

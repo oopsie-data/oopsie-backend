@@ -4,8 +4,8 @@ The dataset analysis computes the statistics for the Oopsie-Data paper, as plann
 
 | Group | Input | Entries |
 |---|---|---|
-| `index` | the episode index | 1–3, 5–7, 9, 10, 12; 15, 18, 21–25, 28 from the contributors' labels |
-| `annotations` | the annotators' returns with failure segments, from the index's `annotation_*` columns | 14, 17, 19, 27, 29–33, 37, 42–45; 15, 18, 21–25, 28 from the annotators' labels |
+| `index` | the episode index | 1–3, 5–7, 9, 10, 12, 46; 15, 18, 21–25, 28 from the contributors' labels |
+| `annotations` | the annotators' returns with failure segments, from the index's `annotation_*` columns | 14, 17, 19, 27, 29–33, 37, 42–45, 47; 15, 18, 21–25, 28 from the annotators' labels |
 | `data` | action features read from the episode files | 36, 38–41 |
 
 | Stage | Target | Runs after | Writes |
@@ -25,7 +25,7 @@ The language entries and the failure prediction need the `analysis` extra, which
 uv sync --extra analysis
 ```
 
-The embedding model is downloaded on first use into the Hugging Face cache (`HF_HOME`). `--no-language` computes the `index` and `annotations` groups without the extra, leaving out entries 1–3, 25 and the verbs of entry 5.
+The embedding model is downloaded on first use into the Hugging Face cache (`HF_HOME`). `--no-language` computes the `index` and `annotations` groups without the extra, leaving out entries 1–3, 25, 47 and the verbs of entry 5.
 
 ## Commands
 
@@ -34,7 +34,10 @@ uv run oopsie stats analysis index --index episode_index.parquet --out reports/a
 uv run oopsie stats analysis annotations --index episode_index.parquet [--batch NAME ...] --out reports/analysis/annotations.json
 uv run oopsie stats analysis features --index episode_index.parquet --data-dir <mirror> --out <features.parquet> [--segments]
 uv run oopsie stats analysis data --index episode_index.parquet --features <features.parquet> --out reports/analysis/data.json
+uv run oopsie stats analysis render reports/analysis/*.json
 ```
+
+`render` writes a Markdown version of each report next to it (`index.json` → `index.md`), with one section per entry and tables for distributions, summaries and group comparisons. Long tables show their first 25 rows, and group comparisons show the 12 most frequent values; the JSON keeps everything.
 
 ## Language
 
@@ -43,11 +46,21 @@ Instructions are lowercased and parsed with spaCy. Only the first sentence count
 - A step's verb is its lemma with particle, merged through `verb_synonyms` ("grab", "pick up" → `pick`). A light verb (`light_verbs`, e.g. "use the box to push the cube") is replaced by the verb of its purpose clause.
 - A step's objects are the lemmatized head nouns of its direct and prepositional objects, without spatial nouns (`object_stopwords`).
 
+Word clouds count the lemmatized nouns, verbs and adjectives of a text once per text, without stop words and the words of `word_stopwords` (generic words such as robot or attempt, sides and colors). Entry 2 counts the first sentence of each episode's instruction, so every episode counts once; entry 47 counts the annotators' failure descriptions, which are the episode descriptions of labels with a failure outcome and the labels of all segments. Its `verbs` keep only verbs and adjectives, which name what went wrong rather than the objects involved.
+
 Task clusters merge instructions whose sentence embeddings reach a cosine similarity threshold: they are the connected components of the graph that links every such pair. Entry 1 reports the number of clusters and the effective number of tasks, `exp(entropy)` of the episodes over the clusters, for each threshold in `similarity_thresholds`. Entry 5 counts clusters at `similarity_threshold`.
+
+## Episode length
+
+Entry 6 summarizes `duration_seconds` overall, per policy class, per contributor outcome and per failure category. `outcome_histogram` also counts the episodes of each outcome in 40 log-spaced bins from 1 s to 1,000 s; shorter and longer episodes fall into the end bins.
+
+## Composition hours
+
+Entry 46 sums `duration_seconds` into episodes and hours per verb, robot arm (`unified_arm`), end effector type, policy class and contributor outcome. In `verbs` an episode counts once for each of its distinct verbs; `verb_sets` counts it once under all its verbs joined by `+`, so that verbs can be grouped without counting an episode twice.
 
 ## Labels
 
-The contributors' labels are each episode's primary annotation, the latest with a timestamp. The annotators' labels have one row per annotator and episode; an annotator's categories of an episode are the union of the categories of their segments. Category statistics use failed labellings. A labelling with several categories counts once for each, and one without any counts as `uncategorized`. Shares come with 95% Wilson intervals, and groups smaller than `min_group_episodes` are left out of comparisons.
+The contributors' labels are each episode's primary annotation, the latest with a timestamp. The annotators' labels have one row per annotator and episode; an annotator's categories of an episode are the union of the categories of their segments. Category statistics use failed labellings. A labelling with several categories counts once for each, and one without any counts as `uncategorized`. Entry 18 also counts every pair of categories a failed labelling gives together (`grasp + manipulation`), as a share of failed labellings. Shares come with 95% Wilson intervals, and groups smaller than `min_group_episodes` are left out of comparisons.
 
 Contributors mostly upload balanced sets of successes and failures, so the reports describe distributions within the failures, and overall outcome shares describe the uploaded data, not failure rates.
 
@@ -57,13 +70,17 @@ The `annotations` group and the segment windows of the `features` group read the
 
 Outcomes are `failure`, `success`, `success_suboptimal`, `success_side_effect` and `incomplete` (the robot acted correctly but the episode ended before the task was done).
 
+Entry 17 counts segments per label and per episode; an episode's count is the lower median of its annotators' counts, so an episode counts k failures only when at least half of its annotators mark k or more segments.
+
+Entry 14 divides the start of an annotator's first segment by the episode duration and also reports it as a histogram of 20 equal bins over 0–1.
+
 Segment bounds are inclusive frame indices in the index and are converted to seconds, `start / control_freq` and `(end + 1) / control_freq`. A segment with several categories is paired once, with its categories joined by `+`.
 
 ## Agreement
 
 Segments of two annotators of an episode are paired greedily by their overlap (IoU), highest first; unpaired segments count as disagreement on the number of segments. Agreement is Krippendorff's α: nominal for outcomes and categories, ordinal for severity. Annotators are anonymized (`A1`, `A2`, …) in the bias report and the list of changed instructions.
 
-Paired segments ignore annotator pairs where only one annotator marks segments. Entry 30 therefore also reports the IoU of the time two annotators' segments cover, with such pairs counted as 0, and for episodes with three annotators whether all three cover a common moment.
+Entry 30 reports the IoU of paired segments also as a histogram of 20 equal bins over 0–1, and the share of paired segments whose starts are within 0.5, 1, 2, 5 and 10 seconds of each other. Paired segments ignore annotator pairs where only one annotator marks segments. Entry 30 therefore also reports the IoU of the time two annotators' segments cover, with such pairs counted as 0, and for episodes with three annotators whether all three cover a common moment.
 
 "Failure or not" compares `outcome == failure` against every other outcome. Entry 27 compares the contributor's label with every annotator label, with the annotators' majority (episodes with a tie are left out) and with unanimous annotators; entry 29 compares annotators with each other.
 

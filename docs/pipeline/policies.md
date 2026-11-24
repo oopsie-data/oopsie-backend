@@ -20,15 +20,15 @@ Episodes name the policy that produced them freely, from `teleop` to checkpoint 
 | Class | Episodes |
 |---|---|
 | `teleop` | a human drives the robot |
-| `frontier` | a released checkpoint of a pretrained generalist model (pi0, pi0-FAST, pi0.5, MolmoAct, PaliGemma DROID policies, X-VLA, GR00T, SmolVLA, Cosmos Policy, DreamZero), not fine-tuned |
-| `custom` | a policy the lab trained, including fine-tunes of frontier models |
+| `frontier` | a pretrained generalist model (pi0, pi0-FAST, pi0.5, MolmoAct, PaliGemma DROID policies, X-VLA, GR00T, SmolVLA, Cosmos Policy, DreamZero), as a released checkpoint or fine-tuned by the lab |
+| `custom` | a policy the lab trained that is not a frontier model |
 | `rl` | a policy trained or refined with reinforcement learning, including residual RL on a frontier model |
 | `dagger` | rollouts with human corrections: DAgger, HG-DAgger, intervention rounds |
 | `scripted` | no learned policy: planners, scripted primitives, random actions |
 | `mixed` | episodes from several policies, or from a policy and a human |
 | `unknown` | the recorded name does not identify the policy |
 
-A fine-tuned frontier model keeps its family, so `policy_family == "pi0.5"` selects every pi0.5 policy and `policy_class` tells released checkpoints from fine-tunes.
+A frontier model refined with reinforcement learning or human corrections keeps its family but takes the class `rl` or `dagger`, so `policy_family == "pi0.5"` selects every pi0.5 policy.
 
 `frontier_groups` sorts the frontier families into model lines:
 
@@ -45,7 +45,7 @@ A frontier family without a group is reported as an issue.
 
 ## Mapping
 
-Each family has a class in `families`. A rule names a family, which takes that class, or `{family, class}` for another class, such as `{family: pi0.5, class: custom}`. A recorded name is looked up in this order:
+Each family has a class in `families`. A rule names a family, which takes that class, or `{family, class}` for another class, such as `{family: pi0.5, class: rl}`. A recorded name is looked up in this order:
 1. `datasets.<dataset>.aliases`, then `datasets.<dataset>.patterns`: rules for one dataset, by repository name without its namespace. A duplicate copy uses the dataset of its original.
 2. `aliases`: whole names.
 3. A recorded name that is itself a family name, such as `pi0.5` or `act`.

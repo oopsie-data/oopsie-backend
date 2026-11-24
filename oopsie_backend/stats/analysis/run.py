@@ -5,6 +5,7 @@ Usage:
     uv run oopsie stats analysis annotations --index episode_index.parquet [--batch NAME ...] --out reports/analysis/annotations.json
     uv run oopsie stats analysis features --index episode_index.parquet --data-dir <mirror> --out <features.parquet> [--segments]
     uv run oopsie stats analysis data --index episode_index.parquet --features <features.parquet> --out reports/analysis/data.json
+    uv run oopsie stats analysis render reports/analysis/*.json
 
 ``index`` uses the episode index alone. ``annotations`` reads the annotators' returns with
 failure segments from the index's ``annotation_*`` columns (``from_annotations``), of every
@@ -27,7 +28,7 @@ from pathlib import Path
 import polars as pl
 
 from oopsie_backend.index.store import DEFAULT_INDEX, KEY, read_index
-from oopsie_backend.stats.analysis import common, from_annotations, from_data, from_index
+from oopsie_backend.stats.analysis import common, from_annotations, from_data, from_index, render
 from oopsie_backend.stats.analysis.language import Parser, normalize
 
 REQUIRED = ["policy_class", "embodiment", "unified_cameras"]
@@ -99,8 +100,14 @@ def main(argv: list[str] | None = None) -> int:
             p.add_argument("--workers", type=int, default=8)
         if name == "data":
             p.add_argument("--features", type=Path, required=True)
+    p = sub.add_parser("render", help="Write a Markdown version of each report next to it")
+    p.add_argument("reports", type=Path, nargs="+")
     args = parser.parse_args(argv)
 
+    if args.group == "render":
+        for path in args.reports:
+            print(f"render: {path} -> {render.render_file(path)}", file=sys.stderr)
+        return 0
     cfg = common.load_config(args.config)
     episodes = episodes_of(args.index)
     if args.group == "index":
@@ -109,6 +116,11 @@ def main(argv: list[str] | None = None) -> int:
         outcomes, segments, assigned = returns_of(args.index, args.batch)
         verbs = None if args.no_language else verbs_of(episodes.filter(pl.col(KEY).is_in(outcomes[KEY].unique().to_list())), cfg)
         entries = from_annotations.compute(episodes, outcomes, segments, cfg, verbs, assigned)
+        if not args.no_language:
+            keys = episodes[KEY].to_list()
+            entries["47_description_words"] = from_annotations.description_words(
+                outcomes.filter(pl.col(KEY).is_in(keys)), segments.filter(pl.col(KEY).is_in(keys)), cfg
+            )
         write_report(args.out, "annotations", outcomes[KEY].n_unique(), entries)
     elif args.group == "features":
         segments = returns_of(args.index)[1] if args.segments else None

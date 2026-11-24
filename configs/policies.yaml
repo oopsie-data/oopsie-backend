@@ -2,7 +2,7 @@
 # `policy_family`, `policy_class`, `frontier_group` and `policy_issues` to the episode index.
 #
 # A rule is a family name, which takes the family's class from `families`, or
-# `{family, class}` for a different class, such as a fine-tuned frontier model (`custom`).
+# `{family, class}` for a different class, such as RL refinement of a frontier model (`rl`).
 # A recorded policy_name is looked up in order:
 #   1. `datasets.<dataset>.aliases`, then `datasets.<dataset>.patterns`
 #   2. `aliases`
@@ -14,8 +14,8 @@
 
 classes:
   - teleop     # a human drives the robot
-  - frontier   # a released checkpoint of a pretrained generalist model, not fine-tuned
-  - custom     # a policy the lab trained or fine-tuned
+  - frontier   # a pretrained generalist model, released checkpoint or fine-tuned
+  - custom     # a policy the lab trained from scratch or on a model that is no frontier family
   - rl         # trained or refined with reinforcement learning
   - dagger     # human corrections during rollouts (DAgger, HG-DAgger, interventions)
   - scripted   # no learned policy: planners, scripted primitives, random actions
@@ -141,13 +141,13 @@ patterns:
   - {match: '^floppy_bagel', family: unknown}              # RoboArena hides policy names
   - {match: '^[0-9a-f]{8}$', family: unknown}              # run hashes
   - {match: '^paligemma_\w+_droid$', family: paligemma}
-  - {match: 'pi0?[._]?5', family: pi0.5, class: custom}
-  - {match: '^pi0', family: pi0, class: custom}
-  - {match: 'gr00t|groot', family: gr00t, class: custom}
-  - {match: 'molmoact', family: molmoact, class: custom}
-  - {match: 'smolvla', family: smolvla, class: custom}
-  - {match: '^x-?vla', family: xvla, class: custom}
-  - {match: 'cosmos', family: cosmos_policy, class: custom}
+  - {match: 'pi0?[._]?5', family: pi0.5}
+  - {match: '^pi0', family: pi0}
+  - {match: 'gr00t|groot', family: gr00t}
+  - {match: 'molmoact', family: molmoact}
+  - {match: 'smolvla', family: smolvla}
+  - {match: '^x-?vla', family: xvla}
+  - {match: 'cosmos', family: cosmos_policy}
   - {match: '^gcbc', family: gcbc}
   - {match: 'dp3', family: dp3}
   - {match: '(^|[_/ -])act([_/ -]|$)', family: act}

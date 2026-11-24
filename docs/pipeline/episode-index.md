@@ -1,6 +1,6 @@
 # Episode index
 
-The index build creates the [episode index](index.md#the-episode-index): it finds every episode in the mirror, reads its h5 metadata and the Hub's hashes, and writes one row per episode. All later stages add their columns to these rows.
+The index build creates the [episode index](../architecture.md#the-episode-index): it finds every episode in the mirror, which is every file ending in `.h5` or `.hdf5` in any capitalization, reads its h5 metadata and the Hub's hashes, and writes one row per episode. All later stages add their columns to these rows.
 
 | Stage | Target | Runs after | Writes |
 |---|---|---|---|

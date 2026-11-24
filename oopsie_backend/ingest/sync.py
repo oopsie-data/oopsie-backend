@@ -398,7 +398,7 @@ def each_repo(run: Callable[..., None], repo_ids: list[str], parallel: int, down
 
 
 def smallest_repos(repo_ids: list[str], n: int, token: str | None) -> list[str]:
-    """The ``n`` smallest contributor repos that hold ``.h5`` files; for local test mirrors."""
+    """The ``n`` smallest contributor repos that hold HDF5 files; for local test mirrors."""
     sized = []
     for repo_id in repo_ids:
         if repo_id in ARCHIVE_DATASETS | EXTERNAL_DATASETS:
@@ -417,7 +417,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--data-dir", "--local-dir", type=Path, default=DEFAULT_DATA_DIR, help="Mirror root")
     parser.add_argument("--org", default=HF_ORG)
     parser.add_argument("--only", nargs="+", default=None, help="Repo names to sync, archive and infra repos included (default: every other repo of the org)")
-    parser.add_argument("--smallest", type=int, default=None, help="Sync only the N smallest contributor repos with h5 files")
+    parser.add_argument("--smallest", type=int, default=None, help="Sync only the N smallest contributor repos with HDF5 files")
     parser.add_argument("--token", default=os.environ.get("HF_TOKEN"), help="HF read token (default: $HF_TOKEN)")
     parser.add_argument("--parallel-repos", type=int, default=4, help="Repos processed at the same time, one per worker")
     parser.add_argument("--workers", type=int, default=4, help="Parallel downloads and checks within a repo")

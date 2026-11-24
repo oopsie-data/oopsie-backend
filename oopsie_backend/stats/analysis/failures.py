@@ -54,8 +54,11 @@ def failure_types(df: pl.DataFrame) -> dict:
 
 
 def categories_per_episode(df: pl.DataFrame) -> dict:
-    """Entry 18: number of distinct categories per failed labelling."""
-    return shares(len(c or []) for c in failed(df)["categories"].to_list())
+    """Entry 18: number of distinct categories per failed labelling, and how often two categories are
+    given together (``a + b``, as a share of failed labellings)."""
+    cats = [sorted(set(c or [])) for c in failed(df)["categories"].to_list()]
+    pairs = [f"{a} + {b}" for c in cats for i, a in enumerate(c) for b in c[i + 1:]]
+    return {"categories": shares(len(c) for c in cats), "pairs": shares(pairs, total=len(cats))}
 
 
 def by_policy(df: pl.DataFrame, min_n: int) -> dict:

@@ -3,9 +3,32 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Iterator
+from pathlib import Path
 
 import h5py
 import numpy as np
+
+H5_SUFFIXES = (".h5", ".hdf5")
+
+
+def is_h5(name: str | Path) -> bool:
+    """Whether a file name ends in an HDF5 suffix, in any capitalization."""
+    return str(name).lower().endswith(H5_SUFFIXES)
+
+
+def strip_h5_suffix(name: str) -> str:
+    """``name`` without its HDF5 suffix, in any capitalization."""
+    lower = name.lower()
+    for suffix in H5_SUFFIXES:
+        if lower.endswith(suffix):
+            return name[: -len(suffix)]
+    return name
+
+
+def find_h5(root: Path) -> list[Path]:
+    """Every HDF5 file under ``root``, sorted."""
+    return sorted(p for suffix in H5_SUFFIXES for p in root.rglob(f"*{suffix}", case_sensitive=False))
 
 _ACTION_KEYS = (
     "joint_position",
