@@ -41,10 +41,4 @@ Publishing refuses unless:
 
 ## Downloading
 
-```bash
-uv run oopsie ingest sync --release 2026-11-08 --data-dir /path/to/data
-```
-
-This downloads the release to `<data dir>/releases/2026-11-08/`, with the index at `episode_index.parquet` there, copies `annotation/` to `<data dir>/annotation/` where it is missing, and syncs every repo at its pinned commit. It refuses to write into the shared mirror. `--revisions <snapshot.json>` syncs from a local snapshot file instead.
-
-A release depends on the labs' repos: it breaks if a lab deletes its repo or squashes its history.
+Users download a release with `oopsie ingest sync --release <name>`, described in [Download a release](../using/download.md). `--revisions <snapshot.json>` instead syncs each repo at the commits of a local snapshot file, without fetching a release.

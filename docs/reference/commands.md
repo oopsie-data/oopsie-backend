@@ -1,6 +1,19 @@
 # Commands
 
-Every command runs as `uv run oopsie <stage> <command>`, and `--help` after a command prints its options. `uv run oopsie` alone lists them.
+Every command runs as `uv run oopsie <group> <command>`, and `--help` after a command prints its options. `uv run oopsie` alone lists them. A command group is named after the code folder its commands live in; it is not a pipeline stage or target, see [Commands, stages and targets](../pipeline/index.md#commands-stages-and-targets).
+
+## For users
+
+| Command | Does |
+|---|---|
+| `ingest release list` | lists the published releases |
+| `ingest sync --release NAME --data-dir DIR` | downloads a release ([Download a release](../using/download.md)) |
+| `tools inspect-hdf5 FILE` | prints the tree of an episode file |
+
+Everything below is for running the pipeline.
+
+!!! note "TODO"
+    The `preqa` and `postqa` code (duplicate episodes, duplicate videos, critical episodes) is not registered in `cli.py` yet. Run it as `uv run python -m oopsie_backend.preqa.duplicate_episodes`, `….preqa.duplicate_videos` and `….postqa.critical`.
 
 ## Pipeline
 

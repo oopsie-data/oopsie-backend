@@ -104,7 +104,7 @@ Running a target also runs every stage it depends on, unless that stage's result
 | `--serial` | runs one stage at a time |
 | `--graph FILE` | draws the stages of the target to an image |
 
-Every stage is also a command that runs without the pipeline, with its own options (`uv run oopsie <stage> <command> --help`). The stage pages give these commands, and the [command reference](../reference/commands.md) lists them all.
+Most stages call a command that also runs on its own, without the pipeline; see [below](#commands-stages-and-targets).
 
 ### Targets
 
@@ -145,6 +145,37 @@ Manual stages are left out of `all` because they are expensive or need a decisio
 | `stage_dir` | fast storage where imported datasets are converted |
 | `node_stage_dir` | node-local storage that QA and training copy episodes to before reading them |
 | `release_snapshot`, `release_name` | the sync report a release is made from, and its name |
+
+## Commands, stages and targets
+
+The same code can be reached in two ways, organized differently:
+
+| | Command group | Target |
+|---|---|---|
+| Run as | `oopsie <group> <command>` | `oopsie pipeline run <target>` |
+| Contains | commands | stages |
+| Organized by | code folder: `oopsie_backend/<group>/` | the order of a run |
+| Defined in | `COMMANDS` in `oopsie_backend/cli.py` | `TARGETS` in `oopsie_backend/pipeline/stages.py` |
+
+A stage is a function in a folder's `stages.py` that calls one of that folder's commands with the pipeline's inputs. Running the command yourself does the same work with options of your choosing, but without the cache or the stages it depends on.
+
+Many command groups and targets share a name because a step of the run mostly uses one folder's code, but their contents differ. The `index` name, for example:
+
+| Command (`oopsie index …`) | Stage that calls it | Target of the stage |
+|---|---|---|
+| `index build` | `episode_index` | `index` |
+| `index camera-names` | `unified_camera_names` | `preqa` |
+| `index embodiments` | `unified_embodiments` | `preqa` |
+| `index policies` | `unified_policies` | `preqa` |
+| `index camera-sheet` | none; a helper for checking the camera mapping | |
+| `ingest upload-times` | `hub_upload_times` | `index` |
+
+The camera, embodiment and policy stages write index columns, so their code lives in `index/`, but they wait for the duplicates, so they run in `preqa`. Likewise the `ingest` folder's three stages belong to three targets: `hub_mirror` to `sync`, `hub_upload_times` to `index` and `data_release` to `release`. There is no `ingest` target.
+
+Some targets have no command group of the same name (`all`, `preqa`, `postqa`, `proposals`), and some command groups have no target (`convert`, `export`, `tools`).
+
+!!! note "TODO"
+    The code of the `preqa` and `postqa` stages (`oopsie_backend/preqa/`, `oopsie_backend/postqa/`) is not registered in `cli.py` yet, so it runs as `uv run python -m oopsie_backend.preqa.duplicate_episodes`, `….preqa.duplicate_videos` and `….postqa.critical`.
 
 ## What reruns
 

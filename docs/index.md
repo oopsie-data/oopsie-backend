@@ -1,34 +1,77 @@
 # Oopsie backend
 
-Oopsie-Data collects robot episodes, successes and failures, from many labs. Each lab uploads its episodes as HDF5 files with camera videos to its own dataset repo in the `OopsieData-Submissions` organization on Hugging Face. The backend turns these uploads into curated data: it mirrors the repos, catalogs every episode, checks the data, holds out an evaluation set, distributes episodes to annotators, collects their labels and materializes training sets.
+Oopsie-Data collects robot episodes, successes and failures, from many labs. Each lab uploads its episodes as HDF5 files with camera videos to its own dataset repo in the `OopsieData-Submissions` organization on Hugging Face. The backend turns these uploads into curated data: it catalogs every episode, checks the data, holds out a test set, has the episodes labeled by annotators, and publishes versioned releases.
 
-All of this runs as one pipeline on TACC's LS6 cluster. A nightly job brings the pipeline up to date with whatever the labs uploaded that day, and every result lands in a single table, the [episode index](architecture.md#the-episode-index), with one row per episode.
+## I want the data
 
-## Where to start
+Ask the Oopsie-Data team for a read-only Hugging Face token, then:
+
+```bash
+git clone https://github.com/oopsie-data/oopsie-backend.git && cd oopsie-backend
+uv sync                                                     # install
+export HF_TOKEN=<your read-only token>
+uv run oopsie ingest release list                           # the published releases
+uv run oopsie ingest sync --release 2026-11-08 --data-dir /path/to/data
+```
+
+```python
+import polars as pl
+df = pl.read_parquet("/path/to/data/releases/2026-11-08/episode_index.parquet")
+```
+
+Next: [Download a release](using/download.md) for what the download contains, and [Reading the index](using/reading-the-index.md) for selecting episodes and finding their files.
+
+## I run the pipeline
+
+```bash
+uv sync                                     # install
+uv run oopsie pipeline run --list           # targets and their stages
+uv run oopsie pipeline run qa --explain     # run a target and every stage it needs
+uv run oopsie                               # every command, by command group
+```
+
+The defaults in `configs/pipeline.yaml` are the LS6 paths: the mirror in `/corral/utexas/IRI26024/oopsiedata`, the index in `/corral/utexas/IRI26024/episode_index/`.
+
+Next: [Pipeline](pipeline/index.md) for the stages and how to run them, and the [LS6 runbook](operations/ls6.md) for the nightly job.
+
+## Key concepts
+
+| Term | Meaning |
+|---|---|
+| **Release** | a frozen, tagged version of the dataset, e.g. `2026-11-08`: the pinned commit of every lab repo and the index built from those files. What users download. |
+| **Mirror** | the team's full local copy of every lab repo, on LS6. The pipeline reads it. |
+| **Episode index** | one table, `episode_index.parquet`, with one row per episode and every result as a column. Each release ships one. |
+| **Command group** | a set of commands named after a code folder, run as `oopsie <group> <command>`, e.g. `oopsie ingest sync`. |
+| **Stage** | one step of the pipeline. It calls a command's code and writes its result to the index or to files. |
+| **Target** | a named set of stages. `oopsie pipeline run <target>` runs them, and first any stage they depend on that is out of date. |
+| **Pipeline** | every stage chained together. The team runs it to build the index and publish releases; users do not need it. |
+
+Command groups follow the code folders and targets follow the order of a run, so a name like `index` can be both, with different contents. [Commands, stages and targets](pipeline/index.md#commands-stages-and-targets) explains how they map.
+
+## The pipeline in brief
+
+A nightly job on TACC's LS6 cluster mirrors the labs' repos, builds the index from the h5 files, finds duplicates, runs quality checks, computes stats, holds out the eval split, distributes episodes to annotators and collects their labels. Every result lands in the index. When the data is in a good state, the team publishes it as a release.
+
+```mermaid
+flowchart LR
+  hub[("Hugging Face<br/>lab repos")] -->|sync| mirror[("mirror")]
+  mirror --> stages["pipeline stages"]
+  stages <--> index[("episode index")]
+  annotators["annotators"] <--> stages
+  index --> release["release"]
+  hub -. "pinned commits" .-> release
+  release --> users["users"]
+```
+
+[Architecture](architecture.md) explains the design, and [Pipeline](pipeline/index.md) every stage.
+
+## Where to look things up
 
 | You want to | Read |
 |---|---|
-| understand how the pieces fit together | [Architecture](architecture.md) |
-| run the pipeline or understand a stage | [Pipeline](pipeline/index.md) |
 | look up an index column or a config file | [Index columns](reference/index-columns.md), [Configs](reference/configs.md) |
-| run or repair the nightly job on LS6 | [LS6 runbook](operations/ls6.md) |
+| find a command | [Commands](reference/commands.md) |
 | coordinate the annotators | [Annotation](pipeline/annotation/index.md) |
 | annotate episodes | [Annotator guide](pipeline/annotation/annotator-guide.md) |
 | build a training set | [Training data](pipeline/training-data.md) |
 | add a stage, a QA check or a converter | [Development](development.md) |
-
-## Setup
-
-The backend is a Python package managed with [uv](https://docs.astral.sh/uv/):
-
-```bash
-uv sync                          # install
-uv run oopsie                    # list every command
-uv run oopsie pipeline run --list
-```
-
-The dataset analysis needs the optional `analysis` extra (`uv sync --extra analysis`). To work on these docs, serve them locally:
-
-```bash
-uv run --group docs mkdocs serve
-```

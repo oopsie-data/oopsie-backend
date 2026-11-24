@@ -48,6 +48,9 @@ markdown_extensions:
 
 nav:
   - Home: index.md
+  - Using the data:
+      - Download a release: using/download.md
+      - Reading the index: using/reading-the-index.md
   - Architecture: architecture.md
   - Pipeline:
       - pipeline/index.md
