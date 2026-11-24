@@ -1,10 +1,10 @@
 # Configs
 
-All settings live in `configs/`. They are edited by hand and take effect on the next run: each config is watched by the pipeline, so a change reruns the stages that read it ([what reruns](../pipeline/running.md#what-reruns)). Every file starts with a comment that explains its keys.
+All settings live in `configs/`. They are edited by hand and take effect on the next run: each config is watched by the pipeline, so a change reruns the stages that read it ([what reruns](../pipeline/running-targets.md#what-reruns)). Every file starts with a comment that explains its keys.
 
 | File | Read by | Sets |
 |---|---|---|
-| `pipeline.yaml` | `oopsie pipeline run` | the [inputs](../pipeline/running.md#inputs) of every stage: paths, workers, Hub access |
+| `pipeline.yaml` | `oopsie pipeline run` | the [inputs](../pipeline/running-targets.md#inputs) of every stage: paths, workers, Hub access |
 | `repositories.yaml` | sync, index build, stats | the org's `archive` and `infra` repos; every other repo is a contributor repo |
 | `imports.yaml` | sync, index build, [imports](../pipeline/imports.md) | the external datasets: Hub repos and local conversions |
 | `lab_ids.yaml` | index build | canonical lab ids and the misspellings recorded for them |

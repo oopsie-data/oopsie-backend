@@ -46,6 +46,92 @@ The index build discovers episodes under `<data_dir>/OopsieData-Submissions/<rep
 | `archive` | frozen snapshots listed in `configs/repositories.yaml` | never synced or indexed |
 | `infra` | site assets and the annotation repos, listed in `configs/repositories.yaml` | never synced or indexed |
 
+## Stages
+
+The pipeline is the sequence of steps that turns the labs' uploads into curated data: sync the Hub, build the index, check the data, choose the eval split, run the annotation and build training sets. Each step is a **stage**. Stages read the [episode index](index.md#the-episode-index) and write their results back to it as columns, or write files such as reports and annotation bundles.
+
+[Apache Hamilton](https://hamilton.apache.org/) runs the stages. A stage declares the stages it depends on as function parameters, and Hamilton derives the order from these dependencies. It runs independent stages in parallel and skips a stage whose code and inputs are unchanged since its last run, so a nightly run only repeats work for what changed that day.
+
+```mermaid
+flowchart TB
+  subgraph sync
+    hub_mirror
+  end
+  subgraph index
+    episode_index
+    hub_upload_times
+  end
+  subgraph preqa
+    duplicate_episodes
+    duplicate_videos
+    unified_camera_names
+    unified_embodiments
+    unified_policies
+  end
+  subgraph qa
+    qa_results
+  end
+  subgraph postqa
+    critical_episodes
+  end
+  subgraph stats_group [stats]
+    stats
+  end
+  subgraph splits
+    eval_proposals --> chosen_proposal
+    chosen_proposal --> eval_split
+    chosen_proposal --> train_sample
+  end
+  subgraph annotation
+    annotator_assignments --> annotation_columns --> annotation_flags
+  end
+  subgraph manual
+    imported_datasets
+    training_data
+    dataset_analysis
+    annotation_analysis
+    data_release
+  end
+
+  hub_mirror --> episode_index --> duplicate_episodes
+  hub_mirror --> hub_upload_times
+  episode_index --> hub_upload_times
+  duplicate_episodes --> duplicate_videos & unified_camera_names & unified_embodiments & unified_policies & qa_results
+  duplicate_videos --> critical_episodes
+  qa_results --> critical_episodes
+  critical_episodes --> stats
+  critical_episodes --> eval_proposals
+  chosen_proposal --> annotator_assignments
+  train_sample --> annotator_assignments
+  imported_datasets -. "writes into the mirror" .-> episode_index
+  eval_split --> training_data
+  annotation_flags --> training_data & dataset_analysis & annotation_analysis
+  critical_episodes --> training_data
+```
+
+Boxes group the stages by the target that runs them. The `manual` stages never run on their own; each needs to be named explicitly, as described in [Running targets](running-targets.md#targets). The dashed edge is not a dependency: `imported_datasets` converts datasets into the mirror, where the next index build finds them. For readability, the graph leaves out the edges from the unification stages into training and the analysis.
+
+| Stage | Does | Page |
+|---|---|---|
+| `hub_mirror` | downloads new and changed files from the Hub into the mirror | [Hub sync](sync.md) |
+| `episode_index` | reads the h5 files and builds the index's core columns | [Episode index](episode-index.md) |
+| `hub_upload_times` | records when each episode reached the Hub | [Hub sync](sync.md#upload-times) |
+| `duplicate_episodes`, `duplicate_videos` | link copies of episodes and videos shared between episodes | [Duplicates](duplicates.md) |
+| `unified_camera_names` | maps recorded camera names to a common set | [Camera names](camera-names.md) |
+| `unified_embodiments` | maps robot and gripper names to unified arms and end effectors | [Embodiments](embodiments.md) |
+| `unified_policies` | maps policy names to families and classes | [Policies](policies.md) |
+| `qa_results` | checks actions, states and videos | [QA](qa/index.md) |
+| `critical_episodes` | marks structurally unusable episodes | [Critical episodes](critical-episodes.md) |
+| `stats` | computes the website and internal stats | [Stats](stats.md) |
+| `eval_proposals`, `chosen_proposal`, `eval_split` | proposes eval splits, freezes the chosen one and records it in the index | [Eval split](eval-split.md) |
+| `train_sample` | samples train episodes for annotation | [Train sample](train-sample.md) |
+| `annotator_assignments`, `annotation_columns` | assigns episodes to annotators and collects their labels into the index | [Annotation](annotation/index.md) |
+| `annotation_flags` | finds problems the annotators reported and excludes affected episodes | [Annotation flags](annotation/flags.md) |
+| `imported_datasets` (manual) | converts external datasets into the mirror | [Imported datasets](imports.md) |
+| `training_data` (manual) | materializes a training set from a recipe | [Training data](training-data.md) |
+| `dataset_analysis`, `annotation_analysis` (manual) | computes the statistics of the dataset paper | [Dataset analysis](analysis.md) |
+| `data_release` (manual) | publishes a reproducible snapshot of the data and index | [Data releases](release.md) |
+
 ## Which episodes count
 
 Three columns take episodes out of later steps, each for a different reason:
@@ -71,4 +157,4 @@ Three rules then keep the split fixed:
 
 ## Next
 
-[Running the pipeline](running.md) describes the stages, how to run them and how the cache decides what to rerun.
+[Running](running.md) explains the two ways to run the stages.
