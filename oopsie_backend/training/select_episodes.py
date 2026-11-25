@@ -1,7 +1,16 @@
 """Select indexed episodes using recipe filters and deterministic sampling.
 
-Excludes missing, unreadable, duplicate and critical episodes, derives outcome
-labels, and filters by split, source, embodiment, length and outcome.
+Recipes exclude missing episodes, unreadable episodes, duplicate copies and
+episodes flagged by ``annotation_excluded``. Recipes also exclude critical
+episodes outside the held-out eval splits. Selection filters by split, repo
+kind, dataset, lab, robot, embodiment, length and outcome. ``max_episodes``
+limits the result using a stable rank derived from the episode key and seed.
+
+An episode's boolean ``success`` comes from its latest annotation with a usable
+success score or outcome. A score of at least 0.5 counts as success. Dated
+annotations take priority, and ties use the first annotation in index order.
+``success`` is null when no annotation has a usable label. ``failure_categories``
+is the union of all annotation categories.
 """
 
 from __future__ import annotations
@@ -15,11 +24,13 @@ from oopsie_data_tools.annotation_tool.annotation_schema import OUTCOME_SUCCESS
 
 from oopsie_backend.index.camera_names import UNIFIED_TYPE
 from oopsie_backend.index.store import KEY
+from oopsie_backend.splits.eval_split import SPLITS
 
 OPTIONAL = {
     "duplicate_of": pl.String,
     "critical": pl.Boolean,
     "eval_split": pl.String,
+    "annotation_excluded": pl.Boolean,
     "unified_cameras": UNIFIED_TYPE,
 }
 COLUMNS = [
@@ -64,7 +75,8 @@ def select_episodes(index: pl.DataFrame, recipe: dict) -> pl.DataFrame:
         pl.col("on_disk"),
         pl.col("read_error").is_null(),
         pl.col("duplicate_of").is_null(),
-        ~pl.col("critical").fill_null(False),
+        ~pl.col("critical").fill_null(False) | pl.col("eval_split").is_in(SPLITS).fill_null(False),
+        ~pl.col("annotation_excluded").fill_null(False),
         pl.col("eval_split").fill_null("train").is_in(sel["splits"]),
         pl.col("repo_kind").is_in(sel["repo_kinds"]),
         pl.col("num_steps").fill_null(0) >= sel["min_steps"],

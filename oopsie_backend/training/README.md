@@ -95,5 +95,5 @@ requires a common rate; RLDS currently writes one TFDS `train` split from the
 recipe's selected episodes. Joint units, gripper open/closed direction and robot
 kinematics are not standardized here.
 
-See [the full training guide](../../docs/training-data.md) for recipe settings,
+See [the full training guide](../../docs/pipeline/training-data.md) for recipe settings,
 conversion rules and format schemas.

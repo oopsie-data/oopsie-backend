@@ -16,6 +16,8 @@ import re
 import textwrap
 from collections import Counter
 
+from oopsie_backend.common.h5 import strip_h5_suffix
+
 WIDTH = 92
 
 # Draft section names that differ from the dataset repo name (OopsieData-Submissions/<name>).
@@ -522,7 +524,7 @@ def automated_block(repo: str, report: dict, lab_feedback: dict, n_examples: int
         lines.append("   Example episode IDs:")
         for episode_id, path, fs in sorted(eps, key=lambda e: e[:2])[:n_examples]:
             if id_counts[episode_id] > 1 and path:  # ambiguous ID: name the file instead
-                episode_id = path.removesuffix(".h5")
+                episode_id = strip_h5_suffix(path)
             detail = "; ".join(dict.fromkeys(finding_detail(f) for f in fs))
             lines.append(textwrap.fill(f"- {episode_id}: {detail}", WIDTH, initial_indent="     ", subsequent_indent="       "))
         lines.append("")

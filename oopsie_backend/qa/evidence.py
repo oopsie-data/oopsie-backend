@@ -14,6 +14,7 @@ from pathlib import Path
 import h5py
 import numpy as np
 
+from oopsie_backend.common.h5 import is_h5, strip_h5_suffix
 from oopsie_backend.common.videos import episode_videos
 from oopsie_backend.qa.action_qa import (
     STATE_KEY_FOR_ACTION,
@@ -36,13 +37,13 @@ _AT_TIME = re.compile(r"at ([\d.]+)s")
 
 
 def episode_path(data_dir: Path, dataset_repo: str, repo_path: str) -> Path:
-    """The episode's .h5 under ``data_dir`` (the org folder or its parent); refuses paths
+    """The episode's HDF5 file under ``data_dir`` (the org folder or its parent); refuses paths
     that would leave it."""
     data_dir = data_dir.resolve()
     name = dataset_repo.split("/", 1)[-1]
     base = data_dir / name if data_dir.name == HF_ORG else data_dir / dataset_repo
     path = (base / repo_path).resolve()
-    if not path.is_relative_to(data_dir) or path.suffix != ".h5":
+    if not path.is_relative_to(data_dir) or not is_h5(path.name):
         raise ValueError(f"not an episode under the data dir: {dataset_repo}/{repo_path}")
     return path
 
@@ -264,7 +265,7 @@ def episode_evidence(data_dir: Path, dataset_repo: str, repo_path: str, category
         charts = [{"title": f"Couldn't draw a chart: {type(exc).__name__}: {exc}", "series": [], "markers": []}]
 
     return {
-        "episode": repo_path.removesuffix(".h5"),
+        "episode": strip_h5_suffix(repo_path),
         "control_freq": hz,
         "seek_s": times[0] if times else None,
         "moments_s": times,

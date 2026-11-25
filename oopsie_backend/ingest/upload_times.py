@@ -22,6 +22,7 @@ from pathlib import Path
 
 import polars as pl
 
+from oopsie_backend.common.h5 import H5_SUFFIXES
 from oopsie_backend.common.repos import DEFAULT_DATA_DIR, data_root
 from oopsie_backend.index.store import DEFAULT_INDEX, KEY, read_index, update_columns
 
@@ -55,7 +56,7 @@ def first_uploads(repo: Path) -> dict[str, tuple[str, datetime]]:
     """
     log = _git([
         "-C", str(repo), "log", "main", "-m", "--first-parent", "--no-renames", "--diff-filter=A",
-        "--name-only", "--format=%x00%H %cI", "--", "*.h5",
+        "--name-only", "--format=%x00%H %cI", "--", *(f":(icase)*{s}" for s in H5_SUFFIXES),
     ])
     out = {}
     for block in log.split("\0")[1:]:

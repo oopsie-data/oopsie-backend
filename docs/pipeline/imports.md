@@ -1,6 +1,10 @@
 # Imported datasets
 
-Imported datasets are bundled with Oopsie-Data but are not lab contributions. `configs/imports.yaml` lists all of them. Every entry is an `external` dataset: it is indexed, QA-checked and available to training recipes, but never public and never counted toward the lab requirements.
+Imported datasets are existing robot datasets, such as SOAR or RoboArena, that are bundled with Oopsie-Data but are not lab contributions. `configs/imports.yaml` lists all of them. Every entry is an `external` dataset: it is indexed, QA-checked and available to training recipes, but never public and never counted toward the lab requirements.
+
+| Stage | Target | Runs after | Writes |
+|---|---|---|---|
+| `imported_datasets` (manual) | `imports` | nothing; runs on every invocation of its target | `<data_dir>/imports/<name>/` |
 
 An entry takes one of two forms:
 

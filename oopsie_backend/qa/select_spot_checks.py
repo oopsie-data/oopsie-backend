@@ -50,7 +50,7 @@ def main(argv: list[str] | None = None) -> int:
 
     episodes = discover_episodes(args.data_dir)
     if not episodes:
-        print(f"error: no .h5 files under {args.data_dir}", file=sys.stderr)
+        print(f"error: no HDF5 files under {args.data_dir}", file=sys.stderr)
         return 1
     records = collect_records(episodes, args.data_dir, workers=args.workers)
     selection = select_per_lab(records, args.per_lab, args.seed, args.min_episodes)

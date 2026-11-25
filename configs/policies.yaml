@@ -1,0 +1,178 @@
+# Unified policy families and classes. Read by oopsie_backend.index.policies, which writes
+# `policy_family`, `policy_class`, `frontier_group` and `policy_issues` to the episode index.
+#
+# A rule is a family name, which takes the family's class from `families`, or
+# `{family, class}` for a different class, such as RL refinement of a frontier model (`rl`).
+# A recorded policy_name is looked up in order:
+#   1. `datasets.<dataset>.aliases`, then `datasets.<dataset>.patterns`
+#   2. `aliases`
+#   3. a recorded name that is itself a family name (`pi0.5`, `act`)
+#   4. `patterns`
+#   5. `datasets.<dataset>.default`
+# Aliases match the whole name; patterns are case-insensitive regular expressions searched in
+# the name, and the first that matches wins. The family `unknown` is reported as an issue.
+
+classes:
+  - teleop     # a human drives the robot
+  - frontier   # a pretrained generalist model, released checkpoint or fine-tuned
+  - custom     # a policy the lab trained from scratch or on a model that is no frontier family
+  - rl         # trained or refined with reinforcement learning
+  - dagger     # human corrections during rollouts (DAgger, HG-DAgger, interventions)
+  - scripted   # no learned policy: planners, scripted primitives, random actions
+  - mixed      # episodes from several policies or from a policy and a human
+  - unknown
+
+families:              # family -> its class unless a rule sets another
+  teleop: teleop
+  mixed: mixed
+  unknown: unknown
+  other: custom        # a learned policy of no listed family
+  pi0: frontier
+  pi0_fast: frontier
+  pi0.5: frontier
+  molmoact: frontier
+  paligemma: frontier
+  xvla: frontier
+  gr00t: frontier
+  smolvla: frontier
+  cosmos_policy: frontier
+  dreamzero: frontier
+  act: custom
+  diffusion_policy: custom
+  dp3: custom
+  flow_matching: custom
+  gcbc: custom
+  beso: custom
+  hpt: custom
+  iql: rl
+  calql: rl
+  crl: rl
+  sac: rl
+  dice_rl: rl
+  dmo: rl
+  xqc: rl
+
+frontier_groups:       # model line of a `frontier` policy; every frontier family belongs to one
+  pi: [pi0, pi0_fast, pi0.5]
+  molmoact: [molmoact]
+  paligemma_droid: [paligemma]   # RoboArena DROID baselines
+  nvidia: [gr00t, cosmos_policy, dreamzero]
+  xvla: [xvla]
+  smolvla: [smolvla]
+
+aliases:
+  # released checkpoints
+  pi0_droid: pi0
+  openpi_aloha: pi0
+  pi0_fast_droid: pi0_fast
+  pi0_fast_droid_jointpos: pi0_fast
+  pi05: pi0.5
+  pi05_droid: pi0.5
+  pi0.5-DROID: pi0.5
+  pi0.5-droid: pi0.5
+  pi0.5_droid: pi0.5
+  pi05_rtc: pi0.5
+  molmoact2: molmoact
+  molmoact2_droid: molmoact
+  molmoact2_eval: molmoact
+  MolmoAct2-SO100_101: molmoact
+  X-VLA: xvla
+  x-vla: xvla
+  gr00t_n1.7_droid: gr00t
+  groot_n1.6: gr00t
+  grootn1.7: gr00t
+  cosmospolicy: cosmos_policy
+  DreamZero-DROID: dreamzero
+
+  # reinforcement learning
+  calql-explore: calql
+  SAC-FLIP: sac
+  DMO RL policy (various checkpoints, not recorded per episode): dmo
+  xqc_visuotactile: xqc
+  pi0_droid_dsrl: {family: pi0, class: rl}
+  expo_pi_pi0.5: {family: pi0.5, class: rl}
+
+  # several policies or policy and human
+  mixed_policies: mixed
+  mix_of_policies: mixed
+  autoeval_submission: mixed      # AutoEval runs policies submitted by many users
+  pi05_droid+human: mixed
+  tiptop_and_teleop: mixed
+
+  # no learned policy
+  tiptop: {family: other, class: scripted}
+  object_centric_push_planner: {family: other, class: scripted}
+  GPT6AstraClassicalStackTrossen: {family: other, class: scripted}
+  PrimitiveSelectorTrossen: {family: other, class: scripted}
+  random_failure_rollouts: {family: other, class: scripted}
+
+  # learned policies of no listed family
+  HPT: hpt
+  se3-labs-bc-policy: other
+  srl_il: other
+  starvla: other
+  VLA_agentic: other
+  abc_vla: other
+  j2-vla: other
+  psi0: other
+  REKI: other
+  nyu-ultra: other
+  lap: other
+  memmelma/mnm_oopsie: other
+  GPT6AstraVisuomotorTrossen: other
+
+  # not identifiable
+  recorded_policy_unspecified: unknown
+  ViFailback source policy (unspecified): unknown
+  training_replay: unknown
+  DROID: unknown
+  egocentric: unknown
+  Apricot: unknown
+  dam: unknown                    # RoboArena hides policy names
+  dreaming_zebra: unknown
+
+patterns:
+  - {match: '^(human|teleop|teleoperation|gello_teleop|vr_teleop)$|^human[ _]teleop', family: teleop}
+  - {match: 'residual_rl', family: pi0.5, class: rl}
+  - {match: '^dice_rl', family: dice_rl}
+  - {match: '^pi0\.5 .*dagger', family: pi0.5, class: dagger}
+  - {match: '^RaC flow-matching', family: flow_matching, class: dagger}
+  - {match: 'dagger|^sirius_fleet', family: other, class: dagger}
+  - {match: '^floppy_bagel', family: unknown}              # RoboArena hides policy names
+  - {match: '^[0-9a-f]{8}$', family: unknown}              # run hashes
+  - {match: '^paligemma_\w+_droid$', family: paligemma}
+  - {match: 'pi0?[._]?5', family: pi0.5}
+  - {match: '^pi0', family: pi0}
+  - {match: 'gr00t|groot', family: gr00t}
+  - {match: 'molmoact', family: molmoact}
+  - {match: 'smolvla', family: smolvla}
+  - {match: '^x-?vla', family: xvla}
+  - {match: 'cosmos', family: cosmos_policy}
+  - {match: '^gcbc', family: gcbc}
+  - {match: 'dp3', family: dp3}
+  - {match: '(^|[_/ -])act([_/ -]|$)', family: act}
+  - {match: 'diffusion|(^|[_/-])dp([_/-]|$)', family: diffusion_policy}
+  - {match: 'flow[_ -]?matching', family: flow_matching}
+  - {match: '^vla_so101_chess', family: other}
+
+datasets:
+  TUD_JP:
+    patterns:
+      - {match: '\.onnx$', family: other, class: rl}     # per-task checkpoints with seeds and iterations
+  KAIST_JS:
+    aliases:
+      rollout: unknown
+      policy_rollout: unknown
+  # datasets whose remaining names are checkpoints or runs of the lab's own policies
+  Araya: {default: other}
+  BONN_MB: {default: other}
+  CMU_RPAD: {default: other}           # ghost, amplify, phantom, point_policy, mimicplay, ...
+  Harvard_EML: {default: other}
+  MIT_Improbable: {default: other}     # local_policy:<id>
+  MIT_PA: {default: other}
+  NUS_CLeAR: {default: other}
+  NYU_AI4CE: {default: other}
+  NYU_LR: {default: other}
+  Princeton_VLL: {default: other}
+  Stanford_REAL: {default: other}
+  UofT_RVL: {default: other}

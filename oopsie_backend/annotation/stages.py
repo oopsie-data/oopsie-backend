@@ -2,7 +2,9 @@
 
 Assignments are written once to ``<data_dir>/annotation/eval_assignment`` and
 ``train_assignment`` from the chosen proposal, the train sample and the settings in
-``configs/eval_split.yaml``.
+``configs/eval_split.yaml``. The index columns hold every collected annotation, and the
+flags of ``configs/annotation_flags.yaml`` mark the problems the annotators found;
+pulling and collecting returns stay manual commands (``docs/pipeline/annotation/index.md``).
 """
 
 from __future__ import annotations
@@ -11,7 +13,7 @@ import json
 import sys
 from pathlib import Path
 
-from oopsie_backend.annotation import assign, pipeline
+from oopsie_backend.annotation import assign, flags, pipeline
 from oopsie_backend.annotation.columns import ANNOTATION_COLUMNS
 from oopsie_backend.annotation.hub import load_config
 from oopsie_backend.common.repos import annotation_dir
@@ -85,3 +87,25 @@ def annotation_columns(
     argv = ["--config", annotation_config_path, "--data-dir", data_dir, "--index", index_path, "index"]
     check_rc(pipeline.main(argv), "annotation index")
     return columns_fingerprint(Path(index_path), ANNOTATION_COLUMNS)
+
+
+
+@stage(always_run=True)
+def annotation_flags_config() -> str:
+    """Fingerprint of ``configs/annotation_flags.yaml``."""
+    return files_fingerprint([flags.FLAGS_CONFIG])
+
+
+@stage
+def annotation_flags(
+    annotation_columns: str, episode_index: str, annotation_flags_config: str, data_dir: str, index_path: str, workers: int
+) -> str:
+    """``annotation_flags`` and ``annotation_excluded``; returns their fingerprint.
+
+    Without assignments the index is left unchanged.
+    """
+    if annotation_columns == NO_ASSIGNMENTS:
+        return NO_ASSIGNMENTS
+    argv = ["--data-dir", data_dir, "--index", index_path, "--workers", str(workers)]
+    check_rc(flags.main(argv), "annotation flags")
+    return columns_fingerprint(Path(index_path), flags.COLUMNS)

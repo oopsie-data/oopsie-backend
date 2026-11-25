@@ -1,45 +1,23 @@
 # oopsie-backend
 
-All oopsiedata processing code lives here. Every stage reads and extends one per-episode parquet index; [Hamilton](https://hamilton.apache.org/) runs the stages and reruns only what changed.
+All Oopsie-Data processing code lives here. Every stage reads and extends one per-episode parquet index; [Hamilton](https://hamilton.apache.org/) runs the stages and reruns only what changed.
+
+There are two things you can do:
+
+1. **Get the data** *(start here)*: download a release, the full dataset or a part of it, and its episode index. It takes minutes, and it is what most people need.
+2. **Run the full pipeline** *(heavy, many steps)*: rebuild everything from the labs' uploads: sync, index, QA, eval split, annotation and releases. It processes the whole dataset, so it needs a large machine (the Oopsie-Data team uses LS6) and a token with access to the labs' repos.
+
+| Topic | Page |
+|---|---|
+| **Get the data** *(start here)* | [docs/using/download.md](docs/using/download.md) |
+| **Run the full pipeline** *(heavy, many steps)* | [docs/pipeline/quickstart.md](docs/pipeline/quickstart.md) |
+| LS6 runbook: the nightly job, permissions, fixing failed runs | [docs/operations/ls6.md](docs/operations/ls6.md) |
+| Reference: index columns and configs | [docs/reference/](docs/reference/index-columns.md) |
+| Development: code layout, adding a stage, browsing the docs locally | [docs/development.md](docs/development.md) |
+| Training data: build datasets from indexed episodes | [Training dataset preparation](oopsie_backend/training/README.md) |
+
+You can also browse the documentation as an MkDocs site, built from `docs/` and starting at [docs/index.md](docs/index.md):
 
 ```bash
-uv sync
-uv run oopsie                                   # list stages and commands
-uv run oopsie pipeline run all --explain        # the full pipeline
+uv run --group docs mkdocs serve     # then open http://127.0.0.1:8000
 ```
-
-## Layout
-
-| Package | Stage |
-|---|---|
-| `oopsie_backend/ingest` | Sync the Hugging Face org to the local mirror |
-| `oopsie_backend/index` | Build the episode index and read or update its columns |
-| `oopsie_backend/preqa` | Checks before QA: duplicate episodes and duplicate videos |
-| `oopsie_backend/qa` | QA checks, one file per check, reports, spot checks and lab feedback |
-| `oopsie_backend/postqa` | Critical episodes |
-| `oopsie_backend/stats` | Public and internal stats |
-| `oopsie_backend/splits` | Eval split proposals, the chosen split, and the annotated train sample |
-| `oopsie_backend/annotation` | Annotator assignment, bundles, Hugging Face distribution and collection |
-| [oopsie_backend/training](oopsie_backend/training/README.md) | Training data recipes: selection, unification, LeRobot, RLDS and HDF5 output |
-| `oopsie_backend/export` | Export to RLDS |
-| `oopsie_backend/conversion` | Converters from external datasets and the imports stage |
-| `oopsie_backend/pipeline` | Stage registry, targets and the Hamilton driver |
-| `oopsie_backend/common` | Repo kinds, h5 decoding, video paths, episode staging, shared I/O |
-
-`oopsie_backend/scripts/` holds aliases for the earlier command paths.
-
-## Documentation
-
-| Topic | Doc |
-|-------|-----|
-| Pipeline | [docs/pipeline.md](docs/pipeline.md) |
-| Episode index | [docs/episode-index.md](docs/episode-index.md) |
-| Sync and stats | [docs/sync-and-stats.md](docs/sync-and-stats.md) |
-| QA spot checks | [docs/qa-spot-checks.md](docs/qa-spot-checks.md) |
-| Action checks | [docs/action-checks.md](docs/action-checks.md) |
-| Video checks | [docs/video-checks.md](docs/video-checks.md) |
-| Imported datasets | [docs/imports.md](docs/imports.md) |
-| Training data | [docs/training-data.md](docs/training-data.md) |
-| Eval split proposals | [docs/eval-split.md](docs/eval-split.md) |
-| Annotation coordinator | [docs/annotation-coordinator.md](docs/annotation-coordinator.md) |
-| Annotator guide | [docs/annotator-guide.md](docs/annotator-guide.md) |

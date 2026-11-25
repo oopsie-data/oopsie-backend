@@ -7,6 +7,8 @@ from urllib.parse import urlparse
 from huggingface_hub import HfApi
 from huggingface_hub.hf_api import RepoFile, RepoFolder
 
+from oopsie_backend.common.h5 import is_h5
+
 
 def parse_repo_arg(repo: str, repo_type: str) -> tuple[str, str]:
     """Return ``(repo_id, repo_type)`` with ``repo_type`` in ``{"dataset","model"}``."""
@@ -133,8 +135,8 @@ def list_repo_files(repo: str, token: str | None, repo_type: str) -> list[str]:
 
 
 def list_h5_files(repo: str, token: str | None, repo_type: str) -> list[str]:
-    """Return every ``.h5`` repo-relative path."""
-    return [p for p in list_repo_files(repo, token, repo_type) if p.lower().endswith(".h5")]
+    """Return every HDF5 repo-relative path."""
+    return [p for p in list_repo_files(repo, token, repo_type) if is_h5(p)]
 
 
 def dataset_repo_size(repo_id: str, token: str | None) -> tuple[int, int]:
@@ -142,7 +144,7 @@ def dataset_repo_size(repo_id: str, token: str | None) -> tuple[int, int]:
     info = HfApi(token=token).dataset_info(repo_id, files_metadata=True)
     siblings = info.siblings or []
     total = sum(s.size or 0 for s in siblings)
-    n_h5 = sum(1 for s in siblings if s.rfilename.lower().endswith(".h5"))
+    n_h5 = sum(1 for s in siblings if is_h5(s.rfilename))
     return total, n_h5
 
 

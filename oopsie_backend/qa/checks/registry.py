@@ -53,6 +53,7 @@ import oopsie_backend.qa.checks.joint_velocity.smoothness  # noqa: F401
 import oopsie_backend.qa.checks.joint_velocity.speed_limit  # noqa: F401
 import oopsie_backend.qa.checks.joint_velocity.tracking  # noqa: F401
 import oopsie_backend.qa.checks.video.brightness  # noqa: F401
+import oopsie_backend.qa.checks.video.browser_playable  # noqa: F401
 import oopsie_backend.qa.checks.video.camera_duration_mismatch  # noqa: F401
 import oopsie_backend.qa.checks.video.choppy  # noqa: F401
 import oopsie_backend.qa.checks.video.corrupted_frames  # noqa: F401

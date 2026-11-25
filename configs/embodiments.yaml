@@ -1,0 +1,195 @@
+# Unified arm and end effector names. Read by oopsie_backend.index.embodiments, which writes
+# `unified_arm`, `unified_end_effector`, `end_effector_type`, `embodiment` and `embodiment_issues`
+# to the episode index.
+#
+# A recorded robot_name is looked up in `datasets.<dataset>.arm_aliases`, then in `arm_aliases`;
+# a recorded name that is itself one of `arms` maps to itself. gripper_name works the same way
+# with `end_effector_aliases` and `end_effectors`. A list of two arms names a mixed bimanual setup
+# (left, right). `unknown` keeps the episode's embodiment unnamed and reports it as an issue.
+# Single-arm, bimanual and mobile setups are told apart by the index's `biarm` and
+# `uses_mobile_base` columns, so arm names only name the arm model.
+
+arms:
+  - franka_panda
+  - franka_fr3
+  - widowx_250
+  - trossen_widowx_ai
+  - viperx_300s
+  - so100
+  - so101
+  - yam
+  - yam_pro
+  - piper
+  - agilex_nero
+  - xarm6
+  - xarm7
+  - lite6
+  - ur5
+  - ur5e
+  - ur10e
+  - flexiv_rizon4s
+  - arx5
+  - openarm
+  - gim_arm_xl
+  - ultra              # NYU platform; `ultra` and `ultra_gen2` are two generations
+  - mabel              # NYU_LR bimanual platform
+  - pal_kangaroo
+  - robotis_ffw_bg2    # ROBOTIS AI Worker FFW-BG2
+  - rainbow_rby1
+  - galaxea_r1_pro
+  - agibot_g2
+  - unitree_g1
+
+end_effector_types:
+  - parallel_jaw
+  - soft              # fin-ray and other compliant fingers
+  - dexterous_hand
+  - tool
+  - other
+
+end_effectors:
+  franka_hand: parallel_jaw
+  robotiq_2f_85: parallel_jaw
+  robotiq_2f_140: parallel_jaw
+  robotiq_hand_e: parallel_jaw
+  widowx_gripper: parallel_jaw
+  trossen_widowx_ai_gripper: parallel_jaw
+  aloha_gripper: parallel_jaw
+  so100_gripper: parallel_jaw
+  so101_gripper: parallel_jaw
+  yam_gripper: parallel_jaw
+  piper_gripper: parallel_jaw
+  agilex_nero_gripper: parallel_jaw
+  xarm_gripper: parallel_jaw
+  lite6_gripper: parallel_jaw
+  wsg50: parallel_jaw
+  rg6: parallel_jaw
+  flexiv_grav: parallel_jaw
+  arx5_gripper: parallel_jaw
+  openarm_gripper: parallel_jaw
+  gim_parallel_gripper: parallel_jaw
+  ultra_gripper: parallel_jaw
+  pal_gripper: parallel_jaw
+  robotis_rh_p12_rn: parallel_jaw
+  galaxea_gripper: parallel_jaw
+  agibot_omnipicker: parallel_jaw
+  umi_finray: soft
+  soft_gripper_passive: soft
+  orca_hand: dexterous_hand
+  faive_hand: dexterous_hand
+  sharpa_hand: dexterous_hand
+  wuji_hand: dexterous_hand
+  inspire_hand: dexterous_hand
+  xhand: dexterous_hand
+  dex3_hand: dexterous_hand
+  brainco_revo2: dexterous_hand
+  custom_tool: tool
+  mabel_gripper: other   # two-servo glove gripper
+
+arm_aliases:
+  franka_droid: franka_panda
+  franka_research_3: franka_fr3
+  Franka Research 3: franka_fr3
+  franka_fr3_left_panda_right: [franka_fr3, franka_panda]
+  franka_xhand: unknown                                   # Panda or FR3 not recorded
+  widow_x: widowx_250
+  widowx_250_s: widowx_250
+  trossen_ai_follower_bimanual: trossen_widowx_ai
+  trossen_stationary: trossen_widowx_ai
+  viperx_300: viperx_300s
+  aloha_viperx_300s: viperx_300s
+  aloha: viperx_300s
+  ALOHA: viperx_300s
+  aloha_2_stationary: viperx_300s
+  so100_follower: so100
+  so101_follower: so101
+  so-101: so101
+  SO-101: so101
+  bimanual-so101: so101
+  so101_bimanual: so101
+  bi_so_follower: so101
+  YAM: yam
+  Bimanual YAM: yam
+  "YAM · two arm": yam
+  i2rt_yam_bimanual: yam
+  bi_yam_follower: yam
+  yam_bimanual_station_0: yam
+  agilex_piper: piper
+  agilex_cobot_magic_piper: piper
+  agilex_piper_cobot_magic: piper
+  yor_agilex_nero: agilex_nero
+  ufactory_xarm7: xarm7
+  dual_ufactory_xarm7: xarm7
+  ufactory_lite6: lite6
+  ur5e_bimanual: ur5e
+  flexiv_rizon_4s: flexiv_rizon4s
+  eva_arx5: arx5
+  ARX X5 single-arm tabletop manipulator: arx5
+  ARX X5 single-arm mobile manipulator: arx5
+  ARX X5 dual-arm tabletop manipulator: arx5
+  ARX X5 dual-arm manipulator mounted on a mobile base: arx5
+  OpenArm_2.0: openarm
+  OpenArm_2.0_beta: openarm
+  gim_arm_xl_dual: gim_arm_xl
+  ultra_gen2: ultra
+  ffw_bg2_rev4: robotis_ffw_bg2
+  rainbow_rby1m: rainbow_rby1
+  Galaxea R1 Pro (real robot): galaxea_r1_pro
+  agibot_g2_t2v2_crsB: agibot_g2
+  egoverse_bimanual: unknown
+
+end_effector_aliases:
+  franka_gripper: franka_hand
+  franka_hand_gelsight_mini: franka_hand
+  franka_hand_with_umifinger: franka_hand
+  franka_toloka_claws_v0: franka_hand
+  robotiq_2f85: robotiq_2f_85
+  Robotiq 2f 85 with attached spatula: robotiq_2f_85
+  widow_x_gripper: widowx_gripper
+  widowx_250_s_gripper: widowx_gripper
+  trossen_pinch: trossen_widowx_ai_gripper
+  trossen_gripper: trossen_widowx_ai_gripper
+  viperx_300_gripper: aloha_gripper
+  viperx_300s_gripper: aloha_gripper
+  aloha_2_gripper: aloha_gripper
+  ALOHA parallel grippers: aloha_gripper
+  so100: so100_gripper
+  so101_parallel_jaw: so101_gripper
+  so-101_gripper: so101_gripper
+  SO-101_gripper: so101_gripper
+  bimanual-so101_gripper: so101_gripper
+  so101_follower: so101_gripper
+  linear_4310: yam_gripper
+  LINEAR_4310: yam_gripper
+  yam_parallel_gripper: yam_gripper
+  yam_parallel_jaw_gripper: yam_gripper
+  bi_yam_follower_grippers: yam_gripper
+  YAM standard linear gripper: yam_gripper
+  agilex_piper_gripper: piper_gripper
+  ufactory_xarm_gripper_two_finger_parallel: xarm_gripper
+  ufactory_lite6_gripper: lite6_gripper
+  flexiv_grav_gn01: flexiv_grav
+  ARX X5 stock gripper: arx5_gripper
+  openarm_posforce_gripper: openarm_gripper
+  openarm_posforce_gripper_2.0_beta: openarm_gripper
+  ultra_gen2_gripper: ultra_gripper
+  "Ultra two-finger parallel grippers, one per arm (normalized position 0-1)": ultra_gripper
+  "RH-P12-RN (gripper_position uses native joint radians, not aperture)": robotis_rh_p12_rn
+  zhiyuan_gripper_omnipicker: agibot_omnipicker
+  umi_gripper: umi_finray
+  UMI finray gripper: umi_finray
+  finray gripper: umi_finray
+  faive_hand_v1: faive_hand
+  sharpa_hand_22dof: sharpa_hand
+  wuji_hand_2: wuji_hand
+  wuji_hand_20dof: wuji_hand
+  inspire_hand_6dof: inspire_hand
+  "Galaxea R1 Pro parallel grippers; native stroke units 0 closed to 100 open, left then right": galaxea_gripper
+  "Mabel right hand: 2-servo glove gripper (proximal, distal joints); the left arm has no gripper": mabel_gripper
+  "BrainCo Revo2 six-DoF five-finger hands driven in grip mode: one grip value per hand mapped to six finger targets (additional_data/hand_finger_targets); finger state not recorded": brainco_revo2
+  unknown_gripper: unknown
+
+datasets:
+  MIT_Improbable:
+    end_effector_aliases:
+      AgileX: unknown      # recorded on a Franka Research 3; which gripper is not settled

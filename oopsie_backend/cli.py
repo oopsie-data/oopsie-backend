@@ -16,7 +16,13 @@ COMMANDS: dict[str, dict[str, str]] = {
         "upload-times": "ingest.upload_times",
         "release": "ingest.release",
     },
-    "index": {"build": "index.build", "camera-names": "index.camera_names", "camera-sheet": "index.camera_sheet"},
+    "index": {
+        "build": "index.build",
+        "camera-names": "index.camera_names",
+        "camera-sheet": "index.camera_sheet",
+        "embodiments": "index.embodiments",
+        "policies": "index.policies",
+    },
     "qa": {
         "run": "qa.run",
         "render-report": "qa.render_report",
@@ -30,6 +36,7 @@ COMMANDS: dict[str, dict[str, str]] = {
         "compute-hf": "stats.compute_hf",
         "render-public": "stats.render_public",
         "render-internal": "stats.render_internal",
+        "analysis": "stats.analysis.run",
     },
     "splits": {
         "propose": "splits.propose",
@@ -43,6 +50,7 @@ COMMANDS: dict[str, dict[str, str]] = {
         "stage": "annotation.stage",
         "collect": "annotation.collect_returns",
         "pipeline": "annotation.pipeline",
+        "flags": "annotation.flags",
     },
     "pipeline": {"run": "pipeline.run"},
     "training": {"materialize": "training.build_dataset"},
@@ -79,7 +87,10 @@ def main(argv: list[str] | None = None) -> int:
     try:
         runpy.run_module(f"oopsie_backend.{COMMANDS[stage][command]}", run_name="__main__", alter_sys=True)
     except SystemExit as exc:
-        return exc.code if isinstance(exc.code, int) else (0 if exc.code is None else 1)
+        if exc.code is None or isinstance(exc.code, int):
+            return exc.code or 0
+        print(exc.code, file=sys.stderr)
+        return 1
     return 0
 
 

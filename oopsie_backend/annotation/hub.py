@@ -19,13 +19,13 @@ from pathlib import Path
 
 import yaml
 from huggingface_hub import HfApi
+from huggingface_hub.hf_api import RepoFile
 
 from oopsie_backend.annotation.bundles import MANIFEST_NAME
 from oopsie_backend.common.repos import annotation_dir
 
 COMMIT_MARKER = ".pr_commit"
 PULLED_STATUSES = ("open", "merged")
-_DIFF_HEADER = re.compile(r"^diff --git a/(\S+) b/(\S+)$", re.MULTILINE)
 
 
 @dataclass
@@ -92,9 +92,17 @@ def annotator_folders(cfg: PipelineConfig) -> dict[str, str]:
     return out
 
 
-def changed_paths(diff: str) -> set[str]:
-    """Paths touched by a git diff."""
-    return {p for m in _DIFF_HEADER.finditer(diff) for p in m.groups()}
+def _file_ids(api: HfApi, repo: str, revision: str | None) -> dict[str, str]:
+    return {
+        f.path: f.blob_id
+        for f in api.list_repo_tree(repo, repo_type="dataset", revision=revision, recursive=True)
+        if isinstance(f, RepoFile)
+    }
+
+
+def changed_paths(api: HfApi, repo: str, revision: str, base: dict[str, str]) -> set[str]:
+    """Files at ``revision`` that are new or differ from ``base`` (path -> blob id)."""
+    return {path for path, blob in _file_ids(api, repo, revision).items() if base.get(path) != blob}
 
 
 def check_pull_request(paths: set[str], folders: set[str], batches: list[str]) -> tuple[str | None, str | None]:
@@ -127,13 +135,13 @@ def pull_returns(
         ref.ref: ref.target_commit
         for ref in api.list_repo_refs(repo, repo_type="dataset", include_pull_requests=True).pull_requests
     }
+    base = _file_ids(api, repo, None)
     rows = []
     for d in api.get_repo_discussions(repo, repo_type="dataset", discussion_type="pull_request"):
         if d.status not in PULLED_STATUSES:
             continue
         row = {"num": d.num, "author": d.author, "status": d.status, "title": d.title}
-        details = api.get_discussion_details(repo, d.num, repo_type="dataset")
-        paths = changed_paths(details.diff or "")
+        paths = changed_paths(api, repo, f"refs/pr/{d.num}", base)
         folder, reason = check_pull_request(paths, folders, batches)
         row |= {"folder": folder, "files": len(paths)}
         if reason:
@@ -170,5 +178,7 @@ def pull_returns(
 
 
 def returned_batch_dirs(cfg: PipelineConfig, batch: str) -> list[Path]:
-    """Downloaded ``pr_NNNN/<folder>/<batch>`` directories, oldest pull request first."""
-    return sorted(p for p in cfg.returns_dir.glob(f"pr_*/*/{batch}") if p.is_dir())
+    """Completely downloaded ``pr_NNNN/<folder>/<batch>`` directories, oldest pull request first."""
+    return sorted(
+        p for p in cfg.returns_dir.glob(f"pr_*/*/{batch}") if p.is_dir() and (p.parents[1] / COMMIT_MARKER).is_file()
+    )

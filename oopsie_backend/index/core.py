@@ -6,6 +6,7 @@ Archive and infra repos (``configs/repositories.yaml``) are not indexed;
 external datasets are indexed as ``external`` with ``public = false``. A file is re-read
 only when its size or modification time changed. File hashes come from the Hub
 listing: ``sha256`` for LFS files and the git object id for all files.
+``lab_id`` is mapped to its canonical name from ``configs/lab_ids.yaml``.
 ``content_hash`` hashes the action and robot state arrays, so copies of an
 episode share it; ``preqa.duplicate_episodes`` uses it to mark duplicates.
 """
@@ -26,7 +27,7 @@ import numpy as np
 import polars as pl
 from oopsie_data_tools.annotation_tool.annotation_schema import read_annotation_attrs
 
-from oopsie_backend.common.h5 import _n_timesteps, _profile, _s, _str_list
+from oopsie_backend.common.h5 import _n_timesteps, _profile, _s, _str_list, find_h5
 from oopsie_backend.common.hf import hub_files
 from oopsie_backend.common.repos import (
     CONTRIBUTOR,
@@ -37,6 +38,7 @@ from oopsie_backend.common.repos import (
     import_dataset_id,
     is_local_import,
     load_imports,
+    load_lab_aliases,
     org_dir,
     repo_kind,
 )
@@ -135,7 +137,7 @@ def discover(data_dir: Path) -> list[tuple[str, str, Path, str]]:
         kind = repo_kind(dataset_repo)
         if kind not in EPISODE_KINDS:
             continue
-        for path in sorted(repo_dir.rglob("*.h5")):
+        for path in find_h5(repo_dir):
             rel = path.relative_to(repo_dir)
             if IGNORED_DIRS.intersection(rel.parts):
                 continue
@@ -151,7 +153,8 @@ def _timestamp(raw) -> datetime | None:
     return dt if dt >= MIN_TIMESTAMP else None
 
 
-def _content_hash(f: h5py.File) -> str:
+def episode_content_hash(f: h5py.File) -> str:
+    """SHA-256 over the action and robot state arrays."""
     h = hashlib.sha256()
     for group_name in ("actions", "observations/robot_states"):
         group = f.get(group_name)
@@ -258,7 +261,7 @@ def read_h5(path: Path, repo_path: str) -> dict:
                 "num_steps": n,
                 "duration_seconds": n / control_freq if n and control_freq else None,
                 "annotations": _annotations(f),
-                "content_hash": _content_hash(f),
+                "content_hash": episode_content_hash(f),
             }
         repo_dir = path
         for _ in Path(repo_path).parts:
@@ -354,8 +357,9 @@ def build_core(
             video["sha256"] = v["sha256"] if v else None
             video["git_oid"] = v["git_oid"] if v else None
 
+    lab_aliases = load_lab_aliases()
     for row in rows.values():
-        lab = row.get("lab_id")
+        lab = row["lab_id"] = lab_aliases.get(row.get("lab_id"), row.get("lab_id"))
         row["public"] = row["repo_kind"] == CONTRIBUTOR and lab not in PUBLIC_EXCLUDED_LABS
     df = pl.DataFrame(
         [{c: row.get(c) for c in CORE_SCHEMA} for row in rows.values()], schema=CORE_SCHEMA

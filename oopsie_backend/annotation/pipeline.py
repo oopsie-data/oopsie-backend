@@ -8,15 +8,16 @@ Commands, in pipeline order:
   stage     (LS6) package every batch into ``stage_dir`` as ``<folder>/<batch>/``
   publish   create the private batch and returns repos if needed and upload ``stage_dir``
   pull      download annotated h5s from the returns repo's pull requests to ``returns_dir``
-  collect   add pulled annotations to each batch's store and write its summary
+  verify    check that every pulled h5 matches its manifest, assignment and index episode
+  collect   add verified annotations to each batch's store and write its summary
   status    returned vs assigned annotations per annotator and batch
-  index     write assignment and collected annotations to the episode index
+  index     write assignments and collected annotations, with their segments, to the episode index
   release   (LS6) write source episodes with collected annotations to each batch's ``release_dir``
 
 Relative paths in the config resolve against ``<data_dir>/annotation``, next to the
 mirror's org folder; ``--data-dir`` and ``--index`` override the config's values.
 ``pull`` and ``collect`` can be re-run as returns arrive; both skip what they
-already have. When the config names an ``index``, ``collect`` also runs ``index``.
+already have. ``collect`` needs the ``index``; it runs ``verify`` first and then ``index``.
 """
 
 from __future__ import annotations
@@ -41,9 +42,9 @@ from oopsie_backend.annotation.hub import (
     annotator_folders,
     load_config,
     pull_returns,
-    returned_batch_dirs,
 )
-from oopsie_backend.index.store import known_only, update_columns
+from oopsie_backend.annotation.verify import index_by_uid, verify_batch, write_report
+from oopsie_backend.index.store import KEY, known_only, read_index, update_columns
 
 
 def stage(cfg: PipelineConfig, args: argparse.Namespace) -> int:
@@ -88,16 +89,43 @@ def pull(cfg: PipelineConfig, args: argparse.Namespace) -> int:
     return 1 if rejected else 0
 
 
-def collect(cfg: PipelineConfig, args: argparse.Namespace) -> int:
-    rc = 0
+def _verified(cfg: PipelineConfig) -> tuple[dict[str, list[Path]], int] | None:
+    """``(batch -> returned files that pass, number rejected)``; writes ``<returns_dir>/<batch>_verification.json``."""
+    if cfg.index is None:
+        print("error: verifying returns needs an index", file=sys.stderr)
+        return None
+    missing = missing_assignments(cfg)
+    if missing:
+        print(f"error: no annotator lists in {', '.join(map(str, missing))}", file=sys.stderr)
+        return None
+    by_uid = index_by_uid(cfg.index)
+    out, n_rejected = {}, 0
     for b in cfg.batches:
-        dirs = returned_batch_dirs(cfg, b.name)
-        print(f"{b.name}: {len(dirs)} returned folder(s)", file=sys.stderr)
-        argv = [*map(str, dirs), "--assignment-dir", str(b.assignment_dir), "--store", str(b.store)]
+        checks = verify_batch(cfg, b, by_uid)
+        write_report(cfg.returns_dir / f"{b.name}_verification.json", checks)
+        rejected = [c for c in checks if c.problems]
+        for c in rejected:
+            print(f"  rejected {c.path}: {'; '.join(c.problems)}", file=sys.stderr)
+        print(f"{b.name}: {len(checks) - len(rejected)}/{len(checks)} returned file(s) verified", file=sys.stderr)
+        out[b.name] = [c.path for c in checks if not c.problems]
+        n_rejected += len(rejected)
+    return out, n_rejected
+
+
+def verify(cfg: PipelineConfig, args: argparse.Namespace) -> int:
+    result = _verified(cfg)
+    return 1 if result is None or result[1] else 0
+
+
+def collect(cfg: PipelineConfig, args: argparse.Namespace) -> int:
+    result = _verified(cfg)
+    if result is None:
+        return 1
+    verified, rc = result[0], 0
+    for b in cfg.batches:
+        argv = [*map(str, verified[b.name]), "--assignment-dir", str(b.assignment_dir), "--store", str(b.store)]
         rc |= collect_returns.main(argv)
-    if cfg.index is not None:
-        rc |= index(cfg, args)
-    return rc
+    return rc | index(cfg, args)
 
 
 def missing_assignments(cfg: PipelineConfig) -> list[Path]:
@@ -112,7 +140,8 @@ def index(cfg: PipelineConfig, args: argparse.Namespace) -> int:
     if missing:
         print(f"error: no annotator lists in {', '.join(map(str, missing))}", file=sys.stderr)
         return 1
-    frame = annotation_frame([(b.name, b.assignment_dir, b.store) for b in cfg.batches])
+    instructions = dict(read_index(cfg.index, ["language_instruction"]).select(KEY, "language_instruction").iter_rows())
+    frame = annotation_frame([(b.name, b.assignment_dir, b.store) for b in cfg.batches], instructions)
     frame = known_only(frame, cfg.index, "assigned")
     update_columns(cfg.index, frame, ANNOTATION_COLUMNS, clear_missing=True)
     print(f"index: annotation columns written for {frame.height} episode(s) in {cfg.index}", file=sys.stderr)
@@ -168,6 +197,7 @@ COMMANDS = {
     "stage": stage,
     "publish": publish,
     "pull": pull,
+    "verify": verify,
     "collect": collect,
     "status": status,
     "index": index,
@@ -190,7 +220,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--workers", type=int, default=8)
     p = sub.add_parser("pull")
     p.add_argument("--close", action="store_true", help="Close open pull requests after downloading them")
-    for name in ("collect", "status", "index", "release"):
+    for name in ("verify", "collect", "status", "index", "release"):
         sub.add_parser(name)
     args = parser.parse_args(argv)
     return COMMANDS[args.command](load_config(args.config, args.data_dir, args.index), args)

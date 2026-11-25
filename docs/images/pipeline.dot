@@ -4,15 +4,17 @@ digraph pipeline {
   edge [color="#555555"];
   mirror [label="local mirror", shape=cylinder, fillcolor="#fff4d6"];
   node [fillcolor="#eeeeee"];
-  hub_mirror; mirror_state; camera_names_config; qa_check_versions; critical_config; stats_config; split_config; annotation_state; training_recipe_state;
+  hub_mirror; mirror_state; camera_names_config; embodiments_config; policies_config; qa_check_versions; critical_config; stats_config; split_config; annotation_state; annotation_flags_config; training_recipe_state; analysis_config;
   node [fillcolor="#fde2e2"];
-  imported_datasets [label="imported_datasets\n(manual)"]; training_data [label="training_data\n(manual)"];
+  imported_datasets [label="imported_datasets\n(manual)"]; training_data [label="training_data\n(manual)"]; dataset_analysis [label="dataset_analysis\n(manual)"];
   node [fillcolor="#e8f0fe"];
   hub_mirror -> mirror; hub_mirror -> mirror_state; mirror -> mirror_state;
   mirror_state -> episode_index;
   hub_mirror -> hub_upload_times; episode_index -> hub_upload_times;
   episode_index -> duplicate_episodes;
   duplicate_episodes -> unified_camera_names; camera_names_config -> unified_camera_names;
+  duplicate_episodes -> unified_embodiments; embodiments_config -> unified_embodiments;
+  duplicate_episodes -> unified_policies; policies_config -> unified_policies;
   duplicate_episodes -> duplicate_videos;
   duplicate_episodes -> qa_results; qa_check_versions -> qa_results;
   duplicate_videos -> critical_episodes; qa_results -> critical_episodes; critical_config -> critical_episodes;
@@ -23,7 +25,10 @@ digraph pipeline {
   chosen_proposal -> eval_split; chosen_proposal -> train_sample; chosen_proposal -> annotator_assignments;
   train_sample -> annotator_assignments;
   annotator_assignments -> annotation_columns; annotation_state -> annotation_columns;
+  annotation_columns -> annotation_flags; episode_index -> annotation_flags; annotation_flags_config -> annotation_flags;
   imported_datasets -> mirror [style=dashed, label="imports/ folder", fontsize=10];
-  critical_episodes -> training_data; eval_split -> training_data; annotation_columns -> training_data;
+  critical_episodes -> training_data; eval_split -> training_data; annotation_flags -> training_data;
   unified_camera_names -> training_data; training_recipe_state -> training_data;
+  critical_episodes -> dataset_analysis; annotation_flags -> dataset_analysis; unified_camera_names -> dataset_analysis; unified_embodiments -> dataset_analysis;
+  unified_policies -> dataset_analysis; analysis_config -> dataset_analysis;
 }

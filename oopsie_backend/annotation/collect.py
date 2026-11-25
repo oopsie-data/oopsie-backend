@@ -24,6 +24,7 @@ from oopsie_data_tools.annotation_tool.annotation_schema import read_annotation_
 
 from oopsie_backend.annotation.bundles import MANIFEST_NAME, sample_uid, source_path
 from oopsie_backend.common.videos import _video_files, repo_root
+from oopsie_backend.index.core import episode_content_hash
 
 UNKNOWN_BUNDLE = "<unknown>"
 ORIGIN_BUNDLE = "eval_bundle"
@@ -78,6 +79,8 @@ def _records_from_h5(f: h5py.File, source: str, bundle: str, assignment: dict[st
     if not isinstance(ea, h5py.Group):
         return [], None
     meta = assignment[uid]
+    data_hash = episode_content_hash(f)
+    instruction = _jsonable(f.attrs.get("language_instruction"))
     out = []
     for name, group in ea.items():
         if not isinstance(group, h5py.Group):
@@ -97,6 +100,8 @@ def _records_from_h5(f: h5py.File, source: str, bundle: str, assignment: dict[st
                 "annotation": read_annotation_attrs(group.attrs),
                 "attrs": attrs,
                 "source_file": source,
+                "content_hash": data_hash,
+                "language_instruction": instruction,
             }
         )
     return out, None
