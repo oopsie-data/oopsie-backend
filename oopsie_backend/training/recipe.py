@@ -107,6 +107,10 @@ def _check(cond: bool, message: str) -> None:
         raise ValueError(message)
 
 
+def has_action_or_state(recipe: dict) -> bool:
+    return recipe["actions"]["mode"] == "native" or bool(recipe["actions"]["keys"] or recipe["state"]["keys"])
+
+
 def load_recipe(path: Path) -> dict:
     raw = yaml.safe_load(Path(path).read_text()) or {}
     name = raw.pop("name", None)
@@ -121,8 +125,13 @@ def load_recipe(path: Path) -> dict:
     _check(recipe["upsample"] in UPSAMPLE_MODES, f"{path}: upsample must be one of {UPSAMPLE_MODES}")
     _check(act["from_states"] in FROM_STATES_MODES, f"{path}: actions.from_states must be one of {FROM_STATES_MODES}")
     if act["mode"] == "target":
-        _check(bool(act["keys"]) and set(act["keys"]) <= set(ACTION_KEYS), f"{path}: target mode needs actions.keys from {ACTION_KEYS}")
-        _check(bool(state["keys"]) and set(state["keys"]) <= set(STATE_KEYS), f"{path}: target mode needs state.keys from {STATE_KEYS}")
+        _check(set(act["keys"] or []) <= set(ACTION_KEYS), f"{path}: actions.keys must be from {ACTION_KEYS}")
+        _check(set(state["keys"] or []) <= set(STATE_KEYS), f"{path}: state.keys must be from {STATE_KEYS}")
+        _check("lerobot" not in recipe["formats"] or bool(act["keys"] and state["keys"]),
+               f"{path}: LeRobot needs both action and state keys in target mode")
+        _check(bool(act["keys"]) or (not act["pad_to"] and act["from_states"] == "never"),
+               f"{path}: actions.pad_to and actions.from_states require action keys")
+        _check(bool(state["keys"]) or not state["pad_to"], f"{path}: state.pad_to requires state keys")
     else:
         _check(not act["keys"] and not state["keys"], f"{path}: native mode keeps every key; leave actions.keys and state.keys unset")
         _check(act["from_states"] == "never", f"{path}: actions.from_states needs target mode")

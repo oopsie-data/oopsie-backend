@@ -19,6 +19,8 @@ def build_layout(recipe: dict, included: pl.DataFrame) -> dict:
     size = recipe["cameras"]["image_size"]
     layout = {"roles": list(recipe["cameras"]["roles"]), "image_size": list(size) if size else None}
     for part, order, cfg in (("action", ACTION_KEYS, recipe["actions"]), ("state", STATE_KEYS, recipe["state"])):
+        if recipe["actions"]["mode"] == "target" and not cfg["keys"]:
+            continue
         widths: dict[str, int] = {}
         for raw in included[f"{part}_widths"].to_list():
             for k, w in json.loads(raw).items():

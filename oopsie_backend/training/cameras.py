@@ -8,6 +8,9 @@ from __future__ import annotations
 
 import fnmatch
 import subprocess
+import tempfile
+from collections.abc import Iterator
+from contextlib import contextmanager
 from pathlib import Path
 
 import cv2
@@ -42,6 +45,18 @@ def assign_roles(cameras: dict[str, str], cfg: dict) -> dict[str, str | None]:
     return out
 
 
+def assign_episode_roles(
+    unified: list[dict] | None, videos: dict[str, Path], cfg: dict,
+) -> dict[str, str | None]:
+    """Map the index's unified names to the recipe's slots for the available videos."""
+    if unified is None:
+        raise Skip("no unified camera names; run oopsie index camera-names")
+    names = {e["name"]: e["camera"] for e in unified if e["name"] and e["camera"] in videos}
+    if not names:
+        raise Skip("no camera has a unified name")
+    return assign_roles(names, cfg)
+
+
 def _resize(frame: np.ndarray, size: tuple[int, int]) -> np.ndarray:
     height, width = size
     if frame.shape[:2] == (height, width):
@@ -50,7 +65,36 @@ def _resize(frame: np.ndarray, size: tuple[int, int]) -> np.ndarray:
     return cv2.resize(frame, (width, height), interpolation=cv2.INTER_AREA if shrink else cv2.INTER_LINEAR)
 
 
+@contextmanager
+def opencv_fallback_to_ffmpeg(path: Path) -> Iterator[Path | None]:
+    """Yield a temporary H.264 copy via FFmpeg when OpenCV cannot decode a source, such as some AV1 clips."""
+    with tempfile.TemporaryDirectory(prefix="oopsie-video-") as tmp:
+        decoded = Path(tmp) / "decoded.mp4"
+        result = subprocess.run(
+            [
+                FFMPEG, "-nostdin", "-loglevel", "error", "-xerror", "-i", str(path),
+                "-map", "0:v:0", "-an", "-vsync", "0", "-c:v", "libx264", "-preset", "ultrafast",
+                "-crf", "0", "-pix_fmt", "yuv420p", str(decoded),
+            ],
+            stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, check=False,
+        )
+        yield decoded if result.returncode == 0 and decoded.is_file() else None
+
+
 def transcode(
+    path: Path, source_steps: int, steps: np.ndarray, out: Path, size: tuple[int, int] | None, fps: float, crf: int
+) -> None:
+    """Prepare a source camera, falling back if OpenCV cannot decode its first frame."""
+    try:
+        _transcode(path, source_steps, steps, out, size, fps, crf)
+    except Skip:
+        with opencv_fallback_to_ffmpeg(path) as decoded:
+            if decoded is None:
+                raise
+            _transcode(decoded, source_steps, steps, out, size, fps, crf)
+
+
+def _transcode(
     path: Path, source_steps: int, steps: np.ndarray, out: Path, size: tuple[int, int] | None, fps: float, crf: int
 ) -> None:
     """Write the frames of ``path`` at the source steps ``steps`` (nondecreasing) to ``out``.
@@ -60,6 +104,7 @@ def transcode(
     """
     capture = cv2.VideoCapture(str(path))
     if not capture.isOpened():
+        capture.release()
         raise Skip(f"cannot open {path.name}")
     num_frames = int(capture.get(cv2.CAP_PROP_FRAME_COUNT))
     if num_frames <= 0:
@@ -91,6 +136,7 @@ def transcode(
         proc.stdin.close()
     except BaseException:
         proc.kill()
+        proc.wait()
         raise
     finally:
         capture.release()

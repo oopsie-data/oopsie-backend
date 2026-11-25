@@ -168,7 +168,7 @@ class Unifier:
         """
         bases = {}
         if self.actions_cfg["mode"] == "target":
-            action_keys, state_keys, derive = self.actions_cfg["keys"], self.state_cfg["keys"], True
+            action_keys, state_keys, derive = self.actions_cfg["keys"] or [], self.state_cfg["keys"] or [], True
             bases = {k: self.state(STATE_SOURCE[k], ep) for k in action_keys if self._from_states(k, ep)}
             action_keys = [k for k in action_keys if k not in bases]
         else:

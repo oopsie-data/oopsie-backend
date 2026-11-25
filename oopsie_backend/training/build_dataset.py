@@ -25,7 +25,7 @@ from oopsie_backend.common.repos import DEFAULT_DATA_DIR, episode_path
 from oopsie_backend.common.staging import chunks, stage_episodes, unstage_episodes
 from oopsie_backend.index.store import DEFAULT_INDEX, KEY, read_index, update_columns
 from oopsie_backend.training.vector_layout import build_layout
-from oopsie_backend.training.recipe import load_recipe, unify_hash
+from oopsie_backend.training.recipe import has_action_or_state, load_recipe, unify_hash
 from oopsie_backend.training.select_episodes import COLUMNS, OPTIONAL, select_episodes
 from oopsie_backend.training.prepare_episode import gripper_job, robot_id, unify_episode
 from oopsie_backend.training.writers.registry import writer
@@ -67,6 +67,7 @@ def unify_rows(
     """``unify_episode`` of every row, in order, staging the episodes chunk by chunk with ``stage_dir``."""
     results = []
     progress = Progress(len(rows), "episode(s) unified")
+    use_index_timing = not has_action_or_state(recipe)
     with ProcessPoolExecutor(max_workers=workers) as pool:
         for chunk in chunks(rows) if stage_dir is not None else [rows]:
             episodes = [(r["dataset_repo"], r["repo_path"]) for r in chunk]
@@ -77,6 +78,7 @@ def unify_rows(
                 (
                     r[KEY], r["repo_path"], episode_path(read_dir, r["dataset_repo"], r["repo_path"]), episodes_dir,
                     recipe, uhash, ranges.get(robot_id(r)), r["unified_cameras"],
+                    (r["num_steps"], r["control_freq"]) if use_index_timing else None,
                 )
                 for r in chunk
             ]
@@ -134,12 +136,17 @@ def unify_all(
     episodes_dir.mkdir(parents=True, exist_ok=True)
     rows = list(selected.iter_rows(named=True))
     uhash = unify_hash(recipe)
-    extent_jobs = [(robot_id(r), episode_path(data_dir, r["dataset_repo"], r["repo_path"])) for r in rows]
+    ranges = {}
+    if has_action_or_state(recipe):
+        extent_jobs = [(robot_id(r), episode_path(data_dir, r["dataset_repo"], r["repo_path"])) for r in rows]
+        extents = (
+            gripper_extents(extent_jobs, workers) if shard_dir is None
+            else sharded(shard_dir, "extents", extent_jobs, workers=workers)
+        )
+        ranges = gripper_ranges(extents)
     if shard_dir is None:
-        ranges = gripper_ranges(gripper_extents(extent_jobs, workers))
         results = unify_rows(rows, recipe, uhash, ranges, data_dir, episodes_dir, workers, stage_dir)
     else:
-        ranges = gripper_ranges(sharded(shard_dir, "extents", extent_jobs, workers=workers))
         results = sharded(
             shard_dir, "unify", rows, recipe=recipe, uhash=uhash, ranges=ranges, data_dir=data_dir,
             episodes_dir=episodes_dir, workers=workers, stage_dir=stage_dir,
@@ -149,7 +156,7 @@ def unify_all(
             {KEY: r[KEY], "dataset_repo": r["dataset_repo"], "repo_path": r["repo_path"], **{c: r[c] for c in LABELS}, **res}
             for r, res in zip(rows, results)
         ],
-        schema_overrides={"success": pl.Float64, "failure_categories": pl.List(pl.String)},
+        schema_overrides={"success": pl.Boolean, "failure_categories": pl.List(pl.String)},
         infer_schema_length=None,
     )
     for column in ("num_steps", "fps", "action_widths", "state_widths", "cameras", "actions_from_states", "filled_steps", "reason"):
@@ -200,7 +207,8 @@ def materialize(
     recipe = load_recipe(recipe_path)
     name = recipe["name"]
     work = work_dir / name
-    df = read_index(index, COLUMNS, optional=OPTIONAL)
+    columns = COLUMNS if has_action_or_state(recipe) else [*COLUMNS, "control_freq"]
+    df = read_index(index, columns, optional=OPTIONAL)
     selected = select_episodes(df, recipe)
     _log(f"{name}: {selected.height} episode(s) selected from {df.height}")
     shard_dir = work / "shards" if shards.node_count() > 1 else None

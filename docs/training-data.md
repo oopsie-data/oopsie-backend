@@ -82,21 +82,76 @@ cameras:
   crf: 23                          # H.264 quality of the unified videos
 ```
 
-An episode's `success` is the mean success of its annotations, falling back to the annotation outcome. Its `failure_categories` is the union of the annotations' categories. `outcome: success` keeps episodes with success ≥ 0.5.
+An episode's boolean `success` comes from the latest annotation with a usable success score or outcome. Scores of at least 0.5 count as success. Dated annotations take priority, and ties use the first annotation in index order. `failure_categories` is the union of the annotations' categories. The manifest stores null when no annotation has a usable outcome.
 
-The repo holds three example recipes:
+The repo holds these example recipes:
 
 | Recipe | Content | Formats |
 |---|---|---|
 | `droid_joint_velocity` | single-arm Franka, joint velocity plus gripper position, the DROID camera names `oopsie-rl` reads, 15 Hz | RLDS |
 | `eef_quat` | single-arm, end-effector pose (xyz plus quaternion) plus gripper, 10 Hz, 224×224 | LeRobot |
 | `all_native` | every usable episode with its own keys, masked, 10 Hz, blank wrist video where none exists | HDF5, LeRobot |
+| `sample_images_rlds` | two wrist slots and one exterior slot with a head/body fallback at 10 Hz, with padding and a camera mask | RLDS |
+
+### Image-only RLDS
+
+In target mode, `actions.keys` and `state.keys` each select what to export.
+The `sample_images_rlds` recipe leaves both unset, so the build reads camera
+paths from HDF5 metadata and timing from the index's `num_steps` and `control_freq`.
+Each step has RGB images, a camera mask, the reward, the discount, episode
+flags and the language instruction. The export omits robot states and actions.
+
+```bash
+release=data/releases/2026-11-08
+cp -n "$release/episode_index_sample.parquet" "$release/episode_index_images.parquet"
+uv run oopsie index camera-names --index "$release/episode_index_images.parquet"
+uv run oopsie training materialize \
+    --recipe configs/training/sample_images_rlds.yaml \
+    --data-dir "$release/sample_data" \
+    --index "$release/episode_index_images.parquet" \
+    --out "$release/training"
+```
+
+The camera mask follows the slot order `wrist_1`, `wrist_2`, `exterior_1`.
+Each slot is a 180×320 RGB image. The role patterns use the index's
+`unified_cameras` names. The exterior slot prefers front, side, top, then
+back views. A head or body view fills the slot when no fixed exterior view
+matches. Missing or unreadable views get black frames with a false mask entry.
+An episode needs at least one readable assigned view. The manifest's `camera_sources` column
+maps output roles back to source camera names.
+
+`cameras.roles` controls the number of images per step. `rate_hz` controls
+temporal sampling, and episode lengths remain variable.
+
+Preview the assignment for a representative episode from each camera setup.
+
+```bash
+uv run oopsie index camera-sheet \
+    --recipe configs/training/sample_images_rlds.yaml \
+    --data-dir "$release/sample_data" \
+    --index "$release/episode_index_images.parquet" \
+    --out "$release/analysis/sample_images_camera_sheet.html"
+```
+
+Use TensorFlow Datasets to read a step and check its camera mask.
+
+```python
+import tensorflow_datasets as tfds
+
+builder = tfds.builder_from_directory(
+    "data/releases/2026-11-08/training/sample_images_rlds/rlds/sample_images_rlds/1.0.0"
+)
+episode = next(iter(builder.as_dataset(split="train")))
+observation = next(iter(episode["steps"]))["observation"]
+image = observation["exterior_1"]
+image_is_present = observation["camera_mask"][2]
+```
 
 ## Unification
 
 ### Actions and states
 
-In **target** mode, `actions.keys` and `state.keys` are the keys every episode must provide. A key that an episode lacks is derived where that needs no kinematics:
+In **target** mode, `actions.keys` and `state.keys` are the keys every episode must provide. An omitted or empty list leaves those fields out of RLDS. LeRobot needs both lists. A key that an episode lacks is derived where that needs no kinematics:
 
 | Key | Derived from |
 |---|---|
@@ -185,7 +240,7 @@ An episode in which no role has a camera is skipped. A blank role holds black fr
   - `observation/<role>` (JPEG), `observation/state` and `observation/<state key>`;
   - `action`, `action_dict/<key>` and `is_filled`;
   - `reward` (1 on the last step of a successful episode), `discount`, `is_first`, `is_last`, `is_terminal` and `language_instruction`.
-- `episode_metadata` holds the source, success, failure categories and masks.
+- `episode_metadata` holds the source, boolean `success`, failure categories and masks. Episodes with no usable outcome have `success` set to `false`.
 - `file_path` starts with `success/` or `failure/`, from which `oopsie-rl` infers the outcome.
 - Recipes that use the DROID camera names and keys produce the layout `oopsie-rl` reads.
 

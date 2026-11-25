@@ -1,12 +1,14 @@
 """Select indexed episodes using recipe filters and deterministic sampling.
 
-Excludes missing, unreadable, duplicate and critical episodes; aggregates success
-and failure labels and filters by split, source, embodiment, length and outcome.
+Excludes missing, unreadable, duplicate and critical episodes, derives outcome
+labels, and filters by split, source, embodiment, length and outcome.
 """
 
 from __future__ import annotations
 
 import hashlib
+import math
+from datetime import datetime, timezone
 
 import polars as pl
 from oopsie_data_tools.annotation_tool.annotation_schema import OUTCOME_SUCCESS
@@ -26,14 +28,34 @@ COLUMNS = [
 ]
 
 
-def episode_labels(annotations: list[dict] | None) -> tuple[float | None, list[str]]:
-    successes, categories = [], set()
+def _annotation_time(timestamp: str | None) -> float:
+    """Compare ISO and Unix timestamps, sorting undated annotations last."""
+    if timestamp is None:
+        return -math.inf
+    try:
+        seconds = float(timestamp)
+    except ValueError:
+        try:
+            stamp = datetime.fromisoformat(timestamp.strip())
+        except ValueError:
+            return -math.inf
+        if stamp.tzinfo is None:
+            stamp = stamp.replace(tzinfo=timezone.utc)
+        return stamp.timestamp()
+    return seconds if math.isfinite(seconds) else -math.inf
+
+
+def episode_labels(annotations: list[dict] | None) -> tuple[bool | None, list[str]]:
+    latest_success, latest_time = None, -math.inf
+    categories = set()
     for a in annotations or []:
         success = a["success"] if a["success"] is not None else OUTCOME_SUCCESS.get(a["outcome"] or "")
         if success is not None:
-            successes.append(float(success))
+            timestamp = _annotation_time(a.get("timestamp"))
+            if latest_success is None or timestamp > latest_time:
+                latest_success, latest_time = float(success) >= 0.5, timestamp
         categories.update(a["failure_category"] or [])
-    return (sum(successes) / len(successes) if successes else None), sorted(categories)
+    return latest_success, sorted(categories)
 
 
 def select_episodes(index: pl.DataFrame, recipe: dict) -> pl.DataFrame:
@@ -63,16 +85,16 @@ def select_episodes(index: pl.DataFrame, recipe: dict) -> pl.DataFrame:
     df = index.filter(pl.all_horizontal(conditions))
     labels = [episode_labels(a) for a in df["annotations"].to_list()]
     df = df.with_columns(
-        pl.Series("success", [s for s, _ in labels], dtype=pl.Float64),
+        pl.Series("success", [s for s, _ in labels], dtype=pl.Boolean),
         pl.Series("failure_categories", [c for _, c in labels], dtype=pl.List(pl.String)),
     )
     outcome = sel["outcome"]
     if outcome == "annotated":
         df = df.filter(pl.col("success").is_not_null())
     elif outcome == "success":
-        df = df.filter(pl.col("success") >= 0.5)
+        df = df.filter(pl.col("success"))
     elif outcome == "failure":
-        df = df.filter(pl.col("success") < 0.5)
+        df = df.filter(~pl.col("success"))
     rank = pl.col(KEY).map_elements(
         lambda k: hashlib.sha1(f"{sel['seed']}:{k}".encode()).hexdigest(), return_dtype=pl.String
     )

@@ -38,31 +38,40 @@ def _frames(path: Path | None, n: int, size: tuple[int, int]) -> Iterator[np.nda
 
 def read_example(episodes_dir: Path, row: dict, layout: dict) -> dict[str, Any]:
     size = tuple(layout["image_size"])
+    has_action = "action" in layout
+    has_state = "state" in layout
     with h5py.File(episodes_dir / f"{row['episode_key']}.h5", "r") as f:
-        action, action_mask, action_dict = padded(f["action"], layout["action"])
-        state, state_mask, state_dict = padded(f["state"], layout["state"])
+        if has_action:
+            action, action_mask, action_dict = padded(f["action"], layout["action"])
+        if has_state:
+            state, state_mask, state_dict = padded(f["state"], layout["state"])
         videos = {r: str(f.attrs.get(f"camera/{r}", "")) for r in layout["roles"]}
         fps = float(f.attrs["fps"])
         filled = np.asarray(f["filled"], dtype=bool)
-    n = len(action)
+    n = len(action) if has_action else len(filled)
     camera_mask = np.array([bool(videos[r]) for r in layout["roles"]])
     images = {r: _frames(episodes_dir / v if v else None, n, size) for r, v in videos.items()}
-    success = row["success"]
-    succeeded = success is not None and success >= 0.5
+    succeeded = bool(row["success"])
     instruction = row["language_instruction"] or ""
     steps = []
     for t in range(n):
         last = t == n - 1
+        state_fields, action_fields = {}, {}
+        if has_state:
+            state_fields = {"state": state[t], **{k: v[t] for k, v in state_dict.items()}}
+        if has_action:
+            action_fields = {
+                "action": action[t],
+                "action_dict": {k: v[t] for k, v in action_dict.items()},
+            }
         steps.append(
             {
                 "observation": {
                     **{r: next(it) for r, it in images.items()},
-                    "state": state[t],
-                    **{k: v[t] for k, v in state_dict.items()},
+                    **state_fields,
                     "camera_mask": camera_mask,
                 },
-                "action": action[t],
-                "action_dict": {k: v[t] for k, v in action_dict.items()},
+                **action_fields,
                 "is_filled": bool(filled[t]),
                 "reward": np.float32(1.0 if last and succeeded else 0.0),
                 "discount": np.float32(1.0),
@@ -73,6 +82,11 @@ def read_example(episodes_dir: Path, row: dict, layout: dict) -> dict[str, Any]:
             }
         )
     outcome = "success" if succeeded else "failure"
+    masks = {}
+    if has_action:
+        masks["action_mask"] = action_mask
+    if has_state:
+        masks["state_mask"] = state_mask
     return {
         "steps": steps,
         "episode_metadata": {
@@ -83,10 +97,9 @@ def read_example(episodes_dir: Path, row: dict, layout: dict) -> dict[str, Any]:
             "lab_id": row["lab_id"] or "",
             "robot_name": row["robot_name"] or "",
             "fps": np.float32(fps),
-            "success": np.float32(-1.0 if success is None else success),
+            "success": succeeded,
             "failure_categories": json.dumps(row["failure_categories"] or []),
-            "action_mask": action_mask,
-            "state_mask": state_mask,
+            **masks,
         },
     }
 
@@ -102,21 +115,30 @@ class UnifiedRLDSBuilder(tfds.core.GeneratorBasedBuilder):
 
     def _info(self) -> tfds.core.DatasetInfo:
         h, w = self._layout["image_size"]
+        roles = self._layout["roles"]
         vector = lambda n: tfds.features.Tensor(shape=(n,), dtype=np.float32)  # noqa: E731
         width = lambda part: sum(self._layout[part].values())  # noqa: E731
+        state_features, action_features, masks = {}, {}, {}
+        if "state" in self._layout:
+            state_features = {"state": vector(width("state")), **{k: vector(n) for k, n in self._layout["state"].items()}}
+            masks["state_mask"] = tfds.features.Tensor(shape=(width("state"),), dtype=np.bool_)
+        if "action" in self._layout:
+            action_features = {
+                "action": vector(width("action")),
+                "action_dict": {k: vector(n) for k, n in self._layout["action"].items()},
+            }
+            masks["action_mask"] = tfds.features.Tensor(shape=(width("action"),), dtype=np.bool_)
         return self.dataset_info_from_configs(
             features=tfds.features.FeaturesDict(
                 {
                     "steps": tfds.features.Dataset(
                         {
                             "observation": {
-                                **{r: tfds.features.Image(shape=(h, w, 3), dtype=np.uint8, encoding_format="jpeg") for r in self._layout["roles"]},
-                                "state": vector(width("state")),
-                                **{k: vector(n) for k, n in self._layout["state"].items()},
-                                "camera_mask": tfds.features.Tensor(shape=(len(self._layout["roles"]),), dtype=np.bool_),
+                                **{r: tfds.features.Image(shape=(h, w, 3), dtype=np.uint8, encoding_format="jpeg") for r in roles},
+                                **state_features,
+                                "camera_mask": tfds.features.Tensor(shape=(len(roles),), dtype=np.bool_),
                             },
-                            "action": vector(width("action")),
-                            "action_dict": {k: vector(n) for k, n in self._layout["action"].items()},
+                            **action_features,
                             "is_filled": tfds.features.Scalar(np.bool_),
                             "reward": tfds.features.Scalar(np.float32),
                             "discount": tfds.features.Scalar(np.float32),
@@ -134,10 +156,9 @@ class UnifiedRLDSBuilder(tfds.core.GeneratorBasedBuilder):
                         "lab_id": tfds.features.Text(),
                         "robot_name": tfds.features.Text(),
                         "fps": tfds.features.Scalar(np.float32),
-                        "success": tfds.features.Scalar(np.float32),
+                        "success": tfds.features.Scalar(np.bool_),
                         "failure_categories": tfds.features.Text(),
-                        "action_mask": tfds.features.Tensor(shape=(width("action"),), dtype=np.bool_),
-                        "state_mask": tfds.features.Tensor(shape=(width("state"),), dtype=np.bool_),
+                        **masks,
                     },
                 }
             ),
