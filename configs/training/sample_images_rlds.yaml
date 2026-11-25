@@ -1,0 +1,12 @@
+name: sample_images_rlds
+formats: [rlds]
+rate_hz: 10
+cameras:
+  image_size: [180, 320]
+  roles:
+    wrist_1: [wrist, wrist_left]
+    wrist_2: [wrist_right, wrist_2]
+    exterior_1:
+      [exterior_front, exterior_side, exterior_top, exterior_back,
+       exterior_front_2, exterior_side_2, exterior_top_2, exterior_back_2, head]
+  missing: blank

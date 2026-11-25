@@ -58,6 +58,27 @@ uv run oopsie ingest sync --release 2026-11-08 --split test --data-dir /path/to/
 
 To get more later, run the command again with another split or without `--split`, into the same folder: files you already have are kept and only the rest downloads.
 
+### Only the files listed in an index
+
+Use `oopsie ingest download` with an episode-index Parquet or a filtered copy.
+
+```bash
+uv run oopsie ingest download \
+  --index data/releases/2026-11-08/episode_index_sample.parquet \
+  --data-dir data/releases/2026-11-08/sample_data \
+  --revisions data/releases/2026-11-08/snapshot.json
+```
+
+The Parquet needs `dataset_repo` (`namespace/repo`) and `repo_path` (a file path
+inside the repo). If it has a `videos` list with a `path` field per video, the
+command downloads those files too. Files go under `<data-dir>/<namespace>/<repo>/`
+with their original paths. The command skips local imports, verifies file
+hashes, and reuses matching files on reruns. It uses your Hugging Face login
+or `HF_TOKEN` for private datasets.
+
+Pass the release's `snapshot.json` to `--revisions` to use its pinned commits.
+Without a snapshot, the command requests files from the repos' default branches.
+
 ## What you get
 
 ```text

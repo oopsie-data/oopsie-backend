@@ -44,7 +44,7 @@ from oopsie_backend.stats.analysis.common import (
     UNCATEGORIZED,
     distribution,
 )
-from oopsie_backend.training.unify import gripper_extent, robot_id
+from oopsie_backend.training.prepare_episode import gripper_extent, robot_id
 
 FEATURES = [
     "mean_speed", "idle_share", "path_efficiency", "log_jerk", "oscillation", "sudden_stops",

@@ -1,8 +1,7 @@
-"""The common layout of a materialized dataset: key order, padded widths and masks.
+"""Define a dataset's action/state vector order, widths, padding and masks.
 
-``action`` and ``state`` vectors concatenate their keys in layout order, each
-padded with zeros to the largest width any included episode has (or the recipe's
-``pad_to`` width). The masks mark which entries an episode actually has.
+Builds layout metadata from included episodes and packs per-key arrays into
+common vectors while marking which dimensions an episode actually provides.
 """
 
 from __future__ import annotations
@@ -20,6 +19,8 @@ def build_layout(recipe: dict, included: pl.DataFrame) -> dict:
     size = recipe["cameras"]["image_size"]
     layout = {"roles": list(recipe["cameras"]["roles"]), "image_size": list(size) if size else None}
     for part, order, cfg in (("action", ACTION_KEYS, recipe["actions"]), ("state", STATE_KEYS, recipe["state"])):
+        if recipe["actions"]["mode"] == "target" and not cfg["keys"]:
+            continue
         widths: dict[str, int] = {}
         for raw in included[f"{part}_widths"].to_list():
             for k, w in json.loads(raw).items():

@@ -1,15 +1,7 @@
-"""Resample unified arrays from an episode's own rate to the recipe rate.
+"""Resample action/state arrays to a target rate or preserve the native rate.
 
-Output step ``i`` lies at source position ``i * source_rate / rate``. Downsampling
-takes the latest source step at or before it. Upsampling (``upsample``):
-
-- ``interpolate``: ``joint_position`` and ``gripper_position`` are interpolated
-  linearly, ``cartesian_position`` linearly in position and by slerp in rotation;
-  every other key (velocities, ``gripper_binary``, base keys) is held.
-- ``hold``: every key is held.
-- ``native``: the episode keeps its own rate.
-
-``filled`` marks the output steps that add no new source step.
+Interpolates joint/gripper positions and Cartesian poses when requested, holds
+other commands, and marks steps that reuse a source step with a filled flag.
 """
 
 from __future__ import annotations
@@ -19,7 +11,7 @@ from dataclasses import dataclass
 import numpy as np
 from scipy.spatial.transform import Rotation
 
-from oopsie_backend.training.convert import decode_poses, encode_poses
+from oopsie_backend.training.convert_actions_states import decode_poses, encode_poses
 
 INTERPOLATED = {"joint_position": "linear", "gripper_position": "linear", "cartesian_position": "pose"}
 

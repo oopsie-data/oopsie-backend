@@ -1,30 +1,8 @@
-"""Materialize the training data of a recipe (``configs/training/<recipe>.yaml``).
+"""Build a training dataset from a YAML recipe and the episode index.
 
-Usage:
-    uv run oopsie training materialize --recipe configs/training/droid_joint_velocity.yaml \\
-        --data-dir /corral/utexas/IRI26024/oopsiedata --index episode_index.parquet \\
-        --out /corral/utexas/IRI26024/training --work-dir $SCRATCH/oopsie/training \\
-        --stage-dir $SCRATCH/oopsie/stage
-
-Steps:
-
-1. Select episodes from the index (``training/select.py``).
-2. Compute each robot's gripper range from the mirror, used to normalize gripper positions.
-3. Unify every selected episode into ``episodes/`` (``training/unify.py``); unified
-   episodes that are still current are reused. With ``--stage-dir``, episodes are
-   copied to fast storage (``common/staging.py``) one chunk at a time and each
-   chunk's copies are removed once it is unified. In a multi-node Slurm job the
-   gripper ranges and the unification run on every node (``common/shards.py``,
-   shard directory ``<work-dir>/<recipe name>/shards``).
-4. Write ``manifest.parquet`` (every selected episode with its status, skip reason
-   and labels), ``layout.json`` and ``recipe.yaml``, then each format in ``formats``
-   (``training/writers/registry.py``) into ``<format>/``.
-5. Set the index's ``training_sets`` column: the recipes each episode is part of.
-
-Everything is built in ``<work-dir>/<recipe name>``. When ``--out`` differs, the
-finished dataset is then copied to ``<out>/<recipe name>``, replacing the previous
-copy; the unified episodes are copied only for the ``hdf5`` format. Keeping the
-work directory on fast scratch storage lets later runs reuse its unified episodes.
+Selects episodes, computes gripper ranges, prepares cached episodes in parallel,
+and exports the requested formats with manifests and index membership updates.
+Run with ``oopsie training materialize``; see README.md for usage.
 """
 
 from __future__ import annotations
@@ -46,10 +24,10 @@ from oopsie_backend.common.progress import Progress
 from oopsie_backend.common.repos import DEFAULT_DATA_DIR, episode_path
 from oopsie_backend.common.staging import chunks, stage_episodes, unstage_episodes
 from oopsie_backend.index.store import DEFAULT_INDEX, KEY, read_index, update_columns
-from oopsie_backend.training.layout import build_layout
-from oopsie_backend.training.recipe import load_recipe, unify_hash
-from oopsie_backend.training.select import COLUMNS, OPTIONAL, select_episodes
-from oopsie_backend.training.unify import gripper_job, robot_id, unify_episode
+from oopsie_backend.training.vector_layout import build_layout
+from oopsie_backend.training.recipe import has_action_or_state, load_recipe, unify_hash
+from oopsie_backend.training.select_episodes import COLUMNS, OPTIONAL, select_episodes
+from oopsie_backend.training.prepare_episode import gripper_job, robot_id, unify_episode
 from oopsie_backend.training.writers.registry import writer
 
 TRAINING_COLUMN = "training_sets"
@@ -89,6 +67,7 @@ def unify_rows(
     """``unify_episode`` of every row, in order, staging the episodes chunk by chunk with ``stage_dir``."""
     results = []
     progress = Progress(len(rows), "episode(s) unified")
+    use_index_timing = not has_action_or_state(recipe)
     with ProcessPoolExecutor(max_workers=workers) as pool:
         for chunk in chunks(rows) if stage_dir is not None else [rows]:
             episodes = [(r["dataset_repo"], r["repo_path"]) for r in chunk]
@@ -99,6 +78,7 @@ def unify_rows(
                 (
                     r[KEY], r["repo_path"], episode_path(read_dir, r["dataset_repo"], r["repo_path"]), episodes_dir,
                     recipe, uhash, ranges.get(robot_id(r)), r["unified_cameras"],
+                    (r["num_steps"], r["control_freq"]) if use_index_timing else None,
                 )
                 for r in chunk
             ]
@@ -133,7 +113,7 @@ def sharded(shard_dir: Path, phase: str, items: list, **payload) -> list:
     """``phase`` of ``run_shard`` over ``items`` on every node of the job; results in order."""
     shards.clear(shard_dir)
     shards.write_input(shard_dir, {"phase": phase, "items": list(enumerate(items)), **payload})
-    rc = shards.run("oopsie_backend.training.materialize", [], shard_dir)
+    rc = shards.run("oopsie_backend.training.build_dataset", [], shard_dir)
     out: dict[int, object] = {}
     for _, part in shards.results(shard_dir):
         out |= part
@@ -156,12 +136,17 @@ def unify_all(
     episodes_dir.mkdir(parents=True, exist_ok=True)
     rows = list(selected.iter_rows(named=True))
     uhash = unify_hash(recipe)
-    extent_jobs = [(robot_id(r), episode_path(data_dir, r["dataset_repo"], r["repo_path"])) for r in rows]
+    ranges = {}
+    if has_action_or_state(recipe):
+        extent_jobs = [(robot_id(r), episode_path(data_dir, r["dataset_repo"], r["repo_path"])) for r in rows]
+        extents = (
+            gripper_extents(extent_jobs, workers) if shard_dir is None
+            else sharded(shard_dir, "extents", extent_jobs, workers=workers)
+        )
+        ranges = gripper_ranges(extents)
     if shard_dir is None:
-        ranges = gripper_ranges(gripper_extents(extent_jobs, workers))
         results = unify_rows(rows, recipe, uhash, ranges, data_dir, episodes_dir, workers, stage_dir)
     else:
-        ranges = gripper_ranges(sharded(shard_dir, "extents", extent_jobs, workers=workers))
         results = sharded(
             shard_dir, "unify", rows, recipe=recipe, uhash=uhash, ranges=ranges, data_dir=data_dir,
             episodes_dir=episodes_dir, workers=workers, stage_dir=stage_dir,
@@ -171,7 +156,7 @@ def unify_all(
             {KEY: r[KEY], "dataset_repo": r["dataset_repo"], "repo_path": r["repo_path"], **{c: r[c] for c in LABELS}, **res}
             for r, res in zip(rows, results)
         ],
-        schema_overrides={"success": pl.Float64, "failure_categories": pl.List(pl.String)},
+        schema_overrides={"success": pl.Boolean, "failure_categories": pl.List(pl.String)},
         infer_schema_length=None,
     )
     for column in ("num_steps", "fps", "action_widths", "state_widths", "cameras", "actions_from_states", "filled_steps", "reason"):
@@ -222,7 +207,8 @@ def materialize(
     recipe = load_recipe(recipe_path)
     name = recipe["name"]
     work = work_dir / name
-    df = read_index(index, COLUMNS, optional=OPTIONAL)
+    columns = COLUMNS if has_action_or_state(recipe) else [*COLUMNS, "control_freq"]
+    df = read_index(index, columns, optional=OPTIONAL)
     selected = select_episodes(df, recipe)
     _log(f"{name}: {selected.height} episode(s) selected from {df.height}")
     shard_dir = work / "shards" if shards.node_count() > 1 else None

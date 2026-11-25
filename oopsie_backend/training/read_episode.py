@@ -1,4 +1,8 @@
-"""Read the arrays, robot profile and videos of a source episode."""
+"""Read an Oopsie HDF5 episode's actions, states, robot profile and video paths.
+
+Validates array lengths and control frequency, and provides the SourceEpisode
+container and Skip exception used during episode preparation.
+"""
 
 from __future__ import annotations
 

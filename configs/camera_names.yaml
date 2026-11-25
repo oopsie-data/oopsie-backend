@@ -137,15 +137,15 @@ datasets:
     exterior_image_1: exterior_side
   CMU_Intent:
     zed: wrist
-  ETH_RK:                          # camera names do not match the views; every camera is left out
-    front_view: null
+  ETH_RK:
+    front_view: exterior_front
     top_view: null
-    oakd_front_view: null
+    oakd_front_view: exterior_front
     oakd_side_view: null
-    oakd_wrist_bottom_view: null
-    oakd_wrist_top_view: null
-    oakd_left_wrist_view: null
-    oakd_right_wrist_view: null
+    oakd_wrist_bottom_view: wrist
+    oakd_wrist_top_view: wrist_2
+    oakd_left_wrist_view: wrist_left
+    oakd_right_wrist_view: wrist_right
   GT_PAIR:
     front: exterior_top
   GT_RL2:

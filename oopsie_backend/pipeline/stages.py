@@ -11,7 +11,7 @@ import oopsie_backend.preqa.stages  # noqa: F401
 import oopsie_backend.qa.stages  # noqa: F401
 import oopsie_backend.splits.stages  # noqa: F401
 import oopsie_backend.stats.stages  # noqa: F401
-import oopsie_backend.training.stages  # noqa: F401
+import oopsie_backend.training.pipeline_stages  # noqa: F401
 import inspect
 
 from oopsie_backend.pipeline.registry import MANUAL, STAGES

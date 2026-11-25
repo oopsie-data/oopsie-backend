@@ -14,6 +14,7 @@ There are two things you can do:
 | LS6 runbook: the nightly job, permissions, fixing failed runs | [docs/operations/ls6.md](docs/operations/ls6.md) |
 | Reference: index columns and configs | [docs/reference/](docs/reference/index-columns.md) |
 | Development: code layout, adding a stage, browsing the docs locally | [docs/development.md](docs/development.md) |
+| Training data: build datasets from indexed episodes | [Training dataset preparation](oopsie_backend/training/README.md) |
 
 You can also browse the documentation as an MkDocs site, built from `docs/` and starting at [docs/index.md](docs/index.md):
 

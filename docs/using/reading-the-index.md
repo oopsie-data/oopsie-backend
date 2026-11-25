@@ -8,6 +8,33 @@ import polars as pl
 df = pl.read_parquet("/path/to/data/releases/2026-11-08/episode_index.parquet")
 ```
 
+## Browse as HTML
+
+Create a standalone viewer and open the resulting HTML file in a browser.
+
+```bash
+uv run oopsie tools parquet-html data/releases/2026-11-08/episode_index_sample.parquet
+```
+
+The HTML is written beside the source with the same name and an `.html` extension.
+It works offline and provides search, sorting, pagination, visible-column controls,
+column types and a row inspector for nested lists, annotations and QA results.
+The viewer displays index metadata and leaves the source Parquet file intact.
+
+By default it embeds the first 1,000 rows and labels the preview with the full row
+count. Search and sorting operate on embedded rows only. Use `--max-rows 0` to
+embed all rows (large indexes can produce large HTML files), `--columns NAME ...`
+to export selected columns, or `--out PATH.html` to choose the output path.
+
+```bash
+uv run oopsie tools parquet-html data/releases/2026-11-08/episode_index.parquet \
+  --max-rows 0 --columns episode_key dataset_repo robot_name language_instruction \
+  --out reports/episode_index.html
+```
+
+Timestamps use ISO strings. Integers beyond JavaScript's exact integer range,
+decimals and nonfinite numbers are displayed as strings to preserve their values.
+
 ## Key columns
 
 | Column | Content |

@@ -10,7 +10,12 @@ import runpy
 import sys
 
 COMMANDS: dict[str, dict[str, str]] = {
-    "ingest": {"sync": "ingest.sync", "upload-times": "ingest.upload_times", "release": "ingest.release"},
+    "ingest": {
+        "sync": "ingest.sync",
+        "download": "ingest.download",
+        "upload-times": "ingest.upload_times",
+        "release": "ingest.release",
+    },
     "index": {
         "build": "index.build",
         "camera-names": "index.camera_names",
@@ -48,7 +53,7 @@ COMMANDS: dict[str, dict[str, str]] = {
         "flags": "annotation.flags",
     },
     "pipeline": {"run": "pipeline.run"},
-    "training": {"materialize": "training.materialize"},
+    "training": {"materialize": "training.build_dataset"},
     "export": {"to-rlds": "export.to_rlds"},
     "convert": {
         "imports": "conversion.imports",
@@ -57,7 +62,11 @@ COMMANDS: dict[str, dict[str, str]] = {
         "roboarena": "conversion.convert_roboarena_data",
         "soar": "conversion.convert_soar_data",
     },
-    "tools": {"inspect-hdf5": "tools.inspect_hdf5", "visualize": "tools.visualize_episodes"},
+    "tools": {
+        "inspect-hdf5": "tools.inspect_hdf5",
+        "visualize": "tools.visualize_episodes",
+        "parquet-html": "tools.parquet_html",
+    },
 }
 
 
