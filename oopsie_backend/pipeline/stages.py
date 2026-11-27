@@ -36,7 +36,7 @@ TARGETS: dict[str, list[str]] = {
     "stats": ["stats"],
     "proposals": ["eval_proposals"],
     "splits": ["eval_split", "train_sample"],
-    "annotation": ["annotation_flags"],
+    "annotation": ["annotation_flags", "annotation_publish"],
     "all": FINAL_STAGES,
     "imports": ["imported_datasets"],
     "training": ["training_data"],

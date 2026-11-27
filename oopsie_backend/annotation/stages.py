@@ -3,11 +3,13 @@
 The first run with a chosen proposal and ``<data_dir>/annotation/annotators.txt`` assigns the
 eval split and the train sample to the listed annotators (``eval_assignment/``, ``train_assignment/``)
 and turns every annotator's list into a bundle in ``bundles/`` (``annotation.roster``). Bundles are
-final. Every later name in ``annotators.txt`` gets a new train bundle (``annotation.train_bundles``);
-``oopsie annotation bundle`` adds further bundles and reassigns them. The index columns hold every
+final. Every later name in ``annotators.txt`` gets a new train bundle (``annotation.train_bundles``).
+``train_annotators.txt`` lists ``<name>: <number>`` lines; an annotator listed there whose current train
+bundles hold fewer episodes gets one new train bundle with the difference. ``oopsie annotation pipeline add``
+adds further bundles by hand, and ``reassign`` moves them. Whenever the bundles change,
+the current holdings are staged and uploaded to the batch repo. The index columns hold every
 collected annotation, and the flags of ``configs/annotation_flags.yaml`` mark the problems the
-annotators found; staging, publishing and collecting returns stay manual commands
-(``docs/pipeline/annotation/index.md``).
+annotators found; collecting returns stays a manual command (``docs/pipeline/annotation/index.md``).
 """
 
 from __future__ import annotations
@@ -21,13 +23,22 @@ from oopsie_backend.annotation.collect import current_annotations, read_store
 from oopsie_backend.annotation.columns import ANNOTATION_COLUMNS
 from oopsie_backend.annotation.hub import load_config
 from oopsie_backend.annotation.roster import EVAL, ROSTER_NAME, TRAIN, Registry, adopt
-from oopsie_backend.annotation.train_bundles import TrainPool, add_train_bundle
+from oopsie_backend.annotation.train_bundles import (
+    TRAIN_ANNOTATORS,
+    TrainPool,
+    add_train_bundle,
+    read_train_targets,
+    train_held,
+)
 from oopsie_backend.common.repos import annotation_dir
 from oopsie_backend.index.store import columns_fingerprint
 from oopsie_backend.pipeline.registry import check_rc, files_fingerprint, stage, write_once
 from oopsie_backend.splits.stages import NO_PROPOSAL, load_split_config
 
 NO_ASSIGNMENTS = "no assignments"
+NOT_PUBLISHED = "not published"
+# Bundles packaged and uploaded in parallel; each reads its episodes from the mirror.
+PUBLISH_WORKERS = 16
 LEGACY = ((EVAL, "batch_1", "eval_assignment"), (TRAIN, "batch_2", "train_assignment"))
 
 
@@ -77,11 +88,12 @@ def returned_uids(annotation_config_path: str, data_dir: str) -> set[str]:
 
 @stage(always_run=True)
 def annotation_roster(split_config_path: str, annotation_config_path: str, data_dir: str) -> str:
-    """Fingerprint of ``annotators.txt`` and the roster."""
+    """Fingerprint of ``annotators.txt``, ``train_annotators.txt`` and the roster."""
     ann = annotation_dir(Path(data_dir))
     cfg = load_split_config(split_config_path).get("assignments", {})
     roster = load_config(Path(annotation_config_path), Path(data_dir)).bundles_dir / ROSTER_NAME
-    return files_fingerprint([ann / cfg.get("annotators_file", "annotators.txt"), roster])
+    train_annotators = ann / cfg.get("train", {}).get("annotators_file", TRAIN_ANNOTATORS)
+    return files_fingerprint([ann / cfg.get("annotators_file", "annotators.txt"), train_annotators, roster])
 
 
 @stage
@@ -116,11 +128,26 @@ def annotation_bundles(
         registry = adopt(bundles_dir, [(kind, slot, ann / name) for kind, slot, name in LEGACY])
         print(f"bundles: {len(registry.bundles)} bundle(s) from {', '.join(n for *_, n in LEGACY)}", file=sys.stderr)
 
-    newcomers = [a for a in read_annotators(annotators) if a not in registry.annotators()]
-    if newcomers:
+    targets = read_train_targets(ann / cfg.get("train", {}).get("annotators_file", TRAIN_ANNOTATORS))
+    short = {name: target - held for name, target in targets.items() if (held := train_held(registry, name)) < target}
+    known = registry.annotators() | short.keys()
+    newcomers = [a for a in read_annotators(annotators) if a not in known]
+    if short or newcomers:
         settings = train_bundle_settings(split_config_path)
         pool = TrainPool(Path(index_path), ann / "eval_proposal.json")
         returned = returned_uids(annotation_config_path, data_dir)
+        for name, missing in sorted(short.items()):
+            first = train_held(registry, name) == 0
+            try:
+                h = add_train_bundle(
+                    registry, pool, name, size=missing, calibration=settings["calibration"] if first else 0,
+                    returned=returned, seed=settings["seed"], note=TRAIN_ANNOTATORS,
+                )
+            except ValueError as exc:
+                print(f"bundles: skipped {name!r} from {TRAIN_ANNOTATORS}: {exc}", file=sys.stderr)
+                continue
+            n = len(registry.bundles[h.bundle]["episodes"])
+            print(f"bundles: {h.bundle} ({n} train episodes) -> {name}, {h.slot}, toward {targets[name]}", file=sys.stderr)
         for name in newcomers:
             try:
                 h = add_train_bundle(registry, pool, name, returned=returned, note="registered", **settings)
@@ -129,6 +156,23 @@ def annotation_bundles(
                 continue
             print(f"bundles: {h.bundle} ({len(registry.bundles[h.bundle]['episodes'])} train episodes) -> {name}, {h.slot}", file=sys.stderr)
     return files_fingerprint(registry.files())
+
+
+@stage
+def annotation_publish(annotation_bundles: str, annotation_config_path: str, data_dir: str, use_hub: bool, workers: int) -> str:
+    """Stages the current holdings into the config's ``stage_dir`` and uploads them to the batch repo.
+
+    Returns the fingerprint of the published bundles. Without bundles, or with ``use_hub`` false, nothing
+    is published. Episodes that cannot be packaged are reported and left out of their batch.
+    """
+    if annotation_bundles == NO_ASSIGNMENTS or not use_hub:
+        return NOT_PUBLISHED
+    base = ["--config", annotation_config_path, "--data-dir", data_dir]
+    n = str(min(workers, PUBLISH_WORKERS))
+    if pipeline.main([*base, "stage", "--workers", n]):
+        print("annotation_publish: some episodes could not be packaged; see the log above", file=sys.stderr)
+    check_rc(pipeline.main([*base, "publish", "--workers", n]), "annotation publish")
+    return annotation_bundles
 
 
 @stage(always_run=True)

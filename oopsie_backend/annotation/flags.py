@@ -41,7 +41,7 @@ SCHEMA = {
     "annotation_unusable": pl.List(pl.String),
 }
 COLUMNS = ["annotation_flags", "annotation_excluded", "annotation_unusable"]
-INPUTS = ["dataset_repo", "repo_path", "control_freq", "content_hash", "annotation_records"]
+INPUTS = ["dataset_repo", "repo_path", "control_freq", "videos", "annotation_records"]
 STATE_KEYS = ("joint_position", "cartesian_position")
 
 
@@ -143,7 +143,7 @@ def flags_frame(index: pl.DataFrame, data_dir: Path, rules: list[Rule], idle_cfg
         print(f"  idle: {missing} episode file(s) without readable positions", file=sys.stderr)
     out = []
     for r in rows.iter_rows(named=True):
-        records, _ = current_records(r["annotation_records"], r["content_hash"])
+        records, _ = current_records(r["annotation_records"], r["videos"])
         flags = note_flags(records, rules)
         if r[KEY] in idle:
             flags.append({"reason": IDLE, "annotator": None, "source": ROBOT_STATE, "text": idle[r[KEY]]})

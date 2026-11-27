@@ -35,7 +35,7 @@ To run one stage's work on its own, with your own options, see [Running commands
 | `stats` | `stats` |
 | `proposals` | `eval_proposals` |
 | `splits` | `eval_split`, `train_sample` |
-| `annotation` | `annotation_flags` |
+| `annotation` | `annotation_flags`, `annotation_publish` |
 | `imports` | `imported_datasets` (manual) |
 | `training` | `training_data` (manual); needs `--set training_recipe=configs/training/<recipe>.yaml` |
 | `analysis` | `dataset_analysis`, `annotation_analysis` (manual); needs `uv sync --extra analysis` |
@@ -73,7 +73,7 @@ Hamilton cannot see files on its own. Small stages that run on every invocation 
 | `mirror_state` | the path, size and modification time of every h5 file, and the repo and import configs |
 | `camera_names_config`, `embodiments_config`, `policies_config`, `critical_config`, `stats_config`, `split_config`, `robot_aliases_config`, `annotation_flags_config`, `analysis_config` | their config file |
 | `qa_check_versions` | the version of every QA check |
-| `annotation_roster` | `annotators.txt` and the bundle roster |
+| `annotation_roster` | `annotators.txt`, `train_annotators.txt` and the bundle roster |
 | `annotation_state` | the annotation stores |
 | `training_recipe_state` | the training recipe |
 

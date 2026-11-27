@@ -66,7 +66,7 @@ Contributors mostly upload balanced sets of successes and failures, so the repor
 
 ## Annotator returns
 
-The `annotations` group and the segment windows of the `features` group read the collected annotations from the index's `annotation_*` columns ([index](../reference/index-columns.md#annotation)), which `oopsie annotation pipeline index` writes. Both kinds of bundle count unless `--batch` names `eval` or `train`. Each annotator's latest record of an episode counts. Records made on a returned copy whose `content_hash` differs from the episode's current one are left out, since the episode changed after it was annotated. So are the records the annotation flags mark unusable (`annotation_unusable`), such as those of an annotator who could not watch the video. The index keeps all of these records.
+The `annotations` group and the segment windows of the `features` group read the collected annotations from the index's `annotation_*` columns ([index](../reference/index-columns.md#annotation)), which `oopsie annotation pipeline index` writes. Both kinds of bundle count unless `--batch` names `eval` or `train`. Each annotator's latest record of an episode counts. Records whose watched videos differ from the episode's current ones are left out, since the episode changed after it was annotated. So are the records the annotation flags mark unusable (`annotation_unusable`), such as those of an annotator who could not watch the video. The index keeps all of these records.
 
 Outcomes are `failure`, `success`, `success_suboptimal`, `success_side_effect` and `incomplete` (the robot acted correctly but the episode ended before the task was done).
 

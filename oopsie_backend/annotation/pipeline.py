@@ -11,7 +11,7 @@ Commands, in pipeline order:
   stage     (LS6) package every current holding into ``stage_dir`` as ``<folder>/<slot>/``
   publish   create the private batch and returns repos if needed, upload ``stage_dir`` and remove moved bundles
   pull      download annotated h5s from the returns repo's pull requests to ``returns_dir``
-  verify    check that every pulled h5 matches its bundle and index episode
+  verify    check that every pulled h5 matches its bundle, and its watched videos the index episode's
   collect   add verified annotations to the store of their bundle kind and write its summary
   status    returned vs assigned annotations per annotator and batch
   index     write assignments and collected annotations, with their segments, to the episode index
@@ -45,8 +45,15 @@ from oopsie_backend.annotation.collect import (
 from oopsie_backend.annotation.columns import ANNOTATION_COLUMNS, annotation_frame
 from oopsie_backend.annotation.hub import PipelineConfig, annotator_slots, file_ids, load_config, pull_returns
 from oopsie_backend.annotation.roster import SLOT_RE, TRAIN, Registry
-from oopsie_backend.annotation.train_bundles import TrainPool, add_train_bundle
-from oopsie_backend.annotation.verify import accepted_hashes, index_by_uid, verify_returns, write_report
+from oopsie_backend.annotation.train_bundles import (
+    TRAIN_ANNOTATORS,
+    TrainPool,
+    add_train_bundle,
+    record_train_target,
+    train_held,
+)
+from oopsie_backend.annotation.verify import index_by_uid, verify_returns, write_report
+from oopsie_backend.annotation.videos import CACHE_NAME as VIDEOS_CACHE, bundle_videos, returned_position
 from oopsie_backend.common.repos import annotation_dir
 from oopsie_backend.index.store import KEY, known_only, read_index, update_columns
 from oopsie_backend.splits.stages import load_split_config
@@ -86,6 +93,7 @@ def add(cfg: PipelineConfig, args: argparse.Namespace) -> int:
     assignments = load_split_config(str(args.split_config)).get("assignments", {})
     train = assignments.get("train", {})
     pool = TrainPool(cfg.index, annotation_dir(cfg.data_dir) / "eval_proposal.json")
+    targets = annotation_dir(cfg.data_dir) / train.get("annotators_file", TRAIN_ANNOTATORS)
     returned = {uid for s in cfg.stores if s.kind == TRAIN for uid in current_annotations(read_store(s.store))}
     for _ in range(args.count):
         try:
@@ -99,8 +107,10 @@ def add(cfg: PipelineConfig, args: argparse.Namespace) -> int:
             print(f"error: {exc}", file=sys.stderr)
             return 1
         b = registry.bundles[h.bundle]
+        record_train_target(targets, args.annotator, train_held(registry, args.annotator))
         print(f"{h.bundle}: {len(b['episodes'])} train episodes ({b['calibration']} calibration) -> {h.annotator}, {h.slot}")
-    print("run stage and publish to send it", file=sys.stderr)
+    print(f"{targets.name}: {args.annotator}: {train_held(registry, args.annotator)}", file=sys.stderr)
+    print("the next pipeline run publishes it; run stage and publish to send it now", file=sys.stderr)
     return 0
 
 
@@ -115,7 +125,7 @@ def reassign(cfg: PipelineConfig, args: argparse.Namespace) -> int:
         print(f"error: {exc}", file=sys.stderr)
         return 1
     print(f"{h.bundle}: {before.annotator} / {before.slot} -> {h.annotator} / {h.slot}")
-    print("run stage and publish to move it", file=sys.stderr)
+    print("the next pipeline run publishes it; run stage and publish to move it now", file=sys.stderr)
     return 0
 
 
@@ -178,41 +188,48 @@ def pull(cfg: PipelineConfig, args: argparse.Namespace) -> int:
     return 1 if rejected or skipped else 0
 
 
-def _verified(cfg: PipelineConfig, registry: Registry, previous: list[Path]) -> tuple[dict, int] | None:
-    """``(kind -> annotator -> returned files that pass, number rejected)``; writes ``<returns_dir>/verification.json``."""
+def _verified(cfg: PipelineConfig, registry: Registry) -> tuple[dict, dict, int] | None:
+    """``(kind -> annotator -> matched returned files, path -> watched videos, number rejected)``.
+
+    Writes ``<returns_dir>/verification.json``. Unmatched files are logged and left out.
+    """
     if cfg.index is None:
         print("error: verifying returns needs an index", file=sys.stderr)
         return None
-    by_uid = index_by_uid(cfg.index)
-    checks = verify_returns(cfg, registry, by_uid, accepted_hashes(by_uid, previous))
+    checks = verify_returns(cfg, registry, index_by_uid(cfg.index))
     write_report(cfg.returns_dir / "verification.json", checks)
     out: dict[str, dict[str, list[Path]]] = defaultdict(lambda: defaultdict(list))
-    rejected = 0
+    seen: dict[str, dict[str, str]] = {}
+    rejected = unmatched = 0
     for c in checks:
         if c.problems:
             rejected += 1
             print(f"  rejected {c.path}: {'; '.join(c.problems)}", file=sys.stderr)
+        elif c.unmatched:
+            unmatched += 1
+            print(f"  unmatched {c.path}: {c.unmatched}", file=sys.stderr)
         else:
             out[c.kind][c.annotator].append(c.path)
+            seen[str(c.path)] = c.seen
     for s in cfg.stores:
         n = sum(map(len, out[s.kind].values()))
         print(f"{s.kind}: {n} returned file(s) verified", file=sys.stderr)
-    print(f"{rejected}/{len(checks)} returned file(s) rejected", file=sys.stderr)
-    return out, rejected
+    print(f"{rejected}/{len(checks)} returned file(s) rejected, {unmatched} unmatched", file=sys.stderr)
+    return out, seen, rejected
 
 
 def verify(cfg: PipelineConfig, args: argparse.Namespace) -> int:
     registry = _registry(cfg)
-    result = registry and _verified(cfg, registry, args.previous_index)
-    return 1 if not result or result[1] else 0
+    result = registry and _verified(cfg, registry)
+    return 1 if not result or result[2] else 0
 
 
 def collect(cfg: PipelineConfig, args: argparse.Namespace) -> int:
     registry = _registry(cfg)
-    result = registry and _verified(cfg, registry, args.previous_index)
+    result = registry and _verified(cfg, registry)
     if not result:
         return 1
-    verified = result[0]
+    verified, seen, _ = result
     for s in cfg.stores:
         assignment = registry.assignment(s.kind)
         records, problems = [], []
@@ -220,6 +237,8 @@ def collect(cfg: PipelineConfig, args: argparse.Namespace) -> int:
             recs, probs = read_annotated(files, annotator, assignment)
             records += recs
             problems += probs
+        for r in records:
+            r["videos"] = seen[r["source_file"]]
         for msg in problems:
             print(f"  skipped {msg}", file=sys.stderr)
         added, present = merge_into_store(s.store, records)
@@ -242,7 +261,10 @@ def index(cfg: PipelineConfig, args: argparse.Namespace) -> int:
         print("error: the config names no index", file=sys.stderr)
         return 1
     instructions = dict(read_index(cfg.index, ["language_instruction"]).select(KEY, "language_instruction").iter_rows())
-    frame = annotation_frame([(s.kind, registry.assignment(s.kind), s.store) for s in cfg.stores], instructions)
+    without = [r["source_file"] for s in cfg.stores for r in read_store(s.store) if not r.get("videos")]
+    slots = {found[0] for f in without if (found := returned_position(f))}
+    videos = bundle_videos(cfg.repo_id, slots, cfg.returns_dir / VIDEOS_CACHE) if slots else {}
+    frame = annotation_frame([(s.kind, registry.assignment(s.kind), s.store) for s in cfg.stores], instructions, videos)
     frame = known_only(frame, cfg.index, "assigned")
     update_columns(cfg.index, frame, ANNOTATION_COLUMNS, clear_missing=True)
     print(f"index: annotation columns written for {frame.height} episode(s) in {cfg.index}", file=sys.stderr)
@@ -330,16 +352,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--workers", type=int, default=8)
     p = sub.add_parser("pull")
     p.add_argument("--close", action="store_true", help="Close open pull requests after downloading them")
-    for name in ("verify", "collect"):
-        p = sub.add_parser(name)
-        p.add_argument(
-            "--previous-index",
-            type=Path,
-            nargs="+",
-            default=[],
-            help="Earlier indexes whose content hashes are also accepted for the same uid",
-        )
-    for name in ("status", "index", "release"):
+    for name in ("verify", "collect", "status", "index", "release"):
         sub.add_parser(name)
     args = parser.parse_args(argv)
     return COMMANDS[args.command](load_config(args.config, args.data_dir, args.index), args)

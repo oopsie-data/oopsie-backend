@@ -51,6 +51,7 @@ BACKEND_DIR = CONFIG_DIR.parent
 # review_bundles) are rebuilt from these and the annotation repos pinned in the manifest.
 ANNOTATION_FILES = [
     "annotators.txt",
+    "train_annotators.txt",
     "eval_proposal.json",
     "train_annotation_sample.json",
     "eval_assignment",

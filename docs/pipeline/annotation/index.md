@@ -6,7 +6,7 @@ The episodes reach the annotators in **bundles**: fixed, ordered lists of eval o
 
 ```mermaid
 flowchart LR
-  bundles["bundles + roster<br/>(pipeline, add, reassign)"] --> stage["stage + publish<br/>(LS6)"]
+  bundles["bundles + roster<br/>(pipeline, add, reassign)"] --> stage["stage + publish<br/>(pipeline)"]
   stage --> hf[("batch repo")]
   hf --> ann["annotators:<br/>download, annotate, upload"]
   ann --> ret[("returns repo<br/>pull requests")]
@@ -15,11 +15,12 @@ flowchart LR
   pull --> rel["release<br/>(LS6)"]
 ```
 
-The pipeline builds the bundles and moves the collected labels into the index. Publishing the bundles, collecting the returns, adding bundles on request and reassigning them are commands the coordinator runs, because they involve the annotators and the Hub.
+The pipeline builds the bundles, publishes them to the batch repo and moves the collected labels into the index. Collecting the returns, adding bundles on request and reassigning them are commands the coordinator runs.
 
 | Stage | Target | Runs after | Writes |
 |---|---|---|---|
 | `annotation_bundles` | `annotation` | `chosen_proposal`, `train_sample`, `annotation_roster`; waits for `<data_dir>/annotation/annotators.txt` | `annotation/bundles/` |
+| `annotation_publish` | `annotation` | `annotation_bundles`; needs `use_hub` | the batch repo, `annotation/annotation_repo/` |
 | `annotation_columns` | `annotation` | `annotation_bundles`, `annotation_state` | `annotation_*` columns |
 | `annotation_flags` | `annotation` | `annotation_columns` | see [annotation flags](flags.md) |
 
@@ -30,6 +31,7 @@ Everything lives in `/corral/utexas/IRI26024/oopsiedata/annotation/`, next to th
 | File | Contents |
 |---|---|
 | `annotators.txt` | the registered annotators, one name per line |
+| `train_annotators.txt` | optional; `<name>: <number>` lines, the number of train episodes each listed annotator should hold |
 | `eval_assignment/`, `train_assignment/` | the first assignment of the eval split and the train sample, one list per annotator |
 | `bundles/<id>.json` | one bundle each: its kind (`eval` or `train`) and its episodes by position |
 | `bundles/roster.jsonl` | who holds each bundle, and under which batch name; the only mapping, with the bundles, from the blinded episode ids back to the source episodes |
@@ -67,9 +69,19 @@ Every name added to `annotators.txt` later gets one new train bundle at the next
 - **Calibration episodes.** `train.calibration_episodes` of them (20) come from other annotators' train bundles, so that each new annotator shares episodes with someone else and their agreement can be measured. These are the episodes with the fewest copies, preferring ones whose annotation was already returned, spread over as many source bundles as possible. Most of them end up with two annotators.
 - **New episodes.** The rest are episodes of the chosen proposal's train pool that no bundle holds yet. Like the train sample, they are spread over labs, then scenes, tasks, policies and success labels, and the budget goes first to the strata that earlier train bundles cover least. The pool is read from the current index, so episodes uploaded after the eval split was chosen are included, while duplicates, critical episodes, episodes the annotation flags exclude and held-out labs and tasks are not. Calibration episodes come from the same pool, so an episode that became critical or excluded after it was bundled is not handed out again.
 
-A name that cannot get a bundle is skipped with a message in the run's log, and the rest of the pipeline continues. This happens when the name maps to the same folder as an existing annotator (folder names are lowercase ASCII with `_` separators, so `José Díaz` and `jose diaz` clash) or when the train pool has no episodes left that no bundle holds. A skipped name is tried again at the next run in which `annotators.txt`, the roster or `configs/eval_split.yaml` changes.
+`train_annotators.txt` sets the number of train episodes per annotator:
 
-An annotator who has finished and wants more work gets another train bundle with `add`, which becomes their next batch.
+```text
+# <name>: <number of train episodes>
+Jane Doe: 300
+John Roe: 100
+```
+
+At every pipeline run, an annotator listed there whose current train bundles hold fewer episodes gets one new train bundle with the difference, as their next batch. Raising a number therefore tops the annotator up at the next run; lowering it takes nothing away. Only bundles the annotator currently holds count, so a bundle reassigned to someone else is replaced. An annotator's first train bundle has calibration episodes; later ones hold only new episodes. A name listed in both files gets its number from `train_annotators.txt` instead of the default bundle. Malformed lines are reported in the run's log and left out. `train.annotators_file` under `assignments` in `configs/eval_split.yaml` names another file.
+
+A name that cannot get a bundle is skipped with a message in the run's log, and the rest of the pipeline continues. This happens when the name maps to the same folder as an existing annotator (folder names are lowercase ASCII with `_` separators, so `José Díaz` and `jose diaz` clash) or when the train pool has no episodes left that no bundle holds. A skipped name is tried again at the next run in which `annotators.txt`, `train_annotators.txt`, the roster or `configs/eval_split.yaml` changes.
+
+An annotator who has finished and wants more work gets another train bundle by a higher number in `train_annotators.txt`, or with `add`, which becomes their next batch.
 
 ### Reassigning
 
@@ -84,11 +96,11 @@ $P add --annotator "Jane Doe" [--count 2]   # new train bundles for an annotator
 $P reassign b0012 --to "Jane Doe" --note "replaces a dropout"
 ```
 
-`add` needs the index and builds the bundle like the pipeline does; `--size` overrides `train.bundle_size`. Both commands only change `bundles/`; run `stage` and `publish` to send the change to the annotators.
+`add` needs the index and builds the bundle like the pipeline does; `--size` overrides `train.bundle_size`. It also records the annotator in `train_annotators.txt` with the number of train episodes they hold afterwards, raising a lower number and leaving a higher one, so the file lists every manual assignment and the pipeline does not top the annotator up again. Otherwise both commands only change `bundles/`; the next pipeline run publishes the change, or run `stage` and `publish` to send it at once.
 
 ## Distributing
 
-On LS6:
+Every pipeline run in which the bundles or the roster changed runs `stage` and then `publish` (the `annotation_publish` stage), so new, topped-up and reassigned bundles reach the annotators by the next morning. The stage is skipped when `use_hub` is false, and it is taken from the cache while the bundles are unchanged. Episodes that cannot be packaged are reported in the run's log and the rest are published; a public batch or returns repo fails the stage. The same steps run by hand on LS6:
 
 ```bash
 $P stage
@@ -120,21 +132,22 @@ $P status
 
 `pull` downloads the annotated files of each pull request to `returns/pr_NNNN/`. It rejects a pull request that touches more than one annotator folder, touches a batch the roster never gave that folder, or changes anything other than episode `.h5` files; rejected ones appear in `status` and `returns/pull_requests.json`, and the annotator should upload again. Pull requests never need to be merged; a merged one is read from its diff and still accepted. Each accepted pull request is downloaded at its head commit, which `returns/pr_NNNN/.pr_commit` records; it is downloaded again only when the head changes, and only downloads with this record are verified and collected. A pull request whose head commit cannot be found is skipped. `pull` exits with an error when any pull request was rejected or skipped.
 
-`collect` verifies every pulled file before it adds it to the store of its bundle's kind. A file `<folder>/<batch>/episodes/NNNN.h5` passes when:
+`collect` verifies every pulled file before it adds it to the store of its bundle's kind. A file `<folder>/<batch>/episodes/NNNN.h5` is rejected unless:
 
 - the roster gives or gave that batch of that folder a bundle, and the bundle has the file's `episode_id` at that position;
-- the `episode_id` matches exactly one index row;
-- its action and state arrays hash to that row's `content_hash`, so the file was not altered. `--previous-index` also accepts the hashes of earlier indexes, for episodes re-uploaded after their bundle was built.
+- the `episode_id` matches exactly one index row.
 
-Rejected files are listed in `returns/verification.json`; `verify` runs the check alone. The stores are append-only and keyed by content: collecting the same return twice adds nothing, and a changed annotation is added as a new revision, of which the latest counts.
+A file that passes is then matched by its videos. The annotator labeled the videos published with the file, `<folder>/<batch>/episodes/NNNN_<camera>.mp4` in the batch repo. Their sha256 values come from the batch repo's Hub listing: from the main branch, or, for batches removed since, from the newest commit that still has them. Each batch is read once, because batches are never reused, and the values are kept in `returns/bundle_videos.json`. The file matches when every video the annotator watched has the same sha256 as the index episode's video of that camera. Changes to the h5 alone, such as a lab re-uploading the episode with corrected arrays, therefore leave the annotation valid. A file whose videos differ, or whose batch videos cannot be found, is logged as unmatched and left out, and collection continues with the other files. Unmatched files are checked again on every `collect`, so they are collected once the index matches.
+
+Rejected and unmatched files are listed in `returns/verification.json`; `verify` runs the check alone and exits with an error only when a file is rejected. The stores are append-only and keyed by content: collecting the same return twice adds nothing, and a changed annotation is added as a new revision, of which the latest counts.
 
 `status` prints returned against assigned annotations per annotator and batch. `eval_annotations_summary.json` and `train_annotations_summary.json` add missing episodes per annotator, returns from former holders, and outcome agreement.
 
 ## Index
 
-`collect` ends by writing the stores to the index, and the `annotation_columns` stage does the same whenever the stores change. Each episode gets `annotation_batch` (`eval` or `train`), its current holders in `annotation_assigned`, and `annotation_records`, one record per annotation with the annotator's labels, segments as frame indices, and the `content_hash` of the copy the annotator labeled. Train annotations of an episode that an eval bundle holds are dropped. The [column reference](../../reference/index-columns.md#annotation) lists the fields.
+`collect` ends by writing the stores to the index, and the `annotation_columns` stage does the same whenever the stores change. Each episode gets `annotation_batch` (`eval` or `train`), its current holders in `annotation_assigned`, and `annotation_records`, one record per annotation with the annotator's labels, segments as frame indices, the `content_hash` of the copy the annotator labeled, and the sha256 of every video the annotator watched. Train annotations of an episode that an eval bundle holds are dropped. The [column reference](../../reference/index-columns.md#annotation) lists the fields.
 
-The index is the merged view of all annotators' work, and the source h5 files are never changed. An annotation applies to an episode only while its `content_hash` equals the episode's: if the lab re-uploads a changed episode, the old labels no longer count. Training and the [dataset analysis](../analysis.md) read the annotations from the index, and the [annotation flags](flags.md) find the problems annotators reported in their notes.
+The index is the merged view of all annotators' work, and the source h5 files are never changed. An annotation applies to an episode only while every video the annotator watched is unchanged in the episode's `videos`: if the lab re-uploads a changed video, the old labels no longer count. Training and the [dataset analysis](../analysis.md) read the annotations from the index, and the [annotation flags](flags.md) find the problems annotators reported in their notes.
 
 ## Release
 
@@ -151,7 +164,7 @@ This writes `eval_release/` and `train_release/`: copies of every annotated sour
 | Command | Where | Does |
 |---|---|---|
 | `bundles` | anywhere | lists every bundle and its holders |
-| `add` | anywhere | builds new train bundles for an annotator |
+| `add` | anywhere | builds new train bundles for an annotator and records their total in `train_annotators.txt` |
 | `reassign` | anywhere | gives a bundle to another annotator |
 | `stage` | LS6 | packages new and moved bundles |
 | `publish` | anywhere | creates the private repos, uploads the batches and removes moved ones |

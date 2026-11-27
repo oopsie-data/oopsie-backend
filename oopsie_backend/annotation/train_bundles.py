@@ -8,12 +8,16 @@ whose annotation was returned, spread over as many source bundles as possible. T
 episodes of the chosen proposal's train pool that no bundle holds yet, spread over labs,
 scenes, tasks, policies and success labels like the train sample (``splits.sample_train``),
 with the budget going first to the strata earlier train bundles cover least.
+
+``train_annotators.txt`` holds ``<name>: <number>`` lines, the number of train episodes each listed
+annotator should hold; ``add`` raises an annotator's number to what they hold after it.
 """
 
 from __future__ import annotations
 
 import json
 import random
+import sys
 from collections import Counter
 from pathlib import Path
 
@@ -34,6 +38,8 @@ from oopsie_backend.splits.eval_split import (
 )
 from oopsie_backend.splits.planning import read_index
 from oopsie_backend.splits.sample_train import LEVELS
+
+TRAIN_ANNOTATORS = "train_annotators.txt"
 
 
 class TrainPool:
@@ -95,6 +101,47 @@ def fresh_entries(registry: Registry, pool: TrainPool, n: int, rng: random.Rando
         }
         for r in sorted(picked, key=key)
     ]
+
+
+def read_train_targets(path: Path) -> dict[str, int]:
+    """``<name>: <number>`` lines of ``path``, without blank lines and ``#`` comments; malformed lines are reported and left out."""
+    targets: dict[str, int] = {}
+    if not path.is_file():
+        return targets
+    for n, raw in enumerate(path.read_text().splitlines(), 1):
+        line = raw.split("#", 1)[0].strip()
+        if not line:
+            continue
+        name, _, number = line.rpartition(":")
+        if not name.strip() or not number.strip().isdigit():
+            print(f"bundles: {path.name}:{n}: expected '<name>: <number>', got {raw!r}", file=sys.stderr)
+            continue
+        targets[name.strip()] = int(number)
+    return targets
+
+
+def train_held(registry: Registry, annotator: str) -> int:
+    """Episodes in the train bundles ``annotator`` currently holds."""
+    return sum(
+        len(registry.bundles[h.bundle]["episodes"])
+        for h in registry.current()
+        if h.annotator == annotator and registry.bundles[h.bundle]["kind"] == TRAIN
+    )
+
+
+def record_train_target(path: Path, annotator: str, number: int) -> None:
+    """Raise ``annotator``'s number in ``path`` to ``number``, appending a line if the file does not list them."""
+    lines = path.read_text().splitlines() if path.is_file() else []
+    for i, raw in enumerate(lines):
+        name, _, value = raw.split("#", 1)[0].strip().rpartition(":")
+        if name.strip() == annotator and value.strip().isdigit():
+            if int(value) < number:
+                lines[i] = f"{annotator}: {number}"
+            break
+    else:
+        lines.append(f"{annotator}: {number}")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines) + "\n")
 
 
 def add_train_bundle(

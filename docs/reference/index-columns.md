@@ -125,7 +125,8 @@ Each record holds:
 - `annotator`, and the `name` and `timestamp` of the annotation;
 - the labels `outcome`, `failure_category`, `severity`, `episode_description` and `additional_notes`;
 - `temporal_segments`, each with `start` and `end` as inclusive frame indices, `type`, `label` and `failure_category`;
-- `content_hash`, the hash of the copy the annotator labeled; the record applies while it equals the row's `content_hash`;
+- `content_hash`, the hash of the copy the annotator labeled;
+- `videos`, the `camera` and `sha256` of every video the annotator watched; the record applies while each equals the sha256 of the row's video of that camera;
 - `language_instruction`, the annotator's corrected instruction where it differs from the episode's, else null.
 
 ## Annotation flags

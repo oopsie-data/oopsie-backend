@@ -84,6 +84,7 @@ flowchart TB
   end
   subgraph annotation
     annotation_bundles --> annotation_columns --> annotation_flags
+    annotation_bundles --> annotation_publish
   end
   subgraph manual
     imported_datasets
@@ -125,7 +126,7 @@ Boxes group the stages by the target that runs them. The `manual` stages never r
 | `stats` | computes the website and internal stats | [Stats](stats.md) |
 | `eval_proposals`, `chosen_proposal`, `eval_split` | proposes eval splits, freezes the chosen one and records it in the index | [Eval split](eval-split.md) |
 | `train_sample` | samples train episodes for annotation | [Train sample](train-sample.md) |
-| `annotation_bundles`, `annotation_columns` | builds the annotation bundles, gives them to annotators and collects their labels into the index | [Annotation](annotation/index.md) |
+| `annotation_bundles`, `annotation_publish`, `annotation_columns` | builds the annotation bundles, publishes them to the annotators and collects their labels into the index | [Annotation](annotation/index.md) |
 | `annotation_flags` | finds problems the annotators reported and excludes affected episodes | [Annotation flags](annotation/flags.md) |
 | `imported_datasets` (manual) | converts external datasets into the mirror | [Imported datasets](imports.md) |
 | `training_data` (manual) | materializes a training set from a recipe | [Training data](training-data.md) |
@@ -148,6 +149,7 @@ The eval split must never change once annotators have started on it. Two stages 
 |---|---|---|
 | which eval proposal to hold out, after reviewing `annotation/proposals/REPORT.md` | `chosen_proposal` in `configs/eval_split.yaml` | `chosen_proposal`, `eval_split`, `train_sample`, `annotation_bundles` |
 | who annotates | `<data_dir>/annotation/annotators.txt`, one name per line; names added later get a train bundle | `annotation_bundles` |
+| train episodes per annotator | `<data_dir>/annotation/train_annotators.txt`, `<name>: <number>` lines; annotators below their number get a bundle with the difference | `annotation_bundles` |
 
 Three rules then keep the split fixed:
 

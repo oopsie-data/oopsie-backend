@@ -12,8 +12,8 @@ into three frames:
 - assigned: one row per assigned episode, with ``episode_key``, ``split`` and
   ``assigned`` (the number of annotators it was given to).
 
-Each annotator's latest record counts. Records made on a copy whose ``content_hash``
-differs from the episode's current one are left out.
+Each annotator's latest record counts. Records whose watched videos differ from the
+episode's current ones are left out.
 
 A segment with several categories is paired once; its category label joins them with ``+``.
 
@@ -80,7 +80,7 @@ ASSIGNED_SCHEMA = {KEY: pl.String, "split": pl.String, "assigned": pl.Int64}
 RANKED_EPISODES = 10
 
 
-RETURNS_COLUMNS = ["content_hash", "control_freq", "annotation_batch", "annotation_split", "annotation_assigned", "annotation_records"]
+RETURNS_COLUMNS = ["videos", "control_freq", "annotation_batch", "annotation_split", "annotation_assigned", "annotation_records"]
 
 
 def returns_from_index(index: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame, pl.DataFrame]:
@@ -95,7 +95,7 @@ def returns_from_index(index: pl.DataFrame) -> tuple[pl.DataFrame, pl.DataFrame,
     for row in rows.iter_rows(named=True):
         key, freq = row[KEY], row["control_freq"]
         assigned.append({KEY: key, "split": row["annotation_split"], "assigned": len(row["annotation_assigned"] or [])})
-        records, n_stale = current_records(row["annotation_records"], row["content_hash"])
+        records, n_stale = current_records(row["annotation_records"], row["videos"])
         stale += n_stale
         dropped = set(row["annotation_unusable"] or [])
         unusable += sum(r["annotator"] in dropped for r in records)

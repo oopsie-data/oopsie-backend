@@ -12,7 +12,7 @@ Annotators report problems with an episode in their notes and descriptions: a re
 - `annotation_excluded`: true when any flag's reason has `exclude: true`.
 - `annotation_unusable`: the annotators whose record matched a rule with `unusable_record: true`.
 
-All three columns are null for episodes without annotation records. Only each annotator's current record counts: their latest one, made on the episode's current content (`content_hash`).
+All three columns are null for episodes without annotation records. Only each annotator's current record counts: their latest one, made on the episode's current videos.
 
 ## Reasons
 
