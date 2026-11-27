@@ -250,7 +250,7 @@ def collect(cfg: PipelineConfig, args: argparse.Namespace) -> int:
             f"returned {report['annotations_returned']}/{report['annotations_assigned']}, see {summary}",
             file=sys.stderr,
         )
-    return index(cfg, args)
+    return 0 if args.skip_index else index(cfg, args)
 
 
 def index(cfg: PipelineConfig, args: argparse.Namespace) -> int:
@@ -352,7 +352,9 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--workers", type=int, default=8)
     p = sub.add_parser("pull")
     p.add_argument("--close", action="store_true", help="Close open pull requests after downloading them")
-    for name in ("verify", "collect", "status", "index", "release"):
+    p = sub.add_parser("collect")
+    p.add_argument("--skip-index", action="store_true", help="Update the stores only; do not write the index")
+    for name in ("verify", "status", "index", "release"):
         sub.add_parser(name)
     args = parser.parse_args(argv)
     return COMMANDS[args.command](load_config(args.config, args.data_dir, args.index), args)

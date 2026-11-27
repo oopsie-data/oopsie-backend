@@ -74,7 +74,7 @@ Hamilton cannot see files on its own. Small stages that run on every invocation 
 | `camera_names_config`, `embodiments_config`, `policies_config`, `critical_config`, `stats_config`, `split_config`, `robot_aliases_config`, `annotation_flags_config`, `analysis_config` | their config file |
 | `qa_check_versions` | the version of every QA check |
 | `annotation_roster` | `annotators.txt`, `train_annotators.txt` and the bundle roster |
-| `annotation_state` | the annotation stores |
+| `annotation_state` | the annotation config and stores, after `annotation_collect` |
 | `training_recipe_state` | the training recipe |
 
 When a watched file changes, the stage after the watcher sees a new input and reruns. `hub_mirror` and `imported_datasets` also run every time, because only they can find out whether there is new data.

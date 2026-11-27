@@ -85,6 +85,7 @@ flowchart TB
   subgraph annotation
     annotation_bundles --> annotation_columns --> annotation_flags
     annotation_bundles --> annotation_publish
+    annotation_bundles --> annotation_collect --> annotation_columns
   end
   subgraph manual
     imported_datasets
@@ -126,7 +127,7 @@ Boxes group the stages by the target that runs them. The `manual` stages never r
 | `stats` | computes the website and internal stats | [Stats](stats.md) |
 | `eval_proposals`, `chosen_proposal`, `eval_split` | proposes eval splits, freezes the chosen one and records it in the index | [Eval split](eval-split.md) |
 | `train_sample` | samples train episodes for annotation | [Train sample](train-sample.md) |
-| `annotation_bundles`, `annotation_publish`, `annotation_columns` | builds the annotation bundles, publishes them to the annotators and collects their labels into the index | [Annotation](annotation/index.md) |
+| `annotation_bundles`, `annotation_publish`, `annotation_collect`, `annotation_columns` | builds the annotation bundles, publishes them to the annotators, collects their returns and writes the labels into the index | [Annotation](annotation/index.md) |
 | `annotation_flags` | finds problems the annotators reported and excludes affected episodes | [Annotation flags](annotation/flags.md) |
 | `imported_datasets` (manual) | converts external datasets into the mirror | [Imported datasets](imports.md) |
 | `training_data` (manual) | materializes a training set from a recipe | [Training data](training-data.md) |

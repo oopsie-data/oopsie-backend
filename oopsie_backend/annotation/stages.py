@@ -7,9 +7,10 @@ final. Every later name in ``annotators.txt`` gets a new train bundle (``annotat
 ``train_annotators.txt`` lists ``<name>: <number>`` lines; an annotator listed there whose current train
 bundles hold fewer episodes gets one new train bundle with the difference. ``oopsie annotation pipeline add``
 adds further bundles by hand, and ``reassign`` moves them. Whenever the bundles change,
-the current holdings are staged and uploaded to the batch repo. The index columns hold every
-collected annotation, and the flags of ``configs/annotation_flags.yaml`` mark the problems the
-annotators found; collecting returns stays a manual command (``docs/pipeline/annotation/index.md``).
+the current holdings are staged and uploaded to the batch repo. Every run pulls the returned pull
+requests and collects them into the stores. The index columns hold every collected annotation, and
+the flags of ``configs/annotation_flags.yaml`` mark the problems the annotators found
+(``docs/pipeline/annotation/index.md``).
 """
 
 from __future__ import annotations
@@ -176,8 +177,33 @@ def annotation_publish(annotation_bundles: str, annotation_config_path: str, dat
 
 
 @stage(always_run=True)
-def annotation_state(annotation_config_path: str, data_dir: str) -> str:
-    """Fingerprint of the annotation config and every annotation store."""
+def annotation_collect(
+    annotation_bundles: str, episode_index: str, annotation_config_path: str, data_dir: str, index_path: str, use_hub: bool
+) -> str:
+    """Pulls the returned pull requests and adds the verified, matched annotations to the stores.
+
+    Returns the stores' fingerprint. Pull requests stay open. Rejected pull requests and files, unmatched
+    files and Hub errors are reported and do not stop the run; files already pulled are collected without
+    ``use_hub``.
+    """
+    cfg = load_config(Path(annotation_config_path), Path(data_dir))
+    if annotation_bundles != NO_ASSIGNMENTS:
+        base = ["--config", annotation_config_path, "--data-dir", data_dir, "--index", index_path]
+        steps = ([("pull", [])] if use_hub else []) + [("collect", ["--skip-index"])]
+        for name, extra in steps:
+            try:
+                rc = pipeline.main([*base, name, *extra])
+            except Exception as exc:
+                print(f"annotation_collect: {name} failed: {type(exc).__name__}: {exc}", file=sys.stderr)
+                continue
+            if rc:
+                print(f"annotation_collect: {name} reported problems; see the log above", file=sys.stderr)
+    return files_fingerprint([s.store for s in cfg.stores])
+
+
+@stage(always_run=True)
+def annotation_state(annotation_collect: str, annotation_config_path: str, data_dir: str) -> str:
+    """Fingerprint of the annotation config and every annotation store, after this run's collection."""
     cfg = load_config(Path(annotation_config_path), Path(data_dir))
     return files_fingerprint([Path(annotation_config_path), *(s.store for s in cfg.stores)])
 

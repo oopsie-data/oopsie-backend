@@ -15,13 +15,14 @@ flowchart LR
   pull --> rel["release<br/>(LS6)"]
 ```
 
-The pipeline builds the bundles, publishes them to the batch repo and moves the collected labels into the index. Collecting the returns, adding bundles on request and reassigning them are commands the coordinator runs.
+The pipeline builds the bundles, publishes them to the batch repo, collects the returns and moves the collected labels into the index. Adding bundles by hand and reassigning them are commands the coordinator runs.
 
 | Stage | Target | Runs after | Writes |
 |---|---|---|---|
 | `annotation_bundles` | `annotation` | `chosen_proposal`, `train_sample`, `annotation_roster`; waits for `<data_dir>/annotation/annotators.txt` | `annotation/bundles/` |
 | `annotation_publish` | `annotation` | `annotation_bundles`; needs `use_hub` | the batch repo, `annotation/annotation_repo/` |
-| `annotation_columns` | `annotation` | `annotation_bundles`, `annotation_state` | `annotation_*` columns |
+| `annotation_collect` | `annotation` | `annotation_bundles`, `episode_index`; runs every time | `annotation/returns/`, the annotation stores |
+| `annotation_columns` | `annotation` | `annotation_bundles`, `annotation_state` (after `annotation_collect`) | `annotation_*` columns |
 | `annotation_flags` | `annotation` | `annotation_columns` | see [annotation flags](flags.md) |
 
 ## Files
@@ -122,7 +123,7 @@ Before announcing new repos, run one episode through the whole loop yourself: do
 
 ## Collecting
 
-Annotators return their work as pull requests on the returns repo. Run this loop as returns arrive; every step skips what it has already done:
+Annotators return their work as pull requests on the returns repo. Every pipeline run collects them (the `annotation_collect` stage): it runs `pull`, then `collect` without writing the index, and `annotation_columns` writes the new annotations to the index in the same run. The stage leaves pull requests open. Rejected pull requests and files, unmatched files and Hub errors are reported in the run's log and do not stop the pipeline; without `use_hub`, only the files already pulled are collected. Between runs, the same loop runs by hand; every step skips what it has already done:
 
 ```bash
 $P pull       # --close closes collected pull requests
