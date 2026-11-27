@@ -21,7 +21,7 @@ propose_args:
   - --no-od-task-spread
 
 # Proposal id from proposals/REPORT.md to hold out; null until one is chosen.
-chosen_proposal: null
+chosen_proposal: configs/eval_proposal.json
 
 train_sample:
   num_episodes: 1000
@@ -30,7 +30,7 @@ assignments:
   annotators_file: annotators.txt   # one name per line, in <data_dir>/annotation/
   seed: 0
   eval:
-    copies: 2
+    copies: 3
     split_copies: {od_task_od_scene: 3}
   train:
-    copies: 1
+    copies: 2
