@@ -35,12 +35,8 @@ assignments:
     copies: 3
     split_copies: {od_task_od_scene: 3}
   train:
-<<<<<<< HEAD
     copies: 2
-=======
-    copies: 1
     # Every later annotator gets a train bundle of bundle_size episodes, of which
     # calibration_episodes are shared with another annotator's train bundle.
     bundle_size: 200
     calibration_episodes: 20
->>>>>>> 43b0bc4 (Thorough changes and hardening of the annotator pipeline)

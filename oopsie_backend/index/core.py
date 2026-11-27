@@ -16,19 +16,21 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
 import sys
 from collections.abc import Callable
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import NamedTuple
 
 import h5py
 import numpy as np
 import polars as pl
 from oopsie_data_tools.annotation_tool.annotation_schema import read_annotation_attrs
 
-from oopsie_backend.common.h5 import _n_timesteps, _profile, _s, _str_list, find_h5
+from oopsie_backend.common.h5 import H5_SUFFIXES, _n_timesteps, _profile, _s, _str_list
 from oopsie_backend.common.hf import hub_files
 from oopsie_backend.common.repos import (
     CONTRIBUTOR,
@@ -124,8 +126,33 @@ def normalize_task(instruction: str | None) -> str:
     return text.strip(" .!?,;:\"'")
 
 
-def discover(data_dir: Path) -> list[tuple[str, str, Path, str]]:
-    """``(dataset_repo, repo_path, path, repo_kind)`` for every h5 in an indexed repo."""
+class Found(NamedTuple):
+    dataset_repo: str
+    repo_path: str
+    path: Path
+    repo_kind: str
+    size: int
+    mtime_ns: int
+
+
+def _scan_repo(repo_dir: Path) -> list[Path]:
+    """Every h5 under ``repo_dir`` outside ``IGNORED_DIRS``, in one walk."""
+    out = []
+    stack = [repo_dir]
+    while stack:
+        with os.scandir(stack.pop()) as entries:
+            for e in entries:
+                if e.is_dir(follow_symlinks=False):
+                    if e.name not in IGNORED_DIRS:
+                        stack.append(Path(e.path))
+                elif e.name.lower().endswith(H5_SUFFIXES):
+                    out.append(Path(e.path))
+    return sorted(out)
+
+
+def discover(data_dir: Path, workers: int = 32) -> list[Found]:
+    """Every h5 in an indexed repo, with its size and modification time.
+    Repos are walked and files stat'ed from ``workers`` threads, since each is a round trip to the file system."""
     repos = [
         (f"{HF_ORG}/{p.name}", p)
         for p in sorted(org_dir(data_dir).iterdir())
@@ -135,16 +162,16 @@ def discover(data_dir: Path) -> list[tuple[str, str, Path, str]]:
         dataset_repo = import_dataset_id(name, entry)
         if is_local_import(dataset_repo) and (data_root(data_dir) / dataset_repo).is_dir():
             repos.append((dataset_repo, data_root(data_dir) / dataset_repo))
-    out = []
-    for dataset_repo, repo_dir in repos:
-        kind = repo_kind(dataset_repo)
-        if kind not in EPISODE_KINDS:
-            continue
-        for path in find_h5(repo_dir):
-            rel = path.relative_to(repo_dir)
-            if IGNORED_DIRS.intersection(rel.parts):
-                continue
-            out.append((dataset_repo, rel.as_posix(), path, kind))
+    repos = [(r, d, k) for r, d in repos if (k := repo_kind(r)) in EPISODE_KINDS]
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        paths = list(pool.map(_scan_repo, [d for _, d, _ in repos]))
+        flat = [p for ps in paths for p in ps]
+        stats = pool.map(os.stat, flat, chunksize=64)
+        out = []
+        for (dataset_repo, repo_dir, kind), ps in zip(repos, paths):
+            for path in ps:
+                st = next(stats)
+                out.append(Found(dataset_repo, path.relative_to(repo_dir).as_posix(), path, kind, st.st_size, st.st_mtime_ns))
     return out
 
 
@@ -318,20 +345,19 @@ def build_core(
     rows: dict[str, dict] = {}
     to_read: list[tuple[str, tuple[str, Path]]] = []
     lab_backfill: list[tuple[str, Path]] = []
-    for dataset_repo, repo_path, path, kind in found:
+    for dataset_repo, repo_path, path, kind, size, mtime_ns in found:
         key = episode_key(dataset_repo, repo_path)
-        st = path.stat()
         row = {
             KEY: key,
             "dataset_repo": dataset_repo,
             "repo_path": repo_path,
             "repo_kind": kind,
             "on_disk": True,
-            "h5_size": st.st_size,
-            "h5_mtime_ns": st.st_mtime_ns,
+            "h5_size": size,
+            "h5_mtime_ns": mtime_ns,
         }
         old = prev.get(key)
-        if reuse and old and old.get("h5_size") == st.st_size and old.get("h5_mtime_ns") == st.st_mtime_ns and not old.get("read_error"):
+        if reuse and old and old.get("h5_size") == size and old.get("h5_mtime_ns") == mtime_ns and not old.get("read_error"):
             row |= {c: old.get(c) for c in H5_COLUMNS}
             if not has_raw_lab:
                 lab_backfill.append((key, path))
@@ -344,8 +370,9 @@ def build_core(
         rows[key] |= result
     if lab_backfill:
         print(f"reading raw_lab_id of {len(lab_backfill)} unchanged episode(s)", file=sys.stderr)
-        with ThreadPoolExecutor(max_workers=workers) as pool:
-            for (key, _), raw in zip(lab_backfill, pool.map(read_raw_lab_id, [p for _, p in lab_backfill])):
+        with ProcessPoolExecutor(max_workers=workers) as pool:
+            raws = pool.map(read_raw_lab_id, [p for _, p in lab_backfill], chunksize=256)
+            for (key, _), raw in zip(lab_backfill, raws):
                 rows[key]["raw_lab_id"] = raw if raw is not None else prev[key].get("lab_id")
 
     for key, old in prev.items():

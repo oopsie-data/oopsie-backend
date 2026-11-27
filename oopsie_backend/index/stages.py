@@ -17,9 +17,8 @@ def mirror_state(hub_mirror: str, data_dir: str, index_path: str) -> str:
     """Runs after the Hub sync. Fingerprint of every indexed h5's path, size and modification time, the repo, import and lab id configs and the index's existence."""
     h = hashlib.sha256(files_fingerprint([REPOSITORIES_CONFIG, IMPORTS_CONFIG, LAB_IDS_CONFIG]).encode())
     h.update(b"index" if Path(index_path).is_file() else b"no index")
-    for dataset_repo, repo_path, path, _ in discover(Path(data_dir)):
-        st = path.stat()
-        h.update(f"{dataset_repo}/{repo_path}:{st.st_size}:{st.st_mtime_ns};".encode())
+    for f in discover(Path(data_dir)):
+        h.update(f"{f.dataset_repo}/{f.repo_path}:{f.size}:{f.mtime_ns};".encode())
     return h.hexdigest()[:16]
 
 
