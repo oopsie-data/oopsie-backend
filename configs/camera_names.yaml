@@ -38,6 +38,7 @@ aliases:
   camera_wrist_left: wrist_left
   wristL: wrist_left
   oakd_left_wrist_view: wrist_left
+  left_wrist_camera: wrist_left
   right_wrist: wrist_right
   wrist_right: wrist_right
   cam_right_wrist: wrist_right
@@ -46,12 +47,14 @@ aliases:
   camera_wrist_right: wrist_right
   wristR: wrist_right
   oakd_right_wrist_view: wrist_right
+  right_wrist_camera: wrist_right
 
   head: head
   cam_head: head
   cam_chest: head
   torso_front: head
   ego_view: head
+  ego_camera: head
   aria: head
   head_left: head
   head_right: head_stereo
@@ -70,6 +73,8 @@ aliases:
   agentview_left: exterior_front
   agentview_right: exterior_front_stereo
   exterior: exterior_front
+  exterior_cam: exterior_front
+  scene_camera: exterior_front
   main: exterior_front
   global: exterior_front
   image_primary: exterior_front

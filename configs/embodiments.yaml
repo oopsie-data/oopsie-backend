@@ -163,6 +163,7 @@ end_effector_aliases:
   LINEAR_4310: yam_gripper
   yam_parallel_gripper: yam_gripper
   yam_parallel_jaw_gripper: yam_gripper
+  yam_linear_4310: yam_gripper
   bi_yam_follower_grippers: yam_gripper
   YAM standard linear gripper: yam_gripper
   agilex_piper_gripper: piper_gripper

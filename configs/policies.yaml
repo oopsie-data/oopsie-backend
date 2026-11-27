@@ -159,6 +159,9 @@ datasets:
   TUD_JP:
     patterns:
       - {match: '\.onnx$', family: other, class: rl}     # per-task checkpoints with seeds and iterations
+  TRI:
+    aliases:
+      yam_eval_policy_rollouts: mixed   # pi0.5, Cosmos, VLA Foundry and in-house runs; the run is only in the file name
   KAIST_JS:
     aliases:
       rollout: unknown
