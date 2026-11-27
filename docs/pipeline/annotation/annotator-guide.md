@@ -1,6 +1,6 @@
 # Annotator guide
 
-You have your own folder in the private Hugging Face dataset `OopsieData-Submissions/oopsie-annotation`. It holds two batches of robot episodes, `batch_1` and `batch_2`. Annotate every episode in both batches, then upload your annotated files with `oopsie-data annotation upload`.
+You have your own folder in the private Hugging Face dataset `OopsieData-Submissions/oopsie-annotation`. It holds one or more batches of robot episodes, `batch_1`, `batch_2`, and so on. Annotate every episode in each batch, then upload your annotated files with `oopsie-data annotation upload`. When you have finished and want to annotate more, ask the coordinator for another batch; it appears as the next `batch_<n>` in your folder.
 
 ## Setup
 
@@ -24,7 +24,7 @@ At the end of the download, the tool prints one command per batch. Each has the 
 oopsie-data annotate --samples-dir oopsie-annotation/<folder>/batch_1/episodes --annotator-name "<your name>"
 ```
 
-Run both, and keep the annotator name exactly as printed, because the upload only sends episodes annotated under that name. Episodes are numbered in the order they should be annotated. You can stop and continue later, because annotations are saved into the `.h5` files.
+Run each of them, and keep the annotator name exactly as printed, because the upload only sends episodes annotated under that name. Episodes are numbered in the order they should be annotated. You can stop and continue later, because annotations are saved into the `.h5` files.
 
 ## Upload
 

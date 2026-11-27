@@ -23,6 +23,7 @@ import shutil
 import sys
 from pathlib import Path
 
+from oopsie_backend.common.h5 import find_h5
 from oopsie_backend.common.repos import (
     DEFAULT_DATA_DIR,
     IMPORTS_CONFIG,
@@ -49,7 +50,7 @@ def convert_entry(name: str, entry: dict, data_dir: Path, work_dir: Path | None 
         partial.mkdir(parents=True, exist_ok=True)
         print(f"converting {name} with {entry['converter']} from {entry['source']}", file=sys.stderr)
         converter.main([converter.source_flag, str(entry["source"]), "--output-dir", str(partial), *args])
-        if not any(partial.rglob("*.h5")):
+        if not find_h5(partial):
             raise RuntimeError(f"{name}: the converter wrote no episodes into {partial}")
         shutil.move(partial, out)
 

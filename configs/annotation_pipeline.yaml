@@ -1,21 +1,22 @@
 # Annotation distribution over Hugging Face; read by oopsie_backend.annotation.pipeline.
 # Relative paths resolve against <data_dir>/annotation, next to the mirror's
-# OopsieData-Submissions folder, so every run sees the same assignments, bundles,
+# OopsieData-Submissions folder, so every run sees the same bundles, roster,
 # returns and stores. --data-dir and --index override the values below.
 repo_id: OopsieData-Submissions/oopsie-annotation
 # Annotators open pull requests with their annotated h5 files here.
 returns_repo_id: OopsieData-Submissions/oopsie-annotation-returns
 data_dir: /corral/utexas/IRI26024/oopsiedata
 index: /corral/utexas/IRI26024/episode_index/episode_index.parquet
+# Bundles (<id>.json, written once) and roster.jsonl, the log of who holds them.
+bundles_dir: bundles
 stage_dir: annotation_repo
 returns_dir: returns
 
-batches:
-  batch_1:
-    assignment_dir: eval_assignment
+# One append-only store and release folder per bundle kind.
+stores:
+  eval:
     store: eval_annotations.jsonl
     release_dir: eval_release
-  batch_2:
-    assignment_dir: train_assignment
+  train:
     store: train_annotations.jsonl
     release_dir: train_release

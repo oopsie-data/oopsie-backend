@@ -1,6 +1,6 @@
 # Episode index
 
-The index build creates the [episode index](../architecture.md#the-episode-index): it finds every episode in the mirror, which is every file ending in `.h5` or `.hdf5` in any capitalization, reads its h5 metadata and the Hub's hashes, and writes one row per episode. All later stages add their columns to these rows.
+The index build creates the [episode index](index.md#the-episode-index): it finds every episode in the mirror, which is every file ending in `.h5` or `.hdf5` in any capitalization, reads its h5 metadata and the Hub's hashes, and writes one row per episode. All later stages add their columns to these rows.
 
 | Stage | Target | Runs after | Writes |
 |---|---|---|---|
@@ -10,7 +10,7 @@ The index build creates the [episode index](../architecture.md#the-episode-index
 
 Episodes are discovered under `<data_dir>/OopsieData-Submissions/<repo>/` and, for local imports, under `<data_dir>/imports/<name>/`, whose dataset id is `imports/<name>`. Archive and infra repos are skipped ([repo kinds](index.md#repos)).
 
-For each h5 file, the build reads the root attributes (lab, operator, instruction, timestamp), the robot profile (robot, gripper, policy, control frequency, action space), the lab's own annotations, the camera list, and the action and state arrays, which it hashes into `content_hash`. It also lists every repo on the Hub to record the Hub's sha256 and git object id of each h5 and video. Lab ids are mapped to canonical names with `configs/lab_ids.yaml`, which fixes labs that recorded misspelled ids.
+For each h5 file, the build reads the root attributes (lab, operator, instruction, timestamp), the robot profile (robot, gripper, policy, control frequency, action space), the lab's own annotations, the camera list, and the action and state arrays, which it hashes into `content_hash`. It also lists every repo on the Hub to record the Hub's sha256 and git object id of each h5 and video. Lab ids are mapped to canonical names with `configs/lab_ids.yaml`, which fixes labs that recorded misspelled ids. The id as written in the file is kept in `raw_lab_id`, and `lab_id` is recomputed from it on every build, so a changed alias applies to every episode, not only to new or changed files.
 
 A file that cannot be read gets a row with `read_error` set and null h5 columns, so it stays visible in the index and becomes [critical](critical-episodes.md). A file that disappears from the mirror keeps its row with `on_disk = false`.
 

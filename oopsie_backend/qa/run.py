@@ -13,9 +13,9 @@ and of external datasets (``configs/imports.yaml``) with ``scope.include_externa
 
 With ``--stage-dir``, the episodes to check and their videos are copied to that
 directory (``common/staging.py``), so the checks read fast local storage. They
-are staged in chunks of ``STAGE_CHUNK``: the next chunk is copied while the
+are staged in chunks of half ``STAGE_CHUNK``: the next chunk is copied while the
 current one is checked, and a chunk's copies are removed once it is done or the
-run stops, so at most two chunks occupy the staging directory.
+run stops, so at most two chunks, ``STAGE_CHUNK`` episodes, occupy the staging directory.
 
 A check runs on an episode only when the index holds no result of its current
 version (``qa/checks/base.py``). Adding, editing or re-configuring a check
@@ -53,8 +53,8 @@ from oopsie_backend.common.repos import (
     EXTERNAL,
     episode_path,
 )
+from oopsie_backend.common.staging import STAGE_CHUNK, stage_episodes, unstage_episodes
 from oopsie_backend.common.staging import chunks as split_chunks
-from oopsie_backend.common.staging import stage_episodes, unstage_episodes
 from oopsie_backend.index.store import DEFAULT_INDEX, KEY, read_index, update_columns
 from oopsie_backend.qa.action_qa_config import CONFIG as ACTION_QA_CONFIG
 from oopsie_backend.qa.action_qa_report import render_action_qa_report
@@ -69,6 +69,7 @@ from oopsie_backend.qa.columns import (
 )
 from oopsie_backend.qa.engine import now, run_episode
 from oopsie_backend.qa.report import build_report
+
 
 def _log(message: str) -> None:
     print(message, file=sys.stderr)
@@ -249,7 +250,7 @@ def main(argv: list[str] | None = None) -> int:
         ]
 
     stage_dir = args.stage_dir
-    chunks = split_chunks(keys) if stage_dir else [keys]
+    chunks = split_chunks(keys, STAGE_CHUNK // 2) if stage_dir else [keys]
     all_checks = enabled_checks(config)
     entries = dict(zip(df[KEY].to_list(), df["qa_results"].to_list())) if "qa_results" in df.columns else {}
     unsaved: set[str] = set()
@@ -276,7 +277,7 @@ def main(argv: list[str] | None = None) -> int:
 
     # Chunks whose episodes are checked from the staging directory, each with its unfinished jobs. The
     # next chunk is submitted as soon as it is staged, so workers never wait for a chunk to drain; one
-    # chunk is staged ahead, so at most two chunks are on disk.
+    # chunk is staged ahead, so at most two chunks, STAGE_CHUNK episodes, are on disk.
     open_jobs: dict[int, int] = {}
     chunk_of: dict = {}
     staged = None

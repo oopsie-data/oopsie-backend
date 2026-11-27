@@ -16,6 +16,7 @@ Written by the [index build](../pipeline/episode-index.md) (`episode_index`).
 | `on_disk`, `on_hub` | bool | whether the h5 is in the mirror and in the Hub listing; rows whose file disappeared stay with `on_disk = false` |
 | `schema`, `episode_id`, `operator_name`, `language_instruction` | string | root attributes of the h5 |
 | `lab_id` | string | the lab id, mapped to its canonical name by `configs/lab_ids.yaml` |
+| `raw_lab_id` | string | the lab id as written in the h5 file |
 | `timestamp` | datetime | the recording time; null when missing or before 2000 |
 | `task` | string | `language_instruction` lowercased, with whitespace collapsed and surrounding punctuation stripped |
 | `robot_name`, `gripper_name`, `policy_name` | string | from the robot profile, as recorded |
@@ -104,7 +105,7 @@ Written by `eval_split` ([eval split](../pipeline/eval-split.md)).
 
 | Column | Type | Content |
 |---|---|---|
-| `eval_split` | string | `id`, `od_task_id_scene`, `od_task_od_scene` or `excluded`; null for train episodes |
+| `eval_split` | string | `id`, `od_task_id_scene`, `od_task_od_scene` or `excluded` (also every unlisted episode of a held-out lab or task); null for train episodes |
 | `eval_proposal` | string | the proposal the split came from |
 
 ## Annotation
@@ -113,9 +114,9 @@ Written by `annotation_columns` ([annotation](../pipeline/annotation/index.md#in
 
 | Column | Type | Content |
 |---|---|---|
-| `annotation_batch` | string | the batch the episode was assigned in |
-| `annotation_split` | string | its split in that batch, including `train_annotated` |
-| `annotation_assigned` | list of strings | the annotators it was assigned to |
+| `annotation_batch` | string | the kind of bundle the episode was assigned in, `eval` or `train` |
+| `annotation_split` | string | its split, including `train_annotated` |
+| `annotation_assigned` | list of strings | the current holders of the bundles that contain it |
 | `annotation_returned` | list of strings | the annotators who returned it |
 | `annotation_records` | list of structs | every collected annotation, described below |
 

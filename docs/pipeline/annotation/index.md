@@ -1,12 +1,12 @@
 # Annotation
 
-Annotators label the [eval split](../eval-split.md) and the [train sample](../train-sample.md) independently of the labs: the outcome, failure categories and severity, and temporal segments that mark when a failure happens. Each eval episode is labeled by two or three annotators, so their agreement can be measured.
+Annotators label the [eval split](../eval-split.md) and train episodes independently of the labs: the outcome, failure categories and severity, and temporal segments that mark when a failure happens. Each eval episode is labeled by two or three annotators, so their agreement can be measured. The annotated train set grows as annotators join.
 
-The episodes reach the annotators as two batches in a private Hugging Face repo: `batch_1` holds the eval assignment and `batch_2` the train sample. Annotators see only the batch names, so they cannot tell which batch is eval.
+The episodes reach the annotators in **bundles**: fixed, ordered lists of eval or train episodes. A bundle is final once built; it can move to another annotator, but its episodes and their order never change. Each annotator's folder in a private Hugging Face repo holds their bundles as `batch_1`, `batch_2`, and so on. Annotators see only these batch names, so they cannot tell which bundles are eval.
 
 ```mermaid
 flowchart LR
-  assign["assign<br/>(pipeline)"] --> stage["stage + publish<br/>(LS6)"]
+  bundles["bundles + roster<br/>(pipeline, add, reassign)"] --> stage["stage + publish<br/>(LS6)"]
   stage --> hf[("batch repo")]
   hf --> ann["annotators:<br/>download, annotate, upload"]
   ann --> ret[("returns repo<br/>pull requests")]
@@ -15,12 +15,12 @@ flowchart LR
   pull --> rel["release<br/>(LS6)"]
 ```
 
-The pipeline covers the assignment and moves the collected labels into the index. Publishing the batches and collecting the returns are commands the coordinator runs, because they involve the annotators and the Hub.
+The pipeline builds the bundles and moves the collected labels into the index. Publishing the bundles, collecting the returns, adding bundles on request and reassigning them are commands the coordinator runs, because they involve the annotators and the Hub.
 
 | Stage | Target | Runs after | Writes |
 |---|---|---|---|
-| `annotator_assignments` | `annotation` | `chosen_proposal`, `train_sample`; waits for `<data_dir>/annotation/annotators.txt` | `annotation/eval_assignment/`, `annotation/train_assignment/`, written once |
-| `annotation_columns` | `annotation` | `annotator_assignments`, `annotation_state` | `annotation_*` columns |
+| `annotation_bundles` | `annotation` | `chosen_proposal`, `train_sample`, `annotation_roster`; waits for `<data_dir>/annotation/annotators.txt` | `annotation/bundles/` |
+| `annotation_columns` | `annotation` | `annotation_bundles`, `annotation_state` | `annotation_*` columns |
 | `annotation_flags` | `annotation` | `annotation_columns` | see [annotation flags](flags.md) |
 
 ## Files
@@ -29,46 +29,82 @@ Everything lives in `/corral/utexas/IRI26024/oopsiedata/annotation/`, next to th
 
 | File | Contents |
 |---|---|
-| `annotators.txt` | the annotators, one name per line |
-| `eval_assignment/`, `train_assignment/` | the assignments, the only mapping from the blinded episode ids back to the source episodes |
+| `annotators.txt` | the registered annotators, one name per line |
+| `eval_assignment/`, `train_assignment/` | the first assignment of the eval split and the train sample, one list per annotator |
+| `bundles/<id>.json` | one bundle each: its kind (`eval` or `train`) and its episodes by position |
+| `bundles/roster.jsonl` | who holds each bundle, and under which batch name; the only mapping, with the bundles, from the blinded episode ids back to the source episodes |
 | `annotation_repo/` | the staged batch repo |
 | `returns/` | downloaded pull requests; `collect` can be rerun from them |
-| `eval_annotations.jsonl`, `train_annotations.jsonl` | append-only stores of every collected annotation |
+| `eval_annotations.jsonl`, `train_annotations.jsonl` | append-only stores of every collected annotation, one per bundle kind |
 | `eval_release/`, `train_release/` | source episodes with the collected annotations added |
 
-Never regenerate the assignments once the batches are published: a new assignment puts different episodes at the positions the annotators are working through.
+Never edit or delete a bundle or a roster line: the annotators work through the bundles by position, and the roster decides which returns are accepted.
 
-## Assignments
+## Bundles and the roster
 
-Once `annotators.txt` exists, `annotator_assignments` assigns every eval episode to `copies` distinct annotators (two by default, three for `od_task_od_scene`) and every train sample episode to one, as set under `assignments` in `configs/eval_split.yaml`.
+`bundles/roster.jsonl` is an append-only log. Each line gives a bundle to an annotator under a batch name, with a time and a note. A bundle's last line names its current holder. Earlier lines stay valid, so annotations a former holder returns are still accepted and kept. Within an annotator's folder, batch names are numbered upward and never reused. Two rules hold for every bundle an annotator is given, whether new or reassigned:
+
+- the annotator has never held a bundle that shares an episode with it, so nobody labels an episode twice and every eval copy comes from a different person;
+- the annotator's name maps to a folder name that no other annotator uses.
+
+Every change to the bundles and the roster holds a lock (`bundles/roster.jsonl.lock`), so a pipeline run and a manual `add` or `reassign` cannot interfere. A bundle file is written before its roster line; a bundle file that no roster line names, left by a write that stopped in between, is ignored, and its episodes stay available.
+
+### First assignment
+
+Once a proposal is chosen and `annotators.txt` exists, `annotation_bundles` assigns every eval episode to `copies` distinct annotators (two by default, three for `od_task_od_scene`) and every [train sample](../train-sample.md) episode to `train.copies`, as set under `assignments` in `configs/eval_split.yaml`. This writes `eval_assignment/` and `train_assignment/` once.
 
 Copies are assigned one at a time, to keep every annotator's workload balanced and every pair of annotators comparable:
 
 1. Among annotators whose load is within one of the lowest, the copy goes to the one with the fewest episodes of that split, lab and task.
 2. Ties go to the annotator who shares the fewest episodes with those already assigned to this episode, which spreads overlap evenly over annotator pairs.
 
-Each annotator's list is then shuffled so that the same lab rarely appears twice in a row. The same seed and inputs give the same assignment. The output holds one ordered list per annotator, `samples.csv` with the annotators of each episode, and `assignment_summary.json` with loads and pair overlaps.
+Each annotator's list is then shuffled so that the same lab rarely appears twice in a row. The same seed and inputs give the same assignment. The stage then turns every list into a bundle held by its annotator: eval lists become `batch_1`, train lists `batch_2`. If the two assignment folders already exist, the stage adopts them as they are. An annotator with only one of the two lists keeps that list's batch name, and an empty list becomes no bundle.
+
+### Train bundles
+
+Every name added to `annotators.txt` later gets one new train bundle at the next pipeline run, in their `batch_1`. The eval bundles stay as they were built. A train bundle holds `train.bundle_size` episodes (200):
+
+- **Calibration episodes.** `train.calibration_episodes` of them (20) come from other annotators' train bundles, so that each new annotator shares episodes with someone else and their agreement can be measured. These are the episodes with the fewest copies, preferring ones whose annotation was already returned, spread over as many source bundles as possible. Most of them end up with two annotators.
+- **New episodes.** The rest are episodes of the chosen proposal's train pool that no bundle holds yet. Like the train sample, they are spread over labs, then scenes, tasks, policies and success labels, and the budget goes first to the strata that earlier train bundles cover least. The pool is read from the current index, so episodes uploaded after the eval split was chosen are included, while duplicates, critical episodes, episodes the annotation flags exclude and held-out labs and tasks are not. Calibration episodes come from the same pool, so an episode that became critical or excluded after it was bundled is not handed out again.
+
+A name that cannot get a bundle is skipped with a message in the run's log, and the rest of the pipeline continues. This happens when the name maps to the same folder as an existing annotator (folder names are lowercase ASCII with `_` separators, so `José Díaz` and `jose diaz` clash) or when the train pool has no episodes left that no bundle holds. A skipped name is tried again at the next run in which `annotators.txt`, the roster or `configs/eval_split.yaml` changes.
+
+An annotator who has finished and wants more work gets another train bundle with `add`, which becomes their next batch.
+
+### Reassigning
+
+A bundle moves to another annotator with `reassign`, for example when someone drops out. The new holder gets the next batch name in their folder. The former holder's returned annotations are kept, and returns they upload later are still accepted. The new holder labels the whole bundle, so episodes the former holder already returned get an extra copy.
+
+## Managing bundles
+
+```bash
+P="uv run oopsie annotation pipeline --config configs/annotation_pipeline.yaml"
+$P bundles                                  # every bundle, its kind, size, holder and former holders
+$P add --annotator "Jane Doe" [--count 2]   # new train bundles for an annotator
+$P reassign b0012 --to "Jane Doe" --note "replaces a dropout"
+```
+
+`add` needs the index and builds the bundle like the pipeline does; `--size` overrides `train.bundle_size`. Both commands only change `bundles/`; run `stage` and `publish` to send the change to the annotators.
 
 ## Distributing
 
 On LS6:
 
 ```bash
-P="uv run oopsie annotation pipeline --config configs/annotation_pipeline.yaml"
 $P stage
 $P publish
 ```
 
-`stage` packages every batch into `annotation_repo/`, with one folder per annotator and a `README.md` listing annotators, folders, episode counts and the commands annotators run. It exits non-zero if an episode lacks its h5 or videos, and still packages the rest.
+`stage` packages every current holding into `annotation_repo/<folder>/<batch>/`, and writes a `README.md` that lists annotators, folders, batches and the commands annotators run. A batch whose staged manifest already lists the bundle's episodes for the same annotator is kept, so only new and moved bundles are packaged. The staged batches of bundles that moved to another annotator are removed. `stage` exits non-zero if an episode lacks its h5 or videos, and still packages the rest.
 
 The packaged copies are blind, so that the lab's labels and the policy cannot bias the annotator:
 
 - the lab's `episode_annotations`, `source_data`, `source_*` attributes and `previous_episode_id` are removed;
 - `policy_name` is set to `redacted`;
 - `episode_id` is replaced by a stable hash of the source episode;
-- files are named by position (`0001.h5`), so the annotation tool shows them in assignment order.
+- files are named by position (`0001.h5`), so the annotation tool shows them in bundle order.
 
-`publish` creates the batch repo and an empty returns repo as private datasets and uploads the staged folder. It refuses to upload if either repo exists and is public. Check on Hugging Face that the repo is private and the README is complete, give every annotator's account read access to both repos, and send them the [annotator guide](annotator-guide.md).
+`publish` creates the batch repo and an empty returns repo as private datasets, uploads the staged folder, and deletes the batches of moved bundles from the batch repo. It refuses to upload if either repo exists and is public. Check on Hugging Face that the repo is private and the README is complete, give every new annotator's account read access to both repos, and send them the [annotator guide](annotator-guide.md).
 
 Before announcing new repos, run one episode through the whole loop yourself: download a folder, annotate an episode, upload it, then `pull` and `collect`. This confirms that returns are accepted.
 
@@ -82,22 +118,21 @@ $P collect
 $P status
 ```
 
-`pull` downloads the annotated files of each pull request to `returns/pr_NNNN/`, with the manifests of the touched batches. It rejects a pull request that touches more than one annotator folder or changes anything other than episode `.h5` files; rejected ones appear in `status` and `returns/pull_requests.json`, and the annotator should upload again. Pull requests never need to be merged.
+`pull` downloads the annotated files of each pull request to `returns/pr_NNNN/`. It rejects a pull request that touches more than one annotator folder, touches a batch the roster never gave that folder, or changes anything other than episode `.h5` files; rejected ones appear in `status` and `returns/pull_requests.json`, and the annotator should upload again. Pull requests never need to be merged; a merged one is read from its diff and still accepted. Each accepted pull request is downloaded at its head commit, which `returns/pr_NNNN/.pr_commit` records; it is downloaded again only when the head changes, and only downloads with this record are verified and collected. A pull request whose head commit cannot be found is skipped. `pull` exits with an error when any pull request was rejected or skipped.
 
-`collect` verifies every pulled file before it adds it to the store. A file passes when:
+`collect` verifies every pulled file before it adds it to the store of its bundle's kind. A file `<folder>/<batch>/episodes/NNNN.h5` passes when:
 
-- its folder's manifest names the same annotator and lists the file's `episode_id` at its position;
-- the assignment gives that annotator the same episode at that position;
+- the roster gives or gave that batch of that folder a bundle, and the bundle has the file's `episode_id` at that position;
 - the `episode_id` matches exactly one index row;
-- its action and state arrays hash to that row's `content_hash`, so the file was not altered.
+- its action and state arrays hash to that row's `content_hash`, so the file was not altered. `--previous-index` also accepts the hashes of earlier indexes, for episodes re-uploaded after their bundle was built.
 
-Rejected files are listed in `returns/<batch>_verification.json`; `verify` runs the check alone. The stores are append-only and keyed by content: collecting the same return twice adds nothing, and a changed annotation is added as a new revision, of which the latest counts.
+Rejected files are listed in `returns/verification.json`; `verify` runs the check alone. The stores are append-only and keyed by content: collecting the same return twice adds nothing, and a changed annotation is added as a new revision, of which the latest counts.
 
-`status` prints returned against assigned annotations per annotator and batch. `eval_annotations_summary.json` and `train_annotations_summary.json` add missing episodes per annotator and outcome agreement.
+`status` prints returned against assigned annotations per annotator and batch. `eval_annotations_summary.json` and `train_annotations_summary.json` add missing episodes per annotator, returns from former holders, and outcome agreement.
 
 ## Index
 
-`collect` ends by writing the stores to the index, and the `annotation_columns` stage does the same whenever the stores change. Each episode gets `annotation_records`, one record per annotation with the annotator's labels, segments as frame indices, and the `content_hash` of the copy the annotator labeled. Train sample annotations of an episode that the eval batch holds out are dropped. The [column reference](../../reference/index-columns.md#annotation) lists the fields.
+`collect` ends by writing the stores to the index, and the `annotation_columns` stage does the same whenever the stores change. Each episode gets `annotation_batch` (`eval` or `train`), its current holders in `annotation_assigned`, and `annotation_records`, one record per annotation with the annotator's labels, segments as frame indices, and the `content_hash` of the copy the annotator labeled. Train annotations of an episode that an eval bundle holds are dropped. The [column reference](../../reference/index-columns.md#annotation) lists the fields.
 
 The index is the merged view of all annotators' work, and the source h5 files are never changed. An annotation applies to an episode only while its `content_hash` equals the episode's: if the lab re-uploads a changed episode, the old labels no longer count. Training and the [dataset analysis](../analysis.md) read the annotations from the index, and the [annotation flags](flags.md) find the problems annotators reported in their notes.
 
@@ -115,12 +150,15 @@ This writes `eval_release/` and `train_release/`: copies of every annotated sour
 
 | Command | Where | Does |
 |---|---|---|
-| `stage` | LS6 | packages both batches |
-| `publish` | anywhere | creates the private repos and uploads the batches |
+| `bundles` | anywhere | lists every bundle and its holders |
+| `add` | anywhere | builds new train bundles for an annotator |
+| `reassign` | anywhere | gives a bundle to another annotator |
+| `stage` | LS6 | packages new and moved bundles |
+| `publish` | anywhere | creates the private repos, uploads the batches and removes moved ones |
 | `pull` | anywhere | downloads returned pull requests |
-| `verify` | anywhere | checks returned files against manifests, assignments and the index |
+| `verify` | anywhere | checks returned files against the bundles and the index |
 | `collect` | anywhere | verifies and adds returns to the stores, then writes the index |
-| `status` | anywhere | progress per annotator |
+| `status` | anywhere | progress per annotator and batch |
 | `index` | anywhere | writes the assignments and collected annotations to the index |
 | `release` | LS6 | builds the annotated release copies |
 

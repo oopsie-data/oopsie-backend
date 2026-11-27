@@ -46,7 +46,7 @@ usable = df.filter(
 | `id` | test: scene and task both also appear in train |
 | `od_task_id_scene` | test: a task never seen in train, in a scene that is |
 | `od_task_od_scene` | a lab never seen in train; empty in the current releases |
-| `excluded` | held-out labs and tasks beyond the annotation budget; neither train nor test |
+| `excluded` | episodes of held-out labs and tasks beyond the annotation budget or uploaded after the split was chosen; neither train nor test |
 | null | train |
 
 ```python

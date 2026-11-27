@@ -1,8 +1,8 @@
 """Annotation columns of the episode index.
 
-The ``annotation_*`` columns describe the annotation batches: which batch and
-split an episode was assigned in, to whom, who returned an annotation, and the
-current collected annotations. A record holds the annotator's labels and segments,
+The ``annotation_*`` columns describe the annotation bundles: the kind of bundle
+(``eval`` or ``train``) and the split an episode was assigned in, its current
+holders, who returned an annotation, and the current collected annotations. A record holds the annotator's labels and segments,
 the ``content_hash`` of the returned copy it was made on, and the annotator's language
 instruction where it differs from the episode's.
 """
@@ -14,11 +14,7 @@ from pathlib import Path
 
 import polars as pl
 
-from oopsie_backend.annotation.collect import (
-    current_annotations,
-    load_assignment,
-    read_store,
-)
+from oopsie_backend.annotation.collect import current_annotations, read_store
 from oopsie_backend.index.store import KEY, episode_key
 from oopsie_backend.splits.eval_split import TRAIN_ANNOTATED
 
@@ -89,17 +85,16 @@ def _segments(record: dict) -> list[dict]:
     ]
 
 
-def annotation_frame(batches: list[tuple[str, Path, Path]], instructions: dict[str, str] | None = None) -> pl.DataFrame:
-    """One row per assigned episode from ``(batch, assignment_dir, store)`` triples.
+def annotation_frame(kinds: list[tuple[str, dict[str, dict], Path]], instructions: dict[str, str] | None = None) -> pl.DataFrame:
+    """One row per assigned episode from ``(kind, assignment, store)`` triples.
 
-    ``instructions`` maps ``episode_key`` to the episode's language instruction; a record
-    keeps the annotator's instruction only where it differs. An episode assigned in an
-    eval split and in ``train_annotated`` keeps only its eval row.
+    ``assignment`` is ``Registry.assignment(kind)``. ``instructions`` maps ``episode_key`` to the
+    episode's language instruction; a record keeps the annotator's instruction only where it
+    differs. An episode assigned in an eval split and in ``train_annotated`` keeps only its eval row.
     """
     instructions = instructions or {}
     rows = []
-    for batch, assignment_dir, store in batches:
-        assignment = load_assignment(assignment_dir)
+    for kind, assignment, store in kinds:
         current = current_annotations(read_store(store))
         for uid, meta in assignment.items():
             records = current.get(uid, [])
@@ -107,7 +102,7 @@ def annotation_frame(batches: list[tuple[str, Path, Path]], instructions: dict[s
             rows.append(
                 {
                     KEY: key,
-                    "annotation_batch": batch,
+                    "annotation_batch": kind,
                     "annotation_split": meta["split"],
                     "annotation_assigned": sorted(meta["assigned"]),
                     "annotation_returned": sorted({r["bundle"] for r in records}),
@@ -133,5 +128,5 @@ def annotation_frame(batches: list[tuple[str, Path, Path]], instructions: dict[s
     df = df.filter(~(pl.col(KEY).is_duplicated() & (pl.col("annotation_split") == TRAIN_ANNOTATED)))
     dupes = df.filter(pl.col(KEY).is_duplicated())
     if dupes.height:
-        raise ValueError(f"{dupes[KEY].n_unique()} episode(s) are assigned in more than one batch")
+        raise ValueError(f"{dupes[KEY].n_unique()} episode(s) are assigned in more than one kind of bundle")
     return df

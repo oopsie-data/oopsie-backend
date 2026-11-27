@@ -8,21 +8,24 @@ The eval set measures how well a model trained on Oopsie-Data generalizes. It ho
 | `od_task_id_scene` | a task never seen in train, in a scene that is | whole tasks from medium-sized multi-task labs |
 | `od_task_od_scene` | a lab never seen in train | whole small labs, on common and on custom robots |
 
-The h5 files have no field for the scene, so a scene is approximated by `(lab, robot, cameras)`. A task is the normalized language instruction: lowercased, with whitespace collapsed and surrounding punctuation stripped. Episodes beyond what the annotation budget allows for a held-out unit go to a fourth group, `excluded`, which belongs to neither train nor eval.
+The h5 files have no field for the scene, so a scene is approximated by `(lab, robot, cameras)`. A task is the normalized language instruction: lowercased, with whitespace collapsed and surrounding punctuation stripped. Episodes beyond what the annotation budget allows for a held-out unit go to a fourth group, `excluded`, which belongs to neither train nor eval. Episodes of a held-out lab or task that the chosen proposal does not list, such as later uploads, are recorded as `excluded` as well.
 
 ## In the pipeline
 
 | Stage | Target | Runs after | Writes |
 |---|---|---|---|
-| `eval_proposals` | `proposals` | `critical_episodes`, `split_config` | `<data_dir>/annotation/proposals/`: one JSON per proposal, `candidates.json`, `REPORT.md` |
+| `eval_proposals` | `proposals` | `critical_episodes`, `split_config`, `robot_aliases_config` | `<data_dir>/annotation/proposals/`: one JSON per proposal, `candidates.json`, `REPORT.md` |
 | `chosen_proposal` | `splits` | `eval_proposals`; waits for `chosen_proposal` in `configs/eval_split.yaml` | `<data_dir>/annotation/eval_proposal.json`, written once |
-| `eval_split` | `splits` | `chosen_proposal` | `eval_split`, `eval_proposal` |
+| `eval_split` | `splits` | `chosen_proposal`, `episode_index` | `eval_split`, `eval_proposal` |
 
 Choosing the split is a human decision:
 
 1. `eval_proposals` generates several candidate splits from the current index and writes `REPORT.md`, which compares them.
 2. Someone reviews the report, and possibly the eval episodes themselves ([below](#reviewing-a-proposal)), and sets `chosen_proposal` in `configs/eval_split.yaml` to a proposal id.
-3. `chosen_proposal` freezes that proposal as `annotation/eval_proposal.json`, and `eval_split` records it in the index. The [train sample](train-sample.md) and the [annotator assignments](annotation/index.md#assignments) follow.
+3. `chosen_proposal` freezes that proposal as `annotation/eval_proposal.json`, and `eval_split` records it in the index. The [train sample](train-sample.md) and the [annotation bundles](annotation/index.md#bundles-and-the-roster) follow.
+4. The frozen proposal is copied into the backend repo, for example as `configs/eval_proposal.json`, and `chosen_proposal` is set to that path.
+
+A proposal id only names a file in `annotation/proposals/`, and a `data_dir` without a frozen proposal regenerates those files from its own index, so the same id can name a different split there. A `chosen_proposal` ending in `.json` is instead a proposal file relative to the backend repo. The stage copies it to `annotation/eval_proposal.json`, and if that file already exists, it must hold the same proposal or the run fails. Proposals are not regenerated while `chosen_proposal` names a repo file.
 
 From then on the split does not change. The frozen proposal is written once, and `eval_proposals` stops regenerating proposals, so later changes to QA or the critical flags cannot affect them ([guarantees](index.md#human-decisions-and-guarantees)).
 

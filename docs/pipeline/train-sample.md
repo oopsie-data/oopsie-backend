@@ -12,7 +12,7 @@ The sample is drawn from the chosen proposal's train set: every eligible episode
 
 The sample aims for coverage rather than proportions. The budget is split equally over labs, and within each lab over scenes, tasks, policies and success labels. A lab with fewer episodes than its share passes the rest to the other labs.
 
-The output has the layout of a proposal with a single split, `train_annotated`, so the [assignment](annotation/index.md#assignments) treats it like the eval set. Like the chosen proposal, it is written once and kept as long as the proposal and settings it was made from are unchanged.
+The output has the layout of a proposal with a single split, `train_annotated`, so the [first assignment](annotation/index.md#bundles-and-the-roster) treats it like the eval set. Like the chosen proposal, it is written once and kept as long as the proposal and settings it was made from are unchanged. Annotators who join later each get a new train bundle drawn from the same pool, which grows the annotated train set beyond this sample ([train bundles](annotation/index.md#train-bundles)).
 
 ## Running it by hand
 

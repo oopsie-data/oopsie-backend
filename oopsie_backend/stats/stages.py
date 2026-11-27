@@ -84,7 +84,7 @@ def annotation_analysis(
         return NO_ASSIGNMENTS
     cfg = load_annotation_config(Path(annotation_config_path), Path(data_dir))
     out_dir = Path(reports_dir) / "analysis"
-    runs = {f"annotations_{b.name}.json": ["--batch", b.name] for b in cfg.batches}
+    runs = {f"annotations_{s.kind}.json": ["--batch", s.kind] for s in cfg.stores}
     runs["annotations.json"] = []
     for name, batch in runs.items():
         argv = ["annotations", "--index", index_path, *batch, "--out", str(out_dir / name)]

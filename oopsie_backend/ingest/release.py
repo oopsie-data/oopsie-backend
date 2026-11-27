@@ -55,6 +55,7 @@ ANNOTATION_FILES = [
     "train_annotation_sample.json",
     "eval_assignment",
     "train_assignment",
+    "bundles",
     "proposals",
 ]
 ANNOTATION_STORE_GLOBS = ["*_annotations.jsonl", "*_annotations_summary.json"]

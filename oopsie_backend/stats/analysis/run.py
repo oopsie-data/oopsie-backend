@@ -2,14 +2,14 @@
 
 Usage:
     uv run oopsie stats analysis index --index episode_index.parquet --out reports/analysis/index.json
-    uv run oopsie stats analysis annotations --index episode_index.parquet [--batch NAME ...] --out reports/analysis/annotations.json
+    uv run oopsie stats analysis annotations --index episode_index.parquet [--batch eval|train] --out reports/analysis/annotations.json
     uv run oopsie stats analysis features --index episode_index.parquet --data-dir <mirror> --out <features.parquet> [--segments]
     uv run oopsie stats analysis data --index episode_index.parquet --features <features.parquet> --out reports/analysis/data.json
     uv run oopsie stats analysis render reports/analysis/*.json
 
 ``index`` uses the episode index alone. ``annotations`` reads the annotators' returns with
 failure segments from the index's ``annotation_*`` columns (``from_annotations``), of every
-batch or of the ``--batch`` names. ``features`` reads the episode files and writes
+kind of bundle or of the ``--batch`` kinds (``eval``, ``train``). ``features`` reads the episode files and writes
 their action features, and with ``--segments`` around every annotated segment start; ``data`` turns
 them into statistics. Every group covers contributed episodes only (``common.contributed``)
 and needs the index columns of the embodiment and policy stages. The language entries
@@ -92,7 +92,7 @@ def main(argv: list[str] | None = None) -> int:
         if name in ("index", "annotations"):
             p.add_argument("--no-language", action="store_true", help="Leave out the entries that parse instructions")
         if name == "annotations":
-            p.add_argument("--batch", nargs="+", metavar="NAME", help="Annotation batches to include; default all")
+            p.add_argument("--batch", nargs="+", metavar="NAME", help="Bundle kinds to include (eval, train); default all")
         if name == "features":
             p.add_argument("--segments", action="store_true", help="Also compute features around every annotated segment start")
         if name == "features":

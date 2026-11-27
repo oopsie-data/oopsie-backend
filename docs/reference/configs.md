@@ -14,9 +14,9 @@ All settings live in `configs/`. They are edited by hand and take effect on the 
 | `action_qa_config.yaml` | [QA](../pipeline/qa/index.md) | one section per check category: toggles, thresholds and lab feedback tags per check; sampling, scope and run defaults |
 | `critical.yaml` | [critical episodes](../pipeline/critical-episodes.md) | the conditions and QA checks that make an episode critical |
 | `stats_config.yaml` | [stats](../pipeline/stats.md) | placeholder lab ids and operator names, and the lab requirement thresholds |
-| `eval_split.yaml` | [eval split](../pipeline/eval-split.md), [train sample](../pipeline/train-sample.md), [assignments](../pipeline/annotation/index.md#assignments) | the proposal search options, the chosen proposal, the train sample size, and the copies and seed of the assignments |
+| `eval_split.yaml` | [eval split](../pipeline/eval-split.md), [train sample](../pipeline/train-sample.md), [annotation bundles](../pipeline/annotation/index.md#bundles-and-the-roster) | the proposal search options, the chosen proposal (an id from `proposals/` or, once frozen, a proposal file in the repo), the train sample size, the copies and seed of the first assignments, and the size and calibration episodes of later train bundles |
 | `robot_aliases.yaml` | eval split, train sample | coarse robot platforms used to define scenes and common robots in split planning |
-| `annotation_pipeline.yaml` | [annotation](../pipeline/annotation/index.md) commands and stages | the batch and returns repos, the annotation paths, and per batch its assignment, store and release folders |
+| `annotation_pipeline.yaml` | [annotation](../pipeline/annotation/index.md) commands and stages | the batch and returns repos, the bundle and annotation paths, and per bundle kind its store and release folders |
 | `annotation_flags.yaml` | [annotation flags](../pipeline/annotation/flags.md) | the note rules, which reasons exclude, and the idle thresholds |
 | `analysis.yaml` | [dataset analysis](../pipeline/analysis.md) | the embedding model, similarity thresholds, verb synonyms and feature thresholds |
 | `training/<recipe>.yaml` | [training data](../pipeline/training-data.md) | one training set: selection, unification and formats |

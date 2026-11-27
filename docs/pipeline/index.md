@@ -83,7 +83,7 @@ flowchart TB
     chosen_proposal --> train_sample
   end
   subgraph annotation
-    annotator_assignments --> annotation_columns --> annotation_flags
+    annotation_bundles --> annotation_columns --> annotation_flags
   end
   subgraph manual
     imported_datasets
@@ -101,8 +101,8 @@ flowchart TB
   qa_results --> critical_episodes
   critical_episodes --> stats
   critical_episodes --> eval_proposals
-  chosen_proposal --> annotator_assignments
-  train_sample --> annotator_assignments
+  chosen_proposal --> annotation_bundles
+  train_sample --> annotation_bundles
   imported_datasets -. "writes into the mirror" .-> episode_index
   eval_split --> training_data
   annotation_flags --> training_data & dataset_analysis & annotation_analysis
@@ -125,7 +125,7 @@ Boxes group the stages by the target that runs them. The `manual` stages never r
 | `stats` | computes the website and internal stats | [Stats](stats.md) |
 | `eval_proposals`, `chosen_proposal`, `eval_split` | proposes eval splits, freezes the chosen one and records it in the index | [Eval split](eval-split.md) |
 | `train_sample` | samples train episodes for annotation | [Train sample](train-sample.md) |
-| `annotator_assignments`, `annotation_columns` | assigns episodes to annotators and collects their labels into the index | [Annotation](annotation/index.md) |
+| `annotation_bundles`, `annotation_columns` | builds the annotation bundles, gives them to annotators and collects their labels into the index | [Annotation](annotation/index.md) |
 | `annotation_flags` | finds problems the annotators reported and excludes affected episodes | [Annotation flags](annotation/flags.md) |
 | `imported_datasets` (manual) | converts external datasets into the mirror | [Imported datasets](imports.md) |
 | `training_data` (manual) | materializes a training set from a recipe | [Training data](training-data.md) |
@@ -146,13 +146,14 @@ The eval split must never change once annotators have started on it. Two stages 
 
 | Decision | Where | Waiting stages |
 |---|---|---|
-| which eval proposal to hold out, after reviewing `annotation/proposals/REPORT.md` | `chosen_proposal` in `configs/eval_split.yaml` | `chosen_proposal`, `eval_split`, `train_sample`, `annotator_assignments` |
-| who annotates | `<data_dir>/annotation/annotators.txt`, one name per line | `annotator_assignments` |
+| which eval proposal to hold out, after reviewing `annotation/proposals/REPORT.md` | `chosen_proposal` in `configs/eval_split.yaml` | `chosen_proposal`, `eval_split`, `train_sample`, `annotation_bundles` |
+| who annotates | `<data_dir>/annotation/annotators.txt`, one name per line; names added later get a train bundle | `annotation_bundles` |
 
 Three rules then keep the split fixed:
 
-- The chosen eval proposal, the annotated train sample and the annotator assignments are **written once**. Next to each output, a `<name>.inputs` file records the settings it was made from. Later runs keep the output, and fail rather than rewrite it when those settings change. To regenerate an output deliberately, delete it together with its `.inputs` file. Outputs copied in by hand are adopted as they are.
-- Once a proposal is chosen, the proposal stage stops regenerating proposals, so changes to QA or to the critical conditions cannot alter them.
+- The chosen eval proposal, the annotated train sample and the first annotator assignments are **written once**, and every annotation bundle is final: the roster only records who holds it. Next to each output, a `<name>.inputs` file records the settings it was made from. Later runs keep the output, and fail rather than rewrite it when those settings change. To regenerate an output deliberately, delete it together with its `.inputs` file. Outputs copied in by hand are adopted as they are.
+- Once a proposal is chosen, the proposal stage stops regenerating proposals, so changes to QA or to the critical conditions cannot alter them. Once frozen, the proposal is also kept in the backend repo and `chosen_proposal` names that file, so every `data_dir` holds the same split ([eval split](eval-split.md)).
+- Episodes of a held-out lab or task that the proposal does not list, such as later uploads, are recorded as `excluded`, so they never reach the train side.
 - Training keeps a held-out eval episode even if it becomes critical later. The only way an episode leaves the eval set is through the annotators' flags.
 
 ## Next

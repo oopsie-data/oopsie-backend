@@ -1,19 +1,20 @@
-"""Distribute annotation batches through a Hugging Face dataset repo and pull returns from its pull requests.
+"""Distribute annotation bundles through a Hugging Face dataset repo and pull returns from its pull requests.
 
-The batch repo holds ``<folder>/<batch>/`` per annotator (see ``stage_annotation_repo``).
-Annotators return their annotated h5 files, at the same paths, as pull requests
-to a separate returns repo (``oopsie-data annotation upload``). A pull request
-is accepted when it only changes ``<folder>/<batch>/episodes/NNNN.h5`` files of
-a single annotator folder; accepted pull requests are downloaded to
-``<returns_dir>/pr_NNNN/``, together with that folder's manifests from the
-batch repo. A pull request is downloaded again only when its head commit changes.
+The batch repo holds ``<folder>/<slot>/`` for every current holding of the roster
+(``annotation.roster``). Annotators return their annotated h5 files, at the same
+paths, as pull requests to a separate returns repo (``oopsie-data annotation upload``).
+A pull request is accepted when it only changes ``<folder>/<slot>/episodes/NNNN.h5``
+files of a single annotator folder, in slots the roster gives or gave that folder;
+accepted pull requests are downloaded to ``<returns_dir>/pr_NNNN/``. A pull request
+is downloaded at its head commit, which ``.pr_commit`` records, and again only when the head changes. The files an open pull request
+changes are found by comparing its tree with the main branch; a merged one's files are
+on the main branch already, so they are read from the pull request's diff.
 """
 
 from __future__ import annotations
 
 import json
 import re
-import unicodedata
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -21,17 +22,16 @@ import yaml
 from huggingface_hub import HfApi
 from huggingface_hub.hf_api import RepoFile
 
-from oopsie_backend.annotation.bundles import MANIFEST_NAME
+from oopsie_backend.annotation.roster import KINDS, Registry
 from oopsie_backend.common.repos import annotation_dir
 
 COMMIT_MARKER = ".pr_commit"
-PULLED_STATUSES = ("open", "merged")
+PULLED_STATUSES = ("open", "merged", "draft")
 
 
 @dataclass
-class Batch:
-    name: str
-    assignment_dir: Path
+class Store:
+    kind: str
     store: Path
     release_dir: Path
 
@@ -41,10 +41,14 @@ class PipelineConfig:
     repo_id: str
     returns_repo_id: str
     data_dir: Path
+    bundles_dir: Path
     stage_dir: Path
     returns_dir: Path
     index: Path | None = None
-    batches: list[Batch] = field(default_factory=list)
+    stores: list[Store] = field(default_factory=list)
+
+    def registry(self) -> Registry:
+        return Registry(self.bundles_dir)
 
 
 def load_config(path: Path, data_dir: Path | None = None, index: Path | None = None) -> PipelineConfig:
@@ -56,43 +60,31 @@ def load_config(path: Path, data_dir: Path | None = None, index: Path | None = N
     data_dir = data_dir or Path(raw["data_dir"])
     root = annotation_dir(data_dir)
     index = index or (Path(raw["index"]) if raw.get("index") else None)
-    return PipelineConfig(
+    cfg = PipelineConfig(
         repo_id=raw["repo_id"],
         returns_repo_id=raw["returns_repo_id"],
         data_dir=data_dir,
+        bundles_dir=root / raw["bundles_dir"],
         stage_dir=root / raw["stage_dir"],
         returns_dir=root / raw["returns_dir"],
         index=index,
-        batches=[
-            Batch(
-                name=name,
-                assignment_dir=root / b["assignment_dir"],
-                store=root / b["store"],
-                release_dir=root / b["release_dir"],
-            )
-            for name, b in raw["batches"].items()
-        ],
+        stores=[Store(kind, root / s["store"], root / s["release_dir"]) for kind, s in raw["stores"].items()],
     )
+    unknown = [s.kind for s in cfg.stores if s.kind not in KINDS]
+    if unknown:
+        raise ValueError(f"{path}: unknown store kinds {unknown}; expected {KINDS}")
+    return cfg
 
 
-def folder_name(annotator: str) -> str:
-    """Annotator name as lowercase ASCII with ``_`` separators."""
-    ascii_name = unicodedata.normalize("NFKD", annotator).encode("ascii", "ignore").decode()
-    return re.sub(r"[^a-z0-9]+", "_", ascii_name.lower()).strip("_")
-
-
-def annotator_folders(cfg: PipelineConfig) -> dict[str, str]:
-    """Annotator name -> repo folder, over all batches."""
-    out = {}
-    for b in cfg.batches:
-        for path in sorted(b.assignment_dir.glob("*.json")):
-            if path.name != "assignment_summary.json":
-                name = json.loads(path.read_text())["annotator"]
-                out[name] = folder_name(name)
+def annotator_slots(registry: Registry) -> dict[str, set[str]]:
+    """Repo folder -> every slot the roster gives or gave it."""
+    out: dict[str, set[str]] = {}
+    for h in registry.holdings:
+        out.setdefault(h.folder, set()).add(h.slot)
     return out
 
 
-def _file_ids(api: HfApi, repo: str, revision: str | None) -> dict[str, str]:
+def file_ids(api: HfApi, repo: str, revision: str | None) -> dict[str, str]:
     return {
         f.path: f.blob_id
         for f in api.list_repo_tree(repo, repo_type="dataset", revision=revision, recursive=True)
@@ -102,10 +94,21 @@ def _file_ids(api: HfApi, repo: str, revision: str | None) -> dict[str, str]:
 
 def changed_paths(api: HfApi, repo: str, revision: str, base: dict[str, str]) -> set[str]:
     """Files at ``revision`` that are new or differ from ``base`` (path -> blob id)."""
-    return {path for path, blob in _file_ids(api, repo, revision).items() if base.get(path) != blob}
+    return {path for path, blob in file_ids(api, repo, revision).items() if base.get(path) != blob}
 
 
-def check_pull_request(paths: set[str], folders: set[str], batches: list[str]) -> tuple[str | None, str | None]:
+DIFF_PATH_RE = re.compile(r"diff --git a/\S+ b/(\S+)")
+
+
+def merged_changes(api: HfApi, repo: str, num: int) -> tuple[set[str], str | None]:
+    """Files a merged pull request added or changed, from its diff, and its merge commit."""
+    details = api.get_discussion_details(repo, num, repo_type="dataset")
+    blocks = re.split(r"(?=^diff --git )", details.diff or "", flags=re.MULTILINE)
+    paths = {m.group(1) for b in blocks if (m := DIFF_PATH_RE.match(b)) and "\ndeleted file mode" not in b}
+    return paths, details.merge_commit_oid
+
+
+def check_pull_request(paths: set[str], slots: dict[str, set[str]]) -> tuple[str | None, str | None]:
     """``(folder, None)`` for an acceptable change set, else ``(None, reason)``."""
     if not paths:
         return None, "no changed files"
@@ -113,9 +116,9 @@ def check_pull_request(paths: set[str], folders: set[str], batches: list[str]) -
     if len(tops) != 1:
         return None, f"touches several folders: {sorted(tops)}"
     folder = tops.pop()
-    if folder not in folders:
+    if folder not in slots:
         return None, f"unknown folder {folder!r}"
-    allowed = re.compile(rf"^{re.escape(folder)}/({'|'.join(map(re.escape, batches))})/episodes/\d+\.h5$")
+    allowed = re.compile(rf"^{re.escape(folder)}/({'|'.join(map(re.escape, sorted(slots[folder])))})/episodes/\d+\.h5$")
     bad = sorted(p for p in paths if not allowed.match(p))
     if bad:
         return None, f"changes files other than episode h5s: {bad[:5]}"
@@ -123,48 +126,51 @@ def check_pull_request(paths: set[str], folders: set[str], batches: list[str]) -
 
 
 def pull_returns(
-    api: HfApi, cfg: PipelineConfig, folders: set[str], close: bool = False
+    api: HfApi, cfg: PipelineConfig, slots: dict[str, set[str]], close: bool = False
 ) -> list[dict]:
     """Download every acceptable pull request of the returns repo that changed since the last pull.
 
     Returns one row per pull request.
     """
     repo = cfg.returns_repo_id
-    batches = [b.name for b in cfg.batches]
     heads = {
         ref.ref: ref.target_commit
         for ref in api.list_repo_refs(repo, repo_type="dataset", include_pull_requests=True).pull_requests
     }
-    base = _file_ids(api, repo, None)
+    base = file_ids(api, repo, None)
     rows = []
     for d in api.get_repo_discussions(repo, repo_type="dataset", discussion_type="pull_request"):
         if d.status not in PULLED_STATUSES:
             continue
         row = {"num": d.num, "author": d.author, "status": d.status, "title": d.title}
-        paths = changed_paths(api, repo, f"refs/pr/{d.num}", base)
-        folder, reason = check_pull_request(paths, folders, batches)
+        revision = f"refs/pr/{d.num}"
+        head = heads.get(revision)
+        if d.status == "merged":
+            paths, merge_commit = merged_changes(api, repo, d.num)
+            if not head and merge_commit:
+                revision, head = merge_commit, merge_commit
+        else:
+            paths = changed_paths(api, repo, revision, base)
+        folder, reason = check_pull_request(paths, slots)
         row |= {"folder": folder, "files": len(paths)}
         if reason:
             rows.append(row | {"result": f"rejected: {reason}"})
             continue
+        if not head:
+            try:
+                head = api.repo_info(repo, repo_type="dataset", revision=revision).sha
+            except Exception as exc:
+                rows.append(row | {"result": f"skipped: head commit of {revision} not found ({exc})"})
+                continue
         dest = cfg.returns_dir / f"pr_{d.num:04d}"
-        head = heads.get(f"refs/pr/{d.num}")
         marker = dest / COMMIT_MARKER
-        if head and marker.is_file() and marker.read_text().strip() == head:
+        if marker.is_file() and marker.read_text().strip() == head:
             result = "unchanged"
         else:
-            touched = sorted({p.split("/")[1] for p in paths})
             api.snapshot_download(
-                repo, repo_type="dataset", revision=f"refs/pr/{d.num}", local_dir=dest, allow_patterns=sorted(paths)
+                repo, repo_type="dataset", revision=head, local_dir=dest, allow_patterns=sorted(paths)
             )
-            api.snapshot_download(
-                cfg.repo_id,
-                repo_type="dataset",
-                local_dir=dest,
-                allow_patterns=[f"{folder}/{b}/{MANIFEST_NAME}" for b in touched],
-            )
-            if head:
-                marker.write_text(head)
+            marker.write_text(head)
             result = "downloaded"
         if close and d.status == "open":
             api.change_discussion_status(
@@ -177,8 +183,8 @@ def pull_returns(
     return rows
 
 
-def returned_batch_dirs(cfg: PipelineConfig, batch: str) -> list[Path]:
-    """Completely downloaded ``pr_NNNN/<folder>/<batch>`` directories, oldest pull request first."""
+def returned_slot_dirs(cfg: PipelineConfig) -> list[Path]:
+    """Completely downloaded ``pr_NNNN/<folder>/<slot>`` directories, oldest pull request first."""
     return sorted(
-        p for p in cfg.returns_dir.glob(f"pr_*/*/{batch}") if p.is_dir() and (p.parents[1] / COMMIT_MARKER).is_file()
+        p for p in cfg.returns_dir.glob("pr_*/*/*") if p.is_dir() and (p.parents[1] / COMMIT_MARKER).is_file()
     )

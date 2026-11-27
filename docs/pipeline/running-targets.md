@@ -59,7 +59,7 @@ Manual stages are left out of `all` because they are expensive or need a decisio
 | `split_config_path`, `annotation_config_path` | the eval split and annotation configs |
 | `training_dir`, `training_work_dir`, `training_recipe` | where training sets are built and copied, and which recipe |
 | `stage_dir` | fast storage where imported datasets are converted |
-| `node_stage_dir` | node-local storage that QA and training copy episodes to before reading them |
+| `node_stage_dir` | node-local storage that QA and training copy episodes to before reading them, at most 1,000 at a time |
 | `release_snapshot`, `release_name` | the sync report a release is made from, and its name |
 
 ## What reruns
@@ -71,8 +71,9 @@ Hamilton cannot see files on its own. Small stages that run on every invocation 
 | Watcher | Hashes |
 |---|---|
 | `mirror_state` | the path, size and modification time of every h5 file, and the repo and import configs |
-| `camera_names_config`, `embodiments_config`, `policies_config`, `critical_config`, `stats_config`, `split_config`, `annotation_flags_config`, `analysis_config` | their config file |
+| `camera_names_config`, `embodiments_config`, `policies_config`, `critical_config`, `stats_config`, `split_config`, `robot_aliases_config`, `annotation_flags_config`, `analysis_config` | their config file |
 | `qa_check_versions` | the version of every QA check |
+| `annotation_roster` | `annotators.txt` and the bundle roster |
 | `annotation_state` | the annotation stores |
 | `training_recipe_state` | the training recipe |
 

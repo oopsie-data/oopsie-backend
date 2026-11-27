@@ -21,6 +21,7 @@ from datetime import datetime
 from pathlib import Path
 
 import polars as pl
+from huggingface_hub import get_token
 
 from oopsie_backend.common.h5 import H5_SUFFIXES
 from oopsie_backend.common.repos import DEFAULT_DATA_DIR, data_root
@@ -33,7 +34,8 @@ SCHEMA = {KEY: pl.String, "hub_uploaded_at": pl.Datetime("us", "UTC"), "hub_uplo
 
 def _git(args: list[str], token: str | None = None) -> str:
     auth = ["-c", f"http.extraHeader=Authorization: Bearer {token}"] if token else []
-    env = {**os.environ, "GIT_LFS_SKIP_SMUDGE": "1", "GIT_TERMINAL_PROMPT": "0"}
+    env = {k: v for k, v in os.environ.items() if k not in ("SSH_ASKPASS", "GIT_ASKPASS")}
+    env |= {"GIT_LFS_SKIP_SMUDGE": "1", "GIT_TERMINAL_PROMPT": "0"}
     return subprocess.run(
         ["git", "-c", "core.quotePath=false", *auth, *args], env=env, check=True, capture_output=True, text=True
     ).stdout
@@ -72,9 +74,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR, help="Mirror root")
     parser.add_argument("--index", type=Path, default=DEFAULT_INDEX)
     parser.add_argument("--only", nargs="+", default=None, help="Repo names to update (default: every repo on the Hub)")
-    parser.add_argument("--token", default=os.environ.get("HF_TOKEN"), help="HF read token (default: $HF_TOKEN)")
+    parser.add_argument("--token", default=None, help="HF read token (default: $HF_TOKEN or the huggingface-cli login)")
     parser.add_argument("--parallel-repos", type=int, default=4)
     args = parser.parse_args(argv)
+    args.token = args.token or get_token()
 
     index = read_index(args.index, columns=["dataset_repo", "repo_path", "on_hub"])
     repos = sorted(index.filter(pl.col("on_hub"))["dataset_repo"].unique())

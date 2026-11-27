@@ -14,7 +14,7 @@ Each release is a folder of the private repo [`OopsieData-Submissions/oopsiedata
 |---|---|
 | `snapshot.json` | a clean [sync report](sync.md#the-sync-report), with the Hub commit of every synced repo |
 | `episode_index.parquet` | the index built from exactly that data |
-| `annotation/` | the chosen proposal, train sample, assignments, annotator list, proposals and annotation stores, with their `.inputs` records |
+| `annotation/` | the chosen proposal, train sample, first assignments, bundles and roster, annotator list, proposals and annotation stores, with their `.inputs` records |
 | `configs/` | the backend's configs |
 | `manifest.json` | the backend commit, the commits of the annotation repos and the sha256 of every file |
 

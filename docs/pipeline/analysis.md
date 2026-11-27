@@ -31,7 +31,7 @@ The embedding model is downloaded on first use into the Hugging Face cache (`HF_
 
 ```bash
 uv run oopsie stats analysis index --index episode_index.parquet --out reports/analysis/index.json
-uv run oopsie stats analysis annotations --index episode_index.parquet [--batch NAME ...] --out reports/analysis/annotations.json
+uv run oopsie stats analysis annotations --index episode_index.parquet [--batch eval|train] --out reports/analysis/annotations.json
 uv run oopsie stats analysis features --index episode_index.parquet --data-dir <mirror> --out <features.parquet> [--segments]
 uv run oopsie stats analysis data --index episode_index.parquet --features <features.parquet> --out reports/analysis/data.json
 uv run oopsie stats analysis render reports/analysis/*.json
@@ -66,7 +66,7 @@ Contributors mostly upload balanced sets of successes and failures, so the repor
 
 ## Annotator returns
 
-The `annotations` group and the segment windows of the `features` group read the collected annotations from the index's `annotation_*` columns ([index](../reference/index-columns.md#annotation)), which `oopsie annotation pipeline index` writes. Every batch counts unless `--batch` names some. Each annotator's latest record of an episode counts. Records made on a returned copy whose `content_hash` differs from the episode's current one are left out, since the episode changed after it was annotated. So are the records the annotation flags mark unusable (`annotation_unusable`), such as those of an annotator who could not watch the video. The index keeps all of these records.
+The `annotations` group and the segment windows of the `features` group read the collected annotations from the index's `annotation_*` columns ([index](../reference/index-columns.md#annotation)), which `oopsie annotation pipeline index` writes. Both kinds of bundle count unless `--batch` names `eval` or `train`. Each annotator's latest record of an episode counts. Records made on a returned copy whose `content_hash` differs from the episode's current one are left out, since the episode changed after it was annotated. So are the records the annotation flags mark unusable (`annotation_unusable`), such as those of an annotator who could not watch the video. The index keeps all of these records.
 
 Outcomes are `failure`, `success`, `success_suboptimal`, `success_side_effect` and `incomplete` (the robot acted correctly but the episode ended before the task was done).
 

@@ -6,7 +6,8 @@ Archive and infra repos (``configs/repositories.yaml``) are not indexed;
 external datasets are indexed as ``external`` with ``public = false``. A file is re-read
 only when its size or modification time changed. File hashes come from the Hub
 listing: ``sha256`` for LFS files and the git object id for all files.
-``lab_id`` is mapped to its canonical name from ``configs/lab_ids.yaml``.
+``lab_id`` is the canonical name of the h5's ``lab_id`` (``raw_lab_id``) from
+``configs/lab_ids.yaml``, recomputed on every build so alias changes reach every row.
 ``content_hash`` hashes the action and robot state arrays, so copies of an
 episode share it; ``preqa.duplicate_episodes`` uses it to mark duplicates.
 """
@@ -18,7 +19,7 @@ import json
 import re
 import sys
 from collections.abc import Callable
-from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -34,6 +35,7 @@ from oopsie_backend.common.repos import (
     EPISODE_KINDS,
     HF_ORG,
     PUBLIC_EXCLUDED_LABS,
+    canonical_lab_id,
     data_root,
     import_dataset_id,
     is_local_import,
@@ -75,6 +77,7 @@ CORE_SCHEMA = {
     "schema": pl.String,
     "episode_id": pl.String,
     "lab_id": pl.String,
+    "raw_lab_id": pl.String,
     "operator_name": pl.String,
     "language_instruction": pl.String,
     "task": pl.String,
@@ -107,7 +110,7 @@ CORE_SCHEMA = {
 }
 # Columns derived from the h5 contents; reused while the file is unchanged.
 H5_COLUMNS = [
-    "schema", "episode_id", "lab_id", "operator_name", "language_instruction", "task", "timestamp",
+    "schema", "episode_id", "raw_lab_id", "operator_name", "language_instruction", "task", "timestamp",
     "robot_name", "gripper_name", "policy_name", "control_freq", "is_biarm", "uses_mobile_base",
     "single_arm", "biarm", "gripper_dof", "binary_gripper", "dexterous_hand",
     "action_space", "robot_state_keys", "cameras", "num_steps", "duration_seconds", "annotations",
@@ -241,7 +244,7 @@ def read_h5(path: Path, repo_path: str) -> dict:
             row = {
                 "schema": _s(f.attrs.get("schema")),
                 "episode_id": _s(f.attrs.get("episode_id")),
-                "lab_id": _s(f.attrs.get("lab_id")),
+                "raw_lab_id": _s(f.attrs.get("lab_id")),
                 "operator_name": _s(f.attrs.get("operator_name")),
                 "language_instruction": instruction,
                 "task": normalize_task(instruction),
@@ -277,6 +280,15 @@ def read_h5(path: Path, repo_path: str) -> dict:
     return row
 
 
+def read_raw_lab_id(path: Path) -> str | None:
+    """The h5's ``lab_id`` attribute; None if it is missing or the file cannot be read."""
+    try:
+        with h5py.File(path, "r") as f:
+            return _s(f.attrs.get("lab_id"))
+    except Exception:
+        return None
+
+
 def _read_job(job: tuple[str, Path]) -> dict:
     repo_path, path = job
     return read_h5(path, repo_path)
@@ -300,9 +312,12 @@ def build_core(
     found = discover(data_dir)
     prev = {r[KEY]: r for r in previous.iter_rows(named=True)} if previous is not None else {}
     # Rows from an index without every h5 column are read again, so new columns get filled.
-    reuse = previous is not None and set(H5_COLUMNS) <= set(previous.columns)
+    # ``raw_lab_id`` alone is filled from the h5 attributes instead.
+    reuse = previous is not None and set(H5_COLUMNS) - {"raw_lab_id"} <= set(previous.columns)
+    has_raw_lab = previous is not None and "raw_lab_id" in previous.columns
     rows: dict[str, dict] = {}
     to_read: list[tuple[str, tuple[str, Path]]] = []
+    lab_backfill: list[tuple[str, Path]] = []
     for dataset_repo, repo_path, path, kind in found:
         key = episode_key(dataset_repo, repo_path)
         st = path.stat()
@@ -318,6 +333,8 @@ def build_core(
         old = prev.get(key)
         if reuse and old and old.get("h5_size") == st.st_size and old.get("h5_mtime_ns") == st.st_mtime_ns and not old.get("read_error"):
             row |= {c: old.get(c) for c in H5_COLUMNS}
+            if not has_raw_lab:
+                lab_backfill.append((key, path))
         else:
             to_read.append((key, (repo_path, path)))
         rows[key] = row
@@ -325,10 +342,16 @@ def build_core(
     print(f"{len(found)} episode(s) found, {len(to_read)} new or changed", file=sys.stderr)
     for (key, _), result in zip(to_read, read([j for _, j in to_read], workers)):
         rows[key] |= result
+    if lab_backfill:
+        print(f"reading raw_lab_id of {len(lab_backfill)} unchanged episode(s)", file=sys.stderr)
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            for (key, _), raw in zip(lab_backfill, pool.map(read_raw_lab_id, [p for _, p in lab_backfill])):
+                rows[key]["raw_lab_id"] = raw if raw is not None else prev[key].get("lab_id")
 
     for key, old in prev.items():
         if key not in rows:
-            rows[key] = {c: old.get(c) for c in CORE_SCHEMA} | {"on_disk": False}
+            raw = old.get("raw_lab_id") if has_raw_lab else old.get("lab_id")
+            rows[key] = {c: old.get(c) for c in CORE_SCHEMA} | {"on_disk": False, "raw_lab_id": raw}
 
     hub: dict[str, dict[str, dict] | None] = {}
     if api is not None:
@@ -359,7 +382,7 @@ def build_core(
 
     lab_aliases = load_lab_aliases()
     for row in rows.values():
-        lab = row["lab_id"] = lab_aliases.get(row.get("lab_id"), row.get("lab_id"))
+        lab = row["lab_id"] = canonical_lab_id(row.get("raw_lab_id"), lab_aliases)
         row["public"] = row["repo_kind"] == CONTRIBUTOR and lab not in PUBLIC_EXCLUDED_LABS
     df = pl.DataFrame(
         [{c: row.get(c) for c in CORE_SCHEMA} for row in rows.values()], schema=CORE_SCHEMA

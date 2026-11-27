@@ -13,6 +13,7 @@ silently accepted.
 from __future__ import annotations
 
 import difflib
+import heapq
 import math
 import random
 import re
@@ -565,10 +566,17 @@ def train_pool(rows: list[dict], proposal: dict) -> list[dict]:
     ]
 
 
+def none_last(g):
+    """Sort key: natural order, with None last, also inside tuples."""
+    if isinstance(g, tuple):
+        return tuple(none_last(x) for x in g)
+    return (g is None, "" if g is None else g)
+
+
 def _even_split(sizes: dict, n: int, rng: random.Random) -> dict:
     """Split ``n`` equally across groups, capped at each group's size; leftovers go to random groups."""
     alloc = {g: 0 for g in sizes}
-    order = sorted(sizes)
+    order = sorted(sizes, key=none_last)
     rng.shuffle(order)
     while n > 0:
         open_groups = [g for g in order if alloc[g] < sizes[g]]
@@ -584,12 +592,31 @@ def _even_split(sizes: dict, n: int, rng: random.Random) -> dict:
     return alloc
 
 
-def coverage_sample(rows: list[dict], n: int, levels: list, rng: random.Random) -> list[dict]:
+def _fill_split(sizes: dict, have: dict, n: int, rng: random.Random) -> dict:
+    """Split ``n`` over groups so that ``have`` plus the allocation is as even as possible, capped at each group's size."""
+    order = sorted(sizes, key=none_last)
+    rng.shuffle(order)
+    alloc = {g: 0 for g in sizes}
+    heap = [(have.get(g, 0), i, g) for i, g in enumerate(order) if sizes[g] > 0]
+    heapq.heapify(heap)
+    while n > 0 and heap:
+        count, i, g = heapq.heappop(heap)
+        alloc[g] += 1
+        n -= 1
+        if alloc[g] < sizes[g]:
+            heapq.heappush(heap, (count + 1, i, g))
+    return alloc
+
+
+def coverage_sample(
+    rows: list[dict], n: int, levels: list, rng: random.Random, existing: list[dict] | None = None
+) -> list[dict]:
     """Pick ``n`` rows spread evenly over nested strata, ignoring stratum sizes.
 
     ``levels`` are functions of a row. The budget is split equally over the
     values of the first level, then recursively within each value; rows are
-    drawn at random once the levels run out.
+    drawn at random once the levels run out. With ``existing``, rows picked
+    earlier, the budget goes first to the strata they cover least.
     """
     if n >= len(rows):
         return list(rows)
@@ -598,10 +625,19 @@ def coverage_sample(rows: list[dict], n: int, levels: list, rng: random.Random) 
     groups: dict = defaultdict(list)
     for r in rows:
         groups[levels[0](r)].append(r)
-    alloc = _even_split({g: len(rs) for g, rs in groups.items()}, n, rng)
+    sizes = {g: len(rs) for g, rs in groups.items()}
+    if existing is None:
+        alloc = _even_split(sizes, n, rng)
+        before: dict = {}
+    else:
+        before = defaultdict(list)
+        for r in existing:
+            before[levels[0](r)].append(r)
+        alloc = _fill_split(sizes, {g: len(rs) for g, rs in before.items()}, n, rng)
     picked = []
-    for g in sorted(groups):
-        picked.extend(coverage_sample(groups[g], alloc[g], levels[1:], rng))
+    for g in sorted(groups, key=none_last):
+        sub = None if existing is None else before.get(g, [])
+        picked.extend(coverage_sample(groups[g], alloc[g], levels[1:], rng, sub))
     return picked
 
 

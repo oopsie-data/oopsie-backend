@@ -1,6 +1,10 @@
 # Canonical lab_id -> raw lab_id values recorded in the h5 files. Read by the index build, which
-# stores the canonical name in `lab_id`. Labs not listed keep their recorded lab_id.
+# stores the canonical name in `lab_id`. Matching ignores case and non-alphanumeric characters, so
+# `enactic-openarm` matches `Enactic_OpenArm`. Labs not listed keep their recorded lab_id.
 
 Enactic_OpenArm:
   - Enact
+  - Enactic
+  - Enatic
   - Enatic_OpenArm
+  - Enact_OpenArm

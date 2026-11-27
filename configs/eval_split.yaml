@@ -1,7 +1,7 @@
-# Eval split and annotator assignment stages. Outputs go to <data_dir>/annotation/.
-# The chosen proposal, the train sample and the assignments are written once: later
-# runs keep them and fail if the settings they were made from changed. Delete an
-# output (and its .inputs record) to regenerate it.
+# Eval split and annotation bundle stages. Outputs go to <data_dir>/annotation/.
+# The chosen proposal, the train sample and the first assignments are written once:
+# later runs keep them and fail if the settings they were made from changed. Delete
+# an output (and its .inputs record) to regenerate it. Bundles are never regenerated.
 
 # Extra arguments for `oopsie splits propose`, e.g. pins:
 #   ["--ood-common", "LAB", "--od-task", "LAB::instruction"]
@@ -29,8 +29,18 @@ train_sample:
 assignments:
   annotators_file: annotators.txt   # one name per line, in <data_dir>/annotation/
   seed: 0
+  # copies and split_copies apply only to the first assignment of the eval split and
+  # the train sample to the annotators listed at that time.
   eval:
     copies: 3
     split_copies: {od_task_od_scene: 3}
   train:
+<<<<<<< HEAD
     copies: 2
+=======
+    copies: 1
+    # Every later annotator gets a train bundle of bundle_size episodes, of which
+    # calibration_episodes are shared with another annotator's train bundle.
+    bundle_size: 200
+    calibration_episodes: 20
+>>>>>>> 43b0bc4 (Thorough changes and hardening of the annotator pipeline)

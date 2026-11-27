@@ -23,6 +23,7 @@ import numpy as np
 from oopsie_data_tools.annotation_tool.annotation_schema import read_annotation_attrs
 
 from oopsie_backend.annotation.bundles import MANIFEST_NAME, sample_uid, source_path
+from oopsie_backend.common.h5 import find_h5, is_h5
 from oopsie_backend.common.videos import _video_files, repo_root
 from oopsie_backend.index.core import episode_content_hash
 
@@ -131,11 +132,11 @@ def read_returns(paths: list[Path], assignment: dict[str, dict], bundle: str | N
                 manifest_name = next((n for n in names if n.endswith(MANIFEST_NAME)), None)
                 manifest = json.loads(zf.read(manifest_name)) if manifest_name else None
                 name = _bundle_name(manifest, bundle)
-                for member in sorted(n for n in names if n.endswith(".h5")):
+                for member in sorted(n for n in names if is_h5(n)):
                     with h5py.File(BytesIO(zf.read(member)), "r") as f:
                         add(_records_from_h5(f, f"{path}:{member}", name, assignment))
             continue
-        files = sorted(path.rglob("*.h5")) if path.is_dir() else [path]
+        files = find_h5(path) if path.is_dir() else [path]
         manifest_path = next(
             (p / MANIFEST_NAME for p in [path, *path.parents] if (p / MANIFEST_NAME).is_file()), None
         )
@@ -144,6 +145,19 @@ def read_returns(paths: list[Path], assignment: dict[str, dict], bundle: str | N
         for file in files:
             with h5py.File(file, "r") as f:
                 add(_records_from_h5(f, str(file), name, assignment))
+    return records, problems
+
+
+def read_annotated(files: list[Path], annotator: str, assignment: dict[str, dict]) -> tuple[list[dict], list[str]]:
+    """Records from returned h5 files that ``annotator`` annotated."""
+    records: list[dict] = []
+    problems: list[str] = []
+    for file in files:
+        with h5py.File(file, "r") as f:
+            recs, problem = _records_from_h5(f, str(file), annotator, assignment)
+        records.extend(recs)
+        if problem:
+            problems.append(problem)
     return records, problems
 
 
@@ -188,18 +202,22 @@ def current_annotations(store: list[dict]) -> dict[str, list[dict]]:
 
 
 def coverage_report(store: list[dict], assignment: dict[str, dict]) -> dict:
-    """Returned vs assigned annotations, revisions, and outcome agreement per split."""
+    """Returned vs assigned annotations of the current holders, returns of former holders, revisions, and outcome agreement per split."""
     current = current_annotations(store)
     revisions = Counter((r["uid"], r["bundle"], r["name"]) for r in store)
     returned_pairs = {(r["uid"], r["bundle"]) for rs in current.values() for r in rs}
     missing = Counter()
-    unexpected = 0
+    unexpected = former = 0
     for uid, meta in assignment.items():
         for a in meta["assigned"]:
             if (uid, a) not in returned_pairs:
                 missing[a] += 1
     for uid, bundle in returned_pairs:
-        if bundle not in assignment[uid]["assigned"]:
+        if bundle in assignment[uid]["assigned"]:
+            continue
+        if bundle in assignment[uid].get("held", []):
+            former += 1
+        else:
             unexpected += 1
     agreement: dict[str, list[int]] = defaultdict(lambda: [0, 0])
     for uid, rs in current.items():
@@ -210,8 +228,9 @@ def coverage_report(store: list[dict], assignment: dict[str, dict]) -> dict:
     return {
         "episodes_assigned": len(assignment),
         "annotations_assigned": sum(len(m["assigned"]) for m in assignment.values()),
-        "annotations_returned": len(returned_pairs),
+        "annotations_returned": len(returned_pairs) - unexpected - former,
         "missing_by_annotator": dict(sorted(missing.items())),
+        "former_holder_returns": former,
         "unexpected_returns": unexpected,
         "revised_annotations": sum(1 for n in revisions.values() if n > 1),
         "outcome_agreement_by_split": {s: {"agree": a, "with_2plus": n} for s, (a, n) in sorted(agreement.items())},

@@ -152,7 +152,11 @@ def unify_all(
     stage_dir: Path | None = None,
     shard_dir: Path | None = None,
 ) -> pl.DataFrame:
-    """Unify every selected episode; with ``shard_dir``, on every node of the job."""
+    """Unify every selected episode; with ``shard_dir``, on every node of the job.
+
+    The gripper extents pass reads only the gripper datasets, straight from ``data_dir``; staging
+    would copy every h5 and its videos for it.
+    """
     episodes_dir.mkdir(parents=True, exist_ok=True)
     rows = list(selected.iter_rows(named=True))
     uhash = unify_hash(recipe)

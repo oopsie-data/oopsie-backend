@@ -1,63 +1,68 @@
-"""Lay out annotation batches as a folder tree for a Hugging Face dataset repo.
+"""Lay out the current holdings of the roster as a folder tree for a Hugging Face dataset repo.
 
 Usage:
     uv run python -m oopsie_backend.annotation.stage \\
-        --batch batch_1=eval_assignment --batch batch_2=train_assignment \\
-        --data-dir /corral/utexas/IRI26024/oopsiedata --out-dir annotation_repo
+        --bundles-dir bundles --data-dir /corral/utexas/IRI26024/oopsiedata --out-dir annotation_repo
 
-Writes ``<folder>/<batch>/`` per annotator and batch, each holding
+Writes ``<folder>/<slot>/`` for every bundle and its current holder, holding
 ``eval_manifest.json`` and ``episodes/0001.h5``, ``episodes/0001_<cam>.mp4``, ...
-``<folder>`` is the annotator name in lowercase ASCII with ``_`` separators.
-A ``README.md`` at the root lists every annotator's folder and the commands
-to download, annotate and upload. ``annotation.pipeline publish`` uploads the tree.
+``<folder>`` is the annotator name in lowercase ASCII with ``_`` separators and
+``<slot>`` is ``batch_<n>``. A slot whose manifest already lists the bundle's
+episodes for the same annotator is kept as it is; slots of bundles that moved to
+another annotator are removed. A ``README.md`` at the root lists every annotator's
+folder and batches and the commands to download, annotate and upload.
+``annotation.pipeline publish`` uploads the tree.
 """
 
 from __future__ import annotations
 
 import argparse
 import json
-import re
+import shutil
 import sys
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
-from oopsie_backend.annotation.bundles import write_bundle
-from oopsie_backend.annotation.hub import folder_name
+from oopsie_backend.annotation.bundles import MANIFEST_NAME, write_bundle
+from oopsie_backend.annotation.roster import SLOT_RE, Holding, Registry
 from oopsie_backend.common.repos import DEFAULT_DATA_DIR
 
 
-def _batch(spec: str) -> tuple[str, Path]:
-    name, sep, path = spec.partition("=")
-    if not sep or not re.fullmatch(r"[a-z0-9_]+", name):
-        raise argparse.ArgumentTypeError(f"expected NAME=ASSIGNMENT_DIR with NAME in [a-z0-9_], got {spec!r}")
-    return name, Path(path)
-
-
 def _package(job: tuple) -> tuple[str, list[str]]:
-    path, folder, data_dir, out_dir, blind = job
-    lists = json.loads(Path(path).read_text())
-    target, missing = write_bundle(
-        lists["annotator"], lists["episodes"], data_dir, out_dir, lists.get("proposal"), blind, folder
-    )
+    annotator, entries, proposal, folder, data_dir, out_dir, blind = job
+    target, missing = write_bundle(annotator, entries, data_dir, out_dir, proposal, blind, folder)
     return str(target), missing
 
 
-def readme(batches: list[str], folders: dict[str, str], counts: dict[tuple[str, str], int]) -> str:
-    rows = "\n".join(
-        f"| {name} | `{folder}` | " + " | ".join(str(counts.get((name, b), 0)) for b in batches) + " |"
-        for name, folder in sorted(folders.items())
+def is_staged(slot_dir: Path, holding: Holding, positions: dict[int, str]) -> bool:
+    manifest = slot_dir / MANIFEST_NAME
+    if not manifest.is_file():
+        return False
+    data = json.loads(manifest.read_text())
+    staged = {e["position"]: e["uid"] for e in data["episodes"]}
+    return data.get("annotator") == holding.annotator and staged == positions
+
+
+def stale_slots(out_dir: Path, current: set[tuple[str, str]]) -> list[Path]:
+    """Staged ``<folder>/<slot>`` directories that no current holding uses."""
+    return sorted(
+        p for p in out_dir.glob("*/*")
+        if p.is_dir() and SLOT_RE.fullmatch(p.name) and (p.parent.name, p.name) not in current
     )
-    annotate = "\n".join(
-        f'oopsie-data annotate --samples-dir oopsie-annotation/<folder>/{b}/episodes --annotator-name "<your name>"'
-        for b in batches
+
+
+def readme(rows: list[tuple[str, str, list[tuple[str, int]]]]) -> str:
+    table = "\n".join(
+        f"| {name} | `{folder}` | " + ", ".join(f"`{slot}` ({n})" for slot, n in slots) + " |"
+        for name, folder, slots in sorted(rows)
     )
     return f"""# Oopsie annotation batches
 
-Each annotator has one folder with {len(batches)} batches ({", ".join(batches)}). Annotate every episode in each batch.
+Each annotator has one folder with one or more batches. Annotate every episode in each batch.
 
-| Annotator | Folder | {" | ".join(batches)} |
-|---|---|{"---:|" * len(batches)}
-{rows}
+| Annotator | Folder | Batches (episodes) |
+|---|---|---|
+{table}
 
 ## Download your folder
 
@@ -69,8 +74,10 @@ This asks for your full name, as listed above, and a HuggingFace token, and down
 
 ## Annotate
 
+Run this for each of your batches:
+
 ```bash
-{annotate}
+oopsie-data annotate --samples-dir oopsie-annotation/<folder>/<batch>/episodes --annotator-name "<your name>"
 ```
 
 Episodes are numbered in the order they should be annotated.
@@ -89,10 +96,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    parser.add_argument(
-        "--batch", action="append", required=True, type=_batch, metavar="NAME=ASSIGNMENT_DIR",
-        help="Batch folder name and the assign_eval_annotators output it is built from; repeatable",
-    )
+    parser.add_argument("--bundles-dir", type=Path, required=True)
     parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
     parser.add_argument("--out-dir", type=Path, default=Path("annotation_repo"))
     parser.add_argument(
@@ -104,37 +108,38 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--workers", type=int, default=4, help="Bundles written in parallel")
     args = parser.parse_args(argv)
 
-    batch_names = [name for name, _ in args.batch]
-    if len(set(batch_names)) != len(batch_names):
-        print(f"error: repeated batch names {batch_names}", file=sys.stderr)
+    registry = Registry(args.bundles_dir)
+    current = registry.current()
+    if not current:
+        print(f"error: no bundles in {args.bundles_dir}", file=sys.stderr)
         return 1
 
-    folders: dict[str, str] = {}
-    counts: dict[tuple[str, str], int] = {}
-    jobs = []
-    for batch, assignment_dir in args.batch:
-        lists = [p for p in sorted(assignment_dir.glob("*.json")) if p.name != "assignment_summary.json"]
-        if not lists:
-            print(f"error: no annotator lists in {assignment_dir}", file=sys.stderr)
-            return 1
-        for path in lists:
-            data = json.loads(path.read_text())
-            name = data["annotator"]
-            folders[name] = folder_name(name)
-            counts[(name, batch)] = len(data["episodes"])
-            if args.only and name not in args.only:
-                continue
-            jobs.append((path, f"{folders[name]}/{batch}", args.data_dir, args.out_dir, not args.keep_annotations))
-
-    taken: dict[str, str] = {}
-    for name, folder in folders.items():
-        if not folder or folder in taken:
-            print(f"error: annotators {taken.get(folder)!r} and {name!r} map to folder {folder!r}", file=sys.stderr)
-            return 1
-        taken[folder] = name
-
     args.out_dir.mkdir(parents=True, exist_ok=True)
-    (args.out_dir / "README.md").write_text(readme(batch_names, folders, counts))
+    for path in stale_slots(args.out_dir, {(h.folder, h.slot) for h in current}):
+        shutil.rmtree(path)
+        if not any(path.parent.iterdir()):
+            path.parent.rmdir()
+        print(f"removed {path}: its bundle moved", file=sys.stderr)
+
+    rows: dict[str, tuple[str, list[tuple[str, int]]]] = {}
+    jobs = []
+    for h in current:
+        bundle = registry.bundles[h.bundle]
+        rows.setdefault(h.annotator, (h.folder, []))[1].append((h.slot, len(bundle["episodes"])))
+        if args.only and h.annotator not in args.only:
+            continue
+        if is_staged(args.out_dir / h.folder / h.slot, h, registry.positions(h)):
+            continue
+        jobs.append((
+            h.annotator, bundle["episodes"], bundle.get("proposal"), f"{h.folder}/{h.slot}",
+            args.data_dir, args.out_dir, not args.keep_annotations,
+        ))
+    (args.out_dir / "README.md").write_text(
+        readme([
+            (name, folder, sorted(slots, key=lambda s: int(SLOT_RE.fullmatch(s[0]).group(1))))
+            for name, (folder, slots) in rows.items()
+        ])
+    )
 
     failed = 0
     with ProcessPoolExecutor(max_workers=args.workers) as pool:
@@ -142,7 +147,11 @@ def main(argv: list[str] | None = None) -> int:
             for msg in missing:
                 print(f"  {target}: {msg}", file=sys.stderr)
             failed += len(missing)
-    print(f"{len(jobs)} bundle(s) in {args.out_dir}, {failed} episode(s) not packaged", file=sys.stderr)
+    print(
+        f"{len(jobs)} bundle(s) staged in {args.out_dir}, {len(current) - len(jobs)} already staged or skipped, "
+        f"{failed} episode(s) not packaged",
+        file=sys.stderr,
+    )
     return 1 if failed else 0
 
 

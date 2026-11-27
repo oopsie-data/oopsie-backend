@@ -29,9 +29,12 @@ from oopsie_backend.common.repos import (  # noqa: F401
     PUBLIC_EXCLUDED_LABS,
     STATS_EXCLUDED_DATASETS,
     canonical_dataset_repo,
+    canonical_lab_id,
+    load_lab_aliases,
     resolve_local_episode_path,
 )
 
+_LAB_ALIASES = load_lab_aliases()
 _BACKEND_ROOT = Path(__file__).resolve().parent.parent.parent
 _REPO_ROOT = _BACKEND_ROOT.parent
 REPORTS_DIR = _BACKEND_ROOT / "reports"
@@ -367,7 +370,8 @@ def build_dataset_inventory(
 
 
 def _repo_short_name_guess(dataset: str) -> str:
-    return dataset.split("/", 1)[-1] if "/" in dataset else dataset
+    name = dataset.split("/", 1)[-1] if "/" in dataset else dataset
+    return canonical_lab_id(name, _LAB_ALIASES)
 
 
 def _attach_requirement_status(

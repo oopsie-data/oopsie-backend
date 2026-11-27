@@ -12,6 +12,7 @@ Imported datasets are either repos of the org or converted locally into
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 import yaml
@@ -38,16 +39,27 @@ def load_imports(path: Path = IMPORTS_CONFIG) -> dict[str, dict]:
     return datasets
 
 
+def lab_key(lab_id: str) -> str:
+    """Spelling-insensitive form of a lab_id: lower case, letters and digits only."""
+    return re.sub(r"[^a-z0-9]", "", lab_id.casefold())
+
+
 def load_lab_aliases(path: Path = LAB_IDS_CONFIG) -> dict[str, str]:
-    """Raw lab_id -> canonical lab_id, from ``configs/lab_ids.yaml``."""
+    """``lab_key`` of every canonical and raw lab_id -> canonical lab_id, from ``configs/lab_ids.yaml``."""
     config = yaml.safe_load(path.read_text()) or {}
     aliases = {}
     for canonical, raw_names in config.items():
-        for raw in raw_names or []:
-            if aliases.get(raw, canonical) != canonical:
-                raise ValueError(f"{path}: {raw} is listed under {aliases[raw]} and {canonical}")
-            aliases[raw] = canonical
+        for raw in [canonical, *(raw_names or [])]:
+            key = lab_key(raw)
+            if aliases.get(key, canonical) != canonical:
+                raise ValueError(f"{path}: {raw} is listed under {aliases[key]} and {canonical}")
+            aliases[key] = canonical
     return aliases
+
+
+def canonical_lab_id(lab_id: str | None, aliases: dict[str, str]) -> str | None:
+    """Canonical lab_id for ``lab_id`` in any spelling ``aliases`` covers; other lab_ids are returned unchanged."""
+    return aliases.get(lab_key(lab_id), lab_id) if lab_id else lab_id
 
 
 def import_dataset_id(name: str, entry: dict) -> str:

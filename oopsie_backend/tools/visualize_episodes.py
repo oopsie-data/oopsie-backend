@@ -26,6 +26,8 @@ import h5py
 import matplotlib
 import numpy as np
 
+from oopsie_backend.common.h5 import is_h5
+
 matplotlib.use("Agg")  # non-interactive by default; overridden below for display
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
@@ -190,9 +192,9 @@ def plot_episode(h5_path: Path, out: Path | None) -> None:
 # ── stats view ────────────────────────────────────────────────────────────────
 
 def plot_stats(data_dir: Path, out: Path | None) -> None:
-    h5_files = sorted(data_dir.glob("*.h5"))
+    h5_files = sorted(p for p in data_dir.glob("*") if is_h5(p))
     if not h5_files:
-        print(f"No .h5 files found in {data_dir}", file=sys.stderr)
+        print(f"No HDF5 files found in {data_dir}", file=sys.stderr)
         sys.exit(1)
 
     n_total = len(h5_files)

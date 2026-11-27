@@ -13,9 +13,11 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 import shutil
 import sys
 import tempfile
+import unicodedata
 import zipfile
 from contextlib import ExitStack
 from pathlib import Path
@@ -33,6 +35,12 @@ BLIND_ATTR_PREFIXES = ("source_",)
 BLIND_ATTRS = ("previous_episode_id",)
 REDACTED_POLICY = "redacted"
 SOURCE_FIELDS = ("split", "lab_id", "robot", "task")
+
+
+def folder_name(annotator: str) -> str:
+    """Annotator name as lowercase ASCII with ``_`` separators."""
+    ascii_name = unicodedata.normalize("NFKD", annotator).encode("ascii", "ignore").decode()
+    return re.sub(r"[^a-z0-9]+", "_", ascii_name.lower()).strip("_")
 
 
 def sample_uid(dataset_repo: str, repo_path: str) -> str:
