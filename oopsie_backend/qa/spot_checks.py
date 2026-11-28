@@ -7,10 +7,10 @@ import random
 import sys
 import zipfile
 from collections import Counter, defaultdict
-from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 from oopsie_backend.common.io import now_timestamps
+from oopsie_backend.common.pools import process_pool
 from oopsie_backend.common.videos import _video_files, repo_root
 from oopsie_backend.stats.episode_stats import _include_in_public_stats, extract_record
 
@@ -48,7 +48,7 @@ def collect_records(
 
     records: list[dict] = []
     skipped: list[str] = []
-    with ProcessPoolExecutor(max_workers=workers) as pool:
+    with process_pool(max_workers=workers) as pool:
         for result in pool.map(_load_one, jobs, chunksize=16):
             if isinstance(result, str):
                 skipped.append(result)

@@ -20,7 +20,7 @@ import os
 import re
 import sys
 from collections.abc import Callable
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import NamedTuple
@@ -32,6 +32,7 @@ from oopsie_data_tools.annotation_tool.annotation_schema import read_annotation_
 
 from oopsie_backend.common.h5 import H5_SUFFIXES, _n_timesteps, _profile, _s, _str_list
 from oopsie_backend.common.hf import hub_files
+from oopsie_backend.common.pools import process_pool
 from oopsie_backend.common.repos import (
     CONTRIBUTOR,
     EPISODE_KINDS,
@@ -323,7 +324,7 @@ def _read_job(job: tuple[str, Path]) -> dict:
 
 def read_jobs(jobs: list[tuple[str, Path]], workers: int) -> list[dict]:
     """``read_h5`` of every ``(repo_path, path)``, in order."""
-    with ProcessPoolExecutor(max_workers=workers) as pool:
+    with process_pool(max_workers=workers) as pool:
         return list(pool.map(_read_job, jobs, chunksize=32))
 
 
@@ -370,7 +371,7 @@ def build_core(
         rows[key] |= result
     if lab_backfill:
         print(f"reading raw_lab_id of {len(lab_backfill)} unchanged episode(s)", file=sys.stderr)
-        with ProcessPoolExecutor(max_workers=workers) as pool:
+        with process_pool(max_workers=workers) as pool:
             raws = pool.map(read_raw_lab_id, [p for _, p in lab_backfill], chunksize=256)
             for (key, _), raw in zip(lab_backfill, raws):
                 rows[key]["raw_lab_id"] = raw if raw is not None else prev[key].get("lab_id")

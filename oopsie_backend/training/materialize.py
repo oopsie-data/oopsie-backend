@@ -35,13 +35,13 @@ import shutil
 import subprocess
 import sys
 from collections import Counter
-from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 import polars as pl
 import yaml
 
 from oopsie_backend.common import shards
+from oopsie_backend.common.pools import process_pool
 from oopsie_backend.common.progress import Progress
 from oopsie_backend.common.repos import DEFAULT_DATA_DIR, episode_path
 from oopsie_backend.common.staging import chunks, stage_episodes, unstage_episodes
@@ -63,7 +63,7 @@ def _log(message: str) -> None:
 
 def gripper_extents(jobs: list[tuple[str, Path]], workers: int) -> list[tuple[str, tuple[float, float] | None]]:
     """``(robot, (min, max))`` of the gripper position of every ``(robot, path)``."""
-    with ProcessPoolExecutor(max_workers=workers) as pool:
+    with process_pool(max_workers=workers) as pool:
         return list(pool.map(gripper_job, jobs, chunksize=16))
 
 
@@ -89,7 +89,7 @@ def unify_rows(
     """``unify_episode`` of every row, in order, staging the episodes chunk by chunk with ``stage_dir``."""
     results = []
     progress = Progress(len(rows), "episode(s) unified")
-    with ProcessPoolExecutor(max_workers=workers) as pool:
+    with process_pool(max_workers=workers) as pool:
         for chunk in chunks(rows) if stage_dir is not None else [rows]:
             episodes = [(r["dataset_repo"], r["repo_path"]) for r in chunk]
             read_dir = stage_episodes(data_dir, stage_dir, episodes, workers) if stage_dir is not None else data_dir

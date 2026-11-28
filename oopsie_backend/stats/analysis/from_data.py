@@ -27,13 +27,13 @@ from __future__ import annotations
 
 import math
 from collections import defaultdict
-from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 import h5py
 import numpy as np
 import polars as pl
 
+from oopsie_backend.common.pools import process_pool
 from oopsie_backend.common.repos import episode_path
 from oopsie_backend.index.store import KEY
 from oopsie_backend.stats.analysis.common import (
@@ -155,7 +155,7 @@ def _extent_job(path: Path) -> tuple[float, float] | None:
 def gripper_ranges(paths: dict[str, Path], robots: dict[str, str], workers: int) -> dict[str, tuple[float, float]]:
     """Per robot, the 5th percentile of the episodes' gripper minima and the 95th of their maxima."""
     keys = list(paths)
-    with ProcessPoolExecutor(workers) as pool:
+    with process_pool(workers) as pool:
         extents = list(pool.map(_extent_job, [paths[k] for k in keys], chunksize=64))
     per_robot = defaultdict(list)
     for key, extent in zip(keys, extents):
@@ -210,7 +210,7 @@ def extract(
          dcfg, starts.get(r[KEY], []))
         for r in rows
     ]
-    with ProcessPoolExecutor(workers) as pool:
+    with process_pool(workers) as pool:
         out = [row for result in pool.map(_episode_job, jobs, chunksize=16) for row in result]
     schema = {KEY: pl.String, "window": pl.String, "segment": pl.Int64, **{f: pl.Float64 for f in FEATURES}}
     return pl.DataFrame(out, schema=schema).with_columns(pl.col(FEATURES).fill_nan(None))

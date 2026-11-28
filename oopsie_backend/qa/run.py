@@ -40,12 +40,13 @@ import argparse
 import hashlib
 import sys
 import time
-from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, ThreadPoolExecutor, wait
+from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from pathlib import Path
 
 import polars as pl
 
 from oopsie_backend.common import interrupt, shards
+from oopsie_backend.common.pools import process_pool
 from oopsie_backend.common.progress import Progress
 from oopsie_backend.common.repos import (
     CONTRIBUTOR,
@@ -269,7 +270,7 @@ def main(argv: list[str] | None = None) -> int:
     progress = Progress(len(keys), "episode(s) checked")
     last_save = time.monotonic()
     finished = False
-    pool = ProcessPoolExecutor(max_workers=workers)
+    pool = process_pool(max_workers=workers)
     stager = ThreadPoolExecutor(max_workers=1)
 
     def stage(chunk: list[str]):

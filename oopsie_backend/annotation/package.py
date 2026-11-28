@@ -16,10 +16,10 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 from oopsie_backend.annotation.bundles import write_bundle
+from oopsie_backend.common.pools import process_pool
 from oopsie_backend.common.repos import DEFAULT_DATA_DIR, annotation_dir
 
 
@@ -59,7 +59,7 @@ def main(argv: list[str] | None = None) -> int:
 
     jobs = [(p, args.data_dir, args.out_dir, not args.keep_annotations) for p in lists]
     failed = 0
-    with ProcessPoolExecutor(max_workers=args.workers) as pool:
+    with process_pool(max_workers=args.workers) as pool:
         for zip_path, missing in pool.map(_package, jobs):
             for msg in missing:
                 print(f"  {Path(zip_path).stem}: {msg}", file=sys.stderr)

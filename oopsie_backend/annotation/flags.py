@@ -17,7 +17,6 @@ from __future__ import annotations
 import argparse
 import re
 import sys
-from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 import h5py
@@ -26,6 +25,7 @@ import polars as pl
 import yaml
 
 from oopsie_backend.annotation.columns import current_records
+from oopsie_backend.common.pools import process_pool
 from oopsie_backend.common.repos import DEFAULT_DATA_DIR, episode_path
 from oopsie_backend.index.store import DEFAULT_INDEX, KEY, read_index, update_columns
 
@@ -134,7 +134,7 @@ def flags_frame(index: pl.DataFrame, data_dir: Path, rules: list[Rule], idle_cfg
         for r in rows.iter_rows(named=True)
     ]
     idle, missing = {}, 0
-    with ProcessPoolExecutor(max_workers=workers) as pool:
+    with process_pool(max_workers=workers) as pool:
         for key, text, error in pool.map(_idle_job, jobs, chunksize=16):
             missing += error is not None
             if text:

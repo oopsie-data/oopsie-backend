@@ -18,10 +18,10 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 from oopsie_backend.annotation.bundles import write_bundle
+from oopsie_backend.common.pools import process_pool
 from oopsie_backend.common.repos import DEFAULT_DATA_DIR, annotation_dir
 from oopsie_backend.splits.eval_split import SPLITS
 
@@ -54,7 +54,7 @@ def main(argv: list[str] | None = None) -> int:
     jobs = [(s, e, args.data_dir, out_dir, proposal_id) for s in splits if (e := split_entries(proposal, s))]
 
     failed = 0
-    with ProcessPoolExecutor(max_workers=len(jobs)) as pool:
+    with process_pool(max_workers=len(jobs)) as pool:
         for path, missing in pool.map(_package, jobs):
             for msg in missing:
                 print(f"  {Path(path).stem}: {msg}", file=sys.stderr)

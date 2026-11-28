@@ -20,11 +20,11 @@ import argparse
 import json
 import shutil
 import sys
-from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 from oopsie_backend.annotation.bundles import MANIFEST_NAME, write_bundle
 from oopsie_backend.annotation.roster import SLOT_RE, Holding, Registry
+from oopsie_backend.common.pools import process_pool
 from oopsie_backend.common.repos import DEFAULT_DATA_DIR
 
 
@@ -142,7 +142,7 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     failed = 0
-    with ProcessPoolExecutor(max_workers=args.workers) as pool:
+    with process_pool(max_workers=args.workers) as pool:
         for target, missing in pool.map(_package, jobs):
             for msg in missing:
                 print(f"  {target}: {msg}", file=sys.stderr)
